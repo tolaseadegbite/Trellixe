@@ -27,9 +27,11 @@ class ContactsController < DashboardController
   # POST /contacts
   def create
     @contact = current_user.contacts.new(contact_params)
+    @contact.creator_id = current_user.id
 
     respond_to do |format|
       if @contact.save
+        NewContactNotifier.with(contact: @contact).deliver(current_user)
         flash.now[:notice] = "Contact was successfully submitted."
         format.turbo_stream
       else

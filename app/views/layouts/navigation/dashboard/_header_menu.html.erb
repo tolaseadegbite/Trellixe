@@ -6,6 +6,12 @@
   <div class="flex items-center gap">
     <div>
       <%= yield :header_action_buttons %>
+
+      <div data-controller="push-subscription">
+        <button data-action="push-subscription#subscribe">
+          Enable Notifications
+        </button>
+      </div>
     </div>
 
     <%# 1. Define the trigger button using the button_tag helper. %>

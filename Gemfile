@@ -78,3 +78,6 @@ gem "omniauth-rails_csrf_protection"
 gem "mission_control-jobs"
 gem "ransack", "~> 4.4"
 gem "pagy", "~> 9.4"
+gem "web-push"
+
+gem "noticed", "~> 2.9"

@@ -17,11 +17,13 @@ class User < ApplicationRecord
   has_many :user_activities, dependent: :destroy
 
   has_many :contacts, as: :owner, dependent: :destroy
-  has_many :created_contacts, class_name: 'Contact', foreign_key: 'creator_id', dependent: :destroy
+  has_many :created_contacts, class_name: "Contact", foreign_key: "creator_id", dependent: :destroy
 
   has_many :events, as: :owner, dependent: :destroy
   has_many :follow_up_tasks, dependent: :destroy
   has_many :interaction_logs, dependent: :destroy
+
+  has_many :web_push_subscriptions
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 12 }
@@ -49,7 +51,7 @@ class User < ApplicationRecord
     user_activities.create! action: "password_changed"
   end
 
-  after_update if: [:verified_previously_changed?, :verified?] do
+  after_update if: [ :verified_previously_changed?, :verified? ] do
     user_activities.create! action: "email_verified"
   end
 end

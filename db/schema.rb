@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_30_161022) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_05_201454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,6 +78,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_30_161022) do
     t.index ["event_id"], name: "index_invitations_on_event_id"
   end
 
+  create_table "noticed_events", force: :cascade do |t|
+    t.string "type"
+    t.string "record_type"
+    t.bigint "record_id"
+    t.jsonb "params"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "notifications_count"
+    t.index ["record_type", "record_id"], name: "index_noticed_events_on_record"
+  end
+
+  create_table "noticed_notifications", force: :cascade do |t|
+    t.string "type"
+    t.bigint "event_id", null: false
+    t.string "recipient_type", null: false
+    t.bigint "recipient_id", null: false
+    t.datetime "read_at", precision: nil
+    t.datetime "seen_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
+    t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "user_agent"
@@ -117,6 +141,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_30_161022) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "web_push_subscriptions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "endpoint"
+    t.string "p256dh"
+    t.string "auth"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_web_push_subscriptions_on_user_id"
+  end
+
   add_foreign_key "contacts", "users", column: "creator_id"
   add_foreign_key "follow_up_tasks", "invitations"
   add_foreign_key "follow_up_tasks", "users"
@@ -129,4 +163,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_30_161022) do
   add_foreign_key "sign_in_tokens", "users"
   add_foreign_key "user_activities", "users"
   add_foreign_key "users", "accounts"
+  add_foreign_key "web_push_subscriptions", "users"
 end

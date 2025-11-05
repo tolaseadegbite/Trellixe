@@ -1,15 +1,17 @@
 Rails.application.routes.draw do
+  mount MissionControl::Jobs::Engine, at: "/jobs"
+
   root "dashboard#show"
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
   get  "sign_up", to: "registrations#new"
   post "sign_up", to: "registrations#create"
-  resources :sessions, only: [:index, :show, :destroy]
-  resource  :password, only: [:edit, :update]
+  resources :sessions, only: [ :index, :show, :destroy ]
+  resource  :password, only: [ :edit, :update ]
   namespace :identity do
-    resource :email,              only: [:edit, :update]
-    resource :email_verification, only: [:show, :create]
-    resource :password_reset,     only: [:new, :edit, :create, :update]
+    resource :email,              only: [ :edit, :update ]
+    resource :email_verification, only: [ :show, :create ]
+    resource :password_reset,     only: [ :new, :edit, :create, :update ]
   end
   namespace :authentications do
     resources :user_activities, only: :index
@@ -20,21 +22,23 @@ Rails.application.routes.draw do
   post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
   # resource :invitation, only: [:new, :create]
   namespace :sessions do
-    resource :passwordless, only: [:new, :edit, :create]
-    resource :sudo, only: [:new, :create]
+    resource :passwordless, only: [ :new, :edit, :create ]
+    resource :sudo, only: [ :new, :create ]
   end
 
   resources :contacts
   resources :events do
-    resources :invitations, only: [:create], shallow: true
+    resources :invitations, only: [ :create ], shallow: true
   end
-  resources :invitations, only: [:update, :edit, :destroy]
+  resources :invitations, only: [ :update, :edit, :destroy ]
 
-   resources :follow_up_tasks, only: [:index] do
-    resources :interaction_logs, only: [:new, :create], shallow: true
+   resources :follow_up_tasks, only: [ :index ] do
+    resources :interaction_logs, only: [ :new, :create ], shallow: true
   end
 
-  resource :dashboard, only: [:show]
+  resources :web_push_subscriptions, only: [ :create ]
+
+  resource :dashboard, only: [ :show ]
 
   get "/home", to: "pages#home", as: :home
   get "/pricing", to: "pages#pricing", as: :pricing

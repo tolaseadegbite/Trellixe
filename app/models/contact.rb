@@ -4,7 +4,7 @@ class Contact < ApplicationRecord
 
   # == Associations ===============
   belongs_to :owner, polymorphic: true
-  belongs_to :creator, class_name: 'User'
+  belongs_to :creator, class_name: "User"
 
   # --- ADD THESE TWO LINES ---
   has_many :invitations, dependent: :destroy

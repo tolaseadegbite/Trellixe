@@ -141,6 +141,8 @@ GEM
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     json (2.15.1)
+    jwt (3.1.2)
+      base64
     kamal (2.8.1)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -216,6 +218,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-musl)
       racc (~> 1.4)
+    noticed (2.9.3)
+      rails (>= 6.1.0)
     omniauth (2.1.4)
       hashie (>= 3.4.6)
       logger
@@ -224,6 +228,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
+    openssl (3.3.2)
     ostruct (0.6.3)
     pagy (9.4.0)
     parallel (1.27.0)
@@ -398,6 +403,9 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    web-push (3.0.2)
+      jwt (~> 3.0)
+      openssl (~> 3.0)
     websocket (1.2.11)
     websocket-driver (0.8.0)
       base64
@@ -431,6 +439,7 @@ DEPENDENCIES
   kamal
   letter_opener_web (~> 3.0)
   mission_control-jobs
+  noticed (~> 2.9)
   omniauth
   omniauth-rails_csrf_protection
   pagy (~> 9.4)
@@ -451,6 +460,7 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   web-console
+  web-push
 
 BUNDLED WITH
    2.7.1

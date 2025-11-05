@@ -6,7 +6,7 @@
   <%= turbo_stream.prepend "contacts-cards", partial: "contacts/contact_card", locals: { contact: @contact } %>
   
   <%= turbo_stream.update("new_contact_form") { render "form", contact: Contact.new } %>
-  <turbo-stream action="dispatch_event" name="dialog:close"></turbo-stream>
+  <%# <turbo-stream action="dispatch_event" name="dialog:close"></turbo-stream> %>
 <% else %>
   <%= turbo_stream.update "new_contact_form", partial: "form", locals: { contact: @contact } %>
 <% end %>

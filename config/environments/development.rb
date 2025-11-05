@@ -25,11 +25,11 @@ Rails.application.configure do
     config.action_controller.perform_caching = false
   end
 
-# MISSION CONTROL CONFIGURATION
+  # MISSION CONTROL CONFIGURATION
   config.mission_control.jobs.http_basic_auth_enabled = false
 
   # Change to :null_store to avoid any caching.
-  config.cache_store = :memory_store
+  config.cache_store = :solid_cache_store
 
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
@@ -80,4 +80,6 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :letter_opener_web
   config.action_mailer.perform_deliveries = true
+
+  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 end
