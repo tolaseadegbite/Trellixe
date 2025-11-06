@@ -1,6 +1,6 @@
 <div class="pbe-3 border-be border-main last:border-be-0">
   <%# --- Event Details --- %>
-  <%= link_to invitation.event, class: "block pbe-3" do %>
+  <%= link_to invitation.event, class: "block pbe-3", data: { turbo_frame: "_top" } do %>
     <div class="flex items-center justify-between">
       <div class="flex-col min-i-0">
         <p class="font-medium text-link overflow-ellipsis"><%= invitation.event.name %></p>
