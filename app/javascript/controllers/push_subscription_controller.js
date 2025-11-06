@@ -62,6 +62,9 @@ export default class extends Controller {
       const vapidKey = document.querySelector("meta[name='vapid_key']").content;
       const applicationServerKey = urlBase64ToUint8Array(vapidKey);
 
+      console.log("Subscribing with VAPID key:", vapidKey);
+      console.log("Converted applicationServerKey:", applicationServerKey);
+
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: applicationServerKey,

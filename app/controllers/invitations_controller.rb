@@ -1,5 +1,5 @@
 class InvitationsController < DashboardController
-  before_action :set_event, only: [:create]
+  before_action :set_event, only: [ :create ]
   before_action :set_invitation, only: [ :edit, :update, :destroy ]
   before_action :set_available_contacts, only: [ :create ]
 
@@ -66,7 +66,7 @@ class InvitationsController < DashboardController
     respond_to do |format|
       # This Turbo Stream will find the invitation's frame and remove it from the page.
       format.turbo_stream { render turbo_stream: turbo_stream.remove(@invitation) }
-      format.html { redirect_to @invitation.event, notice: 'Invitation was successfully removed.' }
+      format.html { redirect_to @invitation.event, notice: "Invitation was successfully removed." }
     end
   end
 

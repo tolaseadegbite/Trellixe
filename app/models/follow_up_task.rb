@@ -13,11 +13,11 @@ class FollowUpTask < ApplicationRecord
 
   def self.ransackable_attributes(auth_object = nil)
     # We still need `due_at` for our date-based searches.
-    ["due_at"]
+    [ "due_at" ]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["contact", "event", "invitation"]
+    [ "contact", "event", "invitation" ]
   end
 
   private

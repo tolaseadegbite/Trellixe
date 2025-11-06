@@ -1,4 +1,9 @@
 <% content_for :title, "Log Follow-Up" %>
+
+<% content_for :page_header do %>
+  <h1 class="font-semibold">New Interaction Log</h1>
+<% end %>
+
 <div class="p-4">
   <h1 class="text-2xl font-semibold mbe-4">
     Log Follow-Up with <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact.id), data: { turbo_frame: "_top" }, class: "text-link" %>

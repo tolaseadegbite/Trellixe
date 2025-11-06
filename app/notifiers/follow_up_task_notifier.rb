@@ -13,7 +13,7 @@ class FollowUpTaskNotifier < ApplicationNotifier
       title: "Time to Follow Up!",
       body: "Don't forget to connect with #{contact_name} from #{event_name}.",
       # This URL will take the user to their to-do list when they click the notification.
-      url: new_follow_up_task_interaction_log_url(follow_up_task)
+      url: new_follow_up_task_interaction_log_url(task)
     }
   end
 end

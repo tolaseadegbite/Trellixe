@@ -66,11 +66,6 @@
 
   <%# Theme switcher popover %>
   <div class="mbs-auto flex flex-col">
-    <%= link_to "", class: "btn sidebar-menu__button mbe-1", aria: (current_page?("") ? { current: "page" } : {}) do %>
-      <span class="icon icon--message-square-text" aria-hidden="true"></span>
-      Feedbacks
-    <% end %>
-    
     <div contents 
          data-controller="popover" 
          data-popover-placement-value="right-center" 

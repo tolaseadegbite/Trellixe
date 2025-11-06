@@ -7,11 +7,11 @@
     <div>
       <%= yield :header_action_buttons %>
 
-      <div data-controller="push-subscription">
-        <button data-action="push-subscription#subscribe">
-          Enable Notifications
-        </button>
-      </div>
+    </div>
+    <div data-controller="push-subscription">
+      <button data-action="push-subscription#subscribe" class="btn bg-sky-600 hover:bg-sky-700">
+        Enable Notifications
+      </button>
     </div>
 
     <%# 1. Define the trigger button using the button_tag helper. %>
