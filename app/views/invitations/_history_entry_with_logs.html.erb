@@ -25,7 +25,7 @@
         <% invitation.follow_up_tasks.each do |task| %>
           <% task.interaction_logs.each do |log| %>
             <div>
-              <p class="text-sm mbe-1 break-words"><%= log.note %></p>
+              <p class="text-sm mbe-1 break-words text-sky-500"><%= log.note %></p>
               <p class="text-xs text-subtle">
                 Logged on <%= log.created_at.strftime("%B %d, %Y") %>
               </p>

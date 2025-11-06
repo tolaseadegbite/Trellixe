@@ -2,7 +2,7 @@
 
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
-    <h2 class="font-semibold text-2xl mbe-4">Edit Invitation for <%= @invitation.contact.full_name %></h2>
+    <h2 class="font-semibold text-2xl mbe-4">Edit Invitation for <%= link_to @invitation.contact.full_name, contact_path(@invitation.contact), class: "text-link", data: { turbo_frame: "_top" } %></h2>
     <%= render "edit_form", invitation: @invitation %>
   </div>
 <% end %>
