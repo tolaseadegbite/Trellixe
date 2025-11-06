@@ -31,7 +31,7 @@ class ContactsController < DashboardController
 
     respond_to do |format|
       if @contact.save
-        NewContactNotifier.with(contact: @contact).deliver(current_user)
+        # NewContactNotifier.with(contact: @contact).deliver(current_user)
         flash.now[:notice] = "Contact was successfully submitted."
         format.turbo_stream
       else
