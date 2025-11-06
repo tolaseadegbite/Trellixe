@@ -12,5 +12,5 @@
   </div>
 
   <%# This button takes the user directly to the form to log their interaction %>
-  <%= link_to "Log Follow-Up", new_follow_up_task_interaction_log_path(pending_follow_up), class: "btn btn--primary", data: { turbo_frame: "modal" } %>
+  <%= link_to "Log Follow-Up", new_follow_up_task_interaction_log_path(pending_follow_up), class: "btn btn--primary", data: { turbo_frame: "_top" } %>
 <% end %>

@@ -4,7 +4,7 @@
   <div class="flex-col">
     <%= link_to new_follow_up_task_interaction_log_path(follow_up_task),
                 class: "font-semibold text-primary hover:text-link",
-                data: { turbo_frame: "modal" } do %>
+                data: { turbo_frame: "_top" } do %>
       Follow up with <%= follow_up_task.invitation.contact.full_name %>
     <% end %>
     <p class="text-sm text-subtle">

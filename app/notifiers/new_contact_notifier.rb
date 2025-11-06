@@ -8,8 +8,8 @@ class NewContactNotifier < ApplicationNotifier
   # This method will be called by your delivery class
   def web_push_payload
     {
-      title: "New Comment!",
-      body: "A new contact was created on '#{params[:contact].full_name}'.",
+      title: "New Contact!",
+      body: "A new contact, '#{params[:contact].full_name}' was created.",
       url: contact_url(params[:contact])
     }
   end
