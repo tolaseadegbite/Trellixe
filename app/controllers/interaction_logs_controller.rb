@@ -20,7 +20,7 @@ class InteractionLogsController < DashboardController
         @follow_up_task.update!(completed_at: Time.current)
       end
 
-      format.turbo_stream
+      # format.turbo_stream
       format.html { redirect_to follow_up_tasks_path, notice: "Follow-up successfully logged!" }
 
     rescue ActiveRecord::RecordInvalid
