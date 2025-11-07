@@ -7,7 +7,7 @@ class FollowUpTask < ApplicationRecord
   has_one :contact, through: :invitation
   has_one :event, through: :invitation
 
-  after_create_commit :schedule_reminder
+  after_create_commit :schedule_first_reminder
 
   # --- RANSACK CONFIGURATION ---
 
@@ -22,13 +22,7 @@ class FollowUpTask < ApplicationRecord
 
   private
 
-  # This method will be called after a new task is saved to the database.
-  def schedule_reminder
-    FollowUpTaskNotifier
-      .with(task: self)
-      .deliver_later(
-        user, # The recipient of the notification
-        wait_until: due_at # The magic! Noticed will schedule the job for this time.
-      )
+  def schedule_first_reminder
+    FollowUpReminderJob.set(wait_until: due_at).perform_later(self)
   end
 end
