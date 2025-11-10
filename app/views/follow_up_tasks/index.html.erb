@@ -12,7 +12,7 @@
   <%= turbo_frame_tag :follow_up_tasks_list do %>
 
     <%# --- RESULTS LIST --- %>
-    <div class="card pb-0">
+    <div class="card pb-0 pi-3">
       <div id="follow_up_tasks" class="flex flex-col">
         <% if @follow_up_tasks.any? %>
           <%= render @follow_up_tasks %>

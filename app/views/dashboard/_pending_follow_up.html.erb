@@ -1,4 +1,4 @@
-<%= tag.div class: "card flex items-center justify-between gap", id: dom_id(pending_follow_up) do %>
+<%= tag.div class: "card p-3 flex items-center justify-between gap", id: dom_id(pending_follow_up) do %>
   <div>
     <p class="font-medium">
       Follow up with <%= pending_follow_up.invitation.contact.full_name %>
@@ -12,5 +12,5 @@
   </div>
 
   <%# This button takes the user directly to the form to log their interaction %>
-  <%= link_to "Log Follow-Up", new_follow_up_task_interaction_log_path(pending_follow_up), class: "btn btn--primary", data: { turbo_frame: "_top" } %>
+  <%= link_to "Log Follow-Up", new_follow_up_task_interaction_log_path(pending_follow_up), class: "btn", data: { turbo_frame: "_top" } %>
 <% end %>

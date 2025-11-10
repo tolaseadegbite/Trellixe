@@ -5,7 +5,7 @@ class FollowUpTasksController < DashboardController
     @q = base_query.ransack(params[:q])
 
     records = @q.result
-                    .includes(invitation: [:contact, :event])
+                    .includes(invitation: [ :contact, :event ])
                     .order(due_at: :asc)
 
     @pagy, @follow_up_tasks = pagy(records)
