@@ -6,11 +6,17 @@
 <% content_for :header_action_buttons do %>
       
   <%= link_to "New event", new_event_path,
-                class: "btn btn--primary",
+                class: "btn btn--primary show@md",
                 data: { turbo_frame: "modal" } %>
 <% end %>
 
-<div id="events-page" class="flex flex-col p-4 i-full">
+<div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
+  <%= link_to new_event_path, class: "btn btn--primary rounded-full p-5", data: { turbo_frame: "modal" } do %>
+    <span class="icon icon--calendar-range"></span>
+  <% end %>
+</div>
+
+<div id="events-page" class="flex flex-col p-2 i-full">
   <!--<div class="flex items-center justify-between mbe-4 hide@md">
     <h1 class="font-semibold text-2xl">Events</h1>
     <%= link_to "New Event", new_event_path, class: "btn btn--primary text-md", data: { turbo_frame: "modal" } %>

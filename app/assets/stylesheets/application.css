@@ -27,6 +27,14 @@
   display: none;
 }
 
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
 /* .events-search-button {
   position: absolute !important;
   top: 12%;

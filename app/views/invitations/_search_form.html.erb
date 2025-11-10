@@ -1,5 +1,5 @@
 <%= search_form_for @invitations_search, url: event_path(@event) do |f| %>
-    <div class="grid grid-cols-1 grid-cols-2@md gap-4 mbe-4">
+    <div class="grid grid-cols-1 grid-cols-2@md gap mbe-4">
         
         <%# --- Search by Contact Name/Email --- %>
         <div>
@@ -22,7 +22,7 @@
     </div>
 
     <%# --- Form Actions --- %>
-    <div class="flex items-center gap mbe-4">
+    <div class="flex items-center gap mbe-10">
         <%= f.submit "Search", class: "btn btn--primary" %>
         <%= link_to "Reset", event_path(@event), class: "btn" if params.has_key?(:q) %>
     </div>

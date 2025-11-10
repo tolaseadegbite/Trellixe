@@ -8,7 +8,7 @@
     <span>Search events</span>
   </button>
 
-  <div class="hide card mbe-4" data-search-filter-target="filters">
+  <div class="hide p-2 card mbe-4" data-search-filter-target="filters">
     <%= search_form_for @q, url: follow_up_tasks_path do |f| %>
       <div class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
 
@@ -60,7 +60,7 @@
       <%# --- Form Action Buttons --- %>
       <div class="flex items-center justify-end gap mbs-4">
         <%= link_to "Reset All", follow_up_tasks_path, class: "btn" if params[:q].present? %>
-        <%= f.submit "Search", class: "btn" %>
+        <%= f.submit "Search", class: "btn btn--primary" %>
       </div>
     <% end %>
   </div>

@@ -40,7 +40,7 @@
     <% end %>
     
     <%# Notifications dropdown %>
-    <div contents 
+    <!--<div contents 
          data-controller="popover" 
          data-popover-placement-value="bottom-center" <%# Placement for header %>
          data-action="click@window->popover#clickOutside">
@@ -50,10 +50,10 @@
         <span class="icon icon--bell" aria-hidden="true"></span>
       </button>
 
-      <%= tag.div popover: true, id: "header-notifications-popover", class: "popover popover--notifications", style: "--popover-size: 23rem;", data: { popover_target: "content" } do %>
-        <%= render "layouts/navigation/dashboard/notifications_list" %>
-      <% end %>
-    </div>
+      <%#= tag.div popover: true, id: "header-notifications-popover", class: "popover popover--notifications", style: "--popover-size: 23rem;", data: { popover_target: "content" } do %>
+        <%#= render "layouts/navigation/dashboard/notifications_list" %>
+      <%# end %>
+    </div>-->
 
     <%# User profile dropdown %>
     <% trigger = button_tag type: "button", class: "btn p-0 rounded-full border-2 border-green-500 hide@md", data: { action: "dialog#showModal" } do %>

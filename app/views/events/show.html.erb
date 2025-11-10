@@ -10,7 +10,7 @@
 <% end %>
 
 <%# --- Main Page Container --- %>
-<div class="flex flex-col gap p-4">
+<div class="flex flex-col gap-half p-2">
 
   <%# --- Event Header Section --- %>
   <div class="card flex items-start justify-between gap-5">
@@ -21,28 +21,28 @@
     <%# --- At-a-Glance Stats --- %>
     <div class="flex flex-wrap items-center justify-center gap text-center">
       <div>
-        <p class="text-xl font-semibold"><%= @stats[:accepted] %></p>
-        <p class="text-xs uppercase text-subtle">Accepted</p>
-      </div>
-      <div>
-        <p class="text-xl font-semibold"><%= @stats[:attended] %></p>
-        <p class="text-xs uppercase text-subtle">Attended</p>
-      </div>
-      <div>
         <p class="text-xl font-semibold"><%= @stats[:total] %></p>
         <p class="text-xs uppercase text-subtle">Invited</p>
       </div>
       <div>
-        <p class="text-xl font-semibold"><%= @stats[:declined] %></p>
-        <p class="text-xs uppercase text-subtle">Declined</p>
+        <p class="text-xl font-semibold text-blue-400"><%= @stats[:accepted] %></p>
+        <p class="text-xs uppercase text-blue-400">Accepted</p>
+      </div>
+      <div>
+        <p class="text-xl font-semibold text-green-400"><%= @stats[:attended] %></p>
+        <p class="text-xs uppercase text-green-400">Attended</p>
+      </div>
+      <div>
+        <p class="text-xl font-semibold text-red-400"><%= @stats[:declined] %></p>
+        <p class="text-xs uppercase text-red-400">Declined</p>
       </div>
     </div>
   </div>
 
   <%# --- Main Content Area: Invitation List and Invite Form --- %>
-  <div class="flex flex-col gap bg-surface rounded-md border pi-6">
+  <div class="flex flex-col gap card">
     
-    <div class="border-be border-main pb-6">
+    <div class="border-be border-main pbe-6">
       <h3 class="text-lg font-semibold">Invite Contacts</h3>
       <%= turbo_frame_tag "new_invitation_form" do %>
         <%= render "invitations/form", event: @event, invitation: @new_invitation %>
