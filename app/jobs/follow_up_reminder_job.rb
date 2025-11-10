@@ -6,6 +6,6 @@ class FollowUpReminderJob < ApplicationJob
 
     FollowUpTaskNotifier.with(task: follow_up_task).deliver(follow_up_task.user)
 
-    self.class.set(wait: 24.hours).perform_later(follow_up_task)
+    self.class.set(wait: 1.minute).perform_later(follow_up_task)
   end
 end

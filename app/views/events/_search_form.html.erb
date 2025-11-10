@@ -8,7 +8,7 @@
     <span>Search events</span>
   </button>
 
-  <div class="hide card p-2 mbe-4" data-search-filter-target="filters">
+  <div class="hide card p-4 mbe-4" data-search-filter-target="filters">
     <%= search_form_for @search, url: events_path do |f| %>
       <%= hidden_field_tag :view, 'events-list' %>
 

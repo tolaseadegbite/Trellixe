@@ -37,7 +37,7 @@ class InvitationsController < DashboardController
     respond_to do |format|
       if @invitation.update(invitation_params)
         create_follow_up_task_if_needed(@invitation)
-        
+
         format.turbo_stream
         format.html { redirect_to @invitation.event, notice: "Invitation was successfully updated." }
       else
@@ -76,31 +76,15 @@ class InvitationsController < DashboardController
     params.require(:invitation).permit(:contact_id, :status, :notes)
   end
 
-  # def create_follow_up_task_if_needed(invitation)
-  #   # Guard clauses to ensure we only create a task when needed.
-  #   return unless invitation.attended? && invitation.saved_change_to_status?
-  #   return if FollowUpTask.exists?(invitation_id: invitation.id)
-
-  #   # Calculate the event's end time.
-  #   event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
-
-  #   due_date = 1.minute.from_now
-
-  #   FollowUpTask.create!(
-  #     invitation: invitation,
-  #     user: current_user,
-  #     due_at: due_date
-  #   )
-  # end
-
   def create_follow_up_task_if_needed(invitation)
+    # Guard clauses to ensure we only create a task when needed.
     return unless invitation.attended? && invitation.saved_change_to_status?
     return if FollowUpTask.exists?(invitation_id: invitation.id)
 
+    # Calculate the event's end time.
     event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
 
-    due_date = event_end_time.next_day.beginning_of_day.advance(hours: 9)
-    # due_date = event_end_time.tomorrow.change(hour: 9)
+    due_date = 1.minute.from_now
 
     FollowUpTask.create!(
       invitation: invitation,
@@ -108,4 +92,20 @@ class InvitationsController < DashboardController
       due_at: due_date
     )
   end
+
+  # def create_follow_up_task_if_needed(invitation)
+  #   return unless invitation.attended? && invitation.saved_change_to_status?
+  #   return if FollowUpTask.exists?(invitation_id: invitation.id)
+
+  #   event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
+
+  #   due_date = event_end_time.next_day.beginning_of_day.advance(hours: 9)
+  #   # due_date = event_end_time.tomorrow.change(hour: 9)
+
+  #   FollowUpTask.create!(
+  #     invitation: invitation,
+  #     user: current_user,
+  #     due_at: due_date
+  #   )
+  # end
 end
