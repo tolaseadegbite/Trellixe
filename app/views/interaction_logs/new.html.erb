@@ -1,7 +1,10 @@
 <% content_for :title, "Log Follow-Up" %>
 
 <% content_for :page_header do %>
-  <h1 class="font-semibold">New Interaction Log</h1>
+  <div class="flex gap-2 items-center">
+    <%= link_to sanitize("&larr;"), :back %>
+    <h1 class="font-semibold">New Interaction Log</h1>
+  </div>
 <% end %>
 
 <div class="p-4">

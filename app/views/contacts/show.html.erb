@@ -1,11 +1,12 @@
 <% content_for :title, "Trellixe - #{@contact.full_name}" %>
 
 <% content_for :page_header do %>
-  <div class="flex items-center justify-between i-full">
+  <div class="flex items-center gap i-full">
+    <%= link_to sanitize("&larr;"), :back %>
     <%# --- Breadcrumb --- %>
     <div class="text-base">
-      <%= link_to "Contacts", contacts_path, class: "text-subtle hover:text-primary" %>
-      <span class="text-subtle">/</span>
+      <%#= link_to "Contacts", contacts_path, class: "text-subtle hover:text-primary" %>
+      <%# <span class="text-subtle">/</span> %>
       <span class="text-primary overflow-ellipsis"><%= @contact.full_name %></span>
     </div>
   </div>
