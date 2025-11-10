@@ -28,12 +28,9 @@
         </div>
 
         <div>
-          <%# --- FILTER LINK LOGIC --- %>
           <%
-            # This logic to build the base parameters is correct.
             base_params = params.fetch(:q, {}).except(:due_at_lt, :due_at_gteq, :due_at_lteq, :page).permit!
             
-            # Helper variables to determine the active state.
             q_params = params.fetch(:q, {})
             is_all_active = !q_params.key?("due_at_lt") && !q_params.key?("due_at_gteq")
             is_overdue_active = q_params.key?("due_at_lt")
@@ -57,7 +54,6 @@
         </div>
       </div>
       
-      <%# --- Form Action Buttons --- %>
       <div class="flex items-center justify-end gap mbs-4">
         <%= link_to "Reset All", follow_up_tasks_path, class: "btn" if params[:q].present? %>
         <%= f.submit "Search", class: "btn btn--primary" %>

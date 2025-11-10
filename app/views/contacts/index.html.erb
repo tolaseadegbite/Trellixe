@@ -54,7 +54,7 @@
 
     <%# --- MOBILE VIEW: Cards (Hidden on medium screens and up) --- %>
     <div class="hide@md flex flex-col" data-controller="check-all">
-      <div class="flex items-center gap-half p-2">
+      <div class="flex items-center gap p-2">
         <%= check_box_tag "check_all_mobile", nil, false, {
               class: "input cursor-pointer",
               data: { action: "check-all#check", check_all_target: "dependee" }

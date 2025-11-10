@@ -5,8 +5,14 @@
   <%# --- Checkbox and Avatar --- %>
   <div class="flex items-center gap shrink-0">
     <%= check_box_tag "selected_ids[]", contact.id, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
-    <div class="flex shrink-0 overflow-hidden rounded-full">
-      <%= link_to image_tag("avatar.jpg", size: "40x40", alt: "User Avatar"), contact_path(contact), data: { turbo_frame: "_top" } %>
+    <!--<div class="flex shrink-0 overflow-hidden rounded-full">
+      <%#= link_to image_tag("avatar.jpg", size: "40x40", alt: "User Avatar"), contact_path(contact), data: { turbo_frame: "_top" } %>
+    </div>-->
+
+    <div class="flex items-center justify-center rounded-full bg-shade shrink-0 border" style="block-size: 2.5rem; inline-size: 2.5rem;">
+      <span class="font-semibold">
+        <%= contact.full_name&.first || contact.first_name&.first || contact.email.first.upcase %>
+      </span>
     </div>
   </div>
 

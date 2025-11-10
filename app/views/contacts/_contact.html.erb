@@ -1,9 +1,16 @@
 <tr id="<%= dom_id(contact, :table_row) %>">
   <td><%= check_box_tag "selected_ids[]", contact.id, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %></td>
   <td class="whitespace-nowrap">
-    <div class="flex items-center gap">
+    <!--<div class="flex items-center gap">
       <div class="flex shrink-0 overflow-hidden rounded-full">
         <%= image_tag "avatar.jpg", size: 32, alt: "User Avatar" %>
+      </div>
+    </div>-->
+    <div class="flex items-center gap">
+      <div class="flex items-center justify-center rounded-full bg-shade shrink-0 border" style="block-size: 2.5rem; inline-size: 2.5rem;">
+        <span class="font-semibold">
+          <%= contact.full_name&.first.upcase || contact.first_name&.first.upcase || contact.email.first.upcase %>
+        </span>
       </div>
 
       <span class="overflow-ellipsis"><%= contact.first_name.titleize %></span>
