@@ -1,4 +1,4 @@
-class InteractionLogsController < DashboardController
+class InteractionLogsController < DashboardsController
   before_action :set_follow_up_task, only: [:new, :create]
 
   def new

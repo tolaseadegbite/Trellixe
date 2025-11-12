@@ -1,4 +1,4 @@
-class InvitationsController < DashboardController
+class InvitationsController < DashboardsController
   before_action :set_event, only: [ :create ]
   before_action :set_invitation, only: [ :edit, :update, :destroy ]
   before_action :set_available_contacts, only: [ :create ]

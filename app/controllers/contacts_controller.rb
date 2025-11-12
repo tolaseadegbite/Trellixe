@@ -1,4 +1,4 @@
-class ContactsController < DashboardController
+class ContactsController < DashboardsController
   before_action :set_contact, only: %i[ show edit update destroy ]
 
   # GET /contacts

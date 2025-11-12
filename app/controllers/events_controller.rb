@@ -1,4 +1,4 @@
-class EventsController < DashboardController
+class EventsController < DashboardsController
   before_action :set_event, only: %i[ show edit update destroy ]
 
   def index

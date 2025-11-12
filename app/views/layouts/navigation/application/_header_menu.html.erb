@@ -1,7 +1,7 @@
 <div class="flex items-center justify-between i-full sticky text-primary">
   <div class="flex items-center gap">
     <%= link_to root_path, class: "flex items-center gap mie-2" do %>
-      <span class="font-bold text-3xl">Trellixe</span>
+      <span class="font-semibold text-lg">Trellixe</span>
     <% end %>
   </div>
 
@@ -12,7 +12,26 @@
     <%= link_to "Blog", "#" %>
   </nav>
 
-    <%= link_to "Log In", sign_in_path, class: "btn btn-primary" %>
+    <%= link_to "Log In", sign_in_path, class: "btn btn--primary" %>
+
+    <div contents 
+         data-controller="popover" 
+         data-popover-placement-value="right-center" 
+         data-action="click@window->popover#clickOutside">
+      <%= button_tag type: "button", class: "btn", data: { action: "click->popover#toggle", popover_target: "trigger" }, aria: { haspopup: "true" } do %>
+        <span class="icon icon--sun icon--color-scheme-light" aria-hidden="true"></span>
+        <span class="icon icon--moon icon--color-scheme-dark" aria-hidden="true"></span>
+        <span class="sr-only">Theme switcher</span>
+        Theme
+      <% end %>
+      <%= tag.div popover: true, id: "dashboard-theme-switcher-popover", class: "popover", style: "--popover-size: 12rem;", data: { popover_target: "content" } do %>
+        <div class="menu" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
+          <button type="button" class="btn menu__item" data-action="popover#hide color-scheme#setLight" data-menu-target="item" role="menuitem">Light</button>
+          <button type="button" class="btn menu__item" data-action="popover#hide color-scheme#setDark" data-menu-target="item" role="menuitem">Dark</button>
+          <button type="button" class="btn menu__item" data-action="popover#hide color-scheme#setSystem" data-menu-target="item" role="menuitem">System</button>
+        </div>
+      <% end %>
+    </div>
 
     <!--<div contents data-controller="popover" data-popover-placement-value="bottom-start">
       <button type="button" class="btn avatar" data-popover-target="trigger" popovertarget="popover" aria-haspopup="true">

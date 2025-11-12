@@ -1,4 +1,4 @@
-class WebPushSubscriptionsController < DashboardController
+class WebPushSubscriptionsController < DashboardsController
   def create
     # Find or create the subscription for the current user
     @subscription = current_user.web_push_subscriptions.find_or_initialize_by(

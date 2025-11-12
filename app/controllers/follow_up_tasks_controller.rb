@@ -1,4 +1,4 @@
-class FollowUpTasksController < DashboardController
+class FollowUpTasksController < DashboardsController
   def index
     base_query = current_user.follow_up_tasks.where(completed_at: nil)
 
