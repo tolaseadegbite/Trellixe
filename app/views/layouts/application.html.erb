@@ -36,17 +36,15 @@
       <%= render "shared/flash" %>
     </div>
 
-    <% if controller_name == 'pages' %>
-      <%= render "layouts/navigation/application/navbar" %>
-    <% end %>
+    <%# if controller_name == 'pages' %>
+      <%#= render "layouts/navigation/application/navbar" %>
+    <%# end %>
 
     <% if auth_pages %>
       <%= yield %>
     <% else %>
       <main id="main">
-        <div class="container">
-          <%= yield %>
-        </div>
+        <%= yield %>
       </main>
     <% end %>
   </body>

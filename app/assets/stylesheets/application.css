@@ -49,3 +49,7 @@
     opacity: 1;
   }
 } */
+
+.section-padding {
+  padding: var(--size-10);
+}

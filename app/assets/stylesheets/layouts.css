@@ -33,7 +33,7 @@
 
 #header {
   align-items: center;
-  background-color: rgb(from var(--color-border-light) r g b / .5);
+  /* background-color: rgb(from var(--color-border-light) r g b / .5); */
   border-block-end-width: var(--border);
   block-size: var(--size-16);
   column-gap: var(--size-4);
@@ -61,5 +61,5 @@
   gap: var(--size-4);
   grid-area: main;
   overflow: auto;
-  padding: var(--size-4);
+  /* padding: var(--size-4); */
 }
