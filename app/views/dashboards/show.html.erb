@@ -1,7 +1,7 @@
 <% content_for :title, "Dashboard" %>
 
 <% content_for :page_header do %>
-  <h2 class="font-semibold">Dashboard</h2>
+  <h4 class="font-semibold">Dashboard</h4>
 <% end %>
 
 <% content_for :header_action_buttons do %>
@@ -19,7 +19,7 @@
 <% end %>
 
 <div class="absolute hide@md" style="bottom: 8.5rem; right: 1.8rem; z-index: 9999">
-  <%= link_to new_contact_path, class: "btn btn--primary rounded-full p-5 border new-btn", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_contact_path, class: "btn btn--primary rounded-full p-5 border-2 border-blue-500 new-btn", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--pen"></span>
   <% end %>
 </div>

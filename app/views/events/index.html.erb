@@ -22,7 +22,7 @@
     <%= link_to "New Event", new_event_path, class: "btn btn--primary text-md", data: { turbo_frame: "modal" } %>
   </div>-->
   
-  <nav class="tabs__list mbe-4" aria-label="Events list and calendar" style="max-inline-size: 500px">
+  <nav class="tabs__list mbe-4 border" aria-label="Events list and calendar" style="max-inline-size: 500px">
     <%# The Events list tab is "current" if the view is anything other than 'calendar' %>
     <%= link_to "Events list",
                 events_path(view: 'events-list', q: params.permit(q: [:name_cont, :starts_at_gteq, :starts_at_lteq, :invited_contacts_id_eq])),
@@ -37,10 +37,10 @@
   </nav>
 
   <%= turbo_frame_tag "event_view" do %>
-  <% if params[:view] == 'calendar' %>
-    <%= render 'events/calendar' %>
-  <% else %>
-    <%= render 'events/events-list' %>
+    <% if params[:view] == 'calendar' %>
+      <%= render 'events/calendar' %>
+    <% else %>
+      <%= render 'events/events-list' %>
+    <% end %>
   <% end %>
-<% end %>
 </div>

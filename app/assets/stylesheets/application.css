@@ -1,29 +1,48 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
-
  body {
     margin: 0;
     padding: 0;
     /* font-size: var(--text-md); */
  }
 
- .cursor-pointer {
+ @font-face {
+  font-family: 'Roboto Condensed';
+  src: font-url('roboto/Roboto_Condensed-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: font-url('roboto/Roboto_Condensed-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: font-url('roboto/Roboto_Condensed-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: font-url('roboto/Roboto_Condensed-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
+.cursor-pointer {
    cursor: pointer;
- }
+}
 
- .min-h-24 {
+.min-h-24 {
   min-height: 96px;
- }
+}
 
- .hide {
+.hide {
   display: none;
 }
 

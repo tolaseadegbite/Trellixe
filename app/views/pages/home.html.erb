@@ -1,32 +1,33 @@
 <% content_for :title, "Never Forget a Follow-Up Again" %>
 
-<section class="mbs-4 mi-4 rounded-lg" style="background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));">
+<section class="mbs-3 mi-3 rounded-lg" style="background-image: linear-gradient(to right, var(--blue-500), var(--teal-500)); max-block-size: 97dvh;">
 
     <%= render "layouts/navigation/application/navbar" %>
 
-    <div class="section-padding text-center" style="padding-top: 6rem;">
-        <div class="flex flex-col gap-8 text-gray-">
-            <h1 class="font-semibold leading-tight" style="font-size: 3.5rem;">Never Forget a Follow-Up Again.</h1>
+    <div class="section-padding text-center">
+        <div class="flex flex-col gap-8">
+            <h1 class="font-bold leading-tight" style="font-size: 3.5rem;">Never Forget a Follow-Up Again.</h1>
             <p class="text-lg mt-4 mi-auto" style="max-inline-size: 48rem;">
-                Trellixe is the simple app for Invitations people, salespeople, and networkers that automates your post-event reminders so you can build lasting connections.
+                Trellixe is the simple app for Inviters, salespeople, and networkers that automates post-event reminders so you can build lasting connections.
             </p>
             <div class="mt-8">
-                <a href="#signup" class="btn btn--primary text-lg">Get started for free</a>
+                <%= link_to "Get Free Early Access", sign_up_path, class: "btn btn--primary text-lg" %>
+                <p class="text-xs mbs-2">Become a founding member. No credit card required.</p>
             </div>
         </div>
             
         <div class="container mbs-10 shadow-lg">
-            <div class="aspect-cover flex items-center relative">
-                <%= image_tag("landing_page/image_1.png", class: "", style: "border-radius: .8rem .8rem 0 0") %>
+            <div class="flex items-center relative">
+                <%= image_tag("landing_page/image_1.png", class: "home-image border rounded-lg") %>
             </div>
         </div>
     </div>
 </section>
 
-<section class="bg-shade mi-4 rounded-lg" style="padding: 6rem 0;">
+<section id="features" class="bg-shade mi-3 rounded-lg" style="padding: 16rem 0 6rem;">
     <div class="container flex justify-center" style="margin-bottom: 4rem;">
         <div>
-            <h2 class="font-semibold leading-tight text-4xl mbe-8" style="max-inline-size: 50dvh;">Just enough tools you need to build lasting connections.</h2>
+            <h2 class="font-bold leading-tight text-4xl mbe-8" style="max-inline-size: 50dvh;">Just enough tools you need to build lasting connections.</h2>
             <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
                 Trellixe provides a simple, focused toolkit to guide you from the first handshake to a meaningful follow-up. No complicated features, just the essentials done right
             </p>
@@ -35,33 +36,33 @@
 
     <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-10">
         <div class="mt-8 flex flex-col items-start gap-4">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2 inline-block", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
+            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
                 <span class="icon icon--user-check" style="--icon-size: 1.5rem" aria-hidden="true"></span>
                 <span class="sr-only">Go forward</span>
             <% end %>
-            <h2 class="font-semibold leading-tight text-lg">Remember Every Detail, Not Just a Name</h2>
+            <h2 class="font-bold leading-tight text-lg">Remember Every Detail, Not Just a Name</h2>
             <p class="text-lg">
                 Go beyond a simple contact list. Use the dedicated <strong>notes field</strong> to capture the crucial context of how you met, what you discussed, and what matters to them. This turns a cold follow-up into a warm, personal conversation
             </p>
         </div>
 
         <div class="mt-8 flex flex-col items-start gap-4">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2 inline-block", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
+            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
                 <span class="icon icon--calendar-range" style="--icon-size: 1.5rem" aria-hidden="true"></span>
                 <span class="sr-only">Go forward</span>
             <% end %>
-            <h2 class="font-semibold leading-tight text-lg">Simple Event Tracking</h2>
+            <h2 class="font-bold leading-tight text-lg">Simple Event Tracking</h2>
             <p class="text-lg">
                 Create an event, invite your contacts, and with a single tap, mark who attended. This simple action is the key that tells Trellixe a meaningful connection was made and it's time to follow up
             </p>
         </div>
 
         <div class="mt-8 flex flex-col items-start gap-4">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2 inline-block", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
+            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
                 <span class="icon icon--bell" style="--icon-size: 1.5rem" aria-hidden="true"></span>
                 <span class="sr-only">Go forward</span>
             <% end %>
-            <h2 class="font-semibold leading-tight text-lg">Automated Follow-Up Reminders</h2>
+            <h2 class="font-bold leading-tight text-lg">Automated Follow-Up Reminders</h2>
             <p class="text-lg">
                 This is the magic. Trellixe automatically reminds you to connect with every single person who attended your event. Never let a valuable relationship fall through the cracks again
             </p>
@@ -70,10 +71,10 @@
 
 </section>
 
-<section class="bg-black text-reversed mi-4 rounded-lg" style="padding: 6rem 0;">
+<section class="bg-black text-reversed mi-3 rounded-lg" style="padding: 6rem 0;">
     <div class="container flex gap-8 justify-center">
         <div class="flex flex-col gap-8">
-            <h2 class="font-semibold leading-tight text-4xl" style="max-inline-size: 60dvh;">Manage Your Entire Relationship Workflow</h2>
+            <h2 class="font-bold leading-tight text-4xl" style="max-inline-size: 60dvh;">Manage Your Entire Relationship Workflow</h2>
             
             <p class="text-lg mt-4" style="max-inline-size: 60dvh;">
                 Trellixe is built with intention at its heart and is loaded with features to help you connect more effectively. It's quick to learn, fast to navigate, and empowering to use
@@ -91,10 +92,10 @@
     </div>
 </section>
 
-<section class="bg-light mi-4 rounded-lg" style="padding: 6rem 0;">
+<section class="bg-light mi-3 rounded-lg" style="padding: 6rem 0;">
     <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@lg gap-10 mbs-10 items-center">
         <div class="container flex flex-col gap-8">
-            <h2 class="font-semibold leading-tight text-4xl" style="max-inline-size: 38dvh;">Remember the Story, Not Just the Name</h2>
+            <h2 class="font-bold leading-tight text-4xl" style="max-inline-size: 38dvh;">Remember the Story, Not Just the Name</h2>
             <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
                 A great follow-up starts with great context. Trellixe’s rich contact profiles give you a dedicated space to capture the details that matter—where you met, what you talked about, and what their interests are—so your next conversation always feels personal and genuine
             </p>
@@ -106,25 +107,25 @@
     </div>
 </section>
 
-<section class="bg-shade mi-4 rounded-lg" style="padding: 6rem 0; background-image: linear-gradient(to right, var(--blue-300), var(--teal-300));">
+<section class="bg-shade mi-3 rounded-lg" style="padding: 6rem 0; background-image: linear-gradient(to right, var(--blue-300), var(--teal-500));">
     <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@lg gap-10 mbs-10 items-center">
         <div class="">
             <%= image_tag("landing_page/image_2.png", class: "rounded-lg shadow-lg", size: "max-block-size: 70dvh;") %>
         </div>
 
         <div class="container flex flex-col gap-8">
-            <h2 class="font-semibold leading-tight text-4xl" style="max-inline-size: 38dvh;">Know Exactly Who to Follow Up With</h2>
+            <h2 class="font-bold leading-tight text-4xl" style="max-inline-size: 38dvh;">Know Exactly Who to Follow Up With</h2>
             <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
-                A great follow-up starts with great context. Trellixe’s rich contact profiles give you a dedicated space to capture the details that matter—where you met, what you talked about, and what their interests are—so your next conversation always feels personal and genuine
+                The automated reminder system is your personal assistant. After an event, Trellixe sends you a timely notification for every person you marked as "Attended." It cuts through the noise and gives you a clear, actionable to-do list, ensuring you never miss the crucial window to build a connection.
             </p>
         </div>
     </div>
 </section>
 
-<section class="mi-4 rounded-lg" style="padding: 6rem 0;">
+<section class="mi-3 rounded-lg" style="padding: 6rem 0;">
     <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@lg gap-10 mbs-10 items-center">
         <div class="container flex flex-col gap-8">
-            <h2 class="font-semibold leading-tight text-4xl" style="max-inline-size: 38dvh;">Build a History of Your Relationship</h2>
+            <h2 class="font-bold leading-tight text-4xl" style="max-inline-size: 38dvh;">Build a History of Your Relationship</h2>
             <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
                 Closing the loop is satisfying. After you've made your call or sent your text, a simple log entry creates a permanent record of the interaction. Over time, you'll build a complete history for each contact, allowing you to see their entire journey from first-time visitor to valued community member.
             </p>
@@ -136,10 +137,10 @@
     </div>
 </section>
 
-<section class="bg-black text-reversed mi-4 rounded-lg" style="padding: 6rem 0;">
-    <div class="container flex justify-center" style="margin-bottom: 4rem;">
+<section id="who_is_it_for" class="bg-black text-reversed mi-3 rounded-lg" style="padding: 6rem 0;">
+    <div class="container section-header flex justify-center" style="margin-bottom: 4rem;">
         <div>
-            <h2 class="font-semibold leading-tight text-4xl mbe-8" style="max-inline-size: 50dvh;">Designed for Connectors</h2>
+            <h2 class="font-bold leading-tight text-4xl mbe-8" style="max-inline-size: 50dvh;">Designed for Connectors</h2>
             <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
                 If your success depends on the strength of your relationships, Trellixe is built for you.
             </p>
@@ -148,33 +149,30 @@
 
     <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-8">
         <div class="mt-8 flex flex-col items-start gap-4 border rounded-lg p-5">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2 inline-block", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <span class="icon icon--user-check" style="--icon-size: 1.5rem" aria-hidden="true"></span>
-                <span class="sr-only">Go forward</span>
+            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
+                <svg class="i-full" style="inline-size: 2rem; block-size: 2rem; color: var(--color-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.25278C12 6.25278 5.68478 3 5.68478 3C5.68478 3 4.5 12 12 12C19.5 12 18.3152 3 18.3152 3C18.3152 3 12 6.25278 12 6.25278Z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12V21" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21H5.68478" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21H18.3152" /></svg>
             <% end %>
-            <h2 class="font-semibold leading-tight text-lg">Pastors & Church Leaders</h2>
+            <h2 class="font-bold leading-tight text-lg">Pastors & Church Leaders</h2>
             <p class="text-lg">
                 Nurture your congregation and make every visitor feel seen and remembered.
             </p>
         </div>
 
         <div class="mt-8 flex flex-col items-start gap-4 border rounded-lg p-5">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2 inline-block", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <span class="icon icon--calendar-range" style="--icon-size: 1.5rem" aria-hidden="true"></span>
-                <span class="sr-only">Go forward</span>
+            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
+                <svg class="i-full" style="inline-size: 2rem; block-size: 2rem; color: var(--color-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
             <% end %>
-            <h2 class="font-semibold leading-tight text-lg">Sales Professionals</h2>
+            <h2 class="font-bold leading-tight text-lg">Sales Professionals</h2>
             <p class="text-lg">
                 Turn conference leads into clients with timely, personal follow-ups that stand out.
             </p>
         </div>
 
         <div class="mt-8 flex flex-col items-start gap-4 border rounded-lg p-5">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2 inline-block", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <span class="icon icon--bell" style="--icon-size: 1.5rem" aria-hidden="true"></span>
-                <span class="sr-only">Go forward</span>
+            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
+                <svg class="i-full" style="inline-size: 2rem; block-size: 2rem; color: var(--color-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a3.001 3.001 0 015.652 0M12 11a3 3 0 100-6 3 3 0 000 6z" /></svg>
             <% end %>
-            <h2 class="font-semibold leading-tight text-lg">Community Organizers</h2>
+            <h2 class="font-bold leading-tight text-lg">Community Organizers</h2>
             <p class="text-lg">
                 Build a dedicated network of volunteers and supporters, one personal connection at a time.
             </p>
@@ -184,30 +182,78 @@
 
 <section class="bg-shade mi-4 rounded-lg" style="padding: 6rem 0;">
     <div class="container flex gap-8 justify-center">
-        <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-8 text-center">
+            <h2 class="font-bold leading-tight text-3xl">A Note from the Founder</h2>
             <p class="text-lg mt-4" style="max-inline-size: 60dvh;">
-                "As a community builder myself, I created Trellixe to solve a problem I faced every day: meeting wonderful people but failing to follow up. I wanted a tool that was simple, focused, and helped me be the intentional connector I aspired to be. I'd love for you to try it and tell me what you think." 
+                "I created Trellixe to solve a problem I faced every day: meeting wonderful people but failing to follow up. Right now, I'm looking for a small group of passionate connectors to help shape the future of this tool. In exchange for your valuable feedback, you get to use Trellixe completely free as a founding member." 
             </p>
 
-            <div class="flex items-center gap-5">
-                    <%= image_tag("avatar.jpg", size: "50", class: "rounded-full") %>
-                    <h2 class="font-semibold leading-tight text-2xl" style="max-inline-size: 60dvh;"> - Tolase Adegbite</h2>
+            <div class="flex items-center justify-center gap-5">
+                <%= image_tag("avatar.jpg", size: "50", class: "rounded-full") %>
+                <div class="text-start">
+                    <h3 class="font-bold leading-tight">Tolase Adegbite</h3>
+                    <p class="text-subtle text-sm">Founder of Trellixe</p>
+                </div>
             </div>
-            
         </div>
     </div>
 </section>
 
-<section class="bg-black text-reversed mbe-4 mi-4 rounded-lg" style="padding: 6rem 0;">
-    <div class="container flex justify-center">
-        <div class="flex flex-col gap-8">
-            <h2 class="font-semibold leading-tight text-4xl" style="max-inline-size: 60dvh;">Ready to Build Stronger Connections?</h2>
-            <p class="text-lg" style="max-inline-size: 50dvh;">
-                Start your free trial today. It only takes a minute to sign up.
+<section id="faq" class="mi-4 rounded-lg" style="padding: 6rem 0;">
+    <div class="container" style="max-inline-size: 48rem;">
+        <div class="text-center mbe-10">
+            <h2 class="font-bold leading-tight text-4xl">Your Questions, Answered</h2>
+        </div>
+
+        <div class="accordion">
+          <details name="my_accordion">
+            <summary class="font-bold text-lg cursor-pointer">What does 'Free Early Access' mean?</summary>
+            <p class="pbe-4 text-subtle text-base">
+              It means you get full access to the Trellixe Pro plan for an extended period (at least 3-6 months) completely free, without needing a credit card. In exchange for your early support and valuable feedback, you'll help us shape the future of the app and will receive a special lifetime discount if you choose to subscribe when we officially launch our paid plans.
             </p>
-            
-            <div class="">
-                <a href="#signup" class="btn text-lg">Start your 14-Day free trial</a>
+          </details>
+
+          <details name="my_accordion">
+            <summary class="font-bold text-lg cursor-pointer">Is this just another complex CRM?</summary>
+            <p class="pbe-4 text-subtle text-base">
+              No. Trellixe is designed with extreme focus and simplicity. It is not a CRM for managing sales pipelines or complex projects. It is a dedicated <strong>follow-up assistant</strong> designed to do one job exceptionally well: ensure you never forget to connect with the people you meet. You can learn its entire workflow in under five minutes.
+            </p>
+          </details>
+
+          <details name="my_accordion">
+            <summary class="font-bold text-lg cursor-pointer">What happens when the free access period ends?</summary>
+            <p class="pbe-4 text-subtle text-base">
+              Your data is always yours. You will not be charged automatically. We will give you plenty of notice before the early access period concludes. At that point, you can decide if you want to subscribe to one of our official plans (with your special founder's discount) or easily export your contact data.
+            </p>
+          </details>
+        </div>
+    </div>
+</section>
+
+<section id="join_us" class="bg-black text-reversed mbe-4 mi-4 rounded-lg" style="padding: 6rem 0;">
+    <div class="container flex justify-center">
+        <div class="flex flex-col gap-8 text-center items-center">
+            <h2 class="font-bold leading-tight text-4xl">Become a Founding Member</h2>
+            <p class="text-lg" style="max-inline-size: 50dvh;">
+                Get free, extended access to Trellixe and help us build the future of personal relationship management.
+            </p>
+
+            <!-- Embedded Sign-Up Form -->
+            <div class="mbs-4" style="max-inline-size: 400px; inline-size: 100%;">
+                <%= form_with url: sign_up_path, html: { autocomplete: "off" }, class: "card flex flex-col gap text-start" do |form| %>
+                  <div class="flex flex-col gap-half">
+                    <%= form.label :email, "Enter your email to get started", class: "text-sm font-medium leading-none text-subtle" %>
+                    <%= form.email_field :email, placeholder: "you@example.com", required: true, class: "input" %>
+                  </div>
+                  
+                  <div class="flex flex-col gap-half">
+                    <%= form.label :password, class: "text-sm font-medium leading-none text-subtle" %>
+                    <%= form.password_field :password, placeholder: "Create a password", required: true, class: "input" %>
+                  </div>
+
+                  <%= form.submit "Get My Free Account", class: "btn btn--primary mbs-2" %>
+                <% end %>
+                <p class="text-xs mbs-2">No credit card required. Ever.</p>
             </div>
         </div>
     </div>
