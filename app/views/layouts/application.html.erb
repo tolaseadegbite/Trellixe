@@ -30,7 +30,7 @@
 
   <%# pages = controller_name.in?(['pages']) %>
 
-  <body class="<%= 'min-b-screen flex flex-col justify-center items-center p-4' if auth_pages %> bg-main" data-controller="color-scheme">
+  <body class="<%= 'min-b-screen flex flex-col justify-center items-center' if auth_pages %> bg-main" data-controller="color-scheme">
 
     <div id="flash_messages">
       <%= render "shared/flash" %>
