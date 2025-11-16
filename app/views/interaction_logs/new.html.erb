@@ -3,14 +3,14 @@
 <% content_for :page_header do %>
   <div class="flex gap-2 items-center">
     <%= link_to sanitize("&larr;"), :back %>
-    <h1 class="font-semibold">New Interaction Log</h1>
+    <h4 class="font-semibold">New Interaction Log</h4>
   </div>
 <% end %>
 
 <div class="p-4">
-  <h1 class="text-2xl font-semibold mbe-4">
+  <h2 class="text-2xl font-semibold mbe-4">
     Log Follow-Up with <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact.id), data: { turbo_frame: "_top" }, class: "text-link" %>
-  </h1>
+  </h2>
 
   <div class="border rounded-md p-4 mbe-6 bg-main">
     <h3 class="text-base mbe-2">Context for your outreach:</h3>
