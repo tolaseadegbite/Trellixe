@@ -1,33 +1,27 @@
-<h1>Activity Log</h1>
+<% content_for :title, "User activities" %>
+<% content_for :page_header, "User Activities" %>
 
-<div id="sessions">
-  <% @user_activities.each do |activity| %>
-    <div id="<%= dom_id activity %>">
-      <p>
-        <strong>User Agent:</strong>
-        <%= activity.user_agent %>
-      </p>
+<%= turbo_frame_tag "settings_content" do %>
+  <div class="p-4">
 
-      <p>
-        <strong>Action:</strong>
-        <%= activity.action %>
-      </p>
+    <%# --- MOBILE-ONLY BACK BUTTON --- %>
+    <%= render "shared/settings_back_button" %>
 
-      <p>
-        <strong>Ip Address:</strong>
-        <%= activity.ip_address %>
-      </p>
+    <div class="max-i-full" style="max-width: 48rem;">
+      <h1 class="font-bold text-2xl mbe-4">Activity Log</h1>
+      <p class="text-subtle mbe-6">A log of important security-related user_activities that have occurred on your account.</p>
 
-      <p>
-        <strong>Created at:</strong>
-        <%= activity.created_at %>
-      </p>
+      <div id="user_activities" class="flex flex-col gap">
+        <% @user_activities.each do |user_activity| %>
+          <div id="<%= dom_id user_activity %>" class="flex items-center justify-between p-4 rounded-lg bg-surface border border-main">
+            <div class="flex flex-col gap-half">
+              <p class="font-medium capitalize"><%= user_activity.action.gsub("_", " ") %></p>
+              <p class="text-sm text-subtle"><%= user_activity.user_agent %></p>
+              <p class="text-xs text-subtle"><%= user_activity.created_at.strftime("%b %d, %Y %I:%M %p") %> from <%= user_activity.ip_address %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
-  <% end %>
-</div>
-
-<br>
-
-<div>
-  <%= link_to "Back", root_path %>
-</div>
+  </div>
+<% end %>

@@ -1,0 +1,19 @@
+<% content_for :title, "Edit name" %>
+<% content_for :page_header, "Edit name" %>
+
+<%= turbo_frame_tag "settings_content" do %>
+  <div class="p-4">
+
+    <%# --- MOBILE-ONLY BACK BUTTON --- %>
+    <%= render "shared/settings_back_button" %>
+
+    <div class="max-i-full" style="max-width: 48rem;">
+      <h1 class="font-bold text-2xl mbe-4">Change your name</h1>
+      <p class="text-subtle mbe-2">Add/Edit your name below</p>
+
+      <div id="edit_name_form">
+        <%= render 'form', user: @user %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -141,7 +141,7 @@
       <% end %>
       <%= tag.div popover: true, id: "user-menu-popover", class: "popover overflow-hidden", style: "--popover-size: 15rem;", data: { popover_target: "content" } do %>
         <div class="menu" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
-          <%= link_to "Settings", "", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
+          <%= link_to "Settings", settings_path, class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
           <%#= link_to "API Keys", "#", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
           <%#= link_to "Webhooks", "#", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
           <%#= link_to "Usage analytics", "#", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>

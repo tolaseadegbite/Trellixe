@@ -1,0 +1,5 @@
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<%= turbo_stream.update "edit_name_form" do %>
+  <%= render "form", user: current_user %>
+<% end %>

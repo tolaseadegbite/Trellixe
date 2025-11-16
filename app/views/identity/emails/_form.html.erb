@@ -1,0 +1,27 @@
+<%= form_with(url: identity_email_path, method: :patch) do |form| %>
+    <% if user.errors.any? %>
+        <div style="color: red">
+            <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+            <ul>
+                <% user.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div class="flex flex-col items-start gap-half mbe-4">
+        <%= form.label :email, "New email", class: "text-sm font-medium leading-none" %>
+        <%= form.email_field :email, required: true, autofocus: true, value: Current.user.email, class: "input i-full" %>
+    </div>
+
+    <div class="flex flex-col items-start gap-half mbe-4">
+        <%= form.label :password_challenge, "Confirm with your password", class: "text-sm font-medium leading-none" %>
+        <%= form.password_field :password_challenge, required: true, autocomplete: "current-password", class: "input i-full" %>
+    </div>
+
+    <div class="inline-flex items-center gap-2 mbs-4">
+        <%= form.submit "Save changes", class: "btn btn--primary" %>
+    </div>
+<% end %>

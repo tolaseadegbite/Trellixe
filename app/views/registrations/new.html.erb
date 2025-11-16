@@ -25,11 +25,11 @@
     <% end %>
 
     <div class="mbe-5">
-      <div class="mbe-5">
-        <%= form.label :name, style: "display: block", class: "font-semibold mbe-1" %>
-        <%= form.text_field :name, value: @user.name, placeholder: "Enter your name", required: true, autofocus: true, class: "input" %>
-      </div>
+      <%= form.label :name, style: "display: block", class: "font-semibold mbe-1" %>
+      <%= form.text_field :name, value: @user.name, placeholder: "Enter your name", required: true, autofocus: true, class: "input" %>
+    </div>
       
+    <div class="mbe-5">
       <%= form.label :email, style: "display: block", class: "font-semibold mbe-1" %>
       <%= form.email_field :email, value: @user.email, required: true, autocomplete: "email", class: "input" %>
     </div>

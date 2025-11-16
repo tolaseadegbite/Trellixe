@@ -1,34 +1,52 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Settings" %>
+<% content_for :page_header, "Settings" %>
 
-<h1>Devices & Sessions</h1>
+<%= turbo_frame_tag "settings_content" do %>
+  <div class="p-4">
 
-<div id="sessions">
-  <% @sessions.each do |session| %>
-    <div id="<%= dom_id session %>">
-      <p>
-        <strong>User Agent:</strong>
-        <%= session.user_agent %>
-      </p>
+    <%# --- MOBILE-ONLY BACK BUTTON --- %>
+    <%= render "shared/settings_back_button" %>
 
-      <p>
-        <strong>Ip Address:</strong>
-        <%= session.ip_address %>
-      </p>
+    <div class="max-i-full" style="max-width: 48rem;">
+      <div class="mbe-6">
+        <h1 class="font-bold text-2xl mbe-2">Devices & Sessions</h1>
+        <p class="text-subtle">
+          This is a list of devices that have logged into your account. For your security, revoke any sessions that you do not recognize.
+        </p>
+      </div>
 
-      <p>
-        <strong>Created at:</strong>
-        <%= session.created_at %>
-      </p>
+      <div id="sessions" class="flex flex-col gap">
+        <% @sessions.each do |session| %>
+          <div id="<%= dom_id session %>" class="rounded-lg bg-surface border border-main">
+            <div class="flex items-center justify-between p-4">
+              
+              <%# Session Information %>
+              <div class="flex flex-col gap-half">
+                <div class="flex items-center gap-2">
+                  <%# "Current Session" Badge %>
+                  <% if session == Current.session %>
+                    <span class="inline-flex items-center font-medium text-xs rounded-md pbe-1 pbs-1 pie-2 pis-2 bg-positive-soft text-positive">
+                      Current session
+                    </span>
+                  <% end %>
+                  <p class="font-semibold"><%= session.ip_address %></p>
+                </div>
+                
+                <p class="text-sm text-subtle"><%= session.user_agent %></p>
+                <p class="text-xs text-subtle">Last seen: <%= time_ago_in_words(session.created_at) %> ago</p>
+              </div>
+              
+              <%# Action Button %>
+              <% if session != Current.session %>
+                <div>
+                  <%= button_to "Log out", session, method: :delete, class: "btn btn--negative" %>
+                </div>
+              <% end %>
 
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
-    <p>
-      <%= button_to "Log out", session, method: :delete %>
-    </p>
-  <% end %>
-</div>
-
-<br>
-
-<div>
-  <%= link_to "Back", root_path %>
-</div>
+  </div>
+<% end %>

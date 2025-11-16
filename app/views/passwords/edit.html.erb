@@ -1,43 +1,18 @@
-<p style="color: red"><%= alert %></p>
+<%= turbo_frame_tag "settings_content" do %>
+  <div class="p-4">
 
-<h1>Change your password</h1>
+    <%= render "shared/settings_back_button" %>
 
-<%= form_with(url: password_path, method: :patch) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+    <div class="max-i-full" style="max-width: 48rem;">
+      <h1 class="font-bold text-2xl mbe-4">Change your password</h1>
+      <p class="text-subtle mbe-4">For your security, please choose a strong, unique password that you don't use for any other online account.</p>
 
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+      <div id="edit_password_form">
+        <%# I'm using your provided form code. I noticed it's missing the model, which might cause errors. %>
+        <%# The form_with should ideally be: form_with(model: @user, url: password_path, method: :patch) %>
+        <%= render 'form', user: @user %>
+      </div>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :password_challenge, style: "display: block" %>
-    <%= form.password_field :password_challenge, required: true, autofocus: true, autocomplete: "current-password" %>
   </div>
 
-  <div>
-    <%= form.label :password, "New password", style: "display: block" %>
-    <%= form.password_field :password, required: true, autocomplete: "new-password" %>
-    <div>12 characters minimum.</div>
-  </div>
-
-  <div>
-    <%= form.label :password_confirmation, "Confirm new password", style: "display: block" %>
-    <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
-  </div>
-
-  <div>
-    <%= form.submit "Save changes" %>
-  </div>
 <% end %>
-
-<br>
-
-<div>
-  <%= link_to "Back", root_path %>
-</div>

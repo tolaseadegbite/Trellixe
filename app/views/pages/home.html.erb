@@ -240,18 +240,23 @@
 
             <!-- Embedded Sign-Up Form -->
             <div class="mbs-4" style="max-inline-size: 400px; inline-size: 100%;">
-                <%= form_with url: sign_up_path, html: { autocomplete: "off" }, class: "card flex flex-col gap text-start" do |form| %>
-                  <div class="flex flex-col gap-half">
-                    <%= form.label :email, "Enter your email to get started", class: "text-sm font-medium leading-none text-subtle" %>
-                    <%= form.email_field :email, placeholder: "you@example.com", required: true, class: "input" %>
-                  </div>
-                  
-                  <div class="flex flex-col gap-half">
-                    <%= form.label :password, class: "text-sm font-medium leading-none text-subtle" %>
-                    <%= form.password_field :password, placeholder: "Create a password", required: true, class: "input" %>
-                  </div>
+                <%= form_with url: sign_up_path, html: { autocomplete: "off" }, class: "card flex flex-col gap text-start text-primary" do |form| %>
+                    <div class="flex flex-col gap-half">
+                        <%= form.label :name, class: "text-sm font-medium leading-none font-semibold" %>
+                        <%= form.text_field :name, placeholder: "John Doe", required: true, class: "input" %>
+                    </div>
 
-                  <%= form.submit "Get My Free Account", class: "btn btn--primary mbs-2" %>
+                    <div class="flex flex-col gap-half">
+                        <%= form.label :email, "Email", class: "text-sm font-medium leading-none font-semibold" %>
+                        <%= form.email_field :email, placeholder: "you@example.com", required: true, class: "input" %>
+                    </div>
+                    
+                    <div class="flex flex-col gap-half">
+                        <%= form.label :password, class: "text-sm font-medium leading-none font-semibold" %>
+                        <%= form.password_field :password, placeholder: "************", required: true, class: "input" %>
+                    </div>
+
+                    <%= form.submit "Get My Free Account", class: "btn btn--primary mbs-2" %>
                 <% end %>
                 <p class="text-xs mbs-2">No credit card required. Ever.</p>
             </div>

@@ -1,0 +1,2 @@
+module Identity::NamesHelper
+end

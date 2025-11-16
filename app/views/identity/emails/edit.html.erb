@@ -1,43 +1,26 @@
-<p style="color: red"><%= alert %></p>
+<% content_for :title, "Edit email address" %>
+<% content_for :page_header, "Edit email address" %>
 
-<% if Current.user.verified? %>
-  <h1>Change your email</h1>
-<% else %>
-  <h1>Verify your email</h1>
-  <p>We sent a verification email to the address below. Check that email and follow those instructions to confirm it's your email address.</p>
-  <p><%= button_to "Re-send verification email", identity_email_verification_path %></p>
-<% end %>
+<%= turbo_frame_tag "settings_content" do %>
+  <div class="p-4">
 
-<%= form_with(url: identity_email_path, method: :patch) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+    <%# --- MOBILE-ONLY BACK BUTTON --- %>
+    <%= render "shared/settings_back_button" %>
 
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div class="max-i-full" style="max-width: 48rem;">
+      <% if Current.user.verified? %>
+        <h1 class="font-bold text-2xl mbe-4">Change your email</h1>
+      <% else %>
+        <h1 class="font-bold text-2xl mbe-4">Verify your email</h1>
+        <p class="text-subtle mbe-2">We sent a verification email to the address below. Check that email and follow those instructions to confirm it's your email address.</p>
+        <div class="mbe-4">
+          <%= button_to "Re-send verification email", identity_email_verification_path, class: "btn", data: { turbo_frame: "_top" } %>
+        </div>
+      <% end %>
+
+      <div id="edit_email_form">
+        <%= render 'form', user: @user %>
+      </div>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :email, "New email", style: "display: block" %>
-    <%= form.email_field :email, required: true, autofocus: true %>
-  </div>
-
-  <div>
-    <%= form.label :password_challenge, style: "display: block" %>
-    <%= form.password_field :password_challenge, required: true, autocomplete: "current-password" %>
-  </div>
-
-  <div>
-    <%= form.submit "Save changes" %>
   </div>
 <% end %>
-
-<br>
-
-<div>
-  <%= link_to "Back", root_path %>
-</div>
