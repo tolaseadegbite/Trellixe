@@ -3,9 +3,9 @@
     <%= image_tag("logo/logo.png", size: 30) %>
   <% end %>
 
-  <div class="sidebar-menu__content mbs-4">
+  <div class="sidebar-menu__content">
     <div class="sidebar-menu__group">
-      <div class="sidebar-menu__group-label">MAIN</div>
+      <%# <div class="sidebar-menu__group-label">MAIN</div> %>
       <div class="sidebar-menu__items">  
         <nav class="">
           <%= link_to dashboard_path, class: "btn sidebar-menu__button mbe-1" do %>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="sidebar-menu__group">
-      <div class="sidebar-menu__group-label">PLAYGROUND</div>
+      <%# <div class="sidebar-menu__group-label">PLAYGROUND</div> %>
       <div class="sidebar-menu__items">  
         <nav>
 
@@ -40,6 +40,10 @@
                       aria: (current_page?(follow_up_tasks_path) ? { current: "page" } : {}) do %>
             <span class="icon icon--list-checks" aria-hidden="true"></span>
             Follow up Tasks
+            <div class="badge badge--number badge--negative"><%= current_user.follow_up_tasks
+                                    .where(completed_at: nil)
+                                    .order(due_at: :asc)
+                                    .includes(invitation: [ :event, :contact ]).count %> </div>
           <% end %>
           
           <%#= link_to voice_changer_path, 
@@ -136,11 +140,6 @@
         <span class="icon icon--chevrons-up-down mis-auto" aria-hidden="true"></span>
       <% end %>
       <%= tag.div popover: true, id: "user-menu-popover", class: "popover overflow-hidden", style: "--popover-size: 15rem;", data: { popover_target: "content" } do %>
-
-        <div class="p-2">
-        </div>
-        <hr class="menu__separator" role="separator"/>
-
         <div class="menu" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
           <%= link_to "Settings", "", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
           <%#= link_to "API Keys", "#", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
