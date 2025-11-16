@@ -47,6 +47,7 @@ img.icon {
 .icon--download { --svg: url("download.svg"); }
 .icon--share { --svg: url("share.svg"); }
 .icon--bell { --svg: url("bell.svg"); }
+.icon--laptop { --svg: url("laptop.svg"); }
 .icon--camera { --svg: url("camera.svg"); }
 .icon--minus { --svg: url("minus.svg"); }
 .icon--sun { --svg: url("sun.svg"); }
