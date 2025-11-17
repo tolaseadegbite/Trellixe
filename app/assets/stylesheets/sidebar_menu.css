@@ -30,14 +30,14 @@
       content: "";
       inline-size: var(--size-4);
       margin-inline-start: auto;
-      mask-image: url("chevron-right.svg");
+      mask-image: url("chevron-down.svg");
       mask-size: cover;
       min-inline-size: var(--size-4);
       transition: transform var(--time-200);
     }
 
     details[open] > &::after {
-      transform: var(--rotate-90);
+      transform: var(--rotate-180);
     }
 
     &::-webkit-details-marker {
