@@ -3,15 +3,39 @@ class EventsController < DashboardsController
 
   def index
     @date = Date.parse(params.fetch(:date, Date.today.to_s))
-    events_for_month = current_user.events.where(starts_at: @date.all_month)
-    @events_by_date = events_for_month.group_by { |event| event.starts_at.to_date }
+
+    calendar_start_date = @date.beginning_of_month.beginning_of_week
+    calendar_end_date = @date.end_of_month.end_of_week
+    events_for_calendar = current_user.events
+                                      .where("starts_at < ?", calendar_end_date)
+                                      .order(starts_at: :asc)
+
+    @events_by_date = Hash.new { |h, k| h[k] = [] }
+
+    events_for_calendar.each do |event|
+      event_date_range = event.starts_at.to_date..event.ends_at.to_date
+      event_date_range.each do |day|
+        if (calendar_start_date..calendar_end_date).cover?(day)
+          @events_by_date[day] << event
+        end
+      end
+    end
+
+    @scope = params.fetch(:scope, "upcoming")
+
+    base_records = current_user.events
+
+    if @scope == "past"
+      records = base_records.where("starts_at < ?", Time.current.beginning_of_day).order(starts_at: :desc)
+    else
+      records = base_records.where("starts_at >= ?", Time.current.beginning_of_day).order(starts_at: :asc)
+    end
 
     if params[:q].present? && params[:q][:starts_at_lteq].present?
       end_date = Date.parse(params[:q][:starts_at_lteq]).end_of_day
       params[:q][:starts_at_lteq] = end_date
     end
 
-    records = current_user.events.order(starts_at: :asc)
     @search = records.ransack(params[:q])
     @pagy, @list_events = pagy(@search.result.includes(:invited_contacts))
 
@@ -23,30 +47,16 @@ class EventsController < DashboardsController
     @invitations_search = base_invitations.ransack(params[:q])
     filtered_invitations = @invitations_search.result
 
-    # --- Calculate stats using a single, efficient database query ---
-    # This groups by status and counts the occurrences.
-    status_counts = filtered_invitations.group(:status).count
-
-    # The result is a hash like {"accepted" => 10, "attended" => 50}
-    # We merge it with a hash of defaults to ensure all keys are present.
+    raw_counts = @event.invitations.group(:status).count
     @stats = {
-      invited: 0, # Assuming you have an 'invited' status
-      accepted: 0,
-      attended: 0,
-      declined: 0
-    }.merge(status_counts.transform_keys(&:to_sym)) # <-- THE FIX IS HERE
+      total:    @event.invitations.count,
+      attended: raw_counts["attended"] || 0
+    }
 
-    # The total can be derived from the hash or a separate count query.
-    # Using the hash is more memory-efficient.
-    @stats[:total] = @stats.values.sum
-    
-    # The rest of your code is perfect.
     @pagy, @invitations = pagy(filtered_invitations.order("contacts.first_name ASC"))
 
     @new_invitation = @event.invitations.build
-    
-    invited_contact_ids = base_invitations.map(&:contact_id)
-    
+    invited_contact_ids = @event.invitations.select(:contact_id)
     @available_contacts = current_user.contacts.where.not(id: invited_contact_ids).order(:first_name)
   end
 
@@ -84,7 +94,6 @@ class EventsController < DashboardsController
     @event.destroy!
     flash.now[:notice] = "Event was successfully destroyed."
     prepare_calendar_data
-
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to events_url, notice: "Event was successfully destroyed." }
@@ -102,17 +111,10 @@ class EventsController < DashboardsController
     end
 
     def prepare_calendar_data
-    # Use the date of the event that was just changed, or fall back to params/today
-    # This ensures the calendar re-renders for the correct month.
-    @date = @event&.starts_at&.to_date || Date.parse(params.fetch(:date, Date.today.to_s))
-
-    events_for_month = current_user.events.where(starts_at: @date.all_month)
-    @events_by_date = events_for_month.group_by { |event| event.starts_at.to_date }
-  end
-
-  def prepare_list_data
-    records = current_user.events.order(starts_at: :asc)
-    @search = records.ransack(params[:q])
-    @pagy, @list_events = pagy(@search.result)
-  end
+      @date = @event&.starts_at&.to_date || Date.parse(params.fetch(:date, Date.today.to_s))
+      events_for_month = current_user.events
+                                     .includes(:invitations)
+                                     .where(starts_at: @date.all_month)
+      @events_by_date = events_for_month.group_by { |event| event.starts_at.to_date }
+    end
 end

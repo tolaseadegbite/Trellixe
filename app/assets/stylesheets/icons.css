@@ -58,3 +58,4 @@ img.icon {
 .icon--user-check { --svg: url("user-check.svg"); }
 .icon--user-minus { --svg: url("user-minus.svg"); }
 .icon--user-x { --svg: url("user-x.svg"); }
+.icon--user { --svg: url("user.svg"); }

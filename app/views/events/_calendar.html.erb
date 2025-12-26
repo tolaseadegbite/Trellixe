@@ -1,8 +1,13 @@
-<%= tag.div id: "calendar_view" do %>
+<%= tag.div id: "calendar_view", 
+            data: { 
+              controller: "mobile-calendar",
+              mobile_calendar_active_class: "bg-selected text-reversed" 
+            } do %>
+
+  <%# --- Header Controls --- %>
   <div class="flex items-center justify-between mbe-4">
     <h2 class="font-semibold text-xl"><%= @date.strftime('%B %Y') %></h2>
     <div class="flex items-center gap">
-        <%# IMPORTANT: We add view: 'calendar' to the links to maintain the current view state %>
         <%= link_to events_path(date: @date - 1.month, view: 'calendar'), class: "btn" do %>
           <span class="icon icon--chevron-left" aria-hidden="true"></span>
         <% end %>
@@ -13,20 +18,96 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-7 border border-main rounded-md">
+  <%# --- Calendar Grid --- %>
+  <%# Box Effect: Border Block-Start (Top) + Inline-Start (Left) on container %>
+  <div class="grid grid-cols-7 border-bs border-is border-main rounded-md bg-surface overflow-hidden">
+    
+    <%# Day Names Header %>
     <% Date::ABBR_DAYNAMES.rotate.each do |weekday| %>
-      <div class="p-2 text-center font-medium text-subtle border-r border-b border-main">
+      <%# Box Effect: Border Block-End (Bottom) + Inline-End (Right) on cells %>
+      <div class="p-2 text-center font-medium text-subtle text-xs uppercase border-be border-ie border-main bg-surface">
         <%= weekday %>
       </div>
     <% end %>
 
+    <%# Calendar Days %>
     <% (@date.beginning_of_month.beginning_of_week..@date.end_of_month.end_of_week).each do |day| %>
-      <div class="p-2 border text-center border-main min-b-32 <%= 'bg-shade' if day.month != @date.month %> <%= today_class(day) %>">
-        <div class="font-medium <%= 'opacity-50' if day.month != @date.month %>"><%= day.day %></div>
+      <% is_today = today?(day) %>
+      <% is_current_month = day.month == @date.month %>
+      
+      <%# Interactive Cell %>
+      <div class="border-be border-ie border-main flex flex-col relative transition-colors
+                  <%= is_current_month ? 'bg-surface' : 'bg-shade' %>"
+           style="cursor: pointer;"
+           data-mobile-calendar-target="day"
+           data-date="<%= day.to_s %>"
+           data-is-today="<%= is_today %>"
+           data-action="click->mobile-calendar#select">
         
-        <%= render partial: "events/calendar_event", collection: @events_by_date[day], as: :event %>
+        <%# Mobile Height (5rem) vs Desktop Height (8rem) %>
+        <div class="p-1 flex flex-col h-full" style="min-block-size: 5rem;"> 
+          
+          <%# Date Number %>
+          <div class="flex justify-between items-start mbe-1">
+             <span class="text-sm font-medium p-1 rounded-full leading-none 
+                          <%= is_today ? 'bg-black text-reversed' : (is_current_month ? '' : 'opacity-50') %>">
+              <%= day.day %>
+            </span>
+          </div>
 
+          <% events_that_day = @events_by_date[day] || [] %>
+
+          <%# --- DESKTOP VIEW: Use the new badge partial --- %>
+          <div class="flex-col gap-1 show@md" data-action="click->mobile-calendar#stopProp">
+            <% events_that_day.each do |event| %>
+              <%# --- THE CHANGE IS HERE --- %>
+              <%= render "events/calendar_event_badge", event: event %>
+            <% end %>
+          </div>
+
+          <%# --- MOBILE VIEW: Dots --- %>
+          <div class="flex flex-wrap gap content-start hide@md">
+             <% events_that_day.each do |event| %>
+                <%# bg-selected acts as the blue dot %>
+                <div class="rounded-full bg-blue-500" 
+                     style="width: 6px; height: 6px;"></div>
+             <% end %>
+          </div>
+          
+        </div>
       </div>
     <% end %>
+  </div>
+
+  <%# --- MOBILE INTERACTIVE DETAILS SECTION --- %>
+  <div class="hide@md mbs-6" style="min-block-size: 200px;">
+    <h3 class="font-semibold text-lg mbe-3 text-subtle">Selected Date Details</h3>
+    
+    <%# Render a hidden list for EVERY day in the view so JS can toggle it %>
+    <% (@date.beginning_of_month.beginning_of_week..@date.end_of_month.end_of_week).each do |day| %>
+      <div data-mobile-calendar-target="list" 
+           data-date="<%= day.to_s %>" 
+           style="display: none;">
+           
+        <h4 class="text-xs font-bold text-subtle uppercase mbe-1"><%= day.strftime("%A, %b %d") %></h4>
+        
+        <% if @events_by_date[day].present? %>
+          <div class="flex flex-col gap-2">
+            <% @events_by_date[day].each do |event| %>
+              <%= render "events/event_list_item", event: event %>
+            <% end %>
+          </div>
+        <% else %>
+           <div class="p-4 text-center border border-dashed border-main rounded-md">
+             <p class="text-subtle text-sm">No events for this day.</p>
+           </div>
+        <% end %>
+      </div>
+    <% end %>
+    
+    <%# Fallback State %>
+    <div class="p-4 text-center text-subtle" data-mobile-calendar-target="placeholder">
+      <p class="text-sm">Tap a day above to see details.</p>
+    </div>
   </div>
 <% end %>

@@ -28,6 +28,15 @@ class Event < ApplicationRecord
   after_create :create_invitations_for_contacts
   after_update :create_invitations_for_contacts
 
+  def invitation_summary
+    all_invites = invitations.loaded? ? invitations : invitations.to_a
+
+    {
+      total:    all_invites.size,
+      attended: all_invites.count { |i| i.attended? }
+    }
+  end
+
 
   private
 

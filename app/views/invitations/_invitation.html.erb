@@ -33,7 +33,7 @@
       <%= link_to edit_invitation_path(invitation),
                   class: "btn i-full",
                   data: { turbo_frame: "modal" } do %>
-        <span class="whitespace-nowrap"><%= invitation.status.humanize %></span>
+        <span class="whitespace-nowrap"><%= invitation.status&.humanize || "Unknown" %></span>
         <span class="icon icon--chevrons-up-down" aria-hidden="true"></span>
       <% end %>
 

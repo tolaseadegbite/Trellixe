@@ -1,0 +1,25 @@
+<% stats = event.invitation_summary %>
+
+<div class="rounded-md bg-surface border border-main m-1 text-center shadow-sm h-full flex flex-col justify-between overflow-hidden">
+  <%# --- Top Section: Event Name (Unchanged) --- %>
+  <div class="p-2 text-center">
+    <h4 class="font-semibold text-xs break-words">
+      <%= link_to event.name, event, class: "text-primary", data: { turbo_frame: "_top" } %>
+    </h4>
+  </div>
+
+  <%# --- ULTRA-MINIMALIST MVP FOOTER --- %>
+  <div class="p-1 border-bs border-main bg-shade">
+    <div class="flex gap-half items-center justify-center" title="<%= stats[:attended] %> of <%= stats[:total] %> Attended">
+      
+      <span class="icon icon--user-check text-green-500 text-xs" aria-hidden="true"></span>
+      
+      <span class="text-xs">
+        <span class="font-semibold"><%= stats[:attended] %></span>
+        <span class="text-subtle">/</span>
+        <span class="text-subtle"><%= stats[:total] %></span>
+      </span>
+
+    </div>
+  </div>
+</div>

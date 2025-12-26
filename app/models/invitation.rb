@@ -6,9 +6,7 @@ class Invitation < ApplicationRecord
 
   enum :status, {
     invited: 0,
-    accepted: 1,
-    declined: 2,
-    attended: 3
+    attended: 1
   }
 
   validates :status, presence: true
