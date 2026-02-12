@@ -1,12 +1,12 @@
 class ContactsController < DashboardsController
   before_action :set_contact, only: %i[ show edit update destroy ]
 
-  # GET /contacts
   def index
-    records = current_user.contacts.order(created_at: :desc)
+    # Use Current.account so everyone on the team sees the same list
+    records = Current.account.contacts.order(created_at: :desc)
     @search = records.ransack(params[:q])
     @pagy, @contacts = pagy(@search.result)
-    @filterable_events = current_user.events.order(:name)
+    @filterable_events = Current.account.events.order(:name)
   end
 
   # GET /contacts/1
@@ -15,30 +15,30 @@ class ContactsController < DashboardsController
     # instance variables are all set by the `set_contact` before_action.
   end
 
-  # GET /contacts/new
   def new
-    @contact = current_user.contacts.build
+    # Build relative to the account
+    @contact = Current.account.contacts.build
   end
 
-  # GET /contacts/1/edit
-  def edit
-  end
-
-  # POST /contacts
   def create
-    @contact = current_user.contacts.new(contact_params)
-    @contact.creator_id = current_user.id
+    @contact = Current.account.contacts.new(contact_params)
+    @contact.creator = current_user
 
     respond_to do |format|
       if @contact.save
+        # Notify the user who created it (In-app)
         NewContactNotifier.with(contact: @contact).deliver(current_user)
-        flash.now[:notice] = "Contact was successfully submitted."
+        flash.now[:notice] = "Contact created."
         format.turbo_stream
       else
         flash.now[:alert] = @contact.errors.full_messages.to_sentence
         format.turbo_stream { render status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /contacts/1/edit
+  def edit
   end
 
   # PATCH/PUT /contacts/1
@@ -68,24 +68,13 @@ class ContactsController < DashboardsController
   private
 
     def set_contact
-      @contact = current_user.contacts.find(params[:id])
+      # CRITICAL: Must find in Current.account, not current_user
+      # Otherwise Bob can't see contacts Alice created for the team
+      @contact = Current.account.contacts.find(params[:id])
 
-      # 1. Define the base query for the contact's invitations
-      base_invitations = @contact.invitations.includes(
-        :event,
-        follow_up_tasks: :interaction_logs
-      )
-
-      # 2. Apply Ransack search to the base query
-      # Using a unique name to avoid conflicts with other search objects
+      base_invitations = @contact.invitations.includes(:event, follow_up_tasks: :interaction_logs)
       @history_search = base_invitations.ransack(params[:q])
-
-      # 3. Get the full list of filtered invitations (before pagination)
-      filtered_invitations = @history_search.result
-
-      # 4. NOW, apply pagination to the filtered and sorted list
-      # Sorting by the event's start date is most logical for a history view
-      @pagy, @invitations = pagy(filtered_invitations.order("events.starts_at DESC"))
+      @pagy, @invitations = pagy(@history_search.result.order("events.starts_at DESC"))
     end
 
     def contact_params

@@ -1,69 +1,228 @@
-<div class="sidebar-menu">
-  <%= link_to root_path, class: "flex items-center gap mbs-4 mis-1" do %>
-    <%= image_tag("logo/logo.png", size: 30) %>
-  <% end %>
+<div class="sidebar-menu b-full flex flex-col">
+  
+  <%# --- HEADER: Logo & Toggle --- %>
+  <div class="flex items-center justify-between mbs-2 mbe-6 pis-1">
+    <%= link_to root_path, class: "flex items-center gap-2 text-decoration-none" do %>
+      <%# Fixed-width container for logo alignment in collapsed mode %>
+      <div class="flex items-center justify-center" style="inline-size: 2.25rem;">
+        <%= image_tag("logo/logo.png", style: "inline-size: 30px; block-size: auto;") %>
+      </div>
+      <%# <h3 class="text-xl sidebar-label font-bold text-primary">Trellixe</h3> %>
+    <% end %>
+    
+    <%# Toggle Button (Desktop Only) %>
+    <!--<button type="button" 
+            class="btn btn--icon show@md border-0 cursor-pointer sidebar-label" 
+            data-action="sidebar#toggle"
+            title="Toggle Sidebar">
+      <span class="icon icon--panel-left"></span>
+    </button>-->
+  </div>
 
-  <div class="sidebar-menu__content">
+  <%# --- WORKSPACE SWITCHER --- %>
+  <div contents class="mbe-6" data-controller="popover" data-popover-placement-value="bottom-start" data-action="click@window->popover#clickOutside">
+    <%= button_tag type: "button", class: "btn sidebar-menu__button workspace-button i-full", data: { action: "click->popover#toggle", popover_target: "trigger" } do %>
+      <div class="flex flex-item-no-shrink overflow-hidden rounded-md bg-blue-500">
+        <div class="flex items-center justify-center font-bold text-gray-50 text-sm" style="inline-size: 2.25rem; block-size: 2.25rem;">
+          <%= account_initials(Current.account) %> 
+        </div>
+      </div>
+
+      <div class="flex flex-col text-start leading-tight overflow-hidden mis-2 sidebar-label">
+        <span class="overflow-ellipsis font-semibold text-primary"><%= Current.account.name %></span>
+        <span class="overflow-ellipsis text-xs text-subtle capitalize"><%= current_role %></span>
+      </div>
+      
+      <span class="icon icon--chevrons-up-down mis-auto text-subtle sidebar-label" aria-hidden="true"></span>
+    <% end %>
+
+    <%# Switcher Popover %>
+    <%= tag.div popover: true, id: "workspace-switcher-popover", class: "popover", style: "--popover-size: 16rem;", data: { popover_target: "content" } do %>
+       <div class="p-2 text-xs font-semibold text-subtle uppercase i-full">Switch Workspace</div>
+       <div class="menu i-full" role="menu">
+          <% Current.user.accounts.each do |account| %>
+            <% is_active = account == Current.account %>
+            
+            <% if is_active %>
+              <%# Non-clickable Active State %>
+              <div class="btn menu__item justify-between i-full bg-blue-700 hover:bg-blue-700 text-gray-50" style="cursor: default;" role="menuitem">
+                <div class="flex items-center gap-2">
+                  <div class="p-1 rounded-md flex items-center justify-center text-xs font-bold bg-black text-reversed" style="inline-size: 1.7rem; block-size: 1.7rem;">
+                    <%= account_initials(account) %>
+                  </div>
+                  <span class="font-bold"><%= account.name %></span>
+                </div>
+                <span class="icon icon--check text-gray-50"></span>
+              </div>
+            <% else %>
+              <%# Clickable Link %>
+              <%= link_to switch_account_path(account), data: { turbo_method: :post }, class: "btn menu__item justify-between i-full hover:bg-shade", role: "menuitem" do %>
+                <div class="flex items-center gap-2">
+                  <div class="p-1 rounded-md flex items-center justify-center text-xs bg-black text-reversed" style="inline-size: 1.7rem; block-size: 1.7rem;">
+                    <%= account_initials(account) %>
+                  </div>
+                  <span><%= account.name %></span>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+          <hr class="menu__separator m-1" />
+          <%= link_to new_account_path, class: "btn menu__item", data: { turbo_frame: "modal" } do %>
+            <span class="icon icon--plus"></span> Create Workspace
+          <% end %>
+       </div>
+    <% end %>
+  </div>
+
+  <%# --- MAIN CONTENT --- %>
+  <div class="sidebar-menu__content flex-1">
+    
+    <%# GROUP 1: CRM (Core Features) %>
     <div class="sidebar-menu__group">
-      <%# <div class="sidebar-menu__group-label">MAIN</div> %>
-      <div class="sidebar-menu__items">  
-        <nav class="">
-          <%= link_to dashboard_path, class: "btn sidebar-menu__button mbe-1" do %>
-            <span class="icon icon--chart-pie" aria-hidden="true"></span>
-            Dashboard
+      <div class="sidebar-menu__group-label sidebar-label">PRM</div>
+      <div class="sidebar-menu__items">
+        
+        <%= link_to dashboard_path, class: "btn sidebar-menu__button", aria: (current_page?(dashboard_path) ? { current: "page" } : {}) do %>
+          <span class="icon icon--chart-pie"></span>
+          <span class="sidebar-label mis-2">Dashboard</span>
+        <% end %>
+
+        <%= link_to contacts_path, class: "btn sidebar-menu__button", aria: (current_page?(contacts_path) ? { current: "page" } : {}) do %>
+          <span class="icon icon--card-sim"></span>
+          <span class="sidebar-label mis-2">Contacts</span>
+        <% end %>
+
+        <%= link_to events_path, class: "btn sidebar-menu__button", aria: (current_page?(events_path) ? { current: "page" } : {}) do %>
+          <span class="icon icon--calendar-range"></span>
+          <span class="sidebar-label mis-2">Events</span>
+        <% end %>
+
+        <%= link_to follow_up_tasks_path, class: "btn sidebar-menu__button", aria: (current_page?(follow_up_tasks_path) ? { current: "page" } : {}) do %>
+          <span class="icon icon--list-checks"></span>
+          <span class="sidebar-label mis-2 flex-1">Follow ups</span>
+          
+          <%# Task Counter %>
+          <% task_count = current_user.follow_up_tasks.where(completed_at: nil).count %>
+          <% if task_count > 0 %>
+            <div class="badge badge--number badge--negative sidebar-label">
+              <%= task_count %>
+            </div>
           <% end %>
-          <%= link_to contacts_path, 
-                      class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?(contacts_path) ? { current: "page" } : {}) do %>
-            <span class="icon icon--card-sim" aria-hidden="true"></span>
-            Contacts
-          <% end %>
-        </nav>
+        <% end %>
+
       </div>
     </div>
-    <div class="sidebar-menu__group">
-      <%# <div class="sidebar-menu__group-label">PLAYGROUND</div> %>
-      <div class="sidebar-menu__items">  
-        <nav>
 
-          <%# Adds `aria-current="page"` if the current page matches the link's path. %>
-          <%= link_to events_path, 
-                      class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?(events_path) ? { current: "page" } : {}) do %>
-            <span class="icon icon--calendar-range" aria-hidden="true"></span>
-            Events
-          <% end %>
+    <%# GROUP 2: CONFIGURATION (Team/Settings) %>
+    <div class="sidebar-menu__group mbs-4">
+      <div class="sidebar-menu__group-label sidebar-label">Configuration</div>
+      <div class="sidebar-menu__items">
+        <% settings_active = request.path.include?('settings') || request.path.include?('members') %>
+        
+        <details <%= 'open' if settings_active ? 'open' : '' %>>
+          <summary class="btn sidebar-menu__button">
+            <span class="icon icon--settings"></span>
+            <span class="sidebar-label mis-2">Workspace Settings</span>
+          </summary>
+          <nav class="sidebar-menu__sub">
+            
+            <% if current_role == "admin" %>
+              <%= link_to edit_account_path(Current.account), class: "btn sidebar-menu__button" do %>
+                <span class="sidebar-label">General</span>
+              <% end %>
+            <% end %>
 
-          <%# Adds `aria-current="page"` if the current page matches the link's path. %>
-          <%= link_to follow_up_tasks_path, 
-                      class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?(follow_up_tasks_path) ? { current: "page" } : {}) do %>
-            <span class="icon icon--list-checks" aria-hidden="true"></span>
-            Follow up Tasks
-            <div class="badge badge--number badge--negative"><%= current_user.follow_up_tasks
-                                    .where(completed_at: nil)
-                                    .order(due_at: :asc)
-                                    .includes(invitation: [ :event, :contact ]).count %> </div>
-          <% end %>
-          
-          <%#= link_to voice_changer_path, 
-                      class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?(voice_changer_path) ? { current: "page" } : {}) do %>
-            <!--<span class="icon icon--vc" aria-hidden="true"></span>
-            Voice Changer-->
-          <%# end %>
-          
-          <%#= link_to sound_effects_path, 
-                      class: "btn sidebar-menu__button mbe-1", 
-                      aria: (current_page?(sound_effects_path) ? { current: "page" } : {}) do %>
-            <!--<span class="icon icon--rotate-3d" aria-hidden="true"></span>
-            Sound Effects-->
-          <%# end %>
+            <%= link_to members_path, class: "btn sidebar-menu__button" do %>
+              <span class="sidebar-label">Team Members</span>
+            <% end %>
 
-        </nav>
+            <% if current_role == "admin" %>
+              <%= link_to "#", class: "btn sidebar-menu__button" do %>
+                <span class="sidebar-label">Billing</span>
+              <% end %>
+            <% end %>
+
+            <%= link_to "#", class: "btn sidebar-menu__button" do %>
+              <span class="sidebar-label">Limits</span>
+            <% end %>
+          </nav>
+        </details>
       </div>
     </div>
   </div>
 
-  <%= render "layouts/navigation/dashboard/sidebar_bottom_menu" %>
+  <%# --- FOOTER (Notifications & Profile) --- %>
+  <div class="mbs-auto flex flex-col pbs-4 border-bs border-main">
+    
+    <%# Notifications %>
+    <div contents data-controller="popover" data-popover-placement-value="right-center" data-action="click@window->popover#clickOutside">
+      <%= button_tag type: "button", class: "btn sidebar-menu__button mbe-1 display-md", data: { action: "click->popover#toggle", popover_target: "trigger" } do %>
+        <div class="relative flex flex-item-no-shrink items-center justify-center" style="inline-size: 2.25rem;">
+          <span class="icon icon--bell"></span>
+          <%= render "notifications/badge", unread: current_user.notifications.unread.any?, id_suffix: "sidebar" %>
+        </div>
+        <span class="sidebar-label mis-2">Notifications</span>
+      <% end %>
+
+      <%= tag.div popover: true, id: "notifications-popover", class: "popover overflow-hidden", style: "--popover-size: 29rem; block-size: 30rem; padding: 0;", data: { popover_target: "content" } do %>
+        <%# ... Notification List Logic ... %>
+        <div class="flex flex-col b-full">
+            <div class="flex flex-item-no-shrink items-center justify-between p-3 border-be border-main bg-surface">
+              <h3 class="font-semibold text-lg">Notifications</h3>
+              <%= link_to "Mark all as read", mark_all_as_read_notifications_path, data: { turbo_method: :post }, class: "hover:text-blue-700 text-xs text-link", style: "text-decoration: none;" if current_user.notifications.any? %>
+            </div>
+
+            <div class="flex-1 overflow-y-auto" id="sidebar-notifications-list">
+              <%# Account ID + Global (nil) %>
+              <%= render partial: "notifications/notification", 
+           collection: context_notifications.limit(10) %>
+              <% if current_user.notifications.empty? %>
+                <div class="p-4 text-center text-subtle text-sm">No notifications.</div>
+              <% end %>
+            </div>
+
+            <% if current_user.notifications.any? %>
+              <div class="flex flex-item-no-shrink p-2 border-bs border-main bg-surface">
+                <%= link_to notifications_path, class: "btn btn--primary text-xs i-full justify-center" do %>
+                  <span>View all notifications</span>
+                <% end %>
+              </div>
+            <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Profile %>
+    <div contents data-controller="popover" data-popover-placement-value="right-start" data-action="click@window->popover#clickOutside">
+      <%= button_tag type: "button", class: "btn sidebar-menu__button display-md", data: { action: "click->popover#toggle", popover_target: "trigger" } do %>
+        <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black text-reversed items-center justify-center font-bold text-xs" style="inline-size: 2.25rem; block-size: 2.25rem;">
+          <%= current_user.initials %>
+        </div>
+        <div class="flex flex-col text-start leading-tight overflow-hidden mis-2 sidebar-label">
+          <span class="font-semibold text-primary"><%= current_user.full_name %></span>
+          <span class="text-xs text-subtle"><%= current_user.email %></span>
+        </div>
+        <span class="icon icon--chevrons-up-down mis-auto text-subtle sidebar-label" aria-hidden="true"></span>
+      <% end %>
+
+      <%= tag.div popover: true, id: "user-menu-popover", class: "popover overflow-hidden", style: "--popover-size: 15rem;", data: { popover_target: "content" } do %>
+        <%# User Menu Content (Settings/Logout) %>
+        <div class="p-2">
+          <%# If you have a credit/plan card partial, render it here %>
+        </div>
+        <hr class="menu__separator" role="separator"/>
+        <div class="menu" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
+          <%= link_to settings_path, class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" do %>
+            <span class="icon icon--user" aria-hidden="true"></span>
+            My Profile
+          <% end %>
+          <%= button_to Current.session, class: "btn menu__item i-full", method: :delete, role: "menuitem" do %>
+            <span class="icon icon--log-out" aria-hidden="true"></span>
+            Log out
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
 </div>

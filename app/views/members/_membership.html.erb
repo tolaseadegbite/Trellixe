@@ -1,0 +1,83 @@
+<tr id="<%= dom_id(membership) %>" class="transition">
+  <td class="p-3">
+    <div class="flex items-center gap-3">
+      <%# Avatar %>
+      <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black text-reversed items-center justify-center font-bold text-xs" style="inline-size: 2rem; block-size: 2rem;">
+        <%= membership.user.initials %>
+      </div>
+      
+      <div class="flex flex-col">
+        <span class="font-semibold text-sm text-primary"><%= membership.user.full_name %></span>
+        <span class="text-xs text-subtle"><%= membership.user.email %></span>
+      </div>
+    </div>
+  </td>
+  
+  <td class="p-3">
+    <% if current_role == "admin" %>
+      <%# --- ADMIN VIEW: Editable Dropdown --- %>
+      <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" } do |f| %>
+        
+        <% select_class = membership.admin? ? "text-blue-700 border-blue-700 bg-blue-50" : "text-subtle bg-shade border-main" %>
+        
+        <div class="relative">
+          <%= f.select :role, 
+              Membership.roles.keys.map { |r| [r.humanize, r] }, 
+              {}, 
+              { 
+                class: "input text-xs font-medium pb-1 pi-2 rounded-full border #{select_class} cursor-pointer capitalize",
+                style: "padding-right: 2rem;", 
+                onchange: "this.form.requestSubmit()" 
+              } 
+          %>
+        </div>
+      <% end %>
+
+    <% else %>
+      <%# --- MEMBER VIEW: Static Badge --- %>
+      <% role_class = membership.admin? ? "bg-blue-50 text-blue-800" : "bg-shade text-subtle" %>
+      <span class="<%= role_class %> pi-2 pb-1 rounded-full text-xs font-medium capitalize">
+        <%= membership.role %>
+      </span>
+    <% end %>
+  </td>
+
+  <td class="p-3 text-sm text-subtle">
+    <%= time_ago_in_words(membership.created_at) %> ago
+  </td>
+
+  <td class="p-3 text-end">
+    <% if membership.user == current_user %>
+      <%# CASE 1: LEAVE (Self) %>
+      <% leave_trigger = button_tag type: "button", class: "btn btn--plain text-subtle hover:text-negative p-2 rounded-md transition", title: "Leave Workspace", data: { action: "dialog#showModal" } do %>
+        <span class="icon icon--log-out"></span>
+      <% end %>
+
+      <%= modal_dialog leave_trigger, size: "400px", title: "Leave Workspace?" do %>
+        <p class="text-sm text-subtle mbe-6 text-start">
+          Are you sure you want to leave <strong><%= Current.account.name %></strong>?
+        </p>
+        <div class="flex items-center justify-end gap-3 text-start">
+          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Leave Team", membership_path(membership), method: :delete, class: "btn btn--negative" %>
+        </div>
+      <% end %>
+
+    <% elsif current_role == "admin" %>
+      <%# CASE 2: REMOVE (Others) %>
+      <% delete_trigger = button_tag type: "button", class: "btn btn--plain text-subtle hover:text-negative p-2 rounded-md transition", data: { action: "dialog#showModal" } do %>
+        <span class="icon icon--trash-2"></span>
+      <% end %>
+      
+      <%= modal_dialog delete_trigger, size: "400px", title: "Remove Member?" do %>
+        <p class="text-sm text-subtle mbe-6 text-start">
+          Are you sure you want to remove <strong><%= membership.user.full_name %></strong>?
+        </p>
+        <div class="flex items-center justify-end gap-3 text-start">
+          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Remove Member", membership_path(membership), method: :delete, class: "btn btn--negative" %>
+        </div>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

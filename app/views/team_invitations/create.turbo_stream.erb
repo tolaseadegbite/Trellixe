@@ -1,0 +1,4 @@
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+<%= turbo_stream.prepend "invitations-list", partial: "team_invitations/team_invitation", locals: { team_invitation: @invitation } %>
+<%= turbo_stream.replace "modal", "" %>
+<%= turbo_stream.update "trigger_pending", "Pending Invites (#{Current.account.team_invitations.count})" %>

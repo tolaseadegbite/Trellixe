@@ -24,6 +24,14 @@
     <%= stylesheet_link_tag "css-zero/utilities", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
+    <%# 1. Listen for Global Events (Invitations) %>
+    <%= turbo_stream_from "notifications_#{current_user.id}_global" %>
+
+    <%# 2. Listen for Context-Specific Events (Role changes in THIS workspace) %>
+    <% if Current.account %>
+    <%= turbo_stream_from "notifications_#{current_user.id}_account_#{Current.account.id}" %>
+    <% end %>
+
   </head>
 
   <body class="bg-main" data-controller="color-scheme ">

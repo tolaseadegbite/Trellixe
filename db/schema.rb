@@ -10,11 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_05_201454) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_08_164508) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "accounts", force: :cascade do |t|
+    t.string "name", default: "Personal Workspace", null: false
+    t.integer "seat_limit", default: 5, null: false
+    t.string "public_id"
+    t.index ["public_id"], name: "index_accounts_on_public_id", unique: true
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -78,6 +82,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_201454) do
     t.index ["event_id"], name: "index_invitations_on_event_id"
   end
 
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
+    t.string "role", default: "member", null: false
+    t.string "public_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_memberships_on_account_id"
+    t.index ["public_id"], name: "index_memberships_on_public_id", unique: true
+    t.index ["user_id", "account_id"], name: "index_memberships_on_user_id_and_account_id", unique: true
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
   create_table "noticed_events", force: :cascade do |t|
     t.string "type"
     t.string "record_type"
@@ -98,7 +115,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_201454) do
     t.datetime "seen_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "account_id"
+    t.string "public_id"
+    t.index ["account_id"], name: "index_noticed_notifications_on_account_id"
     t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
+    t.index ["public_id"], name: "index_noticed_notifications_on_public_id", unique: true
     t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
   end
 
@@ -117,6 +138,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_201454) do
     t.index ["user_id"], name: "index_sign_in_tokens_on_user_id"
   end
 
+  create_table "team_invitations", force: :cascade do |t|
+    t.string "email", null: false
+    t.bigint "account_id", null: false
+    t.string "role", default: "member", null: false
+    t.string "token", null: false
+    t.string "public_id"
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "email"], name: "index_team_invitations_on_account_id_and_email", unique: true
+    t.index ["account_id"], name: "index_team_invitations_on_account_id"
+    t.index ["public_id"], name: "index_team_invitations_on_public_id", unique: true
+    t.index ["token"], name: "index_team_invitations_on_token", unique: true
+  end
+
   create_table "user_activities", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "action", null: false
@@ -133,12 +169,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_201454) do
     t.boolean "verified", default: false, null: false
     t.string "provider"
     t.string "uid"
-    t.integer "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.index ["account_id"], name: "index_users_on_account_id"
+    t.string "public_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["public_id"], name: "index_users_on_public_id", unique: true
   end
 
   create_table "web_push_subscriptions", force: :cascade do |t|
@@ -159,9 +195,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_05_201454) do
   add_foreign_key "interaction_logs", "users"
   add_foreign_key "invitations", "contacts"
   add_foreign_key "invitations", "events"
+  add_foreign_key "memberships", "accounts"
+  add_foreign_key "memberships", "users"
+  add_foreign_key "noticed_notifications", "accounts"
   add_foreign_key "sessions", "users"
   add_foreign_key "sign_in_tokens", "users"
+  add_foreign_key "team_invitations", "accounts"
   add_foreign_key "user_activities", "users"
-  add_foreign_key "users", "accounts"
   add_foreign_key "web_push_subscriptions", "users"
 end

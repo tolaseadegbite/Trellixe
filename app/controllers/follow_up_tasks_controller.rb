@@ -1,6 +1,11 @@
 class FollowUpTasksController < DashboardsController
   def index
-    base_query = current_user.follow_up_tasks.where(completed_at: nil)
+    # 1. Find tasks assigned to ME
+    # 2. Filter tasks where the associated Event belongs to the CURRENT ACCOUNT
+    base_query = current_user.follow_up_tasks
+                             .where(completed_at: nil)
+                             .joins(invitation: :event)
+                             .where(events: { owner_type: "Account", owner_id: Current.account.id })
 
     @q = base_query.ransack(params[:q])
 

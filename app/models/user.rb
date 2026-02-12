@@ -1,6 +1,15 @@
 class User < ApplicationRecord
+  include PublicIdentifiable
+  has_public_id prefix: "user"
+
   has_secure_password
 
+  # Multitenancy (Replaces 'belongs_to :account')
+  has_many :memberships, dependent: :destroy
+  has_many :accounts, through: :memberships
+  has_many :follow_up_tasks, dependent: :destroy
+
+  # Authentication tokens
   generates_token_for :email_verification, expires_in: 2.days do
     email
   end
@@ -9,22 +18,16 @@ class User < ApplicationRecord
     password_salt.last(10)
   end
 
-
-  belongs_to :account
-
+  # Trellixe Specific Associations
   has_many :sessions, dependent: :destroy
   has_many :sign_in_tokens, dependent: :destroy
   has_many :user_activities, dependent: :destroy
+  has_many :web_push_subscriptions, dependent: :destroy
 
-  has_many :contacts, as: :owner, dependent: :destroy
-  has_many :created_contacts, class_name: "Contact", foreign_key: "creator_id", dependent: :destroy
+  # Notifications
+  has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
 
-  has_many :events, as: :owner, dependent: :destroy
-  has_many :follow_up_tasks, dependent: :destroy
-  has_many :interaction_logs, dependent: :destroy
-
-  has_many :web_push_subscriptions
-
+  # Validations
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 12 }
   validates :password, not_pwned: { message: "might easily be guessed" }
@@ -35,23 +38,31 @@ class User < ApplicationRecord
     self.verified = false
   end
 
-  before_validation on: :create do
-    self.account = Account.new
+  # Onboarding: Auto-create workspace
+  after_create :create_personal_workspace
+
+  def full_name
+    # Assuming you might add first/last name columns later, or derived from email for now
+    name || email.split("@").first.humanize
   end
 
-  after_update if: :password_digest_previously_changed? do
-    sessions.where.not(id: Current.session).delete_all
+  def initials
+    # Simple fallback if name is just one word or nil
+    (name || email).first.upcase
   end
 
-  after_update if: :email_previously_changed? do
-    user_activities.create! action: "email_verification_requested"
-  end
+  private
 
-  after_update if: :password_digest_previously_changed? do
-    user_activities.create! action: "password_changed"
-  end
+  def create_personal_workspace
+    # Only create if they didn't join via an invitation
+    return if memberships.any?
 
-  after_update if: [ :verified_previously_changed?, :verified? ] do
-    user_activities.create! action: "email_verified"
+    transaction do
+      # e.g. "David's Workspace"
+      workspace_name = name.present? ? "#{name.split.first}'s Workspace" : "Personal Workspace"
+
+      personal_account = Account.create!(name: workspace_name)
+      memberships.create!(account: personal_account, role: "admin")
+    end
   end
 end

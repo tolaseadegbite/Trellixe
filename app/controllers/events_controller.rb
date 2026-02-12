@@ -6,8 +6,7 @@ class EventsController < DashboardsController
 
     calendar_start_date = @date.beginning_of_month.beginning_of_week
     calendar_end_date = @date.end_of_month.end_of_week
-    events_for_calendar = current_user.events
-                                      .where("starts_at < ?", calendar_end_date)
+    events_for_calendar = Current.account.events.where("starts_at < ?", calendar_end_date)
                                       .order(starts_at: :asc)
 
     @events_by_date = Hash.new { |h, k| h[k] = [] }
@@ -23,7 +22,7 @@ class EventsController < DashboardsController
 
     @scope = params.fetch(:scope, "upcoming")
 
-    base_records = current_user.events
+    base_records = Current.account.events
 
     if @scope == "past"
       records = base_records.where("starts_at < ?", Time.current.beginning_of_day).order(starts_at: :desc)
@@ -39,7 +38,7 @@ class EventsController < DashboardsController
     @search = records.ransack(params[:q])
     @pagy, @list_events = pagy(@search.result.includes(:invited_contacts))
 
-    @filterable_contacts = current_user.contacts.order(:first_name, :last_name)
+    @filterable_contacts = Current.account.contacts.order(:first_name, :last_name)
   end
 
   def show
@@ -57,18 +56,18 @@ class EventsController < DashboardsController
 
     @new_invitation = @event.invitations.build
     invited_contact_ids = @event.invitations.select(:contact_id)
-    @available_contacts = current_user.contacts.where.not(id: invited_contact_ids).order(:first_name)
+    @available_contacts = Current.account.contacts.where.not(id: invited_contact_ids).order(:first_name)
   end
 
   def new
-    @event = current_user.events.build
+    @event = Current.account.events.build
   end
 
   def edit
   end
 
   def create
-    @event = current_user.events.new(event_params)
+    @event = Current.account.events.new(event_params)
     if @event.save
       flash.now[:notice] = "Event was successfully submitted."
       prepare_calendar_data
@@ -103,7 +102,8 @@ class EventsController < DashboardsController
   private
 
     def set_event
-      @event = current_user.events.find(params[:id])
+      # Scope to Account
+      @event = Current.account.events.find(params[:id])
     end
 
     def event_params
@@ -112,7 +112,10 @@ class EventsController < DashboardsController
 
     def prepare_calendar_data
       @date = @event&.starts_at&.to_date || Date.parse(params.fetch(:date, Date.today.to_s))
-      events_for_month = current_user.events
+      
+      # WRONG IN YOUR CODE: events_for_month = current_user.events...
+      # CORRECT:
+      events_for_month = Current.account.events
                                      .includes(:invitations)
                                      .where(starts_at: @date.all_month)
       @events_by_date = events_for_month.group_by { |event| event.starts_at.to_date }

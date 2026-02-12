@@ -1,0 +1,3 @@
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+<%= turbo_stream.remove dom_id(@invitation) %>
+<%= turbo_stream.update "trigger_pending", "Pending Invites (#{Current.account.team_invitations.count})" %>

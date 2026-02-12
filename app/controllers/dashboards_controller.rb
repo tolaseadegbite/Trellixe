@@ -5,7 +5,7 @@ class DashboardsController < ApplicationController
     @pending_follow_ups = current_user.follow_up_tasks
                                     .where(completed_at: nil)
                                     .order(due_at: :asc)
-                                    .includes(invitation: [:event, :contact])
+                                    .includes(invitation: [ :event, :contact ])
                                     .limit(15)
 
     @upcoming_events = current_user.events

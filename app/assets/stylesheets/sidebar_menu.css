@@ -50,7 +50,7 @@
   display: flex;
   flex-direction: column;
   row-gap: var(--size-4);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .sidebar-menu__group {

@@ -1,0 +1,57 @@
+<div class="mbs-10 mi-auto p-4" style="max-inline-size: 450px;">
+  <h1 class="text-2xl font-bold">Join <%= @invitation.account.name %></h1>
+  <p class="mbe-6 text-subtle">You've been invited by the team.</p>
+
+  <% if user_signed_in? %>
+     <%# --- SCENARIO A: LOGGED IN USER --- %>
+     <div class="flex flex-col gap-4">
+       <div class="p-4 bg-surface border border-main rounded-md flex items-center gap-3">
+         <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black text-reversed items-center justify-center font-bold text-xs" style="inline-size: 2rem; block-size: 2rem;">
+            <%= current_user.initials %>
+         </div>
+         <div class="flex flex-col">
+           <span class="font-semibold text-sm">Signed in as <%= current_user.email %></span>
+           <%= link_to "Not you?", session_path(Current.session), data: { turbo_method: :delete }, class: "text-xs text-subtle hover:text-primary" %>
+         </div>
+       </div>
+
+       <%= button_to "Join Team", team_invitation_acceptance_path(token: @invitation.token), method: :put, class: "btn bg-blue-500 hover:bg-blue-600 border-0 i-full justify-center font-semibold" %>
+     </div>
+
+  <% else %>
+  
+    <%# --- SCENARIO B: NEW USER REGISTRATION --- %>
+    <%= form_with model: @user, url: team_invitation_acceptance_path(token: @invitation.token), method: :put do |f| %>
+      <% if @user.errors.any? %>
+        <div class="text-negative mbe-4 text-sm">
+          <%= @user.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <!-- Email is read-only because the invite is specifically for this email -->
+      <div class="flex flex-col gap-half mbe-4">
+        <label class="text-sm font-bold">Email</label>
+        <input type="text" value="<%= @invitation.email %>" disabled class="input bg-shade i-full text-subtle" style="cursor: not-allowed;">
+      </div>
+
+      <div class="flex flex-col gap-half mbe-4">
+        <%# Assuming you don't have separate first/last name columns in Trellixe User model yet based on schema provided earlier, usually it is just 'name'. 
+            If you added split names, use first_name/last_name. I will use 'name' based on your provided schema. %>
+        <%= f.label :name, "Full Name", class: "text-sm font-bold" %>
+        <%= f.text_field :name, required: true, class: "input i-full", autofocus: true %>
+      </div>
+
+      <div class="flex flex-col gap-half mbe-6">
+        <%= f.label :password, class: "text-sm font-bold" %>
+        <%= f.password_field :password, required: true, class: "input i-full" %>
+      </div>
+
+      <%= f.submit "Create Account & Join", class: "btn btn--primary i-full justify-center" %>
+    <% end %>
+
+    <div class="mbs-4 text-sm text-center">
+      Already have an account? 
+      <%= link_to "Log in", sign_in_path(return_to: request.fullpath), class: "text-link" %>
+    </div>
+  <% end %>
+</div>

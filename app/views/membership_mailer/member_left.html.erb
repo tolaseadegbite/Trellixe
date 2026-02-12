@@ -1,0 +1,9 @@
+<p>Hello <%= @admin.full_name %>,</p>
+
+<p>
+  <strong><%= @user.full_name %></strong> (<%= @user.email %>) has voluntarily left the workspace <strong><%= @account.name %></strong>.
+</p>
+
+<p>They no longer have access to any contacts or events in this workspace.</p>
+
+<p><%= link_to "Manage Team", members_url %></p>

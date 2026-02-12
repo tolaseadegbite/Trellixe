@@ -1,0 +1,92 @@
+<% content_for :title, "Team Members" %>
+
+<div class="container i-full p-4 mi-auto">
+  <div class="flex items-center justify-between mbe-6">
+    <div>
+      <h2 class="text-2xl font-bold">Team Members</h2>
+      <div class="flex items-center gap-2 text-sm text-subtle mts-1">
+        <span>Manage access to <strong><%= Current.account.name %></strong>.</span>
+        
+        <%# Seat Counter %>
+        <span class="bg-shade pi-2 pb-1 text-xs font-medium border rounded-md">
+          <%= Current.account.seats_used %> / <%= Current.account.seat_limit %> Seats Used
+        </span>
+      </div>
+    </div>
+
+    <%# --- INVITE BUTTON (Conditional on Seat Limit) --- %>
+    <% if current_role == "admin" %>
+      <% if Current.account.seat_limit_reached? %>
+        <%# Limit Reached: Show Upgrade Link %>
+        <%= link_to "#", class: "btn bg-purple-600 text-reversed hover:bg-purple-700 font-semibold rounded-md p-2 flex items-center gap-2" do %>
+          <span class="icon icon--sparkles"></span>
+          <span>Upgrade Plan</span>
+        <% end %>
+      <% else %>
+        <%# Seats Available: Show Invite Button (Opens Modal) %>
+        <%= link_to new_team_invitation_path, 
+                    class: "btn bg-blue-600 border-0 text-gray-50 hover:bg-blue-700 font-semibold rounded-md p-2 flex items-center gap-2", 
+                    data: { turbo_frame: "modal" } do %>
+          <span class="icon icon--plus"></span>
+          <span>Invite Member</span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%# --- TABS COMPONENT --- %>
+  <div class="tabs i-full" data-controller="tabs">
+    <div class="tabs__list border-b border-main mbe-4" role="tablist">
+      <button type="button" id="trigger_active" class="btn tabs__button" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_active" aria-selected="true">
+        Active Members (<%= @active_memberships.count %>)
+      </button>
+      <button type="button" id="trigger_pending" class="btn tabs__button" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_pending">
+        Pending Invites (<%= @pending_invitations.count %>)
+      </button>
+    </div>
+
+    <%# --- TAB 1: ACTIVE MEMBERS --- %>
+    <div id="tab_active" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_active">
+      <div class="relative i-full overflow-x-auto border border-main rounded-lg bg-surface">
+        <table class="table i-full text-left">
+          <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
+            <tr>
+              <th class="p-3">User</th>
+              <th class="p-3">Role</th>
+              <th class="p-3">Joined</th>
+              <th class="p-3 text-end"></th>
+            </tr>
+          </thead>
+          <tbody id="members-list">
+            <%= render partial: "members/membership", collection: @active_memberships %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%# --- TAB 2: PENDING INVITES --- %>
+    <div hidden id="tab_pending" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_pending">
+      <div class="relative i-full overflow-x-auto border border-main rounded-lg bg-surface">
+        <table class="table i-full text-left">
+          <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
+            <tr>
+              <th class="p-3">Email</th>
+              <th class="p-3">Role</th>
+              <th class="p-3">Sent</th>
+              <th class="p-3 text-end"></th>
+            </tr>
+          </thead>
+          <tbody id="invitations-list">
+            <% if @pending_invitations.any? %>
+              <%= render partial: "team_invitations/team_invitation", collection: @pending_invitations %>
+            <% else %>
+              <tr>
+                <td colspan="4" class="p-8 text-center text-subtle text-sm">No pending invitations.</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

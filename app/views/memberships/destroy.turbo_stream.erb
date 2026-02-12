@@ -1,0 +1,8 @@
+<%# 1. Update Flash %>
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<%# 2. Remove the row %>
+<%= turbo_stream.remove dom_id(@membership) %>
+
+<%# 3. Update Active Members Count %>
+<%= turbo_stream.update "trigger_active", "Active Members (#{Current.account.memberships.count})" %>

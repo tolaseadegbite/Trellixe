@@ -35,14 +35,14 @@
   <div class="mbe-8">
     <h2 class="text-2xl font-semibold mbe-4 text-center">Pending Follow-Ups</h2>
 
-    <div id="dashboard_pending_follow_ups" class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
-      <%= render partial: "dashboards/pending_follow_up", collection: @pending_follow_ups, as: :pending_follow_up %>
+    <% if @pending_follow_ups.empty? %>
+      <div id="dashboard_pending_follow_ups" class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
+        <%= render partial: "dashboards/pending_follow_up", collection: @pending_follow_ups, as: :pending_follow_up %>
+      </div>
+    <% end %>
 
-      <% if @pending_follow_ups.empty? %>
-        <div class="card text-center p-5">
-          <p class="text-subtle">You're all caught up! No pending follow-ups.</p>
-        </div>
-      <% end %>
+    <div class="card text-center mb-5 p-5">
+      <p class="text-subtle">You're all caught up! No pending follow-ups.</p>
     </div>
 
     <div class="text-center">
@@ -59,13 +59,13 @@
 
     <div id="dashboard_upcoming_events" class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
       <%= render partial: "dashboards/upcoming_event", collection: @upcoming_events, as: :upcoming_event %>
-
-      <% if @upcoming_events.empty? %>
-        <div class="card text-center p-5 text-center">
-          <p class="text-subtle">No upcoming events. Why not create one?</p>
-        </div>
-      <% end %>
     </div>
+
+    <% if @upcoming_events.empty? %>
+      <div class="card text-center mb-5 p-5 text-center">
+        <p class="text-subtle">No upcoming events. Why not create one?</p>
+      </div>
+    <% end %>
 
     <div class="text-center">
       <%= link_to events_path(q: { starts_at_gteq: Time.current }), class: "btn" do %>

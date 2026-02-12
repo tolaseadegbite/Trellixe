@@ -59,3 +59,9 @@ img.icon {
 .icon--user-minus { --svg: url("user-minus.svg"); }
 .icon--user-x { --svg: url("user-x.svg"); }
 .icon--user { --svg: url("user.svg"); }
+.icon--settings { --svg: url("settings.svg"); }
+.icon--settings-2 { --svg: url("settings-2.svg"); }
+.icon--check { --svg: url("check.svg"); }
+.icon--plus { --svg: url("plus.svg"); }
+.icon--log-out { --svg: url("log-out.svg"); }
+.icon--trash-2 { --svg: url("trash-2.svg"); }

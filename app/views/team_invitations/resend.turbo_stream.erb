@@ -1,0 +1,5 @@
+<%# 1. Update Flash %>
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<%# 2. Re-render the row %>
+<%= turbo_stream.replace dom_id(@invitation), partial: "team_invitations/team_invitation", locals: { team_invitation: @invitation } %>

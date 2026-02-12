@@ -1,5 +1,5 @@
 class InteractionLogsController < DashboardsController
-  before_action :set_follow_up_task, only: [:new, :create]
+  before_action :set_follow_up_task, only: [ :new, :create ]
 
   def new
     # Build a new interaction_log associated with the task, contact, and user.

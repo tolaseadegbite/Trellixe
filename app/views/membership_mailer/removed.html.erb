@@ -1,0 +1,15 @@
+<p>Hello <%= @user.full_name %>,</p>
+
+<p>
+  Your access to the workspace <strong><%= @account.name %></strong> has been revoked.
+</p>
+
+<p>
+  If you believe this was a mistake, please contact the workspace administrator directly.
+</p>
+
+<p>
+  You can still access your other workspaces here:
+  <br>
+  <%= link_to "Go to Dashboard", root_url %>
+</p>

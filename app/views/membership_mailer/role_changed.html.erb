@@ -1,0 +1,16 @@
+<p>Hello <%= @user.full_name %>,</p>
+
+<p>
+  Your access level in the workspace <strong><%= @account.name %></strong> 
+  has been changed to: <strong><%= @new_role.humanize %></strong>.
+</p>
+
+<% if @new_role == "admin" %>
+  <p>You now have administrative privileges, including billing management and the ability to invite/remove members.</p>
+<% else %>
+  <p>You are now a standard member.</p>
+<% end %>
+
+<p>
+  <%= link_to "Go to Workspace", root_url %>
+</p>

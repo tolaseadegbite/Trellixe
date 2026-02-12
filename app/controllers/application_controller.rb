@@ -3,21 +3,55 @@ class ApplicationController < ActionController::Base
   # allow_browser versions: :modern
 
   include Pagy::Backend
+  include SetCurrentRequestDetails
 
   # Make these methods available as helpers in all views
-  helper_method :current_user, :user_signed_in?
+  helper_method :current_user, :user_signed_in?, :current_role, :admin?
+  helper_method :context_notifications
 
-  # These before_actions run in order on every request
+  # --- CALLBACK ORDER IS CRITICAL ---
+  # 1. Set IP and User Agent
   before_action :set_current_request_details
+  # 2. Find the User from the Session cookie
   before_action :set_current_user_from_session
+  # 3. Find the Active Workspace (Requires User to be set first)
+  before_action :set_current_account
+  # 4. Enforce Login (Redirect if no User)
   before_action :authenticate
 
   def pending_follow_ups
+    # Scoped to Current User AND Current Account logic should happen here
+    # For now, we fetch tasks assigned to the user
     @pending_follow_ups = current_user.follow_up_tasks
-                                    .where(completed_at: nil)
-                                    .order(due_at: :asc)
-                                    .includes(invitation: [ :event, :contact ])
-                                    .limit(15)
+                                      .where(completed_at: nil)
+                                      .order(due_at: :asc)
+                                      .includes(invitation: [ :event, :contact ])
+                                      .limit(15)
+  end
+
+  # Helper for views/controllers to check permissions quickly
+  def current_role
+    return nil unless user_signed_in? && Current.account
+    @current_role ||= Current.user.memberships.find_by(account: Current.account)&.role
+  end
+
+  def admin?
+    current_role == "admin"
+  end
+
+  def context_notifications
+    # Memoize to prevent multiple DB queries in one request
+    @_context_notifications ||= begin
+      # 1. Base Scope: The current user
+      scope = current_user.notifications
+
+      # 2. Filter: Only this account OR Global (nil)
+      #    This prevents "Account 1" events from showing in "Account 2"
+      scope = scope.where(account_id: [ Current.account.id, nil ]) if Current.account
+
+      # 3. Sort
+      scope.newest_first
+    end
   end
 
   private

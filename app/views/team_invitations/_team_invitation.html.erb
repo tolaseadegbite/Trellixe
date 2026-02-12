@@ -1,0 +1,32 @@
+<tr id="<%= dom_id(team_invitation) %>" class="border-b border-main last:border-0 hover:bg-highlight transition">
+  <td class="p-3 font-medium text-primary">
+    <%= team_invitation.email %>
+  </td>
+  
+  <td class="p-3">
+    <span class="bg-shade text-subtle pi-2 pb-1 rounded-full text-xs font-medium capitalize">
+      <%= team_invitation.role %> (Pending)
+    </span>
+  </td>
+
+  <td class="p-3 text-sm text-subtle">
+    <%# Using updated_at to reflect resend times %>
+    <%= time_ago_in_words(team_invitation.updated_at) %> ago
+  </td>
+
+  <td class="p-3 text-end">
+    <% if current_role == "admin" %>
+      <div class="flex items-center justify-end gap-3">
+        <%# Resend %>
+        <%= button_to resend_team_invitation_path(team_invitation), method: :post, class: "btn text-xs text-subtle hover:text-primary hover:underline", form: { data: { turbo_submits_with: "Sending..." } } do %>
+          Resend
+        <% end %>
+
+        <%# Revoke %>
+        <%= button_to team_invitation_path(team_invitation), method: :delete, class: "btn text-xs text-negative hover:underline", form: { data: { turbo_confirm: "Revoke this invitation?" } } do %>
+          Revoke
+        <% end %>
+      </div>
+    <% end %>
+  </td>
+</tr>

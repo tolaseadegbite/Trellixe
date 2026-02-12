@@ -1,6 +1,12 @@
+/* Add these variables at the top or in your variables.css */
+:root {
+  --sidebar-collapsed-width: 4.5rem; /* ~72px, enough for icons */
+}
+
 .sidebar-layout {
   display: grid;
   grid-template-areas: "header header" "sidebar main";
+  /* Default mobile state */
   grid-template-columns: var(--sidebar-width, 0) 1fr;
   grid-template-rows: auto 1fr;
   block-size: 100dvh;
@@ -8,7 +14,83 @@
   @media (width >= 48rem) {
     --sidebar-border-width: var(--border);
     --sidebar-padding: var(--size-2);
-    --sidebar-width: var(--max-i-3xs);
+    /* Default expanded width matches your utility max-i-3xs */
+    --sidebar-width: var(--max-i-3xs); 
+    
+    /* Smoothly animate the grid column width change */
+    transition: grid-template-columns 0.2s ease-in-out;
+  }
+}
+
+/* --- COLLAPSED STATE (Desktop) --- */
+@media (width >= 48rem) {
+  /* 1. Shrink the grid column when collapsed */
+  .sidebar-layout.sidebar-collapsed {
+    --sidebar-width: var(--sidebar-collapsed-width);
+  }
+
+  /* 2. Configure the sidebar for transitions */
+  .sidebar-layout #sidebar {
+    inline-size: var(--sidebar-width);
+    transition: inline-size 0.2s ease-in-out, box-shadow 0.2s;
+    /* Must be opaque so content doesn't show through during overlay */
+    background-color: var(--color-surface); 
+    position: relative;
+    z-index: 20;
+    white-space: nowrap;
+  }
+
+  /* 3. THE GMAIL EFFECT: Expand on Hover */
+  /* When collapsed AND hovered, force width to expanded size */
+  /* Since the grid column remains narrow, this creates the overlay effect */
+  .sidebar-layout.sidebar-collapsed #sidebar:hover {
+    inline-size: var(--max-i-3xs);
+    box-shadow: var(--shadow-lg);
+    border-inline-end: var(--border) solid var(--color-border);
+  }
+
+  /* 4. Hide Labels when collapsed (default state) */
+  .sidebar-layout.sidebar-collapsed .sidebar-label,
+  .sidebar-layout.sidebar-collapsed .sidebar-menu__sub, 
+  .sidebar-layout.sidebar-collapsed summary::after {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    /* Speed up hide, slow down show */
+    transition: opacity 0.1s ease-out; 
+  }
+  
+  /* Collapse specifics: Hide sub-menu height to prevent gaps */
+  .sidebar-layout.sidebar-collapsed .sidebar-menu__sub {
+    display: none; 
+  }
+
+  /* 5. Show Labels when hovered (overlay state) */
+  .sidebar-layout.sidebar-collapsed #sidebar:hover .sidebar-label,
+  .sidebar-layout.sidebar-collapsed #sidebar:hover summary::after {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.2s ease-in 0.1s; /* Slight delay so it doesn't flicker */
+  }
+
+  .sidebar-layout.sidebar-collapsed #sidebar:hover .sidebar-menu__sub {
+    display: flex; /* Restore flex layout for submenus */
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* 6. Center icons when collapsed */
+  .sidebar-layout.sidebar-collapsed .sidebar-menu__button {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  /* Restore alignment when hovered */
+  .sidebar-layout.sidebar-collapsed #sidebar:hover .sidebar-menu__button {
+    justify-content: start;
+    padding-inline: var(--size-2); /* Match your original utility padding */
   }
 }
 
@@ -28,13 +110,11 @@
 .container {
   inline-size: 100%;
   margin-inline: auto;
-  /* max-inline-size: var(--container-width, 64rem); */
   max-inline-size: var(--container-width, 75rem);
 }
 
 #header {
   align-items: center;
-  /* background-color: rgb(from var(--color-border-light) r g b / .5); */
   border-block-end-width: var(--border);
   block-size: var(--size-16);
   column-gap: var(--size-4);
@@ -45,6 +125,7 @@
 }
 
 #sidebar {
+  /* Default background (mobile or translucent) */
   background-color: rgb(from var(--color-border-light) r g b / .5);
   border-inline-end-width: var(--sidebar-border-width, 0);
   display: flex;
@@ -62,5 +143,4 @@
   gap: var(--size-4);
   grid-area: main;
   overflow: auto;
-  /* padding: var(--size-4); */
 }
