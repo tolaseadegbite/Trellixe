@@ -112,7 +112,7 @@ class EventsController < DashboardsController
 
     def prepare_calendar_data
       @date = @event&.starts_at&.to_date || Date.parse(params.fetch(:date, Date.today.to_s))
-      
+
       # WRONG IN YOUR CODE: events_for_month = current_user.events...
       # CORRECT:
       events_for_month = Current.account.events

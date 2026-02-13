@@ -7,7 +7,7 @@
       </div>
     </div>-->
     <div class="flex items-center gap">
-      <div class="flex items-center justify-center rounded-full bg-shade shrink-0 border" style="block-size: 2.5rem; inline-size: 2.5rem;">
+      <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2.5rem; inline-size: 2.5rem;">
         <span class="font-semibold">
           <%= contact.full_name&.first.upcase || contact.first_name&.first.upcase || contact.email.first.upcase %>
         </span>
@@ -23,12 +23,12 @@
   </td>
   <td class="whitespace-nowrap">
     <div class="flex items-center gap">
-      <span><%= contact.email %></span>
+      <span><%= contact.email.present? ? contact.email : "Nil" %></span>
     </div>
   </td>
   <td class="whitespace-nowrap">
     <div class="flex items-center gap">
-      <span><%= contact.phone_number %></span>
+      <span><%= contact.phone_number.present? ? contact.phone_number : "Nil" %></span>
     </div>
   </td>
   <td class="whitespace-nowrap">

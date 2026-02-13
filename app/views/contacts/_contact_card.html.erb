@@ -1,6 +1,6 @@
 <%# This is the card view for a single contact, visible on mobile screens. %>
 <%# We add a suffix to the dom_id to keep it unique from the table row's ID. %>
-<div id="<%= dom_id(contact, :card) %>" class="card p-3 flex items-center gap mbe-4">
+<div id="<%= dom_id(contact, :card) %>" class="card p-3 flex items-center gap-4 mbe-4">
 
   <%# --- Checkbox and Avatar --- %>
   <div class="flex items-center gap shrink-0">
@@ -9,17 +9,19 @@
       <%#= link_to image_tag("avatar.jpg", size: "40x40", alt: "User Avatar"), contact_path(contact), data: { turbo_frame: "_top" } %>
     </div>-->
 
-    <div class="flex items-center justify-center rounded-full bg-shade shrink-0 border" style="block-size: 2.5rem; inline-size: 2.5rem;">
+    <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2.5rem; inline-size: 2.5rem;">
       <span class="font-semibold">
         <%= contact.full_name&.first || contact.first_name&.first || contact.email.first.upcase %>
       </span>
     </div>
   </div>
 
-  <%# --- Contact Info (takes up remaining space) --- %>
+  <%# --- Contact Info --- %>
   <div class="flex flex-col grow min-i-0">
     <div class="flex items-center justify-between">
-      <span class="font-semibold overflow-ellipsis"><%= link_to contact.full_name.titleize, contact, data: { turbo_frame: "_top" } %></span>
+      <div>
+        <span class="font-semibold overflow-ellipsis"><%= link_to contact.full_name.titleize, contact, data: { turbo_frame: "_top" } %></span>
+      </div>
       
       <%# --- Action Buttons --- %>
       <div class="flex gap items-center shrink-0">
@@ -36,7 +38,7 @@
           <div popover id="popover-card-<%= contact.id %>" class="popover" style="--popover-size: 8rem;" data-popover-target="content" role="menu" aria-label="Menu">
             <div class="menu" data-controller="menu" data-action="keydown->menu#navigate">
               <%= link_to "Edit", edit_contact_path(contact), class: "btn menu__item w-full text-left", data: { turbo_frame: "modal" } %>
-              <% delete_trigger = button_tag "Delete", type: "button", class: "btn menu__item w-full text-left text-red-500", data: { action: "dialog#showModal", menu_target: "item" }, role: "menuitem" %>
+              <% delete_trigger = button_tag "Delete", type: "button", class: "btn menu__item i-full text-left text-red-500", data: { action: "dialog#showModal", menu_target: "item" }, role: "menuitem" %>
               <%= modal_dialog delete_trigger, title: "Delete '#{contact.full_name}'?" do %>
                 <p class="text-sm text-subtle mbe-4">This action cannot be undone.</p>
                 <div class="flex items-center justify-end gap">
@@ -50,6 +52,7 @@
       </div>
     </div>
 
-    <span class="text-sm text-subtle overflow-ellipsis"><%= contact.email %></span>
+    <span class="text-sm text-subtle overflow-ellipsis"><%= contact.email.present? ? contact.email : "Nil" %></span>
+    <span class="text-sm text-subtle overflow-ellipsis"><%= contact.phone_number.present? ? contact.phone_number : "Nil" %></span>
   </div>
 </div>

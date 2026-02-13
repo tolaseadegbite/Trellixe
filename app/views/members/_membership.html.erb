@@ -25,7 +25,7 @@
               Membership.roles.keys.map { |r| [r.humanize, r] }, 
               {}, 
               { 
-                class: "input text-xs font-medium pb-1 pi-2 rounded-full border #{select_class} cursor-pointer capitalize",
+                class: "input text-xs font-medium pb-1 pi-2 rounded-md border #{select_class} cursor-pointer capitalize",
                 style: "padding-right: 2rem;", 
                 onchange: "this.form.requestSubmit()" 
               } 

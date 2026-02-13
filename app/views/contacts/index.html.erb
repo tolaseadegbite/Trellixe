@@ -10,7 +10,7 @@
 <% end %>
 
 <div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
-  <%= link_to new_contact_path, class: "btn btn--primary rounded-full p-5", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_contact_path, class: "btn bg-blue-500 hover:bg-blue-600 text-gray-50 p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--pen"></span>
   <% end %>
 </div>
@@ -43,7 +43,7 @@
           </thead>
           <tbody id="contacts-table">
             <% if @contacts.empty? %>
-              <tr><td colspan="7" class="text-center p-8">No Results.</td></tr>
+              <%= render "contacts/empty_state_desktop" %>
             <% else %>
               <%= render @contacts %>
             <% end %>
@@ -64,7 +64,7 @@
       
       <div id="contacts-cards">
         <% if @contacts.empty? %>
-          <p class="text-subtle text-center p-8">No contacts found.</p>
+          <%= render "contacts/empty_state_mobile" %>
         <% else %>
           <%= render partial: "contacts/contact_card", collection: @contacts, as: :contact %>
         <% end %>

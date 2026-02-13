@@ -8,7 +8,7 @@ class DashboardsController < ApplicationController
                                     .includes(invitation: [ :event, :contact ])
                                     .limit(15)
 
-    @upcoming_events = current_user.events
+    @upcoming_events = Current.account.events
                                  .where("starts_at > ?", Time.current)
                                  .order(starts_at: :asc)
                                  .limit(15)

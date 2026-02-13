@@ -1,0 +1,28 @@
+<%= render "shared/modal" do %>
+  <div data-action="turbo:submit-end->modal#submitEnd">
+    <div class="flex items-center justify-between mbe-4">
+      <h3 class="text-lg font-bold">Create New Workspace</h3>
+    </div>
+
+    <%= form_with(model: @account, url: accounts_path) do |form| %>
+      <% if @account.errors.any? %>
+        <div class="bg-red-50 text-red-700 p-3 rounded-md text-sm mbe-4">
+          <%= @account.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <div class="flex flex-col gap-1 mbe-6">
+        <%= form.label :name, "Workspace Name", class: "text-sm font-medium" %>
+        <%= form.text_field :name, required: true, autofocus: true, placeholder: "e.g. Acme Corp", class: "input i-full" %>
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <%# Cancel takes them back to dashboard (effectively closing modal if navigated away) %>
+        <%= link_to "Cancel", root_path, class: "btn" %>
+        
+        <%# turbo_frame: "_top" ensures the redirect to the new workspace reloads the full page context %>
+        <%= form.submit "Create Workspace", class: "btn bg-blue-900 border-0 text-gray-50 hover:bg-blue-700", data: { turbo_frame: "_top" } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,4 +1,5 @@
 class InvitationsController < DashboardsController
+  before_action :authenticate
   before_action :set_event, only: [ :create ]
   before_action :set_invitation, only: [ :edit, :update, :destroy ]
   before_action :set_available_contacts, only: [ :create ]
@@ -8,6 +9,7 @@ class InvitationsController < DashboardsController
 
     if contact_ids.present?
       timestamp = Time.current
+      # Create invitations for the contacts selected
       invitations_attributes = contact_ids.map do |contact_id|
         {
           event_id: @event.id,
@@ -49,6 +51,7 @@ class InvitationsController < DashboardsController
 
   def destroy
     @invitation.destroy!
+    flash.now[:notice] = "Invitation was successfully removed."
 
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.remove(@invitation) }
@@ -59,17 +62,22 @@ class InvitationsController < DashboardsController
   private
 
   def set_event
-    @event = current_user.events.find(params[:event_id])
+    # Scoped to Account: Ensure the event belongs to the active workspace
+    @event = Current.account.events.find(params[:event_id])
   end
 
   def set_invitation
-    @invitation = Invitation.joins(:event).where(events: { owner: current_user }).find(params[:id])
+    # Scoped to Account: Ensure the invitation belongs to an event in this workspace
+    @invitation = Invitation.joins(:event)
+                            .where(events: { owner_type: "Account", owner_id: Current.account.id })
+                            .find(params[:id])
     @event = @invitation.event
   end
 
   def set_available_contacts
     invited_ids = @event.invitations.pluck(:contact_id)
-    @available_contacts = current_user.contacts.where.not(id: invited_ids).order(:first_name)
+    # Scoped to Account: Only show contacts from this workspace
+    @available_contacts = Current.account.contacts.where.not(id: invited_ids).order(:first_name)
   end
 
   def invitation_params
@@ -77,14 +85,13 @@ class InvitationsController < DashboardsController
   end
 
   def create_follow_up_task_if_needed(invitation)
-    # Guard clauses to ensure we only create a task when needed.
     return unless invitation.attended? && invitation.saved_change_to_status?
     return if FollowUpTask.exists?(invitation_id: invitation.id)
 
-    # Calculate the event's end time.
     event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
 
-    due_date = 1.minute.from_now
+    due_date = event_end_time.next_day.beginning_of_day.advance(hours: 9)
+    # due_date = event_end_time.tomorrow.change(hour: 9)
 
     FollowUpTask.create!(
       invitation: invitation,
@@ -92,20 +99,4 @@ class InvitationsController < DashboardsController
       due_at: due_date
     )
   end
-
-  # def create_follow_up_task_if_needed(invitation)
-  #   return unless invitation.attended? && invitation.saved_change_to_status?
-  #   return if FollowUpTask.exists?(invitation_id: invitation.id)
-
-  #   event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
-
-  #   due_date = event_end_time.next_day.beginning_of_day.advance(hours: 9)
-  #   # due_date = event_end_time.tomorrow.change(hour: 9)
-
-  #   FollowUpTask.create!(
-  #     invitation: invitation,
-  #     user: current_user,
-  #     due_at: due_date
-  #   )
-  # end
 end

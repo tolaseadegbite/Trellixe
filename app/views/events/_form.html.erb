@@ -30,7 +30,7 @@
     <%= form.label :contact_ids, "Invite Contacts (optional)", class: "font-medium leading-none" %>
     <%= form.collection_select(
       :contact_ids,
-      current_user.contacts.order(:first_name),
+      Current.account.contacts.order(:first_name),
       :id,
       :full_name,
       {},
@@ -45,6 +45,6 @@
 
 
   <div class="inline-flex items-center mbs-2 mie-1 i-full">
-    <%= form.submit class: "btn btn--primary i-full" %>
+    <%= form.submit class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full" %>
   </div>
 <% end %>

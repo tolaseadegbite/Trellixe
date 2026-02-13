@@ -15,7 +15,7 @@
     --sidebar-border-width: var(--border);
     --sidebar-padding: var(--size-2);
     /* Default expanded width matches your utility max-i-3xs */
-    --sidebar-width: var(--max-i-3xs); 
+    --sidebar-width: var(--max-i-2xs); 
     
     /* Smoothly animate the grid column width change */
     transition: grid-template-columns 0.2s ease-in-out;

@@ -1,5 +1,7 @@
 <% if @contact.persisted? %>
   <%# 1. Prepend the new table row to the table body %>
+  <%= turbo_stream.replace "empty_state_mobile", "" %>
+  <%= turbo_stream.replace "empty_state_desktop", "" %>
   <%= turbo_stream.prepend "contacts-table", partial: "contacts/contact", locals: { contact: @contact } %>
   
   <%# 2. Prepend the new card to the card list %>

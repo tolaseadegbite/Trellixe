@@ -1,0 +1,66 @@
+<div id="<%= dom_id membership, :mobile_card %>" class="card p-4 border rounded-md shadow-sm bg-surface flex flex-col gap-3">
+  <%# Card Header: User & Role %>
+  <div class="flex items-start justify-between">
+    <div>
+      <div class="font-semibold text-lg leading-tight">
+        <%= membership.user.name.presence || membership.user.email %>
+      </div>
+      <span class="text-sm text-subtle"><%= membership.user.email %></span>
+    </div>
+
+    <%# --- ROLE SECTION: Editable if Admin, Static if not --- %>
+    <% if current_role == "admin" %>
+       <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" } do |f| %>
+          <% select_class = membership.admin? ? "text-blue-700 border-blue-700 bg-blue-50" : "text-subtle bg-shade border-main" %>
+          <%= f.select :role, 
+              Membership.roles.keys.map { |r| [r.humanize, r] }, 
+              {}, 
+              { 
+                class: "input text-xs font-medium pb-1 pi-2 rounded-md border #{select_class} cursor-pointer capitalize",
+                onchange: "this.form.requestSubmit()" 
+              } 
+          %>
+       <% end %>
+    <% else %>
+       <span class="bg-shade font-medium pi-2 pb-1 rounded-md text-xs uppercase border">
+         <%= membership.role %>
+       </span>
+    <% end %>
+  </div>
+
+  <%# Card Footer: Details & Actions --- %>
+  <div class="flex items-center justify-between text-sm text-subtle">
+    <div class="flex items-center gap">
+      <span class="icon icon--calendar-range"></span>
+      Joined <%= membership.created_at.strftime("%b %d, %Y") %>
+    </div>
+
+    <%# --- ACTIONS SECTION: Delete/Leave Logic --- %>
+    <% if membership.user == current_user %>
+      <%# Self: Leave %>
+      <% leave_trigger = button_tag type: "button", class: "text-subtle hover:text-negative", data: { action: "dialog#showModal" } do %>
+         <span class="icon icon--log-out"></span>
+      <% end %>
+      <%= modal_dialog leave_trigger, size: "400px", title: "Leave Workspace?" do %>
+        <p class="text-sm text-subtle mbe-6">Are you sure you want to leave <strong><%= Current.account.name %></strong>?</p>
+        <div class="flex items-center justify-end gap-3">
+          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Leave Team", membership_path(membership), method: :delete, class: "btn btn--negative" %>
+        </div>
+      <% end %>
+
+    <% elsif current_role == "admin" %>
+      <%# Admin: Remove Others %>
+      <% delete_trigger = button_tag type: "button", class: "text-subtle hover:text-negative", data: { action: "dialog#showModal" } do %>
+         <span class="icon icon--trash-2"></span>
+      <% end %>
+      <%= modal_dialog delete_trigger, size: "400px", title: "Remove Member?" do %>
+        <p class="text-sm text-subtle mbe-6">Remove <strong><%= membership.user.full_name %></strong> from the team?</p>
+        <div class="flex items-center justify-end gap-3">
+          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Remove Member", membership_path(membership), method: :delete, class: "btn btn--negative" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

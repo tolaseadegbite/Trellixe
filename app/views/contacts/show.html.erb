@@ -26,7 +26,7 @@
             <%= image_tag "avatar.jpg", size: "70", alt: "User Avatar", class: "border border-main rounded-full" %>
           </div>-->
 
-          <div class="flex items-center justify-center rounded-full bg-shade shrink-0 border" style="block-size: 5rem; inline-size: 5rem;">
+          <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border" style="block-size: 5rem; inline-size: 5rem;">
             <span class="font-semibold text-3xl">
               <%= @contact.full_name&.first || @contact.first_name&.first || @contact.email.first.upcase %>
             </span>

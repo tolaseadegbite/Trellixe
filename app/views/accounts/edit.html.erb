@@ -1,6 +1,10 @@
 <% content_for :title, "Workspace Settings" %>
 
-<div class="container i-full p-4 mi-auto" style="max-inline-size: 800px;">
+<% content_for :page_header do %>
+  <h4 class="font-semibold">Workspace settings</h4>
+<% end %>
+
+<div class="container i-full p-4 mi-auto">
   
   <div class="mbe-8">
     <h1 class="text-2xl font-bold mbe-2">General Settings</h1>
@@ -61,7 +65,7 @@
           </p>
 
           <%# PASSWORD CHALLENGE %>
-          <div class="p-3 rounded border" style="background-color: rgb(from var(--color-negative) r g b / 0.05); border-color: rgb(from var(--color-negative) r g b / 0.2);">
+          <div class="p-3 rounded-md border" style="background-color: rgb(from var(--color-negative) r g b / 0.05); border-color: rgb(from var(--color-negative) r g b / 0.2);">
             <%= f.label :password_challenge, "Enter your password to confirm", class: "block text-xs font-bold text-negative mbe-2" %>
             <%= f.password_field :password_challenge, required: true, class: "input i-full", style: "border-color: var(--color-negative);", placeholder: "Your password" %>
           </div>
