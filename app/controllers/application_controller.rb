@@ -18,6 +18,8 @@ class ApplicationController < ActionController::Base
   before_action :set_current_account
   # 4. Enforce Login (Redirect if no User)
   before_action :authenticate
+  # 5. Wraps request in time zone block
+  around_action :switch_time_zone, if: :current_user
 
   def pending_follow_ups
     # Scoped to Current User AND Current Account logic should happen here
@@ -93,5 +95,10 @@ class ApplicationController < ActionController::Base
     unless Current.session.sudo?
       redirect_to new_sessions_sudo_path(proceed_to_url: request.original_url)
     end
+  end
+
+  def switch_time_zone(&block)
+    # Use the user's timezone, or fallback to UTC if invalid
+    Time.use_zone(current_user.time_zone || "UTC", &block)
   end
 end

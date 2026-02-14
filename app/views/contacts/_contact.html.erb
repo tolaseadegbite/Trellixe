@@ -18,7 +18,7 @@
   </td>
   <td class="whitespace-nowrap">
     <div class="flex items-center gap">
-      <span><%= contact.last_name.titleize %></span>
+      <span><%= contact.last_name.present? ? contact.last_name.titleize : "Nil" %></span>
     </div>
   </td>
   <td class="whitespace-nowrap">

@@ -31,46 +31,54 @@
 </div>
 
 <div class="p-4">
+  <%# --- TIMEZONE STATUS BAR --- %>
+  <div class="flex items-center justify-center gap-1 mbe-8 text-xs text-subtle bg-shade pi-4 pb-2 rounded-md border border-main" style="inline-size: fit-content; margin-inline: auto;">
+    <span class="icon icon--globe opacity-75" style="--icon-size: 0.85rem"></span>
+    <span>Timezone: <strong><%= Time.zone.name %></strong></span>
+    <span class="mi-2 opacity-50">|</span>
+    <span>Local time: <strong><%= l(Time.current, format: :short) %></strong></span>
+  </div>
 
-  <div class="mbe-8">
+  <%# --- PENDING FOLLOW-UPS --- %>
+  <div class="mbe-10">
     <h2 class="text-2xl font-semibold mbe-4 text-center">Pending Follow-Ups</h2>
 
-    <% if @pending_follow_ups.empty? %>
+    <% if @pending_follow_ups.any? %>
       <div id="dashboard_pending_follow_ups" class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
         <%= render partial: "dashboards/pending_follow_up", collection: @pending_follow_ups, as: :pending_follow_up %>
       </div>
+    <% else %>
+      <div class="card text-center mbe-5 p-5">
+        <p class="text-subtle">You're all caught up! No pending follow-ups.</p>
+      </div>
     <% end %>
-
-    <div class="card text-center mb-5 p-5">
-      <p class="text-subtle">You're all caught up! No pending follow-ups.</p>
-    </div>
 
     <div class="text-center">
       <%= link_to follow_up_tasks_path, class: "btn" do %>
-        View all pending Follow-Ups
-        <span class="text-subtle">→</span>
+        <span>View all pending Follow-Ups</span>
+        <span class="text-subtle mis-1">→</span>
       <% end %>
     </div>
   </div>
 
+  <%# --- UPCOMING EVENTS --- %>
   <div>
-
     <h2 class="text-2xl font-semibold mbe-4 text-center">Upcoming Events</h2>
 
-    <div id="dashboard_upcoming_events" class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
-      <%= render partial: "dashboards/upcoming_event", collection: @upcoming_events, as: :upcoming_event %>
-    </div>
-
-    <% if @upcoming_events.empty? %>
-      <div class="card text-center mb-5 p-5 text-center">
+    <% if @upcoming_events.any? %>
+      <div id="dashboard_upcoming_events" class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
+        <%= render partial: "dashboards/upcoming_event", collection: @upcoming_events, as: :upcoming_event %>
+      </div>
+    <% else %>
+      <div class="card text-center mbe-5 p-5">
         <p class="text-subtle">No upcoming events. Why not create one?</p>
       </div>
     <% end %>
 
     <div class="text-center">
       <%= link_to events_path(q: { starts_at_gteq: Time.current }), class: "btn" do %>
-        View all upcoming events
-        <span class="text-subtle">→</span>
+        <span>View all upcoming events</span>
+        <span class="text-subtle mis-1">→</span>
       <% end %>
     </div>
   </div>

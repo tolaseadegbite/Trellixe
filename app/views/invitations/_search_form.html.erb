@@ -23,7 +23,7 @@
 
     <%# --- Form Actions --- %>
     <div class="flex items-center gap mbe-10">
-        <%= f.submit "Search", class: "btn btn--primary" %>
+        <%= f.submit "Search", class: "btn bg-blue-600 hover:bg-blue-700 border-0 text-gray-50" %>
         <%= link_to "Reset", event_path(@event), class: "btn" if params.has_key?(:q) %>
     </div>
 <% end %>

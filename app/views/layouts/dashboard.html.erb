@@ -36,6 +36,8 @@
 
   <body class="bg-main" data-controller="color-scheme ">
 
+    <div data-controller="timezone" data-timezone-current-value="<%= current_user.time_zone %>"></div>
+
     <div id="flash_messages">
       <%= render "shared/flash" %>
     </div>
@@ -47,8 +49,8 @@
         <%= render "layouts/navigation/dashboard/sidebar_menu" %>
       </aside>
 
-      <main id="main" style="padding: 0; gap: 0">
-        <div class="header-layout">
+      <main id="main" style="padding: 0; gap: 0;">
+        <div class="header-layout mi-auto i-full" style=" max-inline-size: 70rem">
           <header class="" id="header">
             <%= render "layouts/navigation/dashboard/mobile_menu" %>
             <%= render "layouts/navigation/dashboard/header_menu" %>

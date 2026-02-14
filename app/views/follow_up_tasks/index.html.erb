@@ -12,12 +12,12 @@
   <%= turbo_frame_tag :follow_up_tasks_list do %>
 
     <%# --- RESULTS LIST --- %>
-    <div class="card">
-      <div id="follow_up_tasks" class="flex flex-col p-5 text-center">
+    <div class="card pi-4 pb-2">
+      <div id="follow_up_tasks" class="flex flex-col">
         <% if @follow_up_tasks.any? %>
           <%= render @follow_up_tasks %>
         <% else %>
-          <p class="text-subtle">No pending follow-ups match your search.</p>
+          <p class="p-4 text-subtle">No pending follow-ups match your search.</p>
         <% end %>
       </div>
     </div>

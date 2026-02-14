@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resource :name,               only: [ :edit, :update ]
     resource :email_verification, only: [ :show, :create ]
     resource :password_reset,     only: [ :new, :edit, :create, :update ]
+    resource :time_zone, only: :update
   end
 
   namespace :authentications do

@@ -9,7 +9,7 @@
           <%= image_tag "avatar.jpg", size: 40, alt: "User Avatar border border-main" %>
         </div>-->
 
-        <div class="flex items-center justify-center rounded-full bg-shade shrink-0 border" style="block-size: 2.5rem; inline-size: 2.5rem;">
+        <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border" style="block-size: 2.5rem; inline-size: 2.5rem;">
           <span class="font-semibold">
             <%= invitation.contact.full_name&.first || invitation.contact.first_name&.first || invitation.contact.email.first.upcase %>
           </span>
@@ -39,7 +39,7 @@
 
       <% delete_trigger = button_tag "Delete",
                                     type: "button",
-                                    class: "btn text-negative i-full",
+                                    class: "btn text-red-500 i-full",
                                     data: { action: "dialog#showModal", menu_target: "item" },
                                     role: "menuitem" %>
 

@@ -65,3 +65,4 @@ img.icon {
 .icon--plus { --svg: url("plus.svg"); }
 .icon--log-out { --svg: url("log-out.svg"); }
 .icon--trash-2 { --svg: url("trash-2.svg"); }
+.icon--globe { --svg: url("globe.svg"); }

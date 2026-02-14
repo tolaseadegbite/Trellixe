@@ -6,7 +6,7 @@
     <h1 class="font-bold text-3xl text-center">Sign up to Trellixe</h1>
   </div>
   
-  <%= form_with(url: sign_up_path) do |form| %>
+  <%= form_with(url: sign_up_path, data: { controller: "timezone" }) do |form| %>
     <% if @user.errors.any? %>
       <div class="alert alert--negative flex items-start mbe-5" role="alert">
         <span class="icon icon--circle-alert" aria-hidden="true"></span>
@@ -23,6 +23,9 @@
         </div>
       </div>
     <% end %>
+
+    <%# Hidden field that JS will populate automatically %>
+    <%= form.hidden_field :time_zone, data: { timezone_target: "input" } %>
 
     <div class="mbe-5">
       <%= form.label :name, style: "display: block", class: "font-semibold mbe-1" %>
