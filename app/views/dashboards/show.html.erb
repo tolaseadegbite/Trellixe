@@ -8,24 +8,24 @@
   <div class="show@md">
     <div class="flex gap items-center">
       <%= link_to "New contact", new_contact_path,
-                    class: "btn btn--primary",
+                    class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
                     data: { turbo_frame: "modal" } %>
       
       <%= link_to "New event", new_event_path,
-                    class: "btn btn--primary",
+                    class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
                     data: { turbo_frame: "modal" } %>
     </div>
   </div>
 <% end %>
 
 <div class="absolute hide@md" style="bottom: 8.5rem; right: 1.8rem; z-index: 9999">
-  <%= link_to new_contact_path, class: "btn btn--primary rounded-full p-5 border-2 border-blue-500 new-btn", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_contact_path, class: "btn bg-blue-500 hover:bg-blue-600 text-gray-50 p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--pen"></span>
   <% end %>
 </div>
 
 <div class="absolute hide@md" style="bottom: 4rem; right: 1.8rem; z-index: 9999">
-  <%= link_to new_event_path, class: "btn btn--primary rounded-full p-5 new-btn", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_event_path, class: "btn bg-blue-500 hover:bg-blue-600 text-gray-50 p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--calendar-range"></span>
   <% end %>
 </div>
@@ -54,7 +54,7 @@
     <% end %>
 
     <div class="text-center">
-      <%= link_to follow_up_tasks_path, class: "btn" do %>
+      <%= link_to follow_up_tasks_path, class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50" do %>
         <span>View all pending Follow-Ups</span>
         <span class="text-subtle mis-1">→</span>
       <% end %>
@@ -76,7 +76,7 @@
     <% end %>
 
     <div class="text-center">
-      <%= link_to events_path(q: { starts_at_gteq: Time.current }), class: "btn" do %>
+      <%= link_to events_path(q: { starts_at_gteq: Time.current }), class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50" do %>
         <span>View all upcoming events</span>
         <span class="text-subtle mis-1">→</span>
       <% end %>

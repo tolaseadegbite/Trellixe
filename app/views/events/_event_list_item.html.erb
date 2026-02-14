@@ -15,12 +15,12 @@
                 <div popover id="popover-<%= event.id %>" class="popover" style="--popover-size: 8rem;" data-popover-target="content">
                     <div class="menu flex flex-col" data-controller="menu" data-action="keydown->menu#navigate">
                         <%= link_to "Edit", edit_event_path(event), class: "btn menu__item i-full text-start", data: { turbo_frame: "modal" } %>
-                        <% delete_trigger = button_tag "Delete", type: "button", class: "btn menu__item i-full text-start text-negative", data: { action: "dialog#showModal", menu_target: "item" } %>
-                        <%= modal_dialog delete_trigger, size: "450pi", title: "Delete #{event.name}?" do %>
+                        <% delete_trigger = button_tag "Delete", type: "button", class: "btn menu__item i-full text-start text-red-500", data: { action: "dialog#showModal", menu_target: "item" } %>
+                        <%= modal_dialog delete_trigger, size: "450px", title: "Delete #{event.name}?" do %>
                             <p class="text-sm text-subtle mbe-4">This will permanently delete this event.</p>
                             <div class="flex items-center justify-end gap">
                                 <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
-                                <%= button_to "Continue", event, method: :delete, class: "btn btn--negative" %>
+                                <%= button_to "Continue", event, method: :delete, class: "btn bg-red-500 border-0" %>
                             </div>
                         <% end %>
                     </div>

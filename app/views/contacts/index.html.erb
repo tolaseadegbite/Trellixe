@@ -43,7 +43,7 @@
           </thead>
           <tbody id="contacts-table">
             <% if @contacts.empty? %>
-              <%= render "contacts/empty_state_desktop" %>
+              <%= render "shared/empty_state_desktop" %>
             <% else %>
               <%= render @contacts %>
             <% end %>
@@ -64,7 +64,7 @@
       
       <div id="contacts-cards">
         <% if @contacts.empty? %>
-          <%= render "contacts/empty_state_mobile" %>
+          <%= render "shared/empty_state_mobile" %>
         <% else %>
           <%= render partial: "contacts/contact_card", collection: @contacts, as: :contact %>
         <% end %>

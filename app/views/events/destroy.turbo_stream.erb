@@ -1,3 +1,9 @@
 <%= turbo_stream.remove @event %>
 <%= turbo_stream.replace "calendar_view", partial: "events/calendar" %>
+
+<%# 2. If no events remain, render the empty state partials directly %>
+<% unless Current.account.events.exists? %>
+  <%= turbo_stream.update "events-list", partial: "shared/empty_state" %>
+<% end %>
+
 <%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice] } %>

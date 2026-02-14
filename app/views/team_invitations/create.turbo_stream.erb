@@ -1,4 +1,15 @@
 <%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<%# Remove the empty state messages if they are present %>
+<%= turbo_stream.remove "empty_state_desktop" %>
+<%= turbo_stream.remove "empty_state_mobile" %>
+
+<%# Prepend the new invitation to both lists %>
 <%= turbo_stream.prepend "invitations-list", partial: "team_invitations/team_invitation", locals: { team_invitation: @invitation } %>
+
+<%# The card partial expects the variable to be named `invitation` %>
+<%= turbo_stream.prepend "invitations-cards", partial: "team_invitations/invitation-card", locals: { invitation: @invitation } %>
+
+<%# Close the modal and update the counter %>
 <%= turbo_stream.replace "modal", "" %>
 <%= turbo_stream.update "trigger_pending", "Pending Invites (#{Current.account.team_invitations.count})" %>

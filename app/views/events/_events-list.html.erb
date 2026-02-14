@@ -7,9 +7,7 @@
     <% if @list_events.any? %>
       <%= render partial: "events/event_list_item", collection: @list_events, as: :event %>
     <% else %>
-      <div class="card text-center">
-        <p class="text-subtle">No events found.</p>
-      </div>
+      <%= render "shared/empty_state" %>
     <% end %>
   </div>
 

@@ -207,10 +207,6 @@
 
       <%= tag.div popover: true, id: "user-menu-popover", class: "popover overflow-hidden", style: "--popover-size: 15rem;", data: { popover_target: "content" } do %>
         <%# User Menu Content (Settings/Logout) %>
-        <div class="p-2">
-          <%# If you have a credit/plan card partial, render it here %>
-        </div>
-        <hr class="menu__separator" role="separator"/>
         <div class="menu" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
           <%= link_to settings_path, class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" do %>
             <span class="icon icon--user" aria-hidden="true"></span>

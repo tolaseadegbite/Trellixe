@@ -3,8 +3,8 @@
 
 <%# 2. If no contacts remain, render the empty state partials directly %>
 <% unless Current.account.contacts.exists? %>
-  <%= turbo_stream.update "contacts-table", partial: "contacts/empty_state_desktop" %>
-  <%= turbo_stream.update "contacts-cards", partial: "contacts/empty_state_mobile" %>
+  <%= turbo_stream.update "contacts-table", partial: "shared/empty_state_desktop" %>
+  <%= turbo_stream.update "contacts-cards", partial: "shared/empty_state_mobile" %>
 <% end %>
 
 <%# 3. Flash Messages %>

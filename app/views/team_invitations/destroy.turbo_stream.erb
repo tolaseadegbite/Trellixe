@@ -1,3 +1,14 @@
 <%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<%# Remove the invitation from both the table and the card list %>
 <%= turbo_stream.remove dom_id(@invitation) %>
+<%= turbo_stream.remove dom_id(@invitation, :card) %>
+
+<%# Update the tab counter %>
 <%= turbo_stream.update "trigger_pending", "Pending Invites (#{Current.account.team_invitations.count})" %>
+
+<%# Check the database directly, not an instance variable %>
+<% unless Current.account.team_invitations.exists? %>
+  <%= turbo_stream.update "invitations-list", partial: "shared/empty_state_desktop" %>
+  <%= turbo_stream.update "invitations-cards", partial: "shared/empty_state_mobile" %>
+<% end %>
