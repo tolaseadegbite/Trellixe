@@ -30,7 +30,7 @@
   <% end %>
 </div>
 
-<div class="p-4">
+<div class="container p-4">
   <%# --- TIMEZONE STATUS BAR --- %>
   <div class="flex items-center justify-center gap-1 mbe-8 text-xs text-subtle bg-shade pi-4 pb-2 rounded-md border border-main" style="inline-size: fit-content; margin-inline: auto;">
     <span class="icon icon--globe opacity-75" style="--icon-size: 0.85rem"></span>
@@ -67,7 +67,7 @@
 
     <% if @upcoming_events.any? %>
       <div id="dashboard_upcoming_events" class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
-        <%= render partial: "dashboards/upcoming_event", collection: @upcoming_events, as: :upcoming_event %>
+        <%= render partial: "dashboards/upcoming_event", collection: @upcoming_events, as: :event %>
       </div>
     <% else %>
       <div class="card text-center mbe-5 p-5">

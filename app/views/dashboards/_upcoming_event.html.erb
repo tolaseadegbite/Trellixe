@@ -1,9 +1,66 @@
-<%= link_to event_path(upcoming_event), class: "card p-3 flex items-center justify-between gap", id: dom_id(upcoming_event) do %>
-  <div>
-    <p class="font-medium"><%= upcoming_event.name %></p>
-    <p class="text-sm text-subtle">
-      <%= upcoming_event.starts_at.strftime("%A, %B %d at %l:%M %p") %>
-    </p>
-  </div>
-  <span class="text-subtle">→</span>
+<%= tag.div id: dom_id(event), class: "card bg-main overflow-hidden mbe-2 p-3" do %>
+    
+    <%# --- MAIN CONTENT AREA (White/Surface) --- %>
+    <div>
+        <%# Header: Name & Menu %>
+        <div class="flex items-start justify-between mbe-1 gap">
+            <%= link_to event, class: "text-primary hover:text-link", data: { turbo_frame: "_top" } do %>
+                <h3 class="font-semibold text-base leading-tight"><%= event.name %></h3>
+            <% end %>
+
+            <div data-controller="popover" data-popover-placement-value="bottom-end">
+                <button type="button" class="btn btn--icon btn--subtle p-1" data-popover-target="trigger" popovertarget="popover-<%= event.id %>">
+                    <span class="icon icon--ellipsis"></span>
+                </button>
+                <div popover id="popover-<%= event.id %>" class="popover" style="--popover-size: 8rem;" data-popover-target="content">
+                    <div class="menu flex flex-col" data-controller="menu" data-action="keydown->menu#navigate">
+                        <%= link_to "Edit", edit_event_path(event), class: "btn menu__item i-full text-start", data: { turbo_frame: "modal" } %>
+                        <% delete_trigger = button_tag "Delete", type: "button", class: "btn menu__item i-full text-start text-red-500", data: { action: "dialog#showModal", menu_target: "item" } %>
+                        <%= modal_dialog delete_trigger, size: "450px", title: "Delete #{event.name}?" do %>
+                            <p class="text-sm text-subtle mbe-4">This will permanently delete this event.</p>
+                            <div class="flex items-center justify-end gap">
+                                <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+                                <%= button_to "Continue", event, method: :delete, class: "btn bg-red-500 border-0" %>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%# Date & Time %>
+        <div class="flex items-center gap-half text-sm text-subtle">
+            <span class="icon icon--calendar-range text-subtle" aria-hidden="true"></span>
+            <span>
+                <% if event.starts_at.to_date == event.ends_at.to_date %>
+                    <span class="font-medium text-primary"><%= event.starts_at.strftime("%a, %b %d") %></span>
+                    <span class="text-subtle opacity-50 mi-1">|</span>
+                    <%= event.starts_at.strftime("%l:%M %p") %> - <%= event.ends_at.strftime("%l:%M %p") %>
+                <% else %>
+                    <%= event.starts_at.strftime("%b %d") %> - <%= event.ends_at.strftime("%b %d") %>
+                <% end %>
+            </span>
+        </div>
+    </div>
+
+    <%# --- STATS FOOTER STRIP --- %>
+    <% stats = event.invitation_summary %>
+    <% if stats[:total] > 0 %>
+        <div class="bg-shade border rounded-md pi-3 pb-2 flex items-center gap-3 mbs-2">
+            
+            <div class="flex items-center gap-half" title="Total Guests">
+                <span class="icon icon--user text-subtle" style="font-size: 10pi;"></span>
+                <span class="text-xs font-medium text-subtle">Total: <%= stats[:total] %></span>
+            </div>
+
+            <% if stats[:attended] > 0 %>
+                <div class="flex items-center gap-half" title="Attended">
+                    <span class="icon icon--user-check text-green-500" style="font-size: 10pi;"></span>
+                    <span class="text-xs font-semibold text-primary">Attended: <%= stats[:attended] %></span>
+                </div>
+            <% end %>
+
+        </div>
+    <% end %>
+
 <% end %>

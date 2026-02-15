@@ -5,7 +5,9 @@
   <%# --- PAGINATED LIST OF EVENTS --- %>
   <div id="events-list" class="flex flex-col gap-3">
     <% if @list_events.any? %>
-      <%= render partial: "events/event_list_item", collection: @list_events, as: :event %>
+      <div class="grid grid-cols-1 grid-cols-2@sm grid-cols-3@md gap mbe-4">
+        <%= render partial: "events/event_list_item", collection: @list_events, as: :event %>
+      </div>
     <% else %>
       <%= render "shared/empty_state" %>
     <% end %>

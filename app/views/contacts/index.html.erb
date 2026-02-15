@@ -15,13 +15,13 @@
   <% end %>
 </div>
 
-<div class="flex flex-col i-full">
+<div class="flex flex-col i-full container p-4">
   <!--<div class="flex items-center justify-between mbe-4 hide@md">
     <h1 class="font-semibold text-2xl">Contacts</h1>
     <%= link_to "New Contact", new_contact_path, class: "btn btn--primary text-md", data: { turbo_frame: "modal" } %>
   </div>-->
 
-  <div class="search-form pbs-3">
+  <div class="search-form pbs-2">
     <%= render "contacts/search_form" %>
   </div>
 
@@ -55,8 +55,8 @@
     </div>
 
     <%# --- MOBILE VIEW: Cards (Hidden on medium screens and up) --- %>
-    <div class="hide@md flex flex-col pi-2" data-controller="check-all">
-      <div class="flex items-center gap p-2">
+    <div class="hide@md flex flex-col" data-controller="check-all">
+      <div class="flex items-center gap pb-2 pi-3">
         <%= check_box_tag "check_all_mobile", nil, false, {
               class: "input cursor-pointer",
               data: { action: "check-all#check", check_all_target: "dependee" }

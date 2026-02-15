@@ -1,9 +1,9 @@
 <% content_for :title, "Notifications" %>
 <% content_for :page_header, "Notifications" %>
 
-<div class="container i-full p-4 mi-auto" style="max-inline-size: 70rem">
+<div class="container i-full p-2 mi-auto" style="max-inline-size: 70rem">
   <div class="flex items-center justify-between mbe-4">
-    <h1 class="text-2xl font-bold">All Notifications</h1>
+    <h2 class="font-bold">All Notifications</h2>
     
     <%# FIX: Use turbo_method: :post here as well %>
     <p>
@@ -14,7 +14,7 @@
     </p>
   </div>
   
-  <div class="flex flex-col border border-main rounded-lg bg-surface">
+  <div class="flex flex-col border border-main rounded-lg bg-main">
     <div id="notifications-list">
       <% if @notifications.any? %>
         <%= render partial: "notifications/notification", collection: @notifications, as: :notification %>
