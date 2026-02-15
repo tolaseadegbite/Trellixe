@@ -15,22 +15,24 @@
   <% end %>
 </div>
 
-<div class="flex flex-col p-4 i-full">
+<div class="flex flex-col i-full">
   <!--<div class="flex items-center justify-between mbe-4 hide@md">
     <h1 class="font-semibold text-2xl">Contacts</h1>
     <%= link_to "New Contact", new_contact_path, class: "btn btn--primary text-md", data: { turbo_frame: "modal" } %>
   </div>-->
 
-  <%= render "contacts/search_form" %>
+  <div class="search-form pbs-3">
+    <%= render "contacts/search_form" %>
+  </div>
 
   <%= turbo_frame_tag :contacts_table do %>
     
     <%# --- DESKTOP VIEW: Table (Visible on medium screens and up) --- %>
     <div class="show@md">
-      <div class="relative i-full overflow-x-auto border rounded-md bg-surface mbe-4">
+      <div class="relative i-full overflow-x-auto border rounded-md mbe-4">
         <table class="table" data-controller="check-all">
           <%# FIX: Removed duplicated <thead> tag %>
-          <thead>
+          <thead class="bg-surface">
             <tr>
               <th><%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
               <th><%= sort_link(@search, :first_name, class: "flex items-center") %></th>
@@ -53,7 +55,7 @@
     </div>
 
     <%# --- MOBILE VIEW: Cards (Hidden on medium screens and up) --- %>
-    <div class="hide@md flex flex-col" data-controller="check-all">
+    <div class="hide@md flex flex-col pi-2" data-controller="check-all">
       <div class="flex items-center gap p-2">
         <%= check_box_tag "check_all_mobile", nil, false, {
               class: "input cursor-pointer",

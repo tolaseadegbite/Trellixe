@@ -37,7 +37,7 @@
       
       <%# Interactive Cell %>
       <div class="border-be border-ie border-main flex flex-col relative transition-colors
-                  <%= is_current_month ? 'bg-surface' : 'bg-shade' %>"
+                  <%= is_current_month ? 'bg-main' : 'bg-shade' %>"
            style="cursor: pointer;"
            data-mobile-calendar-target="day"
            data-date="<%= day.to_s %>"
@@ -81,7 +81,7 @@
 
   <%# --- MOBILE INTERACTIVE DETAILS SECTION --- %>
   <div class="hide@md mbs-6" style="min-block-size: 200px;">
-    <h3 class="font-semibold text-lg mbe-3 text-subtle">Selected Date Details</h3>
+    <h3 class="font-semibold text-lg mbe-3">Selected Date Details</h3>
     
     <%# Render a hidden list for EVERY day in the view so JS can toggle it %>
     <% (@date.beginning_of_month.beginning_of_week..@date.end_of_month.end_of_week).each do |day| %>

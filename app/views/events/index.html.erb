@@ -17,40 +17,43 @@
 </div>
 
 <div id="events-page" class="flex flex-col p-4 i-full">
-  <div class="flex items-center justify-between flex-wrap gap mbe-4">
+  <%= turbo_frame_tag :contacts_table do %>
+    <div class="flex items-center justify-between flex-wrap gap mbe-4">
 
-    <%# Main view tabs: List vs Calendar (This is the LEFT side) %>
-    <nav class="tabs__list border" aria-label="Events list and calendar">
-      <%= link_to "Events list",
-                  events_path(view: 'events-list', q: params.permit(q: [:name_cont, :starts_at_gteq, :starts_at_lteq, :invited_contacts_id_eq])),
-                  class: "btn tabs__button",
-                  **(params[:view] != 'calendar' ? { aria: { current: "page" } } : {}) %>
-      <%= link_to "Calendar", 
-                  events_path(view: 'calendar'), 
-                  class: "btn tabs__button", 
-                  **(params[:view] == 'calendar' ? { aria: { current: "page" } } : {}) %>
-    </nav>
+      <%# Main view tabs: List vs Calendar (This is the LEFT side) %>
+      <nav class="tabs__list border" aria-label="Events list and calendar">
+        <%= link_to "Events list",
+                    events_path(view: 'events-list', q: params.permit(q: [:name_cont, :starts_at_gteq, :starts_at_lteq, :invited_contacts_id_eq])),
+                    class: "btn tabs__button",
+                    **(params[:view] != 'calendar' ? { aria: { current: "page" } } : {}) %>
+        <%= link_to "Calendar", 
+                    events_path(view: 'calendar'), 
+                    class: "btn tabs__button", 
+                    **(params[:view] == 'calendar' ? { aria: { current: "page" } } : {}) %>
+      </nav>
 
-    <% if params[:view] != 'calendar' %>
-      <div class="flex items-center gap">
-        <%= link_to "Upcoming", 
-                    events_path(view: 'events-list', scope: 'upcoming'), 
-                    class: "btn btn--subtle " + (@scope == 'upcoming' ? 'font-bold text-primary' : 'text-subtle') %>
+      <% if params[:view] != 'calendar' %>
+        <div class="flex items-center gap">
+          <%= link_to "Upcoming", 
+                      events_path(view: 'events-list', scope: 'upcoming'), 
+                      class: "btn btn--subtle " + (@scope == 'upcoming' ? 'font-bold text-primary' : 'text-subtle') %>
 
-        <%= link_to "Past", 
-                    events_path(view: 'events-list', scope: 'past'), 
-                    class: "btn btn--subtle " + (@scope == 'past' ? 'font-bold text-primary' : 'text-subtle') %>
-      </div>
+          <%= link_to "Past", 
+                      events_path(view: 'events-list', scope: 'past'), 
+                      class: "btn btn--subtle " + (@scope == 'past' ? 'font-bold text-primary' : 'text-subtle') %>
+        </div>
+      <% end %>
+
+    </div>
+
+    <%= turbo_frame_tag "event_view" do %>
+      <% if params[:view] == 'calendar' %>
+        <%= render 'events/calendar' %>
+      <% else %>
+        <%= render 'events/events-list' %>
+      <% end %>
     <% end %>
-
-  </div>
-
-  <%= turbo_frame_tag "event_view" do %>
-    <% if params[:view] == 'calendar' %>
-      <%= render 'events/calendar' %>
-    <% else %>
-      <%= render 'events/events-list' %>
-    <% end %>
+    
   <% end %>
 
 </div>

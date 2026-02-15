@@ -8,39 +8,78 @@
     <span>Search events</span>
   </button>
 
-  <div class="hide card p-4 mbe-4" data-search-filter-target="filters">
-    <%= search_form_for @search, url: events_path do |f| %>
+  <div class="hide card bg-main p-4 mbe-4" data-search-filter-target="filters">
+    <%= search_form_for(@search, 
+      url: events_path, 
+      data: { 
+        turbo_frame: "events_table", 
+        turbo_action: "advance",
+        controller: "debounce" 
+      }
+    ) do |f| %>
       <%= hidden_field_tag :view, 'events-list' %>
 
       <div class="grid grid-cols-1 grid-cols-12@md gap-4 mbe-6">
         <%# --- Search by Name (existing) --- %>
         <div class="col-span-12 col-span-3@lg">
           <%#= f.label :name_cont, "Event Name", class: "font-medium" %>
-          <%= f.search_field :name_cont, placeholder: "Name", class: "input i-full mbs-1" %>
+          <%= f.search_field :name_cont, 
+                             placeholder: "Name", 
+                             class: "input i-full mbs-1",
+                             data: { action: "input->debounce#submit" }
+          %>
         </div>
 
         <%# --- Filter by Date Range (new) --- %>
         <div class="col-span-6 col-span-1@lg">
           <%#= f.label :starts_at_gteq, "From", class: "font-medium mbs-1" %>
-          <%= f.date_field :starts_at_gteq, placeholder: "Date from...", class: "input i-full mbs-1", data: { controller: "datepicker" } %>
+          <%= f.date_field :starts_at_gteq, 
+                            placeholder: "Date from...", 
+                            class: "input i-full mbs-1", 
+                            data: { 
+                              controller: "datepicker",
+                              action: "input->debounce#submit" 
+                            } 
+          %>
         </div>
         
         <div class="col-span-6 col-span-1@lg">
           <%#= f.label :starts_at_lteq, "To", class: "font-medium" %>
-          <%= f.date_field :starts_at_lteq, placeholder: "Date to...", class: "input i-full mbs-1", data: { controller: "datepicker" } %>
+          <%= f.date_field :starts_at_lteq, 
+                            placeholder: "Date to...", 
+                            class: "input i-full mbs-1", 
+                            data: { 
+                              controller: "datepicker",
+                              action: "input->debounce#submit" 
+                            } 
+          %>
         </div>
 
         <%# --- Filter by Invited Contact (new) --- %>
         <div class="col-span-12 col-span-1@lg">
           <%#= f.label :invited_contacts_id_eq, "Contact", class: "font-medium" %>
-          <%= f.collection_select :invited_contacts_id_eq, @filterable_contacts, :id, :full_name, { include_blank: 'Select Contact' }, { class: "i-full mbs-1", data: { controller: "combobox" } } %>
+          <%= f.collection_select :invited_contacts_id_eq, 
+                                  @filterable_contacts, 
+                                  :id, 
+                                  :full_name, 
+                                  { 
+                                    include_blank: 'Select Contact' 
+                                  }, 
+                                  { 
+                                    class: "i-full mbs-1", 
+                                    data: { 
+                                      controller: "combobox",
+                                      action: "input->debounce#submit" 
+                                    } 
+                                  } 
+          %>
         </div>
       </div>
 
       <%# --- Form Actions --- %>
       <div class="flex items-center justify-end gap mbe-4">
-        <%= link_to "Reset all", events_path(view: "events-list"), class: "btn" if params.has_key?(:q) %>
-        <%= f.submit "Search", class: "btn btn--primary" %>
+        <%= link_to "Reset", events_path(view: "events-list"), class: "btn btn--primary" %>
+        <%#= f.submit "Search", class: "btn btn--primary" %>
       </div>
     <% end %>
   </div>

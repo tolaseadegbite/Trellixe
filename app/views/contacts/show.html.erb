@@ -40,7 +40,7 @@
         </div>
 
           <%= link_to edit_contact_path(@contact), class: "flex items-start", data: { turbo_frame: "modal" } do %>
-            <span class="btn btn--icon rounded-full bg-blue-600 hover:bg-blue-700 border-0">
+            <span class="btn btn--icon rounded-full bg-blue-600 hover:bg-blue-700 border-0 text-gray-50">
               <span class="icon icon--pen" aria-hidden="true"></span>
             </span>
           <% end %>
@@ -80,7 +80,7 @@
           <% end %>
         </div>
       <% else %>
-        <p class="text-sm text-subtle text-center p-8">This contact has not been invited to any events that match your search.</p>
+        <p class="card text-center mbs-2">No records found.</p>
       <% end %>
 
       <%= render "shared/pagination", pagy: @pagy %>

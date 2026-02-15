@@ -1,6 +1,6 @@
 <%# This is the card view for a single contact, visible on mobile screens. %>
 <%# We add a suffix to the dom_id to keep it unique from the table row's ID. %>
-<div id="<%= dom_id(contact, :card) %>" class="card p-3 flex items-center gap-4 mbe-4">
+<div id="<%= dom_id(contact, :card) %>" class="card bg-main p-3 flex items-center gap-4 mbe-4">
 
   <%# --- Checkbox and Avatar --- %>
   <div class="flex items-center gap shrink-0">
@@ -52,7 +52,14 @@
       </div>
     </div>
 
-    <span class="text-sm text-subtle overflow-ellipsis"><%= contact.email.present? ? contact.email : "Nil" %></span>
-    <span class="text-sm text-subtle overflow-ellipsis"><%= contact.phone_number.present? ? contact.phone_number : "Nil" %></span>
+    <span class="flex gap items-center text-sm text-subtle overflow-ellipsis">
+      <span class="icon icon--mail" aria-hidden="true"></span>
+      <%= contact.email.present? ? contact.email : "Nil" %>
+    </span>
+
+    <span class="flex gap items-center text-sm text-subtle overflow-ellipsis">
+      <span class="icon icon--phone" aria-hidden="true"></span>
+      <%= contact.phone_number.present? ? contact.phone_number : "Nil" %>
+    </span>
   </div>
 </div>

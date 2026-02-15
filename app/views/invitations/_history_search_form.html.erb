@@ -1,13 +1,24 @@
 <%# This form searches invitations within the context of a specific contact %>
-<%= search_form_for search_object, url: contact_path(contact) do |f| %>
-  <div class="grid grid-cols-1 grid-cols-2@md gap mbe-4">
+<%= search_form_for(search_object, 
+      url: contact_path(contact), 
+      data: { 
+        turbo_frame: "event_history_list", 
+        turbo_action: "advance",
+        controller: "debounce" 
+      }
+    ) do |f| %>
+  <div class="grid grid-cols-1 grid-cols-3@sm grid-cols-3@md gap mbe-4">
     
     <%# --- Search by Event Name --- %>
     <div>
       <%#= f.label :event_name_cont, "Search by Event Name", class: "font-medium" %>
       <%= f.search_field :event_name_cont,
                          placeholder: "Name...",
-                         class: "input i-full" %>
+                         class: "input i-full",
+                        data: { 
+                          action: "input->debounce#submit" 
+                        } 
+      %>
     </div>
 
     <%# --- Filter by Status --- %>
@@ -16,13 +27,19 @@
       <%= f.select :status_eq,
                    Invitation.statuses.map { |name, value| [name.humanize, value] },
                    { include_blank: 'Filter by Status' },
-                   { class: "i-full", data: { controller: "combobox" } } %>
+                   { class: "i-full", 
+                   data: { 
+                    controller: "combobox",
+                    action: "input->debounce#submit" 
+                    } 
+                  } 
+      %>
     </div>
-  </div>
 
-  <%# --- Form Actions --- %>
-  <div class="flex items-center gap">
-    <%= f.submit "Search", class: "btn btn--primary" %>
-    <%= link_to "Reset", contact_path(contact), class: "btn" if params.has_key?(:q) %>
+    <%# --- Form Actions --- %>
+    <div class="flex items-center gap">
+      <%#= f.submit "Search", class: "btn btn--primary" %>
+      <%= link_to "Reset", contact_path(contact), class: "btn btn--primary i-full" %>
+    </div>
   </div>
 <% end %>

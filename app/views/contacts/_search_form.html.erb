@@ -8,8 +8,16 @@
     <span>Search contacts</span>
   </button>
 
-  <div class="hide card p-4 mbe-4" data-search-filter-target="filters">
-    <%= search_form_for @search, url: contacts_path do |f| %>
+  <div class="hide card bg-main p-4 mbe-4" data-search-filter-target="filters">
+    <%= search_form_for(@search, 
+      url: contacts_path, 
+      data: { 
+        turbo_frame: "contacts_table", 
+        turbo_action: "advance",
+        controller: "debounce" 
+      }
+    ) do |f| %>
+
       <div class="grid grid-cols-1 grid-cols-12@md gap-4 mbe-6">
 
         <%# 1. Omni-Search Bar (Now includes 'how_we_met') %>
@@ -17,17 +25,33 @@
           <%#= f.label :first_name_or_last_name_or_email_or_how_we_met_cont, "Name, Email, or Context", class: "font-medium" %>
           <%= f.search_field :first_name_or_last_name_or_email_or_how_we_met_cont,
                              placeholder: "Search name, Email, or Context...",
-                             class: "input i-full mbs-1" %>
+                             class: "input i-full mbs-1",
+                             data: { action: "input->debounce#submit" } 
+          %>
         </div>
 
         <%# 2. Date Created Range %>
         <div class="col-span-6 col-span-2@lg">
           <%#= f.label :created_at_gteq, "Added After", class: "font-medium" %>
-          <%= f.date_field :created_at_gteq, placeholder: "Added after...", class: "i-full mbs-1", data: { controller: "datepicker" } %>
+          <%= f.date_field :created_at_gteq, 
+            placeholder: "Added after...", 
+            class: "i-full mbs-1", 
+            data: { 
+              controller: "datepicker",
+              action: "input->debounce#submit" 
+            } 
+          %>
         </div>
         <div class="col-span-6 col-span-2@lg">
           <%#= f.label :created_at_lteq, "Added Before", class: "font-medium" %>
-          <%= f.date_field :created_at_lteq, placeholder: "Added before...", class: "i-full mbs-1", data: { controller: "datepicker" } %>
+          <%= f.date_field :created_at_lteq, 
+                placeholder: "Added before...", 
+                class: "i-full mbs-1", 
+                data: { 
+                  controller: "datepicker",
+                  action: "input->debounce#submit" 
+                } 
+          %>
         </div>
 
         <%# 3. Event Filter Dropdown %>
@@ -38,14 +62,18 @@
                                   :id,
                                   :name,
                                   { include_blank: 'Event you invited them to' },
-                                  { class: "i-full mbs-1", data: { controller: "combobox" } } %>
+                                  { class: "i-full mbs-1", data: { 
+                                                              controller: "combobox", 
+                                                              action: "input->debounce#submit" } 
+                                  } 
+          %>
         </div>
       </div>
 
       <%# --- Form Actions --- %>
       <div class="flex items-center justify-end gap">
-        <%= link_to "Reset", contacts_path, class: "btn" if params.has_key?(:q) %>
-        <%= f.submit "Search", class: "btn btn--primary" %>
+        <%= link_to "Reset", contacts_path, class: "btn btn--primary" %>
+        <%#= f.submit "Search", class: "btn btn--primary" %>
       </div>
     <% end %>
   </div>
