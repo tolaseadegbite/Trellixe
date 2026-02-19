@@ -5,78 +5,88 @@
 <% end %>
 
 <% content_for :header_action_buttons do %>
-    <%= link_to new_contact_path,
-                  class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
-                  data: { turbo_frame: "modal" } do %>
-
-      <span class="icon icon--user-round-pen"></span>
-    <% end %>
+  <%= link_to new_contact_path, class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-reversed i-full", data: { turbo_frame: "modal" } do %>
+    <span class="icon icon--user-round-pen"></span>
+  <% end %>
 <% end %>
 
 <div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
-  <%= link_to new_contact_path, class: "btn bg-blue-500 hover:bg-blue-600 text-gray-50 p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_contact_path, class: "btn bg-blue-500 hover:bg-blue-600 text-reversed p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--pen"></span>
   <% end %>
 </div>
 
 <div class="flex flex-col i-full p-3">
-  <!--<div class="flex items-center justify-between mbe-4 hide@md">
-    <h1 class="font-semibold text-2xl">Contacts</h1>
-    <%= link_to "New Contact", new_contact_path, class: "btn btn--primary text-md", data: { turbo_frame: "modal" } %>
-  </div>-->
-
   <div class="search-form pbs-2">
     <%= render "contacts/search_form" %>
   </div>
 
   <%= turbo_frame_tag :contacts_table do %>
     
-    <%# --- DESKTOP VIEW: Table (Visible on medium screens and up) --- %>
-    <div class="show@md">
-      <div class="relative i-full overflow-x-auto border rounded-md mbe-4">
-        <table class="table" data-controller="check-all">
-          <%# FIX: Removed duplicated <thead> tag %>
-          <thead class="bg-surface">
-            <tr>
-              <th><%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
-              <th><%= sort_link(@search, :first_name, class: "flex items-center") %></th>
-              <th><%= sort_link(@search, :last_name, class: "flex items-center") %></th>
-              <th><%= sort_link(@search, :email, class: "flex items-center") %></th>
-              <th><%= sort_link(@search, :phone_number, class: "flex items-center") %></th>
-              <th><%= sort_link(@search, :how_we_met, class: "flex items-center") %></th>
-              <th style="min-inline-size: 3rem"></th>
-            </tr>
-          </thead>
-          <tbody id="contacts-table">
-            <% if @contacts.empty? %>
-              <%= render "shared/empty_state_desktop" %>
-            <% else %>
-              <%= render @contacts %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <%# --- WRAP IN FORM & CONTROLLER --- %>
+    <%= form_with url: bulk_destroy_contacts_path, method: :delete, data: { controller: "check-all" } do |form| %>
 
-    <%# --- MOBILE VIEW: Cards (Hidden on medium screens and up) --- %>
-    <div class="hide@md flex flex-col" data-controller="check-all">
-      <div class="flex items-center gap pb-2 pi-1">
-        <%= check_box_tag "check_all_mobile", nil, false, {
-              class: "input cursor-pointer",
-              data: { action: "check-all#check", check_all_target: "dependee" }
-            } %>
-        <label for="check_all_mobile" class="font-medium cursor-pointer">Select all</label>
-      </div>
-      
-      <div id="contacts-cards">
-        <% if @contacts.empty? %>
-          <%= render "shared/empty_state_mobile" %>
-        <% else %>
-          <%= render partial: "contacts/contact_card", collection: @contacts, as: :contact %>
-        <% end %>
-      </div>
-    </div>
+      <%# --- FLOATING BULK ACTION BAR --- %>
+      <div id="bulk_actions_bar">
+        <div data-check-all-target="actionBar" 
+            class="bg-black text-reversed p-2 rounded-md shadow-lg items-center justify-between" 
+            style="position: fixed; display: none; bottom: 2rem; inline-size: calc(100% - 2rem); max-inline-size: 600px; left: 50%; transform: translateX(-50%); z-index: 10000;">
+          
+          <div class="flex items-center gap">
+            <span class="font-bold text-sm" data-check-all-target="count">0 selected</span>
+          </div>
 
-    <%= render "shared/pagination", pagy: @pagy %>
-  <% end %>
+          <div class="flex items-center gap">
+            <%= form.submit "Delete", 
+                data: { turbo_confirm: "Are you sure you want to delete the selected contacts? This cannot be undone." },
+                class: "btn bg-red-500 hover:bg-red-700 text-gray-50 border-0 text-xs" %>
+          </div>
+        </div>
+      </div>
+
+      <%# --- DESKTOP VIEW --- %>
+      <div class="show@md">
+        <div class="relative i-full overflow-x-auto border rounded-md mbe-4">
+          <table class="table">
+            <thead class="bg-surface">
+              <tr>
+                <th><%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
+                <th><%= sort_link(@search, :first_name, class: "flex items-center") %></th>
+                <th><%= sort_link(@search, :last_name, class: "flex items-center") %></th>
+                <th><%= sort_link(@search, :email, class: "flex items-center") %></th>
+                <th><%= sort_link(@search, :phone_number, class: "flex items-center") %></th>
+                <th><%= sort_link(@search, :how_we_met, class: "flex items-center") %></th>
+                <th style="min-inline-size: 3rem"></th>
+              </tr>
+            </thead>
+            <tbody id="contacts-table">
+              <% if @contacts.empty? %>
+                <%= render "shared/empty_state_desktop" %>
+              <% else %>
+                <%= render @contacts %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <%# --- MOBILE VIEW --- %>
+      <div class="hide@md flex flex-col">
+        <div class="flex items-center gap pb-2 pi-1">
+          <%= check_box_tag "check_all_mobile", nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %>
+          <label for="check_all_mobile" class="font-medium cursor-pointer">Select all</label>
+        </div>
+        
+        <div id="contacts-cards">
+          <% if @contacts.empty? %>
+            <%= render "shared/empty_state_mobile" %>
+          <% else %>
+            <%= render partial: "contacts/contact_card", collection: @contacts, as: :contact %>
+          <% end %>
+        </div>
+      </div>
+
+      <%= render "shared/pagination", pagy: @pagy %>
+    <% end %> <%# End form_with %>
+  <% end %> <%# End turbo_frame %>
 </div>

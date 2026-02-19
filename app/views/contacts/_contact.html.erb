@@ -1,5 +1,5 @@
 <tr id="<%= dom_id(contact, :table_row) %>">
-  <td><%= check_box_tag "selected_ids[]", contact.id, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %></td>
+  <td><%= check_box_tag "contact_ids[]", contact.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %></td>
   <td class="whitespace-nowrap">
     <!--<div class="flex items-center gap">
       <div class="flex shrink-0 overflow-hidden rounded-full">

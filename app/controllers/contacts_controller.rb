@@ -65,6 +65,28 @@ class ContactsController < DashboardsController
     end
   end
 
+  def bulk_destroy
+    # 1. Capture IDs safely
+    @contact_ids = params[:contact_ids] || []
+
+    # 2. Scope to account
+    contacts_to_delete = Current.account.contacts.where(id: @contact_ids)
+    count = contacts_to_delete.count
+
+    if count > 0
+      contacts_to_delete.destroy_all
+      flash.now[:notice] = "Successfully deleted #{count} contacts."
+    else
+      flash.now[:alert] = "No contacts selected."
+    end
+
+    # 3. Respond
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to contacts_path, status: :see_other, notice: flash[:notice] }
+    end
+  end
+
   private
 
     def set_contact

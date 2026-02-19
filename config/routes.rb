@@ -83,7 +83,11 @@ Rails.application.routes.draw do
 
   # --- CRM Core (Existing) ---
 
-  resources :contacts
+  resources :contacts do
+    collection do
+      delete :bulk_destroy
+    end
+  end
 
   resources :events do
     # These are EVENT invitations (RSVPs), not Team invitations
