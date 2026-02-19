@@ -26,6 +26,7 @@ img.icon {
 * Open-source icon library with a consistent style
 *****************************************************************/
 .icon--calendar-range { --svg: url("calendar-range.svg"); }
+.icon--calendar-plus { --svg: url("calendar-plus.svg"); }
 .icon--chevron-left { --svg: url("chevron-left.svg"); }
 .icon--chevrons-left { --svg: url("chevrons-left.svg"); }
 .icon--chevrons-right { --svg: url("chevrons-right.svg"); }
@@ -35,6 +36,7 @@ img.icon {
 .icon--pen { --svg: url("pen.svg"); }
 .icon--message-square-text { --svg: url("message-square-text.svg"); }
 .icon--mail { --svg: url("mail.svg"); }
+.icon--notebook-tabs { --svg: url("notebook-tabs.svg"); }
 .icon--phone { --svg: url("phone.svg"); }
 .icon--list-checks { --svg: url("list-checks.svg"); }
 .icon--chevrons-up-down { --svg: url("chevrons-up-down.svg"); }
@@ -59,6 +61,7 @@ img.icon {
 .icon--user-minus { --svg: url("user-minus.svg"); }
 .icon--user-x { --svg: url("user-x.svg"); }
 .icon--user { --svg: url("user.svg"); }
+.icon--user-round-pen { --svg: url("user-round-pen.svg"); }
 .icon--settings { --svg: url("settings.svg"); }
 .icon--settings-2 { --svg: url("settings-2.svg"); }
 .icon--check { --svg: url("check.svg"); }

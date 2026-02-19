@@ -51,7 +51,7 @@
         <span class="text-xs text-subtle">Permanently remove this workspace and all associated data.</span>
       </div>
 
-      <% delete_trigger = button_tag "Delete Workspace", type: "button", class: "btn font-bold text-gray-50 border-0", style: "background-color: var(--color-negative);", data: { action: "dialog#showModal" } %>
+      <% delete_trigger = button_tag "Delete Workspace", type: "button", class: "btn font-bold text-gray-50 border-0 flex", style: "background-color: var(--color-negative);", data: { action: "dialog#showModal" } %>
       
       <%= modal_dialog delete_trigger, size: "450px", title: "Delete #{@account.name}?" do %>
         

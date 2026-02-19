@@ -5,9 +5,11 @@
 
 <% content_for :header_action_buttons do %>
       
-  <%= link_to "New event", new_event_path,
-                class: "btn btn--primary show@md",
-                data: { turbo_frame: "modal" } %>
+  <%= link_to new_event_path,
+                    class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
+                    data: { turbo_frame: "modal" } do %>
+    <span class="icon icon--calendar-plus"></span>
+  <% end %>
 <% end %>
 
 <div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">

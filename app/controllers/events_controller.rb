@@ -2,34 +2,29 @@ class EventsController < DashboardsController
   before_action :set_event, only: %i[ show edit update destroy ]
 
   def index
+    # 1. Calendar Logic
     @date = Date.parse(params.fetch(:date, Date.today.to_s))
 
-    calendar_start_date = @date.beginning_of_month.beginning_of_week
-    calendar_end_date = @date.end_of_month.end_of_week
-    events_for_calendar = Current.account.events.where("starts_at < ?", calendar_end_date)
-                                      .order(starts_at: :asc)
+    # Use the optimized scope to prevent loading entire history
+    calendar_events = Current.account.events.in_range(
+      @date.beginning_of_month.beginning_of_week,
+      @date.end_of_month.end_of_week
+    )
 
-    @events_by_date = Hash.new { |h, k| h[k] = [] }
+    @events_by_date = calendar_events.group_by { |e| e.starts_at.to_date }
 
-    events_for_calendar.each do |event|
-      event_date_range = event.starts_at.to_date..event.ends_at.to_date
-      event_date_range.each do |day|
-        if (calendar_start_date..calendar_end_date).cover?(day)
-          @events_by_date[day] << event
-        end
-      end
-    end
-
+    # 2. List Logic (Past vs Upcoming)
     @scope = params.fetch(:scope, "upcoming")
 
-    base_records = Current.account.events
-
-    if @scope == "past"
-      records = base_records.where("starts_at < ?", Time.current.beginning_of_day).order(starts_at: :desc)
+    records = if @scope == "past"
+                # Events that have completely finished
+                Current.account.events.past.order(starts_at: :desc)
     else
-      records = base_records.where("starts_at >= ?", Time.current.beginning_of_day).order(starts_at: :asc)
+                # Events happening now or in the future
+                Current.account.events.upcoming.order(starts_at: :asc)
     end
 
+    # 3. Ransack Date Fix (End of day handling)
     if params[:q].present? && params[:q][:starts_at_lteq].present?
       end_date = Date.parse(params[:q][:starts_at_lteq]).end_of_day
       params[:q][:starts_at_lteq] = end_date

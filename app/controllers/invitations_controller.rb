@@ -91,7 +91,7 @@ class InvitationsController < DashboardsController
     event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
 
     # due_date = event_end_time.next_day.beginning_of_day.advance(hours: 9)
-    due_date = event_end_time.advance(minutes: 1)
+    due_date = event_end_time.advance(minutes: 3)
     # due_date = event_end_time.tomorrow.change(hour: 9)
 
     FollowUpTask.create!(

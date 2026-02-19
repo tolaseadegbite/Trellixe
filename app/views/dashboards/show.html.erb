@@ -7,13 +7,18 @@
 <% content_for :header_action_buttons do %>
   <div class="show@md">
     <div class="flex gap items-center">
-      <%= link_to "New contact", new_contact_path,
-                    class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
-                    data: { turbo_frame: "modal" } %>
+      <%= link_to new_contact_path,
+                    class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
+                    data: { turbo_frame: "modal" } do %>
+
+        <span class="icon icon--user-round-pen"></span>
+      <% end %>
       
-      <%= link_to "New event", new_event_path,
-                    class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
-                    data: { turbo_frame: "modal" } %>
+      <%= link_to new_event_path,
+                    class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
+                    data: { turbo_frame: "modal" } do %>
+        <span class="icon icon--calendar-plus"></span>
+      <% end %>
     </div>
   </div>
 <% end %>
@@ -54,7 +59,7 @@
     <% end %>
 
     <div class="text-center">
-      <%= link_to follow_up_tasks_path, class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50" do %>
+      <%= link_to follow_up_tasks_path, class: "btn btn--primary" do %>
         <span>View all pending Follow-Ups</span>
         <span class="mis-1 text-gray-50">→</span>
       <% end %>
@@ -76,7 +81,7 @@
     <% end %>
 
     <div class="text-center">
-      <%= link_to events_path(q: { starts_at_gteq: Time.current }), class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50" do %>
+      <%= link_to events_path(q: { starts_at_gteq: Time.current }), class: "btn btn--primary" do %>
         <span>View all upcoming events</span>
         <span class="mis-1 text-gray-50">→</span>
       <% end %>

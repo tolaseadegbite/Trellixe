@@ -5,9 +5,9 @@
   <%# --- PAGINATED LIST OF EVENTS --- %>
   <div id="events-list" class="flex flex-col gap-3">
     <% if @list_events.any? %>
-      <div class="grid grid-cols-1 grid-cols-2@sm grid-cols-3@md gap mbe-4">
+      <%= content_tag(:"turbo-frame", id: "events", target: "_top", class: "grid grid-cols-1 grid-cols-2@sm grid-cols-3@md gap mbe-4") do %>
         <%= render partial: "events/event_list_item", collection: @list_events, as: :event %>
-      </div>
+      <% end %>
     <% else %>
       <%= render "shared/empty_state" %>
     <% end %>

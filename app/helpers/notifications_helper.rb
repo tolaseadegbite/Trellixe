@@ -28,8 +28,8 @@ module NotificationsHelper
     when "TeamNotifier::InvitationReceived"
       "You have been invited to join #{params[:account_name]}."
 
-    else
-      "New activity in your workspace."
+      # else
+      #   "New activity in your workspace."
     end
   end
 

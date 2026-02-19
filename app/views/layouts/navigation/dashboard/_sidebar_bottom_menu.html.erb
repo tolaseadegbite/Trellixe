@@ -1,4 +1,4 @@
-<div class="show@md mbs-auto i-full">
+<div class="show@md mbs-auto flex flex-col pbs-4 border-bs i-full">
   <div class="mbs-auto flex flex-col gap-2 i-full">
 
     <%# Notifications %>
@@ -67,8 +67,8 @@
         data-popover-placement-value="right-start" 
         data-action="click@window->popover#clickOutside">
       <%= button_tag type: "button", class: "btn sidebar-menu__button", data: { action: "click->popover#toggle", popover_target: "trigger" }, aria: { haspopup: "true" } do %>
-        <div class="flex shrink-0 overflow-hidden rounded-full border-2 border-green-500">
-          <%= image_tag "avatar.jpg", size: 32, alt: "User Avatar" %>
+        <div class="flex shrink-0 overflow-hidden rounded-full bg-highlight" style="padding: .1rem;">
+          <%= image_tag "avatar.jpg", size: 32, alt: "User Avatar", class: "rounded-full" %>
         </div>
         <div class="flex flex-col text-start leading-tight overflow-hidden">
           
@@ -87,7 +87,7 @@
             <% end %>
           </span>
 
-          <span class="overflow-ellipsis max-i-full text-xs"><%= current_user.email %></span>
+          <span class="overflow-ellipsis max-i-full text-xs text-subtle"><%= current_user.email %></span>
         </div>
         <span class="icon icon--chevron-right mis-auto" aria-hidden="true"></span>
       <% end %>
@@ -102,7 +102,7 @@
 </div>
 
 <%# Mobile views %>
-<div class="hide@md mbs-auto flex flex-col gap-2">
+<div class="hide@md mbs-auto flex flex-col pbs-4 border-bs">
   <details>
     <summary class="btn sidebar-menu__button">
       
@@ -116,16 +116,25 @@
       </div>
     </summary>
     <nav class="sidebar-menu__sub">
-      <button type="button" class="btn sidebar-menu__button" data-action="popover#hide color-scheme#setLight">Light</button>
-      <button type="button" class="btn sidebar-menu__button" data-action="popover#hide color-scheme#setDark">Dark</button>
-      <button type="button" class="btn sidebar-menu__button" data-action="popover#hide color-scheme#setSystem">System</button>
+      <button type="button" class="btn menu__item bg-main" data-action="dialog#close color-scheme#setLight" data-menu-target="item" role="menuitem">
+        <span class="icon icon--sun"></span>
+        Light
+      </button>
+      <button type="button" class="btn menu__item bg-main" data-action="dialog#close color-scheme#setDark" data-menu-target="item" role="menuitem">
+      <span class="icon icon--moon"></span>
+        Dark
+      </button>
+      <button type="button" class="btn menu__item bg-main" data-action="dialog#close color-scheme#setSystem" data-menu-target="item" role="menuitem">
+        <span class="icon icon--laptop"></span>
+        System
+      </button>
     </nav>
   </details>
 
   <details>
     <summary class="btn sidebar-menu__button">
-      <div class="flex shrink-0 overflow-hidden rounded-full border">
-        <%= image_tag "avatar.jpg", size: 32, alt: "User Avatar" %>
+      <div class="flex shrink-0 overflow-hidden rounded-full bg-highlight" style="padding: .1rem;">
+        <%= image_tag "avatar.jpg", size: 32, alt: "User Avatar", class: "rounded-full" %>
       </div>
       <div class="flex flex-col text-start leading-tight overflow-hidden">
         
@@ -144,7 +153,7 @@
           <% end %>
         </span>
 
-        <span class="overflow-ellipsis max-i-full text-xs"><%= current_user.email %></span>
+        <span class="overflow-ellipsis max-i-full text-xs text-subtle"><%= current_user.email %></span>
       </div>
     </summary>
     <nav class="sidebar-menu__sub">

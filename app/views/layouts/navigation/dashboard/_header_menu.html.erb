@@ -4,8 +4,23 @@
   </div>
 
   <div class="flex items-center gap">
-    <div class="show@md gap">
+    <div class="show@md gap flex">
       <%= yield :header_action_buttons %>
+
+      <div data-controller="push-subscription">
+        <%# This button will now be a "target". It shows when NOT subscribed. %>
+        <button data-push-subscription-target="subscribeButton" data-action="push-subscription#subscribe" class="btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50">
+          <span class="icon icon--bell"></span>
+          Enable Push Notifications
+        </button>
+
+        <%# This is the new button. It shows when the user IS subscribed. %>
+        <%# We hide it by default and let Stimulus manage its visibility. %>
+        <%# <button data-push-subscription-target="unsubscribeButton" data-action="push-subscription#unsubscribe"  class="btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50">
+          <span class="icon icon--bell"></span>
+          Disable Notifications
+        </button> %>
+      </div>
     </div>
 
     <div class="flex items-center gap-2">

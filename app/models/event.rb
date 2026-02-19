@@ -10,7 +10,30 @@ class Event < ApplicationRecord
   has_many :follow_up_tasks, through: :invitations
   has_many :interaction_logs, through: :follow_up_tasks
 
-  # This is a "virtual attribute". It feels like a database column, but it's calculated.
+  attr_accessor :contact_ids
+
+  after_create :create_invitations_for_contacts
+  after_update :create_invitations_for_contacts
+
+  # --- NEW SCOPES ---
+
+  # Helper to calculate the End Time inside the database query
+  def self.sql_ends_at
+    "starts_at + (duration_in_minutes * interval '1 minute')"
+  end
+
+  # Calendar Optimization: Only load events starting in the viewable range
+  scope :in_range, ->(start_date, end_date) { where(starts_at: start_date..end_date) }
+
+  # Past: The event finished before right now
+  scope :past, -> { where("#{sql_ends_at} < ?", Time.current) }
+
+  # Upcoming: The event finishes in the future (includes currently ongoing events)
+  scope :upcoming, -> { where("#{sql_ends_at} >= ?", Time.current) }
+
+  # ------------------
+
+  # This is a "virtual attribute" for Ruby logic
   def ends_at
     starts_at + duration_in_minutes.minutes
   end
@@ -23,20 +46,13 @@ class Event < ApplicationRecord
     %w[ invited_contacts ]
   end
 
-  attr_accessor :contact_ids
-
-  after_create :create_invitations_for_contacts
-  after_update :create_invitations_for_contacts
-
   def invitation_summary
     all_invites = invitations.loaded? ? invitations : invitations.to_a
-
     {
       total:    all_invites.size,
       attended: all_invites.count { |i| i.attended? }
     }
   end
-
 
   private
 

@@ -1,9 +1,9 @@
 @media (width <= 64rem) {
-    .search-form {
+    /* .search-form {
         padding: 12px 10px 0 10px !important;
-    }
+    } */
 
     .container {
-        padding: 0.5rem !important;
+        padding: 0.75rem !important;
     }
 }
