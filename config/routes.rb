@@ -86,6 +86,7 @@ Rails.application.routes.draw do
   resources :contacts do
     collection do
       delete :bulk_destroy
+      post :bulk_assign_event
     end
   end
 

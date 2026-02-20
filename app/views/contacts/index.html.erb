@@ -5,7 +5,7 @@
 <% end %>
 
 <% content_for :header_action_buttons do %>
-  <%= link_to new_contact_path, class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-reversed i-full", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_contact_path, class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--user-round-pen"></span>
   <% end %>
 <% end %>
@@ -23,23 +23,47 @@
 
   <%= turbo_frame_tag :contacts_table do %>
     
-    <%# --- WRAP IN FORM & CONTROLLER --- %>
-    <%= form_with url: bulk_destroy_contacts_path, method: :delete, data: { controller: "check-all" } do |form| %>
+    <%# Wrap the lists in a form connected to the Stimulus controller %>
+    <%= form_with url: bulk_destroy_contacts_path, method: :delete, id: "contacts-bulk-form", data: { controller: "check-all", action: "reset-bulk-ui->check-all#deselectAll" } do |form| %>
 
-      <%# --- FLOATING BULK ACTION BAR --- %>
       <div id="bulk_actions_bar">
-        <div data-check-all-target="actionBar" 
-            class="bg-black text-reversed p-2 rounded-md shadow-lg items-center justify-between" 
+        <div id="bulk_actions_bar_inner" data-check-all-target="actionBar" 
+            class="bg-black text-reversed p-2 rounded-md shadow-lg items-center justify-between border" 
             style="position: fixed; display: none; bottom: 2rem; inline-size: calc(100% - 2rem); max-inline-size: 600px; left: 50%; transform: translateX(-50%); z-index: 10000;">
           
           <div class="flex items-center gap">
-            <span class="font-bold text-sm" data-check-all-target="count">0 selected</span>
+            <span class="font-bold text-sm mis-2" data-check-all-target="count">0 selected</span>
           </div>
 
           <div class="flex items-center gap">
-            <%= form.submit "Delete", 
-                data: { turbo_confirm: "Are you sure you want to delete the selected contacts? This cannot be undone." },
-                class: "btn bg-red-500 hover:bg-red-700 text-gray-50 border-0 text-xs" %>
+            
+            <%# --- Event Assignment Controls --- %>
+            <div class="flex items-center gap-half bg-surface p-1 rounded-sm border border-main">
+              <%= form.select :event_id, 
+                    Current.account.events
+                                  .where("starts_at >= ?", Time.current.beginning_of_day)
+                                  .order(starts_at: :asc)
+                                  .map { |e| [e.name, e.id] }, # FIX: [Name, ID]
+                    { prompt: "Select Event..." }, 
+                    class: "input text-xs border-0 cursor-pointer bg-transparent text-primary", 
+                    style: "min-inline-size: 140px; padding-block: 0.25rem;" %>
+              
+              <%= form.button "Add", 
+                    formaction: bulk_assign_event_contacts_path, 
+                    formmethod: :post,
+                    class: "btn bg-teal-600 text-reversed font-semibold rounded-sm text-xs",
+                    style: "padding: 0.25rem 0.75rem;" %>
+            </div>
+
+            <%# --- Delete Control --- %>
+            <%= form.button formaction: bulk_destroy_contacts_path, 
+                            formmethod: :delete,
+                            data: { turbo_confirm: "Delete selected contacts?" },
+                            class: "btn bg-negative hover:bg-red-700 text-reversed border-0 text-xs" do %>
+              <span class="icon icon--trash-2"></span>
+              <span class="show@md text-xs">Delete</span>
+            <% end %>
+
           </div>
         </div>
       </div>

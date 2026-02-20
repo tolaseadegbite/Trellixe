@@ -1,0 +1,11 @@
+<%# 1. Show Flash %>
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<%# 2. Reset UI via Stimulus %>
+<%# We append a tiny script that grabs the controller instance and calls the method.
+    This keeps the "how" inside the JS file and the "when" inside the View. %>
+<%= turbo_stream.append "contacts-bulk-form" do %>
+  <script>
+    document.getElementById("contacts-bulk-form").dispatchEvent(new CustomEvent("reset-bulk-ui"));
+  </script>
+<% end %>

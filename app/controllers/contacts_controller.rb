@@ -87,6 +87,49 @@ class ContactsController < DashboardsController
     end
   end
 
+  def bulk_assign_event
+    @contact_ids = params[:contact_ids] || []
+    event_id = params[:event_id] # FIX: Access specific key, not whole params object
+
+    if @contact_ids.empty?
+      flash.now[:alert] = "No contacts selected."
+      render turbo_stream: turbo_stream.update("flash_messages", partial: "shared/flash")
+      return
+    end
+
+    if event_id.blank?
+      flash.now[:alert] = "Please select an event."
+      render turbo_stream: turbo_stream.update("flash_messages", partial: "shared/flash")
+      return
+    end
+
+    # 1. Verify event
+    @event = Current.account.events.find(event_id)
+    timestamp = Time.current
+
+    # 2. Filter existing invitations
+    existing_contact_ids = @event.invitations.where(contact_id: @contact_ids).pluck(:contact_id).map(&:to_s)
+    new_contact_ids = @contact_ids - existing_contact_ids
+
+    # 3. Batch Insert
+    if new_contact_ids.any?
+      invitations_attributes = new_contact_ids.map do |cid|
+        { event_id: @event.id, contact_id: cid, created_at: timestamp, updated_at: timestamp }
+      end
+
+      Invitation.insert_all(invitations_attributes)
+      flash.now[:notice] = "Successfully added #{new_contact_ids.size} contacts to #{@event.name}."
+    else
+      flash.now[:alert] = "Selected contacts were already assigned to #{@event.name}."
+    end
+
+    # 4. Respond (Flash + Reset UI)
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to contacts_path, status: :see_other, notice: flash.now[:notice] }
+    end
+  end
+
   private
 
     def set_contact
