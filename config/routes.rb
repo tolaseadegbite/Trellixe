@@ -96,10 +96,19 @@ Rails.application.routes.draw do
   end
 
   # Handling updates to Event Invitations (Marking as attended, etc)
-  resources :invitations, only: [ :update, :edit, :destroy ]
+  resources :invitations, only: [ :update, :edit, :destroy ] do
+    collection do
+      patch :bulk_update # NEW
+    end
+  end
 
   resources :follow_up_tasks, only: [ :index ] do
     resources :interaction_logs, only: [ :new, :create ], shallow: true
+
+    # Bulk operations
+    collection do
+      patch :bulk_update
+    end
   end
 
   resources :web_push_subscriptions, only: [ :create ]

@@ -1,28 +1,74 @@
-<% content_for :title, "Pending Follow-Ups" %>
+<% content_for :title, "Follow Ups" %>
 
-<% content_for :page_header do %>
-  <h4 class="font-semibold">Pending Follow-Ups (<%= @pagy.count %>)</h4>
-<% end %>
+<div class="container i-full p-4 mi-auto">
+  <div class="flex items-center justify-between mbe-6">
+    <h2 class="text-2xl font-bold">Follow Up Tasks</h2>
+    <div class="text-sm text-subtle">
+      <%= @pagy.count %> pending tasks
+    </div>
+  </div>
 
-<div class="p-4">
-  <%# --- SEARCH AND FILTER FORM --- %>
-  <%= render "follow_up_tasks/search_form" %>
+  <%# --- BULK FORM WRAPPER --- %>
+  <%= form_with url: bulk_update_follow_up_tasks_path, 
+                method: :patch, 
+                id: "tasks-bulk-form", 
+                data: { 
+                  controller: "check-all", 
+                  action: "reset-bulk-ui->check-all#deselectAll" 
+                } do |form| %>
 
-  <%# --- TURBO FRAME FOR DYNAMIC UPDATES --- %>
-  <%= turbo_frame_tag :follow_up_tasks_list do %>
+    <%# --- ACTION BAR --- %>
+    <div id="bulk_actions_bar_inner" data-check-all-target="actionBar" 
+            class="bg-black text-reversed p-2 rounded-md shadow-lg items-center justify-between border" 
+            style="position: fixed; display: none; bottom: 2rem; inline-size: calc(100% - 2rem); max-inline-size: 600px; left: 50%; transform: translateX(-50%); z-index: 10000;">
+      
+      <div class="flex items-center gap">
+        <span class="font-bold text-sm mis-2" data-check-all-target="count">0 selected</span>
+      </div>
 
-    <%# --- RESULTS LIST --- %>
-    <div class="card pi-4 pb-2">
-      <div id="follow_up_tasks" class="flex flex-col">
-        <% if @follow_up_tasks.any? %>
-          <%= render @follow_up_tasks %>
-        <% else %>
-          <p class="p-4 text-subtle">No pending follow-ups match your search.</p>
-        <% end %>
+      <div class="flex items-center gap">
+        <%# Snooze Button %>
+        <%= form.submit "Snooze 24h", 
+              class: "btn bg-surface text-primary border border-main text-xs font-semibold rounded-sm",
+              style: "padding: 0.25rem 0.75rem;" %>
+
+        <%# Complete Button %>
+        <%= form.submit "Mark Complete", 
+              class: "btn bg-green-600 text-reversed border-0 text-xs font-semibold rounded-sm mis-2",
+              style: "padding: 0.25rem 0.75rem;",
+              data: { turbo_confirm: "Mark selected tasks as complete?" } %>
       </div>
     </div>
 
-    <%= render "shared/pagination", pagy: @pagy %>
-    
-  <% end %> <%# --- End of Turbo Frame --- %>
+    <%= turbo_frame_tag :tasks_table do %>
+      <div class="relative i-full overflow-x-auto border border-main rounded-lg bg-surface">
+        <table class="table i-full text-left">
+          <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
+            <tr>
+              <%# Select All Checkbox %>
+              <th class="p-3 w-8">
+                <%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %>
+              </th>
+              <th class="p-3">Contact</th>
+              <th class="p-3">Event</th>
+              <th class="p-3">Due</th>
+              <th class="p-3 text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody id="tasks-list">
+            <% if @follow_up_tasks.any? %>
+              <%= render partial: "follow_up_tasks/follow_up_task", collection: @follow_up_tasks, as: :task %>
+            <% else %>
+              <tr><td colspan="5" class="p-8 text-center text-subtle text-sm">No pending tasks. Good job!</td></tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="mbs-4">
+        <%= render "shared/pagination", pagy: @pagy %>
+      </div>
+    <% end %>
+
+  <% end %>
 </div>

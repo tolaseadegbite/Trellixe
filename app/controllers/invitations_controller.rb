@@ -59,7 +59,52 @@ class InvitationsController < DashboardsController
     end
   end
 
+  def bulk_update
+    @invitation_ids = params[:invitation_ids] || []
+    target_status = params[:status]
+
+    if @invitation_ids.empty?
+      flash.now[:alert] = "No invitations selected."
+      render_flash
+      return
+    end
+
+    # 1. Fetch invitations scoped to Current.account for security
+    # We load them because we need to run callbacks/controller logic on each
+    @invitations = Invitation.joins(:event)
+                             .where(events: { owner_type: "Account", owner_id: Current.account.id })
+                             .where(id: @invitation_ids)
+
+    updated_count = 0
+
+    ActiveRecord::Base.transaction do
+      @invitations.each do |invitation|
+        # Skip if already in the target state
+        next if invitation.status == target_status
+
+        if invitation.update(status: target_status)
+          # CRITICAL: Trigger the task creation logic if marked attended
+          # This ensures the reminder job gets scheduled
+          create_follow_up_task_if_needed(invitation) if target_status == "attended"
+          updated_count += 1
+        end
+      end
+    end
+
+    flash.now[:notice] = "Marked #{updated_count} as #{target_status.humanize}."
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_back fallback_location: events_path, notice: flash.now[:notice] }
+    end
+  end
+
   private
+
+  # Helper to render flash for error returns
+  def render_flash
+    render turbo_stream: turbo_stream.update("flash_messages", partial: "shared/flash")
+  end
 
   def set_event
     # Scoped to Account: Ensure the event belongs to the active workspace

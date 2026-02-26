@@ -1,0 +1,20 @@
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<% if params[:commit] == "Mark Complete" %>
+  <%# Remove rows if completed %>
+  <% @tasks.each do |task| %>
+    <%= turbo_stream.remove dom_id(task) %>
+  <% end %>
+<% else %>
+  <%# Replace rows if snoozed (to update the 'Overdue' text to the new date) %>
+  <% @tasks.each do |task| %>
+    <%= turbo_stream.replace dom_id(task), partial: "follow_up_tasks/follow_up_task", locals: { task: task } %>
+  <% end %>
+<% end %>
+
+<%# Reset UI %>
+<%= turbo_stream.append "tasks-bulk-form" do %>
+  <script>
+    document.getElementById("tasks-bulk-form").dispatchEvent(new CustomEvent("reset-bulk-ui"));
+  </script>
+<% end %>

@@ -1,0 +1,14 @@
+<%# 1. Update Flash %>
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<%# 2. Re-render only the affected rows to show new status %>
+<% @invitations.each do |invitation| %>
+  <%= turbo_stream.replace dom_id(invitation), partial: "invitations/invitation", locals: { invitation: invitation } %>
+<% end %>
+
+<%# 3. Reset the UI (Uncheck boxes, hide bar) %>
+<%= turbo_stream.append "invitations-bulk-form" do %>
+  <script>
+    document.getElementById("invitations-bulk-form").dispatchEvent(new CustomEvent("reset-bulk-ui"));
+  </script>
+<% end %>

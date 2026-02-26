@@ -2,30 +2,21 @@
 
 <% content_for :page_header do %>
   <div class="flex items-center gap i-full">
-    <%= link_to sanitize("&larr;"), :back %>
-    <%# --- Breadcrumb --- %>
+    <%= link_to sanitize("&larr;"), :back, class: "text-subtle hover:text-primary no-underline" %>
     <div class="text-base">
-      <%#= link_to "Contacts", contacts_path, class: "text-subtle hover:text-primary" %>
-      <%# <span class="text-subtle">/</span> %>
       <span class="text-primary overflow-ellipsis"><%= @contact.full_name %></span>
     </div>
   </div>
 <% end %>
 
-<%# --- Main Page Container: A flex container to stack sections vertically --- %>
-<div class="p-2 flex flex-col gap">
+<div class="p-2 flex flex-col gap-6">
 
-  <%# --- SECTION 1: The two-column grid for the top content --- %>
+  <%# --- SECTION 1: PROFILE & DETAILS (Kept existing) --- %>
   <div class="grid grid-cols-1 grid-cols-12@md gap-4">
-
-    <%# --- Left Column (Profile) --- %>
+    <%# Left Column %>
     <div class="col-span-12 col-span-8@md">
       <div class="card flex justify-between">
         <div class="flex items-start gap-5">
-          <!--<div class="flex shrink-0 overflow-hidden rounded-full">
-            <%= image_tag "avatar.jpg", size: "70", alt: "User Avatar", class: "border border-main rounded-full" %>
-          </div>-->
-
           <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border" style="block-size: 5rem; inline-size: 5rem;">
             <span class="font-semibold text-3xl">
               <%= @contact.full_name&.first || @contact.first_name&.first || @contact.email.first.upcase %>
@@ -34,66 +25,88 @@
 
           <div>
             <h1 class="text-2xl font-semibold mbe-2"><%= @contact.full_name %></h1>
-            <h3 class="font-medium mbe-1">How We Met:</h3>
-            <p class="text-subtle break-words"><%= @contact.how_we_met.presence || "No context has been added yet." %></p>
+            <h3 class="font-medium mbe-1 text-xs uppercase tracking-wide text-subtle">How We Met</h3>
+            <p class="text-primary break-words"><%= @contact.how_we_met.presence || "No context has been added yet." %></p>
           </div>
         </div>
 
-          <%= link_to edit_contact_path(@contact), class: "flex items-start", data: { turbo_frame: "modal" } do %>
-            <span class="btn btn--icon rounded-full bg-blue-600 hover:bg-blue-700 border-0 text-gray-50">
-              <span class="icon icon--pen" aria-hidden="true"></span>
-            </span>
-          <% end %>
-
+        <%= link_to edit_contact_path(@contact), class: "flex items-start", data: { turbo_frame: "modal" } do %>
+          <span class="btn btn--icon rounded-full bg-blue-600 hover:bg-blue-700 border-0 text-gray-50">
+            <span class="icon icon--pen" aria-hidden="true"></span>
+          </span>
+        <% end %>
       </div>
     </div>
 
-    <%# --- Right Column (Details) --- %>
+    <%# Right Column %>
     <div class="col-span-12 col-span-4@md">
       <div class="card">
-        <h3 class="text-xl font-semibold mbe-4">Contact Details</h3>
-        <div class="flex flex-col gap text-sm">
-          <div class="flex items-center gap">
-            <span class="icon icon--mail text-subtle" aria-hidden="true"></span>
+        <h3 class="text-lg font-semibold mbe-4">Details</h3>
+        <div class="flex flex-col gap-3 text-sm">
+          <div class="flex items-center gap-2">
+            <span class="icon icon--mail text-subtle"></span>
             <span class="text-primary break-all"><%= @contact.email.presence || "No email" %></span>
           </div>
-
-          <div class="flex items-center gap">
-            <span class="icon icon--phone text-subtle" aria-hidden="true"></span>
+          <div class="flex items-center gap-2">
+            <span class="icon icon--phone text-subtle"></span>
             <span class="text-primary whitespace-nowrap"><%= @contact.phone_number.presence || "No phone number" %></span>
           </div>
-
-          <div class="flex items-center gap">
-            Added by:
-            <div class="bg-black rounded-full flex items-center justify-center font-semibold text-reversed" style="block-size: 1.8rem; inline-size: 1.8rem;">
-              <%= current_user.initials %>
+          <div class="flex items-center gap-2 border-t border-main pt-3 mt-1">
+            <span class="text-xs text-subtle">Added by</span>
+            <div class="bg-black rounded-full flex items-center justify-center font-bold text-xs text-reversed" style="block-size: 1.5rem; inline-size: 1.5rem;">
+              <%= @contact.creator.initials %>
             </div>
-            <span class="text-primary whitespace-nowrap"><%= @contact.creator.full_name.presence || "No creator recorded" %></span>
+            <span class="text-xs font-semibold"><%= @contact.creator.full_name %></span>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <%# --- SECTION 2: The full-width Event History --- %>
-  <div class="">
-    <h3 class="text-xl font-semibold mbe-4">Event History</h3>
+  <%# --- SECTION 2: TABS (History vs Events) --- %>
+  <div class="tabs i-full" data-controller="tabs">
+    <div class="tabs__list border-b border-main mbe-4" role="tablist">
+      <button type="button" class="btn tabs__button" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_events">
+        Events Attended
+      </button>
+      <button type="button" class="btn tabs__button" data-tabs-target="button" data-action="tabs#select" role="tab" aria-selected="true" aria-controls="tab_logs">
+        Interaction History
+      </button>
+    </div>
 
-    <%= render 'invitations/history_search_form', search_object: @history_search, contact: @contact %>
+    <%# TAB 1: EVENTS LIST (Adapted from your previous code) %>
+    <div id="tab_events" hidden data-tabs-target="tab" role="tabpanel">
+      <%# Search form can go here if needed %>
+      <%= render 'invitations/history_search_form', search_object: @history_search, contact: @contact %>
 
-    <%= turbo_frame_tag "event_history_list" do %>
-      <% if @invitations.any? %>
-        <div class="flex flex-col gap-y-4 mbs-4">
-          <% @invitations.each do |invitation| %>
-            <%= render 'invitations/history_entry_with_logs', invitation: invitation %>
-          <% end %>
-        </div>
-      <% else %>
-        <p class="card text-center mbs-2">No records found.</p>
+      <%= turbo_frame_tag "event_history_list" do %>
+        <% if @invitations.any? %>
+          <div class="flex flex-col gap-4 mbs-4">
+            <% @invitations.each do |invitation| %>
+              <%= render 'invitations/history_entry_with_logs', invitation: invitation %>
+            <% end %>
+          </div>
+          <%= render "shared/pagination", pagy: @pagy %>
+        <% else %>
+          <p class="card text-center mbs-2">No events found.</p>
+        <% end %>
       <% end %>
+    </div>
 
-      <%= render "shared/pagination", pagy: @pagy %>
-    <% end %>
+    <%# TAB 2: INTERACTION LOGS %>
+    <div id="tab_logs" data-tabs-target="tab" role="tabpanel">
+      <div class="border border-main rounded-lg bg-surface overflow-hidden">
+        <% if @contact.interaction_logs.any? %>
+          <%# Using the partial created in previous step %>
+          <%= render partial: "interaction_logs/interaction_log", collection: @contact.interaction_logs.includes(:user, follow_up_task: { invitation: :event }).order(created_at: :desc) %>
+        <% else %>
+          <div class="p-8 text-center text-subtle">
+            <p>No interactions logged yet.</p>
+            <p class="text-xs mt-1">Complete a follow-up task to add to this history.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 
 </div>

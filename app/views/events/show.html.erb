@@ -11,7 +11,7 @@
 <div class="flex flex-col gap p-2">
 
   <%# --- HEADER CARD --- %>
-  <div class="card p-3 bg-surface border rounded-md shadow-sm overflow-hidden">
+  <div class="card p-3 bg-surface border border-main rounded-md shadow-sm overflow-hidden">
     
     <%# Top Section: Title %>
     <div class="p-3">
@@ -19,7 +19,8 @@
         <div>
           <h1 class="text-2xl font-bold mbe-1"><%= @event.name %></h1>
           <p class="text-subtle text-sm">
-            <%= format_full_event_datetime_range(@event) %>
+            <%# Assuming you have this helper, otherwise use l(@event.starts_at) %>
+            <%= format_full_event_datetime_range(@event) rescue l(@event.starts_at, format: :long) %>
           </p>
         </div>
         <div>
@@ -29,7 +30,7 @@
     </div>
 
     <%# Bottom Section: Stats Dashboard %>
-    <div class="bg-shade border rounded-md p-3 flex flex-wrap items-center gap-8">
+    <div class="bg-shade border border-main rounded-md p-3 flex flex-wrap items-center gap-8">
   
       <div class="flex flex-col">
         <span class="text-xs uppercase font-bold text-subtle mbe-1">Total Guests</span>
@@ -51,40 +52,119 @@
   <div class="flex flex-col gap-6 mbs-4">
     
     <%# 1. Invite New Contacts Form %>
-    <div class="card bg-surface border rounded-md p-5 shadow-sm">
-      <h3 class="text-lg font-semibold">Invite Contacts</h3>
+    <div class="card bg-surface border border-main rounded-md p-5 shadow-sm">
+      <h3 class="text-lg font-semibold mbe-4">Invite Contacts</h3>
       <%= turbo_frame_tag "new_invitation_form" do %>
         <%= render "invitations/form", event: @event, invitation: @new_invitation, available_contacts: @available_contacts %>
       <% end %>
     </div>
 
-    <%# 2. Invitation List %>
-    <div>
-      <div class="flex items-center justify-between">
-        <h2 class="text-xl font-semibold">Guest List (<%= @pagy.count %>)</h2>
-        <%# Optional: Add an export button here later %>
-      </div>
+    <%# 2. Invitation List (With Bulk Actions) %>
+    <div class="mbe-4">
+      <h2 class="font-bold text-lg mbe-2">Guest List</h2>
+      
+      <%# WRAP TABLE IN FORM %>
+      <%= form_with url: bulk_update_invitations_path, method: :patch, id: "invitations-bulk-form", data: { controller: "check-all", action: "reset-bulk-ui->check-all#deselectAll" } do |form| %>
 
-      <%= render "invitations/search_form", q: @invitations_search %>
+        <%# --- BULK ACTION BAR --- %>
+        <div id="bulk_actions_bar_inner" data-check-all-target="actionBar" 
+            class="bg-black text-reversed p-2 rounded-md shadow-lg items-center justify-between border" 
+            style="position: fixed; display: none; bottom: 2rem; inline-size: calc(100% - 2rem); max-inline-size: 600px; left: 50%; transform: translateX(-50%); z-index: 10000;">
+          
+          <div class="flex items-center gap">
+            <span class="font-bold text-sm mis-2" data-check-all-target="count">0 selected</span>
+          </div>
 
-      <%= turbo_frame_tag "guest_list" do %>
-        <div class="flex flex-col gap-2">
-          <% if @invitations.any? %>
-            <% @invitations.each do |invitation| %>
-              <%# Assuming you have a _invitation.html.erb partial %>
-              <%= render invitation %>
-            <% end %>
-          <% else %>
-            <div class="p-8 text-center border border-dashed border-main rounded-md">
-              <p class="text-subtle">No guests found matching your criteria.</p>
-            </div>
-          <% end %>
+          <div class="flex items-center gap">
+            <%# Mark Attended Button %>
+            <%= form.button "Mark Attended", 
+                  name: "status",
+                  value: "attended",
+                  class: "btn bg-teal-600 hover:bg-teal-700 text-reversed font-semibold rounded-sm text-xs",
+                  style: "padding: 0.25rem 0.75rem;" %>
+
+            <%# Mark Pending/Invited (Undo action) %>
+            <%= form.button "Reset", 
+                  name: "status",
+                  value: "invited",
+                  class: "btn btn--subtle text-xs" %>
+          </div>
         </div>
 
+        <%# --- TABLE --- %>
+        <div class="relative i-full overflow-x-auto border border-main rounded-md bg-surface">
+          <table class="table">
+            <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
+              <tr>
+                <%# Select All Checkbox %>
+                <th class="p-3 w-8">
+                  <%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %>
+                </th>
+                <th class="p-3">Name</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Notes</th>
+                <th class="p-3 text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="invitations-table">
+              <% if @invitations.any? %>
+                <%= render @invitations %>
+              <% else %>
+                <tr><td colspan="5" class="p-8 text-center text-subtle">No invitations yet.</td></tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        
         <div class="mbs-4">
           <%= render "shared/pagination", pagy: @pagy %>
         </div>
-      <% end %>
+
+      <% end %> <%# End Form %>
     </div>
+    
+    <%# 3. Follow-up Activity (New Section) %>
+    <div class="mbe-8">
+      <h2 class="font-bold text-lg mbe-2">Follow-up Activity</h2>
+      <div class="border border-main rounded-lg bg-surface overflow-hidden">
+        <%# Fetch logs for this event %>
+        <% event_logs = @event.interaction_logs.includes(:user, :contact).order(created_at: :desc) %>
+
+        <% if event_logs.any? %>
+          <div class="bg-shade p-3 border-b border-main flex justify-between items-center text-xs text-subtle">
+            <span>Showing <%= event_logs.count %> interactions resulting from this event.</span>
+          </div>
+          
+          <% event_logs.each do |log| %>
+            <div class="flex gap-3 p-4 border-b border-main last:border-0 hover:bg-surface transition">
+              <%# Avatar %>
+              <div class="flex flex-item-no-shrink items-center justify-center font-bold text-xs text-reversed rounded-full bg-teal-600" 
+                   style="inline-size: 2rem; block-size: 2rem;">
+                <%= log.user.initials %>
+              </div>
+
+              <div class="flex flex-col gap-1 i-full">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="font-semibold text-sm"><%= log.user.full_name %></span>
+                    <span class="text-xs text-subtle">followed up with</span>
+                    <%= link_to log.contact.full_name, contact_path(log.contact), class: "font-semibold text-sm text-primary hover:underline", data: { turbo_frame: "_top" } %>
+                  </div>
+                  <span class="text-xs text-subtle"><%= time_ago_in_words(log.created_at) %> ago</span>
+                </div>
+                <div class="text-sm text-primary whitespace-pre-wrap"><%= log.note %></div>
+              </div>
+            </div>
+          <% end %>
+
+        <% else %>
+          <div class="p-8 text-center text-subtle">
+            <p>No follow-ups logged yet.</p>
+            <p class="text-xs mt-1">Mark guests as "Attended" to trigger reminders for your team.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
   </div>
 </div>

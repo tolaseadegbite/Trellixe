@@ -1,21 +1,27 @@
-<%= tag.div id: dom_id(follow_up_task), class: "flex items-center justify-between border-be pb-4" do %>
+<tr id="<%= dom_id(task) %>" class="border-b border-main last:border-0 hover:bg-highlight transition">
+  <td class="p-3">
+    <%= check_box_tag "task_ids[]", task.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
+  </td>
+  
+  <td class="p-3 font-medium">
+    <%= link_to task.contact.full_name, contact_path(task.contact), class: "text-primary hover:underline", data: { turbo_frame: "_top" } %>
+  </td>
 
-  <%# --- Left Side: The Actionable Information --- %>
-  <div class="flex-col">
-    <%= link_to new_follow_up_task_interaction_log_path(follow_up_task),
-                class: "font-semibold text-primary hover:text-link",
-                data: { turbo_frame: "_top" } do %>
-      Follow up with <%= follow_up_task.invitation.contact.full_name %>
+  <td class="p-3 text-sm text-subtle">
+    <%= task.event.name %>
+  </td>
+
+  <td class="p-3 text-sm <%= task.due_at < Time.current ? 'text-negative font-bold' : 'text-subtle' %>">
+    <% if task.due_at < Time.current %>
+      Overdue (<%= time_ago_in_words(task.due_at) %> ago)
+    <% else %>
+      <%= l(task.due_at, format: :short) %>
     <% end %>
-    <p class="text-sm text-subtle">
-      from the event: <%= link_to follow_up_task.invitation.event.name, follow_up_task.invitation.event, class: "text-link", data: { turbo_frame: "_top" } %>
-    </p>
-  </div>
+  </td>
 
-  <%# --- Right Side: The Due Date Information --- %>
-  <div class="text-end shrink-0">
-    <p class="text-sm font-medium text-red-400">Due</p>
-    <p class="text-sm text-subtle"><%= time_ago_in_words(follow_up_task.due_at) %> ago</p>
-  </div>
-
-<% end %>
+  <td class="p-3 text-end">
+    <%= link_to new_follow_up_task_interaction_log_path(task), class: "btn btn--primary", data: { turbo_frame: "_top" } do %>
+      Log Log
+    <% end %>
+  </td>
+</tr>
