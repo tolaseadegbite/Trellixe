@@ -31,8 +31,16 @@
     <div class="mbe-2">
       <%= render "contacts/active_filters" %>
     </div>
+
+    <%# --- 3. RESULT COUNT FEEDBACK --- %>
+    <%# Only show this line if a search is actually active %>
+    <% if params[:q].present? %>
+      <div class="mbe-4 text-sm text-subtle">
+        Found <strong class="text-primary"><%= @pagy.count %></strong> <%= "contact".pluralize(@pagy.count) %> matching your filters.
+      </div>
+    <% end %>
     
-    <%# --- 3. BULK ACTIONS FORM --- %>
+    <%# --- 4. BULK ACTIONS FORM --- %>
     <%= form_with url: bulk_destroy_contacts_path, method: :delete, id: "contacts-bulk-form", data: { controller: "check-all", action: "reset-bulk-ui->check-all#deselectAll" } do |form| %>
 
       <div id="bulk_actions_bar">
