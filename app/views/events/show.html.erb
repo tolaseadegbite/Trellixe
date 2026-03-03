@@ -76,18 +76,25 @@
           </div>
 
           <div class="flex items-center gap">
-            <%# Mark Attended Button %>
+            <%# Mark Attended %>
             <%= form.button "Mark Attended", 
                   name: "status",
                   value: "attended",
-                  class: "btn bg-teal-600 hover:bg-teal-700 text-reversed font-semibold rounded-sm text-xs",
+                  class: "btn bg-teal-600 hover:bg-teal-700 text-gray-50 text-xs",
                   style: "padding: 0.25rem 0.75rem;" %>
 
-            <%# Mark Pending/Invited (Undo action) %>
+            <%# NEW: Mark Declined %>
+            <%= form.button "Mark Declined", 
+                  name: "status",
+                  value: "declined",
+                  class: "btn bg-red-600 hover:bg-red-700 text-gray-50 text-xs",
+                  style: "padding: 0.25rem 0.75rem;" %>
+
+            <%# Reset %>
             <%= form.button "Reset", 
                   name: "status",
                   value: "invited",
-                  class: "btn btn--subtle text-xs" %>
+                  class: "btn btn--subtle text-xs mis-2" %>
           </div>
         </div>
 
@@ -97,7 +104,7 @@
             <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
               <tr>
                 <%# Select All Checkbox %>
-                <th class="p-3 w-8">
+                <th class="p-3">
                   <%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %>
                 </th>
                 <th class="p-3">Name</th>

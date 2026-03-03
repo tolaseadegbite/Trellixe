@@ -14,25 +14,4 @@
       </span>
     </div>
   <% end %>
-
-  <%# --- Nested Interaction Logs for this Invitation --- %>
-  <%# We access the logs through the follow_up_tasks, which were eager-loaded %>
-  <% if invitation.interaction_logs.any? %>
-    <div class="pis-4">
-      <h4 class="text-sm font-medium mbe-2 text-subtle">Follow-up Notes</h4>
-      <div class="flex flex-col gap-y-3">
-        <%# Loop through each follow-up task to display its logs %>
-        <% invitation.follow_up_tasks.each do |task| %>
-          <% task.interaction_logs.each do |log| %>
-            <div>
-              <p class="text-sm mbe-1 break-words text-sky-500"><%= log.note %></p>
-              <p class="text-xs text-subtle">
-                Logged on <%= log.created_at.strftime("%B %d, %Y") %>
-              </p>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
 </div>

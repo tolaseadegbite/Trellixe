@@ -72,8 +72,9 @@ class InvitationsController < DashboardsController
     # 1. Fetch invitations scoped to Current.account for security
     # We load them because we need to run callbacks/controller logic on each
     @invitations = Invitation.joins(:event)
-                             .where(events: { owner_type: "Account", owner_id: Current.account.id })
-                             .where(id: @invitation_ids)
+                         .includes(:contact, :event)
+                         .where(events: { owner_type: "Account", owner_id: Current.account.id })
+                         .where(id: @invitation_ids)
 
     updated_count = 0
 

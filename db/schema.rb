@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_14_065500) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_trgm"
 
   create_table "accounts", force: :cascade do |t|
     t.string "name", default: "Personal Workspace", null: false
@@ -33,6 +34,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_14_065500) do
     t.datetime "updated_at", null: false
     t.bigint "creator_id", null: false
     t.index ["creator_id"], name: "index_contacts_on_creator_id"
+    t.index ["email"], name: "index_contacts_on_email", opclass: :gin_trgm_ops, using: :gin
+    t.index ["first_name"], name: "index_contacts_on_first_name", opclass: :gin_trgm_ops, using: :gin
+    t.index ["how_we_met"], name: "index_contacts_on_how_we_met", opclass: :gin_trgm_ops, using: :gin
+    t.index ["last_name"], name: "index_contacts_on_last_name", opclass: :gin_trgm_ops, using: :gin
     t.index ["owner_type", "owner_id"], name: "index_contacts_on_owner"
   end
 

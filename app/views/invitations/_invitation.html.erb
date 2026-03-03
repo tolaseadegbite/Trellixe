@@ -1,7 +1,17 @@
 <tr id="<%= dom_id(invitation) %>" class="border-b last:border-0 hover:bg-highlight transition">
-  <%# 1. Checkbox for Bulk Actions %>
+  <%# 1. Checkbox for Bulk Actions (Gated) %>
   <td class="p-3">
-    <%= check_box_tag "invitation_ids[]", invitation.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
+    <% if invitation.event.starts_at > Time.current %>
+      <%# Upcoming: Show Clock Icon (Placeholder) %>
+      <div class="flex items-center justify-center text-subtle opacity-50 cursor-help" 
+           title="Cannot mark attendance until event starts" 
+           style="inline-size: 1.25rem; block-size: 1.25rem;">
+        <span class="icon icon--clock"></span>
+      </div>
+    <% else %>
+      <%# Ongoing/Past: Show Checkbox %>
+      <%= check_box_tag "invitation_ids[]", invitation.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
+    <% end %>
   </td>
 
   <td class="p-3">
@@ -21,7 +31,6 @@
   </td>
 
   <td class="p-3 text-end flex justify-end gap-2">
-    <%# Keep your existing edit/delete buttons here %>
     <%= link_to edit_invitation_path(invitation), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
       <span class="icon icon--pen"></span>
     <% end %>

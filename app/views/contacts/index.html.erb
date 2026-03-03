@@ -5,30 +5,39 @@
 <% end %>
 
 <% content_for :header_action_buttons do %>
-  <%= link_to new_contact_path, class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full", data: { turbo_frame: "modal" } do %>
-    <span class="icon icon--user-round-pen"></span>
-  <% end %>
+    <%= link_to new_contact_path,
+                  class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
+                  data: { turbo_frame: "modal" } do %>
+      <span class="icon icon--user-round-pen"></span>
+    <% end %>
 <% end %>
 
 <div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
-  <%= link_to new_contact_path, class: "btn bg-blue-500 hover:bg-blue-600 text-reversed p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_contact_path, class: "btn bg-blue-500 hover:bg-blue-600 text-gray-50 p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--pen"></span>
   <% end %>
 </div>
 
 <div class="flex flex-col i-full p-3">
+  
+  <%# --- 1. SEARCH FORM --- %>
   <div class="search-form pbs-2">
     <%= render "contacts/search_form" %>
   </div>
 
   <%= turbo_frame_tag :contacts_table do %>
+
+    <%# --- 2. ACTIVE FILTERS (New) --- %>
+    <div class="mbe-2">
+      <%= render "contacts/active_filters" %>
+    </div>
     
-    <%# Wrap the lists in a form connected to the Stimulus controller %>
+    <%# --- 3. BULK ACTIONS FORM --- %>
     <%= form_with url: bulk_destroy_contacts_path, method: :delete, id: "contacts-bulk-form", data: { controller: "check-all", action: "reset-bulk-ui->check-all#deselectAll" } do |form| %>
 
       <div id="bulk_actions_bar">
         <div id="bulk_actions_bar_inner" data-check-all-target="actionBar" 
-            class="bg-black text-reversed p-2 rounded-md shadow-lg items-center justify-between border" 
+            class="bg-black text-white p-2 rounded-md shadow-lg items-center justify-between border" 
             style="position: fixed; display: none; bottom: 2rem; inline-size: calc(100% - 2rem); max-inline-size: 600px; left: 50%; transform: translateX(-50%); z-index: 10000;">
           
           <div class="flex items-center gap">
@@ -37,31 +46,30 @@
 
           <div class="flex items-center gap">
             
-            <%# --- Event Assignment Controls --- %>
+            <%# Event Assignment Controls %>
             <div class="flex items-center gap-half bg-surface p-1 rounded-sm border border-main">
               <%= form.select :event_id, 
                     Current.account.events
                                   .where("starts_at >= ?", Time.current.beginning_of_day)
                                   .order(starts_at: :asc)
-                                  .map { |e| [e.name, e.id] }, # FIX: [Name, ID]
+                                  .map { |e| [e.name, e.id] }, 
                     { prompt: "Select Event..." }, 
-                    class: "input text-xs border-0 cursor-pointer bg-transparent text-primary", 
+                    class: "input cursor-pointer border-0", 
                     style: "min-inline-size: 140px; padding-block: 0.25rem;" %>
               
               <%= form.button "Add", 
                     formaction: bulk_assign_event_contacts_path, 
                     formmethod: :post,
-                    class: "btn bg-teal-600 text-reversed font-semibold rounded-sm text-xs",
+                    class: "btn bg-teal-600 hover:bg-teal-700 text-gray-50 font-semibold rounded-sm text-xs border-0",
                     style: "padding: 0.25rem 0.75rem;" %>
             </div>
 
-            <%# --- Delete Control --- %>
+            <%# Delete Control %>
             <%= form.button formaction: bulk_destroy_contacts_path, 
                             formmethod: :delete,
                             data: { turbo_confirm: "Delete selected contacts?" },
-                            class: "btn bg-negative hover:bg-red-700 text-reversed border-0 text-xs" do %>
-              <span class="icon icon--trash-2"></span>
-              <span class="show@md text-xs">Delete</span>
+                            class: "btn bg-red-600 hover:bg-red-700 text-gray-50 border-0 text-xs" do %>
+              <span class="icon icon--btn icon--trash-2"></span>
             <% end %>
 
           </div>

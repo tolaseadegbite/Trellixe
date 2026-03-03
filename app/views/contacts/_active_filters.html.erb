@@ -1,0 +1,65 @@
+<%# Only render if there is a query present %>
+<% return unless params[:q].present? %>
+
+<% 
+  safe_params = params.fetch(:q, {}).permit(
+    :combined_search_cont, 
+    :invitations_event_id_eq, 
+    :invitations_status_eq, 
+    :created_at_gteq
+  ) 
+%>
+
+<div class="flex flex-wrap items-center gap-2 mbe-4">
+  <span class="text-xs font-semibold text-subtle">Active Filters:</span>
+
+  <%# --- 1. Text Search Pill --- %>
+  <% if safe_params[:combined_search_cont].present? %>
+    <div class="badge bg-shade border border-main flex items-center gap-1">
+      <span class="text-subtle">Text:</span>
+      <span class="font-bold">"<%= safe_params[:combined_search_cont] %>"</span>
+      <%# Added data: { turbo_frame: "_top" } %>
+      <%= link_to contacts_path(q: safe_params.except(:combined_search_cont)), 
+            class: "mis-1 text-subtle hover:text-negative", 
+            data: { turbo_frame: "_top" } do %>
+        <span class="icon icon--x" style="--icon-size: 0.8rem"></span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# --- 2. Event Pill --- %>
+  <% if safe_params[:invitations_event_id_eq].present? %>
+    <% event_name = @filterable_events.find { |e| e.id.to_s == safe_params[:invitations_event_id_eq].to_s }&.name || "Unknown Event" %>
+    <div class="badge bg-shade border border-main flex items-center gap-1">
+      <span class="text-subtle">Event:</span>
+      <span class="font-bold"><%= event_name %></span>
+      <%# Added data: { turbo_frame: "_top" } %>
+      <%= link_to contacts_path(q: safe_params.except(:invitations_event_id_eq)), 
+            class: "mis-1 text-subtle hover:text-negative",
+            data: { turbo_frame: "_top" } do %>
+        <span class="icon icon--x" style="--icon-size: 0.8rem"></span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# --- 3. Status Pill --- %>
+  <% if safe_params[:invitations_status_eq].present? %>
+    <% status_name = Invitation.statuses.key(safe_params[:invitations_status_eq].to_i)&.humanize %>
+    <div class="badge bg-shade border border-main flex items-center gap-1">
+      <span class="text-subtle">Status:</span>
+      <span class="font-bold"><%= status_name %></span>
+      <%# Added data: { turbo_frame: "_top" } %>
+      <%= link_to contacts_path(q: safe_params.except(:invitations_status_eq)), 
+            class: "mis-1 text-subtle hover:text-negative",
+            data: { turbo_frame: "_top" } do %>
+        <span class="icon icon--x" style="--icon-size: 0.8rem"></span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# --- Reset All --- %>
+  <%# Added data: { turbo_frame: "_top" } %>
+  <%= link_to "Clear all", contacts_path, 
+        class: "text-xs text-negative hover:underline mis-2", 
+        data: { turbo_frame: "_top" } %>
+</div>

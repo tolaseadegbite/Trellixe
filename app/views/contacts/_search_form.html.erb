@@ -5,7 +5,7 @@
   <%# Button to toggle the visibility of the filters %>
   <button type="button" class="btn btn--subtle mbe-4" data-action="search-filter#toggle">
     <span class="icon icon--search"></span>
-    <span>Search contacts</span>
+    <span>Filter Contacts</span>
   </button>
 
   <div class="hide card bg-main p-4 mbe-4" data-search-filter-target="filters">
@@ -20,60 +20,52 @@
 
       <div class="grid grid-cols-1 grid-cols-12@md gap-4 mbe-6">
 
-        <%# 1. Omni-Search Bar (Now includes 'how_we_met') %>
+        <%# 1. Optimized Omni-Search (Using Alias) %>
         <div class="col-span-12 col-span-4@lg">
-          <%#= f.label :first_name_or_last_name_or_email_or_how_we_met_cont, "Name, Email, or Context", class: "font-medium" %>
-          <%= f.search_field :first_name_or_last_name_or_email_or_how_we_met_cont,
-                             placeholder: "Search name, Email, or Context...",
-                             class: "input i-full mbs-1",
+          <%= f.label :combined_search_cont, "Search", class: "text-xs font-bold text-subtle uppercase tracking-wide mbe-1 block" %>
+          <%= f.search_field :combined_search_cont,
+                             placeholder: "Name, Email, or Context...",
+                             class: "input",
                              data: { action: "input->debounce#submit" } 
           %>
         </div>
 
-        <%# 2. Date Created Range %>
-        <div class="col-span-6 col-span-2@lg">
-          <%#= f.label :created_at_gteq, "Added After", class: "font-medium" %>
-          <%= f.date_field :created_at_gteq, 
-            placeholder: "Added after...", 
-            class: "i-full mbs-1", 
-            data: { 
-              controller: "datepicker",
-              action: "input->debounce#submit" 
-            } 
-          %>
-        </div>
-        <div class="col-span-6 col-span-2@lg">
-          <%#= f.label :created_at_lteq, "Added Before", class: "font-medium" %>
-          <%= f.date_field :created_at_lteq, 
-                placeholder: "Added before...", 
-                class: "i-full mbs-1", 
-                data: { 
-                  controller: "datepicker",
-                  action: "input->debounce#submit" 
-                } 
-          %>
-        </div>
-
-        <%# 3. Event Filter Dropdown %>
-        <div class="col-span-12 col-span-4@lg">
-          <%#= f.label :events_id_eq, "Invited to Event", class: "font-medium" %>
-          <%= f.collection_select :events_id_eq,
+        <%# 2. Event Filter %>
+        <div class="col-span-6 col-span-3@lg">
+          <%= f.label :invitations_event_id_eq, "Event Context", class: "text-xs font-bold text-subtle uppercase tracking-wide mbe-1 block" %>
+          <%= f.collection_select :invitations_event_id_eq,
                                   @filterable_events,
                                   :id,
                                   :name,
-                                  { include_blank: 'Event you invited them to' },
-                                  { class: "i-full mbs-1", data: { 
+                                  { include_blank: 'All Events' },
+                                  { class: "", data: { 
                                                               controller: "combobox", 
                                                               action: "input->debounce#submit" } 
                                   } 
           %>
         </div>
+
+        <%# 3. NEW: Attendance Status Filter %>
+        <div class="col-span-6 col-span-2@lg">
+          <%= f.label :invitations_status_eq, "Status", class: "text-xs font-bold text-subtle uppercase tracking-wide mbe-1 block" %>
+          <%= f.select :invitations_status_eq,
+                       Invitation.statuses.map { |k, v| [k.humanize, v] },
+                       { include_blank: "Any Status" },
+                       { class: "input", data: { action: "input->debounce#submit" } } 
+          %>
+        </div>
+
+        <%# 4. Date Filter %>
+        <div class="col-span-12 col-span-3@lg">
+           <%= f.label :created_at_gteq, "Date Added", class: "text-xs font-bold text-subtle uppercase tracking-wide mbe-1 block" %>
+           <%= f.date_field :created_at_gteq, class: "input", data: { action: "input->debounce#submit" } %>
+        </div>
+
       </div>
 
       <%# --- Form Actions --- %>
       <div class="flex items-center justify-end gap">
-        <%= link_to "Reset", contacts_path, class: "btn btn--primary" %>
-        <%#= f.submit "Search", class: "btn btn--primary" %>
+        <%= link_to "Reset Filters", contacts_path, class: "btn btn--primary" %>
       </div>
     <% end %>
   </div>
