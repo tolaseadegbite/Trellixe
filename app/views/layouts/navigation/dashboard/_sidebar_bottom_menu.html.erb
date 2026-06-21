@@ -6,7 +6,7 @@
       <%= button_tag type: "button", class: "btn sidebar-menu__button display-md", data: { action: "click->popover#toggle", popover_target: "trigger" } do %>
         <div class="relative flex flex-item-no-shrink items-center justify-center">
           <span class="icon icon--bell"></span>
-          <%= render "notifications/badge", unread: current_user.notifications.unread.any?, id_suffix: "sidebar" %>
+          <%= render "notifications/badge", unread: context_notifications.unread.any?, id_suffix: "sidebar" %>
         </div>
         <span class="sidebar-label">Notifications</span>
       <% end %>
@@ -16,7 +16,7 @@
         <div class="flex flex-col b-full">
             <div class="flex flex-item-no-shrink items-center justify-between p-3 border-be border-main bg-surface">
               <h3 class="font-semibold text-lg">Notifications</h3>
-              <%= link_to "Mark all as read", mark_all_as_read_notifications_path, data: { turbo_method: :post }, class: "hover:text-blue-700 text-xs text-link", style: "text-decoration: none;" if current_user.notifications.any? %>
+              <%= link_to "Mark all as read", mark_all_as_read_notifications_path, data: { turbo_method: :post }, class: "hover:text-blue-700 text-xs text-link", style: "text-decoration: none;" if context_notifications.any? %>
             </div>
 
             <div class="flex-1 overflow-y-auto" id="sidebar-notifications-list">

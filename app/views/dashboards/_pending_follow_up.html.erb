@@ -1,16 +1,25 @@
-<%= tag.div class: "card p-3 flex items-center justify-between gap", id: dom_id(pending_follow_up) do %>
+<% urgency_color = local_assigns[:urgency_color] || "var(--color-border)" %>
+<%= tag.div class: "card flex items-center justify-between gap p-4",
+            style: "border-left: 4px solid #{urgency_color};",
+            id: dom_id(pending_follow_up) do %>
   <div>
-    <p class="font-medium">
-      Follow up with <%= pending_follow_up.invitation.contact.full_name %>
+    <p class="font-semibold">
+      <%= pending_follow_up.invitation.contact.full_name %>
     </p>
     <p class="text-sm text-subtle">
       from <%= pending_follow_up.invitation.event.name %>
     </p>
-    <p class="text-sm text-subtle mbs-2">
-      <span class="text-red-400">Due</span> <%= time_ago_in_words(pending_follow_up.due_at) %> ago
+    <p class="text-sm mbs-1 <%= pending_follow_up.due_at < Time.current ? 'text-red-600' : 'text-subtle' %>">
+      Due: <%= l(pending_follow_up.due_at, format: :short) %>
+      <% if pending_follow_up.due_at < Time.current %>
+        (<%= time_ago_in_words(pending_follow_up.due_at) %> overdue)
+      <% end %>
     </p>
   </div>
-
-  <%# This button takes the user directly to the form to log their interaction %>
-  <%= link_to "Log Follow-Up", new_follow_up_task_interaction_log_path(pending_follow_up), class: "btn bg-blue-500 hover:bg-blue-600 border-0", data: { turbo_frame: "_top" } %>
+  <div class="flex-shrink-0">
+    <%= link_to "Log Follow-Up",
+        new_follow_up_task_interaction_log_path(pending_follow_up),
+        class: "btn btn--primary",
+        data: { turbo_frame: "_top" } %>
+  </div>
 <% end %>

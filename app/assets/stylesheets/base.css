@@ -12,7 +12,7 @@
   --color-selected-dark: light-dark(var(--blue-300), var(--blue-800));
   --color-highlight: light-dark(var(--yellow-200), var(--yellow-900));
 
-  --color-primary: light-dark(var(--zinc-900), var(--zinc-50));
+  --color-primary: light-dark(var(--emerald-600), var(--emerald-400));
   --color-secondary: light-dark(var(--zinc-100), var(--zinc-800));
   --color-negative: light-dark(var(--red-600), var(--red-800));
   --color-positive: light-dark(var(--green-600), var(--green-800));

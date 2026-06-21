@@ -26,8 +26,6 @@ class ContactsController < DashboardsController
 
     respond_to do |format|
       if @contact.save
-        # Notify the user who created it (In-app)
-        # NewContactNotifier.with(contact: @contact).deliver(current_user)
         flash.now[:notice] = "Contact created."
         format.turbo_stream
       else

@@ -81,6 +81,6 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :letter_opener_web
   config.action_mailer.perform_deliveries = true
 
-  config.action_mailer.default_url_options = { host: "127.0.0.1", port: 3000 }
-  Rails.application.routes.default_url_options = { host: "127.0.0.1", port: 3000 }
+  config.action_mailer.default_url_options = { host: ENV.fetch("HOST", "127.0.0.1"), port: ENV.fetch("PORT", 3000) }
+  Rails.application.routes.default_url_options = { host: ENV.fetch("HOST", "127.0.0.1"), port: ENV.fetch("PORT", 3000) }
 end

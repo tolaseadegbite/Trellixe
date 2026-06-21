@@ -65,8 +65,9 @@ class TeamInvitationAcceptancesController < ApplicationController
       ).deliver_later(admin)
     end
 
-    # Switch Context
-    session[:user_id] = user.id
+    # Sign in and switch context
+    session_record = user.sessions.create!
+    cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }
     session[:current_account_id] = account.id
 
     redirect_to root_path, notice: "You have joined #{account.name}!"

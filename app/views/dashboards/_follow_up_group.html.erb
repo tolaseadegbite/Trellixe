@@ -1,0 +1,14 @@
+<div class="mbe-6">
+  <h3 class="text-sm font-semibold text-subtle uppercase mbe-2" style="border-left: 3px solid <%= color %>; padding-left: 0.5rem;">
+    <%= label %> (<%= tasks.count %>)
+  </h3>
+  <% if tasks.any? %>
+    <div class="flex flex-col gap-4">
+      <% tasks.each do |task| %>
+        <%= render "dashboards/pending_follow_up", pending_follow_up: task, urgency_color: color %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-sm text-subtle mis-1">None</p>
+  <% end %>
+</div>
