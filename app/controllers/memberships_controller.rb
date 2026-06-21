@@ -110,7 +110,7 @@ class MembershipsController < DashboardsController
   private
 
   def ensure_admin!
-    redirect_to members_path, alert: "Admins only." unless admin?
+    redirect_to(members_path, alert: "Admins only.") and return unless admin?
   end
 
   def membership_params

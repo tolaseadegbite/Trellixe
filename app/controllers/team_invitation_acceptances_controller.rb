@@ -42,8 +42,7 @@ class TeamInvitationAcceptancesController < ApplicationController
     end
 
     if @invitation.expired?
-      redirect_to root_path, alert: "Invitation expired. Ask admin to resend."
-      nil
+      redirect_to(root_path, alert: "Invitation expired. Ask admin to resend.") and return
     end
   end
 

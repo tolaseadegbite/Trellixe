@@ -51,7 +51,7 @@ class AccountsController < DashboardsController
       return
     end
 
-    @account.destroy
+    @account.destroy!
     session[:current_account_id] = nil
     redirect_to root_path, notice: "Workspace deleted."
   end
@@ -71,8 +71,6 @@ class AccountsController < DashboardsController
   end
 
   def ensure_admin!
-    unless admin?
-      redirect_to root_path, alert: "Access denied."
-    end
+    redirect_to(root_path, alert: "Access denied.") and return unless admin?
   end
 end

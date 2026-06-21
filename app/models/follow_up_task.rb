@@ -9,6 +9,12 @@ class FollowUpTask < ApplicationRecord
 
   after_create_commit :schedule_first_reminder
 
+  scope :for_account, ->(account) {
+    joins(invitation: :event).where(events: { owner_type: "Account", owner_id: account.id })
+  }
+
+  scope :pending, -> { where(completed_at: nil) }
+
   # --- RANSACK CONFIGURATION ---
 
   def self.ransackable_attributes(auth_object = nil)

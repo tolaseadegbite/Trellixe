@@ -31,7 +31,7 @@ class Identity::PasswordResetsController < ApplicationController
     def set_user
       @user = User.find_by_token_for!(:password_reset, params[:sid])
     rescue StandardError
-      redirect_to new_identity_password_reset_path, alert: "That password reset link is invalid"
+      redirect_to(new_identity_password_reset_path, alert: "That password reset link is invalid") and return
     end
 
     def user_params

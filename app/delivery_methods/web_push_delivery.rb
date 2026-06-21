@@ -17,7 +17,7 @@ class WebPushDelivery < Noticed::DeliveryMethods::Base
       )
     rescue WebPush::Error => e
       # Handle errors (e.g., subscription expired, log it)
-      puts "WebPush Error: #{e.message}"
+      Rails.logger.error "WebPush Error: #{e.message}"
       # You might want to delete the invalid subscription
       # subscription.destroy
     end

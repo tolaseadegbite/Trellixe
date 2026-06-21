@@ -1,11 +1,8 @@
 class FollowUpTasksController < DashboardsController
   def index
-    # 1. Find tasks assigned to ME
-    # 2. Filter tasks where the associated Event belongs to the CURRENT ACCOUNT
     base_query = current_user.follow_up_tasks
-                             .where(completed_at: nil)
-                             .joins(invitation: :event)
-                             .where(events: { owner_type: "Account", owner_id: Current.account.id })
+                             .pending
+                             .for_account(Current.account)
 
     @q = base_query.ransack(params[:q])
 
@@ -22,7 +19,7 @@ class FollowUpTasksController < DashboardsController
 
   def bulk_update
     @task_ids = params[:task_ids] || []
-    action_type = params[:commit] # The value of the clicked button
+    action_type = params[:commit]
 
     if @task_ids.empty?
       flash.now[:alert] = "No tasks selected."
@@ -30,11 +27,10 @@ class FollowUpTasksController < DashboardsController
       return
     end
 
-    # 1. Secure Scope: Find tasks assigned to user AND belonging to current account context
     @tasks = current_user.follow_up_tasks
-                         .where(id: @task_ids, completed_at: nil)
-                         .joins(invitation: :event)
-                         .where(events: { owner_type: "Account", owner_id: Current.account.id })
+                         .where(id: @task_ids)
+                         .pending
+                         .for_account(Current.account)
 
     count = @tasks.count
 
