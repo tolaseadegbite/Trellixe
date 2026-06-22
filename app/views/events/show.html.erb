@@ -55,7 +55,7 @@
     <div class="card bg-surface border border-main rounded-md p-5 shadow-sm">
       <h3 class="text-lg font-semibold mbe-4">Invite Contacts</h3>
       <%= turbo_frame_tag "new_invitation_form" do %>
-        <%= render "invitations/form", event: @event, invitation: @new_invitation, available_contacts: @available_contacts %>
+        <%= render "invitations/form", event: @event, invitation: @new_invitation %>
       <% end %>
     </div>
 
@@ -117,7 +117,7 @@
               <% if @invitations.any? %>
                 <%= render @invitations %>
               <% else %>
-                <tr><td colspan="5" class="p-8 text-center text-subtle">No invitations yet.</td></tr>
+                <tr id="no-invitations-row"><td colspan="5" class="p-8 text-center text-subtle">No invitations yet.</td></tr>
               <% end %>
             </tbody>
           </table>
@@ -134,15 +134,12 @@
     <div class="mbe-8">
       <h2 class="font-bold text-lg mbe-2">Follow-up Activity</h2>
       <div class="border border-main rounded-lg bg-surface overflow-hidden">
-        <%# Fetch logs for this event %>
-        <% event_logs = @event.interaction_logs.includes(:user, :contact).order(created_at: :desc) %>
-
-        <% if event_logs.any? %>
+        <% if @event_logs.any? %>
           <div class="bg-shade p-3 border-b border-main flex justify-between items-center text-xs text-subtle">
-            <span>Showing <%= event_logs.count %> interactions resulting from this event.</span>
+            <span>Showing <%= @event_logs.count %> interactions resulting from this event.</span>
           </div>
           
-          <% event_logs.each do |log| %>
+          <% @event_logs.each do |log| %>
             <div class="flex gap-3 p-4 border-b border-main last:border-0 hover:bg-surface transition">
               <%# Avatar %>
               <div class="flex flex-item-no-shrink items-center justify-center font-bold text-xs text-reversed rounded-full bg-teal-600" 

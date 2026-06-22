@@ -102,7 +102,7 @@
           <span class="sidebar-label mis-2 flex-1">Follow ups</span>
           
           <%# Task Counter %>
-          <% task_count = current_user.follow_up_tasks.where(completed_at: nil).count %>
+          <% task_count = current_user.follow_up_tasks.for_account(Current.account).where(completed_at: nil).count %>
           <% if task_count > 0 %>
             <div class="badge badge--number badge--negative sidebar-label">
               <%= task_count %>

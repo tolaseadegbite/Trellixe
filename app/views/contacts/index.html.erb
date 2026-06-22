@@ -57,10 +57,7 @@
             <%# Event Assignment Controls %>
             <div class="flex items-center gap-half bg-surface p-1 rounded-sm border border-main">
               <%= form.select :event_id, 
-                    Current.account.events
-                                  .where("starts_at >= ?", Time.current.beginning_of_day)
-                                  .order(starts_at: :asc)
-                                  .map { |e| [e.name, e.id] }, 
+                    @bulk_event_options, 
                     { prompt: "Select Event..." }, 
                     class: "input cursor-pointer border-0", 
                     style: "min-inline-size: 140px; padding-block: 0.25rem;" %>

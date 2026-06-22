@@ -1,20 +1,15 @@
 <%# Loop through all newly created invitations and append them %>
 <% @new_invitations.each do |invitation| %>
   <% if invitation.persisted? %>
-    <%= turbo_stream.prepend "guest_list" do %>
+    <%= turbo_stream.prepend "invitations-table" do %>
       <%= render invitation %>
     <% end %>
   <% end %>
 <% end %>
 
-<!-- Reset the form. IMPORTANT: We need to re-calculate @available_contacts
-    or the just-invited people will still be in the dropdown.
-    A simple hack for MVP is just to re-render the form with a blank new object,
-    but ideally, the controller should re-fetch @available_contacts.-->
+<%= turbo_stream.remove "no-invitations-row" %>
+
 <%= turbo_stream.replace "new_invitation_form" do %>
-  <!-- For simplicity in this view, we might need to reset @available_contacts in the controller
-      if we want them instantly gone from the dropdown.
-      For now, let's just reset the form. %>-->
   <%= render "invitations/form", event: @event, invitation: @event.invitations.build %>
 <% end %>
 

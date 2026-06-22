@@ -11,23 +11,25 @@ class Sessions::PasswordlessesController < ApplicationController
     session_record = @user.sessions.create!
     cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }
 
-    revoke_tokens; redirect_to(root_path, notice: "Signed in successfully")
+    revoke_tokens
+    redirect_to(root_path, notice: "Signed in successfully") and return
   end
 
   def create
     if @user = User.find_by(email: params[:email], verified: true)
       send_passwordless_email
-      redirect_to sign_in_path, notice: "Check your email for sign in instructions"
+      redirect_to sign_in_path, notice: "Check your email for sign in instructions" and return
     else
-      redirect_to new_sessions_passwordless_path, alert: "You can't sign in until you verify your email"
+      redirect_to new_sessions_passwordless_path, alert: "You can't sign in until you verify your email" and return
     end
   end
 
   private
     def set_user
-      token = SignInToken.find_signed!(params[:sid]); @user = token.user
+      token = SignInToken.find_signed!(params[:sid])
+      @user = token.user
     rescue StandardError
-      redirect_to new_sessions_passwordless_path, alert: "That sign in link is invalid"
+      redirect_to new_sessions_passwordless_path, alert: "That sign in link is invalid" and return
     end
 
     def send_passwordless_email

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_21_224033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -19,13 +19,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
     t.string "name", default: "Personal Workspace", null: false
     t.integer "seat_limit", default: 5, null: false
     t.string "public_id"
+    t.datetime "created_at", default: -> { "now()" }, null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
     t.index ["public_id"], name: "index_accounts_on_public_id", unique: true
   end
 
   create_table "contacts", force: :cascade do |t|
     t.string "owner_type", null: false
     t.bigint "owner_id", null: false
-    t.string "first_name"
+    t.string "first_name", null: false
     t.string "last_name"
     t.string "email"
     t.string "phone_number"
@@ -49,6 +51,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
     t.integer "duration_in_minutes", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["owner_type", "owner_id", "starts_at"], name: "index_events_on_owner_and_starts_at"
     t.index ["owner_type", "owner_id"], name: "index_events_on_owner"
   end
 
@@ -60,6 +63,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invitation_id"], name: "index_follow_up_tasks_on_invitation_id", unique: true
+    t.index ["user_id", "completed_at"], name: "index_follow_up_tasks_on_user_id_and_completed_at"
     t.index ["user_id"], name: "index_follow_up_tasks_on_user_id"
   end
 
@@ -94,6 +98,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
     t.string "public_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id", "role"], name: "index_memberships_on_account_id_and_role"
     t.index ["account_id"], name: "index_memberships_on_account_id"
     t.index ["public_id"], name: "index_memberships_on_public_id", unique: true
     t.index ["user_id", "account_id"], name: "index_memberships_on_user_id_and_account_id", unique: true
@@ -129,7 +134,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "user_agent"
     t.string "ip_address"
     t.datetime "sudo_at", null: false
@@ -139,7 +144,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
   end
 
   create_table "sign_in_tokens", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", default: -> { "now()" }, null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
     t.index ["user_id"], name: "index_sign_in_tokens_on_user_id"
   end
 
@@ -159,7 +166,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
   end
 
   create_table "user_activities", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "action", null: false
     t.string "user_agent"
     t.string "ip_address"
@@ -185,9 +192,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_174052) do
 
   create_table "web_push_subscriptions", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "endpoint"
-    t.string "p256dh"
-    t.string "auth"
+    t.string "endpoint", null: false
+    t.string "p256dh", null: false
+    t.string "auth", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_web_push_subscriptions_on_user_id"

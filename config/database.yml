@@ -15,9 +15,10 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  statement_timeout: 30s
+  idle_timeout: 300
+  connect_timeout: 5
 
 sqlite: &sqlite
   adapter: sqlite3
@@ -102,6 +103,7 @@ production:
     database: trellixe_production
     username: trellixe
     password: <%= ENV["trellixe_DATABASE_PASSWORD"] %>
+    pool: <%= ENV.fetch("DB_POOL_SIZE") { 10 } %>
   cache:
     <<: *primary_production
     database: trellixe_production_cache

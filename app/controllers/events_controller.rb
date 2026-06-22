@@ -9,7 +9,7 @@ class EventsController < DashboardsController
     calendar_events = Current.account.events.in_range(
       @date.beginning_of_month.beginning_of_week,
       @date.end_of_month.end_of_week
-    )
+    ).includes(:invitations)
 
     @events_by_date = calendar_events.group_by { |e| e.starts_at.to_date }
 
@@ -31,7 +31,7 @@ class EventsController < DashboardsController
     end
 
     @search = records.ransack(params[:q])
-    @pagy, @list_events = pagy(@search.result.includes(:invited_contacts))
+    @pagy, @list_events = pagy(@search.result.includes(:invited_contacts, :invitations))
 
     @filterable_contacts = Current.account.contacts.order(:first_name, :last_name)
   end
@@ -43,7 +43,7 @@ class EventsController < DashboardsController
 
     raw_counts = @event.invitations.group(:status).count
     @stats = {
-      total:    @event.invitations.count,
+      total: raw_counts.values.sum,
       attended: raw_counts["attended"] || 0
     }
 
@@ -52,6 +52,8 @@ class EventsController < DashboardsController
     @new_invitation = @event.invitations.build
     invited_contact_ids = @event.invitations.select(:contact_id)
     @available_contacts = Current.account.contacts.where.not(id: invited_contact_ids).order(:first_name)
+
+    @event_logs = @event.interaction_logs.includes(:user, :contact).order(created_at: :desc)
   end
 
   def new
@@ -63,24 +65,32 @@ class EventsController < DashboardsController
 
   def create
     @event = Current.account.events.new(event_params)
-    if @event.save
-      flash.now[:notice] = "Event was successfully submitted."
-      prepare_calendar_data
-      render :create
-    else
-      flash.now[:alert] = @event.errors.full_messages.to_sentence
-      render :create, status: :unprocessable_entity
+    respond_to do |format|
+      if @event.save
+        flash.now[:notice] = "Event was successfully submitted."
+        prepare_calendar_data
+        format.turbo_stream
+        format.html { redirect_to events_path, notice: "Event was successfully submitted." }
+      else
+        flash.now[:alert] = @event.errors.full_messages.to_sentence
+        format.turbo_stream { render :create, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
   def update
-    if @event.update(event_params)
-      flash.now[:notice] = "Event was successfully updated."
-      prepare_calendar_data
-      render :update
-    else
-      flash.now[:alert] = @event.errors.full_messages.to_sentence
-      render :update, status: :unprocessable_entity
+    respond_to do |format|
+      if @event.update(event_params)
+        flash.now[:notice] = "Event was successfully updated."
+        prepare_calendar_data
+        format.turbo_stream
+        format.html { redirect_to events_path, notice: "Event was successfully updated." }
+      else
+        flash.now[:alert] = @event.errors.full_messages.to_sentence
+        format.turbo_stream { render :update, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 

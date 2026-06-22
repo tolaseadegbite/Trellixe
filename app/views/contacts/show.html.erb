@@ -96,9 +96,8 @@
     <%# TAB 2: INTERACTION LOGS %>
     <div id="tab_logs" data-tabs-target="tab" role="tabpanel">
       <div class="border border-main rounded-lg bg-surface overflow-hidden">
-        <% if @contact.interaction_logs.any? %>
-          <%# Using the partial created in previous step %>
-          <%= render partial: "interaction_logs/interaction_log", collection: @contact.interaction_logs.includes(:user, follow_up_task: { invitation: :event }).order(created_at: :desc) %>
+          <% if @interaction_logs.any? %>
+            <%= render @interaction_logs %>
         <% else %>
           <div class="p-8 text-center text-subtle">
             <p>No interactions logged yet.</p>

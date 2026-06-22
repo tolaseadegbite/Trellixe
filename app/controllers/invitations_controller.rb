@@ -23,6 +23,11 @@ class InvitationsController < DashboardsController
 
       @new_invitations = @event.invitations.where(contact_id: contact_ids).includes(:contact)
 
+      invited_ids = @event.invitations.pluck(:contact_id)
+      @available_contacts = Current.account.contacts.where.not(id: invited_ids).order(:first_name)
+
+      flash.now[:notice] = "#{contact_ids.count} #{'invitation'.pluralize(contact_ids.count)} sent."
+
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to @event, notice: "#{contact_ids.count} invitations sent." }
@@ -78,6 +83,10 @@ class InvitationsController < DashboardsController
 
     updated_count = 0
 
+    # Preload existing follow-up tasks to avoid N+1 in create_follow_up_task_if_needed
+    existing_follow_up_ids = FollowUpTask.where(invitation_id: @invitations.select(:id)).pluck(:invitation_id)
+    @_existing_follow_up_ids = existing_follow_up_ids.to_set
+
     ActiveRecord::Base.transaction do
       @invitations.each do |invitation|
         # Skip if already in the target state
@@ -132,7 +141,7 @@ class InvitationsController < DashboardsController
 
   def create_follow_up_task_if_needed(invitation)
     return unless invitation.attended? && invitation.saved_change_to_status?
-    return if FollowUpTask.exists?(invitation_id: invitation.id)
+    return if @_existing_follow_up_ids.include?(invitation.id)
 
     event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
 

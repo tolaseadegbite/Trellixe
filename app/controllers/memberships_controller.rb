@@ -1,9 +1,9 @@
 class MembershipsController < DashboardsController
   before_action :authenticate
+  before_action :set_membership, only: [ :update, :destroy ]
   before_action :ensure_admin!, only: [ :update ]
 
   def update
-    @membership = Current.account.memberships.find_by!(public_id: params[:id])
     new_role = membership_params[:role]
 
     # Guard: Last Admin check
@@ -38,8 +38,6 @@ class MembershipsController < DashboardsController
   end
 
   def destroy
-    @membership = Current.account.memberships.find_by!(public_id: params[:id])
-
     # Authorization: Admin OR Self
     unless admin? || @membership.user == Current.user
       redirect_to members_path, alert: "Permission denied."
@@ -108,6 +106,10 @@ class MembershipsController < DashboardsController
   end
 
   private
+
+  def set_membership
+    @membership = Current.account.memberships.includes(:user).find_by!(public_id: params[:id])
+  end
 
   def ensure_admin!
     redirect_to(members_path, alert: "Admins only.") and return unless admin?

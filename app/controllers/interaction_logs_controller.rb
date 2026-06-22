@@ -32,8 +32,7 @@ class InteractionLogsController < DashboardsController
   private
 
   def set_follow_up_task
-    # Find the task securely, scoped to the current user.
-    @follow_up_task = current_user.follow_up_tasks.find(params[:follow_up_task_id])
+    @follow_up_task = current_user.follow_up_tasks.for_account(Current.account).find(params[:follow_up_task_id])
   end
 
   def interaction_log_params

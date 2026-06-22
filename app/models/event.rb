@@ -57,8 +57,19 @@ class Event < ApplicationRecord
   private
 
   def create_invitations_for_contacts
-    contact_ids&.reject(&:blank?)&.each do |contact_id|
-      self.invitations.create(contact_id: contact_id)
+    return unless contact_ids
+    clean_ids = contact_ids.reject(&:blank?).map(&:to_i)
+    return if clean_ids.empty?
+
+    if persisted?
+      existing_ids = invitations.pluck(:contact_id)
+      to_remove = existing_ids - clean_ids
+      to_add = clean_ids - existing_ids
+
+      invitations.where(contact_id: to_remove).destroy_all if to_remove.any?
+      to_add.each { |cid| invitations.create!(contact_id: cid) } if to_add.any?
+    else
+      clean_ids.each { |cid| invitations.build(contact_id: cid) }
     end
   end
 end

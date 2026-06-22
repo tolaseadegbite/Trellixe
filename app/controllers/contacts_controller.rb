@@ -2,17 +2,20 @@ class ContactsController < DashboardsController
   before_action :set_contact, only: %i[ show edit update destroy ]
 
   def index
-    # Use Current.account so everyone on the team sees the same list
     records = Current.account.contacts.order(created_at: :desc)
     @search = records.ransack(params[:q])
     @pagy, @contacts = pagy(@search.result)
     @filterable_events = Current.account.events.order(:name)
+    @bulk_event_options = Current.account.events
+                                 .where("starts_at >= ?", Time.current.beginning_of_day)
+                                 .order(starts_at: :asc)
+                                 .map { |e| [ e.name, e.id ] }
   end
 
-  # GET /contacts/1
   def show
-    # The @contact, @invitations, and @general_interaction_logs
-    # instance variables are all set by the `set_contact` before_action.
+    @interaction_logs = @contact.interaction_logs
+                                .includes(:user, follow_up_task: { invitation: :event })
+                                .order(created_at: :desc)
   end
 
   def new

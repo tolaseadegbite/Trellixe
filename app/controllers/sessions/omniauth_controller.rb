@@ -9,14 +9,14 @@ class Sessions::OmniauthController < ApplicationController
       session_record = @user.sessions.create!
       cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }
 
-      redirect_to root_path, notice: "Signed in successfully"
+      redirect_to root_path, notice: "Signed in successfully" and return
     else
-      redirect_to sign_in_path, alert: "Authentication failed"
+      redirect_to sign_in_path, alert: "Authentication failed" and return
     end
   end
 
   def failure
-    redirect_to sign_in_path, alert: params[:message]
+    redirect_to sign_in_path, alert: params[:message] and return
   end
 
   private
