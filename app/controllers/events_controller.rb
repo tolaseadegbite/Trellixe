@@ -37,7 +37,7 @@ class EventsController < DashboardsController
   end
 
   def show
-    base_invitations = @event.invitations.includes(:contact)
+    base_invitations = @event.invitations.includes(:contact, :event)
     @invitations_search = base_invitations.ransack(params[:q])
     filtered_invitations = @invitations_search.result
 

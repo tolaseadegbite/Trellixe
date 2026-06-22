@@ -45,6 +45,8 @@ class InvitationsController < DashboardsController
       if @invitation.update(invitation_params)
         create_follow_up_task_if_needed(@invitation)
 
+        flash.now[:notice] = "Invitation was successfully updated."
+
         format.turbo_stream
         format.html { redirect_to @invitation.event, notice: "Invitation was successfully updated." }
       else
@@ -141,7 +143,7 @@ class InvitationsController < DashboardsController
 
   def create_follow_up_task_if_needed(invitation)
     return unless invitation.attended? && invitation.saved_change_to_status?
-    return if @_existing_follow_up_ids.include?(invitation.id)
+    return if @_existing_follow_up_ids&.include?(invitation.id)
 
     event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
 
