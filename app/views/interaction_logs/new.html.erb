@@ -2,7 +2,9 @@
 
 <% content_for :page_header do %>
   <div class="flex gap-2 items-center">
-    <%= link_to sanitize("&larr;"), :back %>
+    <%= link_to "javascript:history.back()", class: "flex items-center text-subtle hover:text-primary no-underline" do %>
+      <span class="icon icon--chevron-left" style="--icon-size: 1.25rem" aria-hidden="true"></span>
+    <% end %>
     <h4 class="font-semibold">New Interaction Log</h4>
   </div>
 <% end %>

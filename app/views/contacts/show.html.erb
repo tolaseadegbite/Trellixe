@@ -2,7 +2,9 @@
 
 <% content_for :page_header do %>
   <div class="flex items-center gap i-full">
-    <%= link_to sanitize("&larr;"), :back, class: "text-subtle hover:text-primary no-underline" %>
+    <%= link_to "javascript:history.back()", class: "flex items-center text-subtle hover:text-primary no-underline" do %>
+      <span class="icon icon--chevron-left" style="--icon-size: 1.25rem" aria-hidden="true"></span>
+    <% end %>
     <div class="text-base">
       <span class="text-primary overflow-ellipsis"><%= @contact.full_name %></span>
     </div>

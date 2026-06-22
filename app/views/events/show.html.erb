@@ -2,7 +2,9 @@
 
 <% content_for :page_header do %>
   <div class="flex items-center gap text-sm i-full">
-    <%= link_to sanitize("&larr; Back"), events_path, class: "text-subtle hover:text-primary no-underline" %>
+    <%= link_to "javascript:history.back()", class: "flex items-center text-subtle hover:text-primary no-underline" do %>
+      <span class="icon icon--chevron-left" style="--icon-size: 1.25rem" aria-hidden="true"></span>
+    <% end %>
     <span class="text-subtle mi-2">/</span>
     <span class="text-primary font-medium"><%= @event.name %></span>
   </div>

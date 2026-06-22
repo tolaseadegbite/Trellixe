@@ -60,7 +60,7 @@ def seed_workspace_data(account:, creator:, member_ids:)
   invitations = []
   Event.where(owner: account).find_each do |event|
     contact_ids.sample(rand(3..8)).each do |cid|
-      status = %i[invited attended declined].sample
+      status = event.starts_at > Time.current ? :invited : %i[invited attended declined].sample
       invitations << {
         contact_id: cid, event_id: event.id,
         status: Invitation.statuses[status],
@@ -72,7 +72,7 @@ def seed_workspace_data(account:, creator:, member_ids:)
   Invitation.insert_all!(invitations)
 
   follow_ups = []
-  Invitation.joins(:event).where(events: { owner_type: "Account", owner_id: account.id }, status: :attended).find_each do |invitation|
+  Invitation.joins(:event).where(events: { owner_type: "Account", owner_id: account.id }, status: :attended).where("events.starts_at <= ?", Time.current).find_each do |invitation|
     due = (invitation.event.ends_at + 1.day).change(hour: 9)
     assignee = (member_ids.sample if member_ids.any? && rand < 0.3) || creator.id
     completed = invitation.event.ends_at < 7.days.ago && [ true, false ].sample
