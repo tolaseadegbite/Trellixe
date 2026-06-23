@@ -1,20 +1,22 @@
 class FollowUpTasksController < DashboardsController
   def index
-    base_query = current_user.follow_up_tasks
-                             .pending
-                             .for_account(Current.account)
+    @scope = params[:scope] == "past" ? "past" : "pending"
+
+    base_query = current_user.follow_up_tasks.for_account(Current.account)
+
+    base_query = if @scope == "past"
+      base_query.where.not(completed_at: nil)
+    else
+      base_query.pending
+    end
 
     @q = base_query.ransack(params[:q])
 
     records = @q.result
-                    .includes(invitation: [ :contact, :event ])
-                    .order(due_at: :asc)
+                    .includes(invitation: [ :contact, :event ], interaction_logs: :user)
+                    .order(@scope == "past" ? { completed_at: :desc } : { due_at: :asc })
 
     @pagy, @follow_up_tasks = pagy(records)
-
-    @filterable_events = Event.where(id: base_query.joins(:invitation).select("invitations.event_id"))
-                            .distinct
-                            .order(:name)
   end
 
   def bulk_update

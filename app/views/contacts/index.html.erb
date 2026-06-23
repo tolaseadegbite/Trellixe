@@ -83,17 +83,16 @@
 
       <%# --- DESKTOP VIEW --- %>
       <div class="show@md">
-        <div class="relative i-full overflow-x-auto border rounded-md mbe-4">
-          <table class="table">
-            <thead class="bg-surface">
+        <div class="relative i-full overflow-x-auto border border-main rounded-lg">
+          <table class="table i-full text-left">
+            <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
               <tr>
-                <th><%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
-                <th><%= sort_link(@search, :first_name, class: "flex items-center") %></th>
-                <th><%= sort_link(@search, :last_name, class: "flex items-center") %></th>
-                <th><%= sort_link(@search, :email, class: "flex items-center") %></th>
-                <th><%= sort_link(@search, :phone_number, class: "flex items-center") %></th>
-                <th><%= sort_link(@search, :how_we_met, class: "flex items-center") %></th>
-                <th style="min-inline-size: 3rem"></th>
+                <th class="p-3 w-8"><%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
+                <th class="p-3"><%= sort_link(@search, :first_name, class: "flex items-center") %></th>
+                <th class="p-3"><%= sort_link(@search, :last_name, class: "flex items-center") %></th>
+                <th class="p-3"><%= sort_link(@search, :email, class: "flex items-center") %></th>
+                <th class="p-3"><%= sort_link(@search, :phone_number, class: "flex items-center") %></th>
+                <th class="p-3 text-end"></th>
               </tr>
             </thead>
             <tbody id="contacts-table">

@@ -1,0 +1,29 @@
+<div id="<%= dom_id(task, :card) %>" class="card bg-main p-3 flex items-center gap-4 mbe-3">
+  <div class="flex items-center gap shrink-0">
+    <%= check_box_tag "task_ids[]", task.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
+    <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2.5rem; inline-size: 2.5rem;">
+      <span class="font-semibold">
+        <%= task.contact.full_name.split.first(2).map(&:first).join.upcase %>
+      </span>
+    </div>
+  </div>
+
+  <div class="flex flex-col grow min-i-0 gap-1">
+    <div class="flex items-center justify-between gap-2">
+      <div class="flex flex-col min-w-0">
+        <%= link_to task.contact.full_name, contact_path(task.contact), class: "font-semibold text-sm text-primary hover:underline truncate", data: { turbo_frame: "_top" } %>
+        <span class="text-xs text-subtle truncate"><%= task.event.name %></span>
+      </div>
+      <%= link_to new_follow_up_task_interaction_log_path(task), class: "btn btn--primary shrink-0", data: { turbo_frame: "_top" } do %>
+        Log it
+      <% end %>
+    </div>
+    <div class="text-xs <%= task.due_at < Time.current ? 'text-red-600 font-bold' : 'text-subtle' %>">
+      <% if task.due_at < Time.current %>
+        Overdue (<%= time_ago_in_words(task.due_at) %> ago)
+      <% else %>
+        Due <%= l(task.due_at, format: :short) %>
+      <% end %>
+    </div>
+  </div>
+</div>

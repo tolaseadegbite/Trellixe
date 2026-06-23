@@ -1,11 +1,8 @@
-<tr id="<%= dom_id(contact, :table_row) %>">
-  <td><%= check_box_tag "contact_ids[]", contact.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %></td>
-  <td class="whitespace-nowrap">
-    <!--<div class="flex items-center gap">
-      <div class="flex shrink-0 overflow-hidden rounded-full">
-        <%= image_tag "avatar.jpg", size: 32, alt: "User Avatar" %>
-      </div>
-    </div>-->
+<tr id="<%= dom_id(contact, :table_row) %>" class="border-b border-main last:border-0 hover:bg-highlight transition">
+  <td class="p-3">
+    <%= check_box_tag "contact_ids[]", contact.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
+  </td>
+  <td class="p-3 font-medium">
     <div class="flex items-center gap">
       <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2.5rem; inline-size: 2.5rem;">
         <span class="font-semibold">
@@ -16,51 +13,48 @@
       <span class="overflow-ellipsis"><%= contact.first_name.titleize %></span>
     </div>
   </td>
-  <td class="whitespace-nowrap">
+  <td class="p-3 text-sm text-subtle">
     <div class="flex items-center gap">
       <span><%= contact.last_name.present? ? contact.last_name.titleize : "Nil" %></span>
     </div>
   </td>
-  <td class="whitespace-nowrap">
+  <td class="p-3 text-sm text-subtle">
     <div class="flex items-center gap">
       <span><%= contact.email.present? ? contact.email : "Nil" %></span>
     </div>
   </td>
-  <td class="whitespace-nowrap">
+  <td class="p-3 text-sm text-subtle">
     <div class="flex items-center gap">
       <span><%= contact.phone_number.present? ? contact.phone_number : "Nil" %></span>
     </div>
   </td>
-  <td class="whitespace-nowrap">
-    <div class="flex items-center gap">
-      <span class="overflow-ellipsis" style="inline-size: 350px"><%= contact.how_we_met %></span>
-    </div>
-  </td>
-  <td class="flex gap-4 items-center justify-end">
-    <%= link_to contact, class: "btn btn--icon btn--subtle", data: { turbo_frame: "_top" } do %>
-      <span class="icon icon--eye" aria-hidden="true"></span>
-    <% end %>
+  <td class="p-3 text-end">
+    <div class="flex items-center justify-end gap-2">
+      <%= link_to contact, class: "btn btn--icon btn--subtle", data: { turbo_frame: "_top" } do %>
+        <span class="icon icon--eye" aria-hidden="true"></span>
+      <% end %>
 
-    <div contents data-controller="popover" data-popover-placement-value="bottom-end">
-      <button type="button" class="btn btn--icon btn--subtle" data-popover-target="trigger" popovertarget="popover-<%= contact.id %>" aria-haspopup="true">
-        <span class="icon icon--ellipsis" aria-hidden="true"></span>
-      </button>
+      <div contents data-controller="popover" data-popover-placement-value="bottom-end">
+        <button type="button" class="btn btn--icon btn--subtle" data-popover-target="trigger" popovertarget="popover-<%= contact.id %>" aria-haspopup="true">
+          <span class="icon icon--ellipsis" aria-hidden="true"></span>
+        </button>
 
-      <div popover id="popover-<%= contact.id %>" class="popover" style="--popover-size: 8rem;" data-popover-target="content" role="menu" aria-label="Menu">
-        <div class="menu" data-controller="menu" data-action="keydown->menu#navigate">
+        <div popover id="popover-<%= contact.id %>" class="popover" style="--popover-size: 8rem;" data-popover-target="content" role="menu" aria-label="Menu">
+          <div class="menu" data-controller="menu" data-action="keydown->menu#navigate">
 
-          <%= link_to "Edit", edit_contact_path(contact),
-                      class: "btn menu__item w-full text-left",
-                      data: { turbo_frame: "modal" } %>
+            <%= link_to "Edit", edit_contact_path(contact),
+                        class: "btn menu__item w-full text-left",
+                        data: { turbo_frame: "modal" } %>
 
-          <% delete_trigger = button_tag "Delete", type: "button", class: "btn menu__item w-full text-left text-red-500 hover:text-red-600 focus:text-red-600", data: { action: "dialog#showModal", menu_target: "item" }, role: "menuitem" %>
-          <%= modal_dialog delete_trigger, size: "450px", title: "Delete '#{contact.first_name} #{contact.last_name}'?" do %>
-            <p class="text-sm text-subtle mbe-4">This will permanently delete this contact. This action cannot be undone.</p>
-            <div class="flex items-center justify-end gap">
-              <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
-              <%= button_to "Continue", contact, method: :delete, class: "btn btn--negative" %>
-            </div>
-          <% end %>
+            <% delete_trigger = button_tag "Delete", type: "button", class: "btn menu__item w-full text-left text-red-500 hover:text-red-600 focus:text-red-600", data: { action: "dialog#showModal", menu_target: "item" }, role: "menuitem" %>
+            <%= modal_dialog delete_trigger, size: "450px", title: "Delete '#{contact.first_name} #{contact.last_name}'?" do %>
+              <p class="text-sm text-subtle mbe-4">This will permanently delete this contact. This action cannot be undone.</p>
+              <div class="flex items-center justify-end gap">
+                <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+                <%= button_to "Continue", contact, method: :delete, class: "btn btn--negative" %>
+              </div>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>

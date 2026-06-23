@@ -1,11 +1,16 @@
 class InteractionLogsController < DashboardsController
   before_action :set_follow_up_task, only: [ :new, :create ]
+  before_action :set_interaction_log, only: [ :edit, :update, :destroy ]
+  before_action :authorize_owner!, only: [ :edit, :update, :destroy ]
 
   def new
     @interaction_log = @follow_up_task.interaction_logs.build(
       contact: @follow_up_task.invitation.contact,
       user: current_user
     )
+  end
+
+  def edit
   end
 
   def create
@@ -30,10 +35,35 @@ class InteractionLogsController < DashboardsController
     end
   end
 
+  def update
+    if @interaction_log.update(interaction_log_params)
+      redirect_back_or_to contact_path(@interaction_log.contact), notice: "Log updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @interaction_log.destroy!
+    redirect_back_or_to contact_path(@interaction_log.contact), notice: "Log deleted."
+  end
+
   private
 
   def set_follow_up_task
     @follow_up_task = current_user.follow_up_tasks.for_account(Current.account).find(params[:follow_up_task_id])
+  end
+
+  def set_interaction_log
+    @interaction_log = InteractionLog.joins(follow_up_task: { invitation: :event })
+                                     .where(events: { owner_type: "Account", owner_id: Current.account.id })
+                                     .find(params[:id])
+  end
+
+  def authorize_owner!
+    unless @interaction_log.user == current_user
+      redirect_back_or_to contact_path(@interaction_log.contact), alert: "You can only edit your own logs."
+    end
   end
 
   def interaction_log_params

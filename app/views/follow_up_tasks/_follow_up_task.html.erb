@@ -11,7 +11,7 @@
     <%= task.event.name %>
   </td>
 
-  <td class="p-3 text-sm <%= task.due_at < Time.current ? 'text-negative font-bold' : 'text-subtle' %>">
+  <td class="p-3 text-sm <%= task.due_at < Time.current ? 'text-red-600 font-bold' : 'text-subtle' %>">
     <% if task.due_at < Time.current %>
       Overdue (<%= time_ago_in_words(task.due_at) %> ago)
     <% else %>
@@ -20,7 +20,7 @@
   </td>
 
   <td class="p-3 text-end">
-    <%= link_to new_follow_up_task_interaction_log_path(task), class: "btn btn--primary", data: { turbo_frame: "_top" } do %>
+    <%= link_to new_follow_up_task_interaction_log_path(task), class: "btn btn--primary text-sm", data: { turbo_frame: "_top" } do %>
       Log it
     <% end %>
   </td>

@@ -14,9 +14,16 @@
     <% end %>
   </td>
 
-  <td class="p-3">
-    <div class="font-medium text-primary"><%= invitation.contact.full_name %></div>
-    <div class="text-xs text-subtle"><%= invitation.contact.email %></div>
+  <td class="p-3 font-medium">
+    <div class="flex items-center gap">
+      <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2rem; inline-size: 2rem;">
+        <span class="font-semibold text-xs"><%= invitation.contact.full_name.split.first(2).map(&:first).join.upcase %></span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-emerald-600"><%= invitation.contact.full_name %></span>
+        <span class="text-xs text-subtle"><%= invitation.contact.email %></span>
+      </div>
+    </div>
   </td>
   
   <td class="p-3">
