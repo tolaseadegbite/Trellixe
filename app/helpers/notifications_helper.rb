@@ -28,8 +28,12 @@ module NotificationsHelper
     when "TeamNotifier::InvitationReceived"
       "You have been invited to join #{params[:account_name]}."
 
-      # else
-      #   "New activity in your workspace."
+    when "FollowUpTaskNotifier"
+      if params[:task]
+        "Follow up with #{params[:task].contact.full_name}"
+      else
+        "Follow up reminder"
+      end
     end
   end
 
@@ -40,32 +44,40 @@ module NotificationsHelper
 
     case event.type
     when "TeamNotifier::MemberRemoved"
-      # If user was removed, they can't see the team page -> go to root
       recipient.id == params[:user_id] ? root_path : members_path
 
     when "TeamNotifier::InvitationReceived"
-      # Go to the public acceptance page
       team_invitation_acceptance_path(token: params[:token])
 
+    when "FollowUpTaskNotifier"
+      if params[:task]
+        new_follow_up_task_interaction_log_path(params[:task])
+      else
+        follow_up_tasks_path
+      end
+
     else
-      # Default: Go to the Team Directory
       members_path
     end
   end
 
-  # UI Helper for Initials (Workspace Square vs User Circle)
   def notification_avatar_initials(notification)
     params = notification.event.params
-    if params[:user_name].present?
+    if params[:task].present?
+      params[:task].contact.full_name.split.first(2).map(&:first).join.upcase
+    elsif params[:user_name].present?
       params[:user_name].split.first(2).map(&:first).join.upcase
     else
-      # Fallback to Account Initials if no user name (e.g. Invitations)
       notification.account&.name&.first(2)&.upcase || "??"
     end
   end
 
   def notification_avatar_style(notification)
-    # Circle for user events, Square for system/workspace events
-    notification.event.params[:user_name].present? ? "rounded-full bg-teal-600" : "rounded-md bg-black"
+    params = notification.event.params
+    if params[:task].present? || params[:user_name].present?
+      "rounded-full bg-teal-600"
+    else
+      "rounded-md bg-black"
+    end
   end
 end

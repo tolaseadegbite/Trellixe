@@ -2,7 +2,6 @@ class InteractionLogsController < DashboardsController
   before_action :set_follow_up_task, only: [ :new, :create ]
 
   def new
-    # Build a new interaction_log associated with the task, contact, and user.
     @interaction_log = @follow_up_task.interaction_logs.build(
       contact: @follow_up_task.invitation.contact,
       user: current_user
@@ -20,11 +19,13 @@ class InteractionLogsController < DashboardsController
         @follow_up_task.update!(completed_at: Time.current)
       end
 
-      format.turbo_stream
+      mark_related_notifications_read
+
+      # format.turbo_stream
       format.html { redirect_to follow_up_tasks_path, notice: "Follow-up successfully logged!" }
 
     rescue ActiveRecord::RecordInvalid
-      format.turbo_stream { render :new, status: :unprocessable_entity }
+      # format.turbo_stream { render :new, status: :unprocessable_entity }
       format.html { render :new, status: :unprocessable_entity }
     end
   end
@@ -37,5 +38,14 @@ class InteractionLogsController < DashboardsController
 
   def interaction_log_params
     params.require(:interaction_log).permit(:note)
+  end
+
+  def mark_related_notifications_read
+    task_gid = @follow_up_task.to_gid.to_s
+    event_ids = Noticed::Event.where(type: "FollowUpTaskNotifier")
+                              .where("params #>> '{task, _aj_globalid}' = ?", task_gid)
+                              .pluck(:id)
+    current_user.notifications.where(event_id: event_ids)
+                .update_all(read_at: Time.current, seen_at: Time.current)
   end
 end

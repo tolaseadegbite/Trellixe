@@ -15,7 +15,7 @@ class NotificationsController < DashboardsController
     redirect_to helpers.notification_destination(@notification)
   end
 
-  def mark_all_read
+  def mark_all_as_read
     scope = current_user.notifications.unread
 
     if Current.account

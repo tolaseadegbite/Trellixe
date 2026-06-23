@@ -1,5 +1,4 @@
 class FollowUpTask < ApplicationRecord
-  # == Associations ===============
   belongs_to :invitation
   belongs_to :user
 
@@ -15,10 +14,7 @@ class FollowUpTask < ApplicationRecord
 
   scope :pending, -> { where(completed_at: nil) }
 
-  # --- RANSACK CONFIGURATION ---
-
   def self.ransackable_attributes(auth_object = nil)
-    # We still need `due_at` for our date-based searches.
     [ "due_at" ]
   end
 

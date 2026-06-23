@@ -151,10 +151,9 @@ class InvitationsController < DashboardsController
     due_date = event_end_time.advance(minutes: 3)
     # due_date = event_end_time.tomorrow.change(hour: 9)
 
-    FollowUpTask.create!(
-      invitation: invitation,
-      user: current_user,
-      due_at: due_date
-    )
+    FollowUpTask.find_or_create_by!(invitation: invitation) do |task|
+      task.user = current_user
+      task.due_at = due_date
+    end
   end
 end
