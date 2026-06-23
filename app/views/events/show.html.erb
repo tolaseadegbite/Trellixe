@@ -47,6 +47,14 @@
         </div>
       </div>
 
+      <div class="flex flex-col">
+        <span class="text-xs uppercase font-bold text-red-500 mbe-1">Declined</span>
+        <div class="flex items-center gap-half">
+          <span class="icon icon--user-x text-red-500" aria-hidden="true"></span>
+          <span class="text-2xl font-bold text-primary"><%= @stats[:declined] %></span>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -147,54 +155,6 @@
         </div>
 
       <% end %> <%# End Form %>
-    </div>
-    
-    <%# 3. Follow-up Activity %>
-    <div class="mbe-8">
-      <h2 class="font-bold text-lg mbe-2">Follow-up Activity</h2>
-
-      <div class="border border-main rounded-lg bg-surface overflow-hidden">
-        <% if @event_logs.any? %>
-          <% @event_logs.each do |log| %>
-            <div class="flex items-start gap-3 p-4 border-b border-main last:border-0 hover:bg-highlight transition">
-              <div class="flex flex-item-no-shrink items-center justify-center font-bold text-xs text-reversed rounded-full bg-black"
-                   style="inline-size: 2rem; block-size: 2rem;">
-                <%= log.user.initials %>
-              </div>
-
-              <div class="flex flex-col gap-1 i-full min-w-0">
-                <div class="flex items-center justify-between gap-2 flex-wrap">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <span class="font-semibold text-sm text-emerald-600 shrink-0"><%= log.user.full_name %></span>
-                    <span class="text-xs text-subtle shrink-0">followed up with</span>
-                    <%= link_to log.contact.full_name, contact_path(log.contact), class: "font-semibold text-sm text-emerald-600 hover:underline truncate", data: { turbo_frame: "_top" } %>
-                  </div>
-                  <span class="text-xs text-subtle shrink-0"><%= time_ago_in_words(log.created_at) %> ago</span>
-                </div>
-
-                <div class="flex items-start justify-between gap-2 mbs-1">
-                  <div class="text-sm text-primary whitespace-pre-wrap"><%= log.note %></div>
-                  <% if log.user == current_user %>
-                    <div class="flex gap-1 shrink-0">
-                      <%= link_to edit_interaction_log_path(log), class: "btn btn--icon btn--subtle", style: "block-size: 1.5rem; inline-size: 1.5rem;", data: { turbo_frame: "_top" } do %>
-                        <span class="icon icon--pen" style="--icon-size: 0.75rem" aria-hidden="true"></span>
-                      <% end %>
-                      <%= button_to interaction_log_path(log), method: :delete, class: "btn btn--icon btn--subtle", style: "block-size: 1.5rem; inline-size: 1.5rem;", data: { turbo_confirm: "Delete this log?" } do %>
-                        <span class="icon icon--trash-2" style="--icon-size: 0.75rem" aria-hidden="true"></span>
-                      <% end %>
-                    </div>
-                  <% end %>
-                </div>
-              </div>
-            </div>
-          <% end %>
-        <% else %>
-          <div class="p-8 text-center text-subtle">
-            <p>No follow-ups logged yet.</p>
-            <p class="text-xs mt-1">Mark guests as "Attended" to trigger reminders for your team.</p>
-          </div>
-        <% end %>
-      </div>
     </div>
     
   </div>

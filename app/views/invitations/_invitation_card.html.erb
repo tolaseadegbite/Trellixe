@@ -1,32 +1,72 @@
-<div id="<%= dom_id(invitation, :card) %>" class="card bg-main p-3 flex items-center gap-4">
-  <div class="flex items-center gap shrink-0">
-    <% if invitation.event.starts_at <= Time.current %>
-      <%= check_box_tag "invitation_ids[]", invitation.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
-    <% else %>
-      <div class="flex items-center justify-center text-subtle opacity-50" style="inline-size: 1.25rem; block-size: 1.25rem;">
-        <span class="icon icon--clock" aria-hidden="true"></span>
-      </div>
-    <% end %>
-    <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2.5rem; inline-size: 2.5rem;">
-      <span class="font-semibold"><%= invitation.contact.full_name.split.first(2).map(&:first).join.upcase %></span>
-    </div>
-  </div>
-  <div class="flex flex-col grow min-i-0 gap-1">
-    <div class="flex items-center justify-between gap-2">
-      <div class="flex flex-col min-w-0">
-        <span class="font-semibold text-sm truncate"><%= invitation.contact.full_name %></span>
-        <span class="text-xs text-subtle truncate"><%= invitation.contact.email %></span>
-      </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <% status_color = invitation.attended? ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800" %>
-        <span class="<%= status_color %> pi-2 pb-1 rounded-full text-xs font-medium capitalize"><%= invitation.status %></span>
-        <%= link_to edit_invitation_path(invitation), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
-          <span class="icon icon--pen" aria-hidden="true"></span>
-        <% end %>
+<div id="<%= dom_id(invitation, :card) %>" class="card bg-main p-3 flex flex-col gap-3">
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap shrink-0">
+      <% if invitation.event.starts_at <= Time.current %>
+        <%= check_box_tag "invitation_ids[]", invitation.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
+      <% else %>
+        <div class="flex items-center justify-center text-subtle opacity-50" style="inline-size: 1.25rem; block-size: 1.25rem;">
+          <span class="icon icon--clock" aria-hidden="true"></span>
+        </div>
+      <% end %>
+      <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2.5rem; inline-size: 2.5rem;">
+        <span class="font-semibold"><%= invitation.contact.full_name.split.first(2).map(&:first).join.upcase %></span>
       </div>
     </div>
-    <% if invitation.notes.present? %>
-      <div class="text-xs text-subtle truncate"><%= invitation.notes.truncate(100) %></div>
-    <% end %>
+    <div class="flex flex-col grow gap-1" style="min-inline-size: 0">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex flex-col" style="min-inline-size: 0">
+          <span class="font-semibold text-sm" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= invitation.contact.full_name %></span>
+          <span class="text-xs text-subtle" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= invitation.contact.email %></span>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <% status_color = invitation.attended? ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800" %>
+          <span class="<%= status_color %> pi-2 pb-1 rounded-full text-xs font-medium capitalize"><%= invitation.status %></span>
+          <%= link_to edit_invitation_path(invitation), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
+            <span class="icon icon--pen" aria-hidden="true"></span>
+          <% end %>
+        </div>
+      </div>
+      <% if invitation.notes.present? %>
+        <div class="text-xs text-subtle" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= invitation.notes.truncate(100) %></div>
+      <% end %>
+    </div>
   </div>
+
+  <% if invitation.interaction_logs.any? %>
+    <div class="border-t border-main">
+      <% invitation.interaction_logs.order(created_at: :desc).limit(2).each do |log| %>
+        <div class="flex items-start gap-0 p-4 border-b border-main last:border-0 transition">
+          <div class="flex flex-col gap-1 i-full" style="min-inline-size: 0">
+            <div class="flex items-center justify-between gap-2" style="flex-wrap: wrap">
+              <div class="flex items-center gap-2" style="min-inline-size: 0">
+                <span class="text-subtle shrink-0">—</span>
+                <span class="font-semibold text-sm text-emerald-600 shrink-0"><%= log.user.full_name %></span>
+                <span class="text-xs text-subtle shrink-0">followed up with</span>
+                <%= link_to log.contact.full_name, contact_path(log.contact), class: "font-semibold text-sm text-emerald-600 hover:underline", style: "overflow: hidden; text-overflow: ellipsis; white-space: nowrap;", data: { turbo_frame: "_top" } %>
+              </div>
+              <span class="text-xs text-subtle shrink-0"><%= time_ago_in_words(log.created_at) %> ago</span>
+            </div>
+            <div class="flex items-start justify-between gap-2 mbs-1">
+              <div class="text-sm text-primary" style="white-space: pre-wrap"><%= log.note %></div>
+              <% if log.user == current_user %>
+                <div class="flex gap-1 shrink-0">
+                  <%= link_to edit_interaction_log_path(log), class: "btn btn--icon btn--subtle", style: "block-size: 1.5rem; inline-size: 1.5rem;", data: { turbo_frame: "_top" } do %>
+                    <span class="icon icon--pen" style="--icon-size: 0.75rem" aria-hidden="true"></span>
+                  <% end %>
+                  <%= button_to interaction_log_path(log), method: :delete, class: "btn btn--icon btn--subtle", style: "block-size: 1.5rem; inline-size: 1.5rem;", data: { turbo_confirm: "Delete this log?" } do %>
+                    <span class="icon icon--trash-2" style="--icon-size: 0.75rem" aria-hidden="true"></span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <% if invitation.interaction_logs.count > 2 %>
+        <div class="p-3 pbs-0">
+          <%= link_to "View all →", contact_path(invitation.contact), class: "text-xs text-emerald-600 hover:underline font-medium", data: { turbo_frame: "_top" } %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>

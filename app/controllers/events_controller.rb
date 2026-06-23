@@ -37,14 +37,15 @@ class EventsController < DashboardsController
   end
 
   def show
-    base_invitations = @event.invitations.includes(:contact, :event)
+    base_invitations = @event.invitations.includes(:contact, :event, interaction_logs: :user)
     @invitations_search = base_invitations.ransack(params[:q])
     filtered_invitations = @invitations_search.result
 
     raw_counts = @event.invitations.group(:status).count
     @stats = {
       total: raw_counts.values.sum,
-      attended: raw_counts["attended"] || 0
+      attended: raw_counts["attended"] || 0,
+      declined: raw_counts["declined"] || 0
     }
 
     @pagy, @invitations = pagy(filtered_invitations.order("contacts.first_name ASC"))
@@ -52,8 +53,6 @@ class EventsController < DashboardsController
     @new_invitation = @event.invitations.build
     invited_contact_ids = @event.invitations.select(:contact_id)
     @available_contacts = Current.account.contacts.where.not(id: invited_contact_ids).order(:first_name)
-
-    @event_logs = @event.interaction_logs.includes(:user, :contact).order(created_at: :desc)
   end
 
   def new
