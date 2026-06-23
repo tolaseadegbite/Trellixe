@@ -14,7 +14,7 @@
         <%= link_to task.contact.full_name, contact_path(task.contact), class: "font-semibold text-sm text-primary hover:underline truncate", data: { turbo_frame: "_top" } %>
         <span class="text-xs text-subtle truncate"><%= task.event.name %></span>
       </div>
-      <%= link_to new_follow_up_task_interaction_log_path(task), class: "btn btn--primary shrink-0", data: { turbo_frame: "_top" } do %>
+      <%= link_to new_follow_up_task_interaction_log_path(task), class: "btn btn--primary shrink-0", data: { turbo_frame: "modal" } do %>
         Log it
       <% end %>
     </div>

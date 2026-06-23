@@ -1,5 +1,16 @@
-<%= turbo_stream.remove [@follow_up_task, @pending_follow_up] %>
+<%= turbo_stream.remove @follow_up_task %>
 
-<%#= turbo_stream.remove "modal" %>
+<%= turbo_stream.replace dom_id(@follow_up_task, :past) do %>
+  <%= render "follow_up_tasks/past_task", task: @follow_up_task %>
+<% end %>
+
+<% invitation = @follow_up_task.invitation %>
+<%= turbo_stream.prepend dom_id(invitation, :logs) do %>
+  <%= render "log_invitation_row", log: @interaction_log, prefix: :desktop %>
+<% end %>
+
+<%= turbo_stream.prepend dom_id(invitation, :logs_mobile) do %>
+  <%= render "log_invitation_row", log: @interaction_log, prefix: :mobile %>
+<% end %>
 
 <%= turbo_stream.prepend "flash", partial: "shared/flash", locals: { notice: "Follow-up successfully logged!" } %>

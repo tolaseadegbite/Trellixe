@@ -1,36 +1,8 @@
 <% content_for :title, "Log Follow-Up" %>
 
-<% content_for :page_header do %>
-  <div class="flex gap-2 items-center">
-    <%= link_to "javascript:history.back()", class: "flex items-center text-subtle hover:text-primary no-underline" do %>
-      <span class="icon icon--chevron-left" style="--icon-size: 1.25rem" aria-hidden="true"></span>
-    <% end %>
-    <h4 class="font-semibold">New Interaction Log</h4>
+<%= render "shared/modal" do %>
+  <div data-action="turbo:submit-end->modal#submitEnd">
+    <h2 class="font-semibold text-2xl mbe-4">Log Follow-Up with <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact), class: "text-link", data: { turbo_frame: "_top" } %></h2>
+    <%= render "form", interaction_log: @interaction_log, follow_up_task: @follow_up_task %>
   </div>
 <% end %>
-
-<div class="p-4">
-  <h2 class="text-2xl font-semibold mbe-4">
-    Log Follow-Up with <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact.id), data: { turbo_frame: "_top" }, class: "text-link" %>
-  </h2>
-
-  <div class="border rounded-md p-4 mbe-6 bg-main">
-    <h3 class="text-base mbe-2">Context for your outreach:</h3>
-    <div class="text-sm text-subtle flex flex-col gap">
-      <p><strong>How you met:</strong> <%= @interaction_log.contact.how_we_met %></p>
-      <% if @follow_up_task.invitation.notes.present? %>
-        <p><strong>Notes from the event:</strong> <%= @follow_up_task.invitation.notes %></p>
-      <% end %>
-    </div>
-  </div>
-
-  <%= form_with(model: [@follow_up_task, @interaction_log], data: { turbo_frame: "_top" }) do |form| %>
-    <div class="flex flex-col items-start gap-half mbe-4">
-      <%= form.label :note, "How did it go?", class: "text-base" %>
-      <%= form.text_area :note, rows: 5, class: "input i-full", placeholder: "e.g., 'Called them, had a great chat...'" %>
-    </div>
-    <div class="flex justify-end gap">
-      <%= form.submit "Save Log and Complete Task", class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50" %>
-    </div>
-  <% end %>
-</div>

@@ -1,26 +1,8 @@
 <% content_for :title, "Edit Log" %>
 
-<% content_for :page_header do %>
-  <div class="flex gap-2 items-center">
-    <%= link_to "javascript:history.back()", class: "flex items-center text-subtle hover:text-primary no-underline" do %>
-      <span class="icon icon--chevron-left" style="--icon-size: 1.25rem" aria-hidden="true"></span>
-    <% end %>
-    <h4 class="font-semibold">Edit Interaction Log</h4>
+<%= render "shared/modal" do %>
+  <div data-action="turbo:submit-end->modal#submitEnd">
+    <h2 class="font-semibold text-2xl mbe-4">Edit Log</h2>
+    <%= render "form", interaction_log: @interaction_log %>
   </div>
 <% end %>
-
-<div class="p-4">
-  <h2 class="text-2xl font-semibold mbe-4">
-    Edit Log for <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact), data: { turbo_frame: "_top" }, class: "text-link" %>
-  </h2>
-
-  <%= form_with(model: @interaction_log, data: { turbo_frame: "_top" }) do |form| %>
-    <div class="flex flex-col items-start gap-half mbe-4">
-      <%= form.label :note, "Note", class: "text-base" %>
-      <%= form.text_area :note, rows: 5, class: "input i-full" %>
-    </div>
-    <div class="flex justify-end gap">
-      <%= form.submit "Update Log", class: "btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50" %>
-    </div>
-  <% end %>
-</div>

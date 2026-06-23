@@ -24,10 +24,10 @@
 
         <%# Edit/Delete actions — only for the creator %>
         <% if interaction_log.user == current_user %>
-          <%= link_to edit_interaction_log_path(interaction_log), class: "btn btn--icon btn--subtle", data: { turbo_frame: "_top" } do %>
+          <%= link_to edit_interaction_log_path(interaction_log), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
             <span class="icon icon--pen" aria-hidden="true"></span>
           <% end %>
-          <%= button_to interaction_log_path(interaction_log), method: :delete, class: "btn btn--icon btn--subtle", data: { turbo_confirm: "Delete this log?" } do %>
+          <%= link_to confirm_delete_interaction_log_path(interaction_log), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
             <span class="icon icon--trash-2" aria-hidden="true"></span>
           <% end %>
         <% end %>

@@ -1,0 +1,11 @@
+<% content_for :title, "Delete Log" %>
+
+<%= render "shared/modal" do %>
+  <div data-action="turbo:submit-end->modal#submitEnd">
+    <h2 class="font-semibold text-2xl mbe-4">Delete this log?</h2>
+    <p class="text-sm text-subtle mbe-4">This action cannot be undone.</p>
+    <div class="flex justify-end gap">
+      <%= button_to "Delete", interaction_log_path(@interaction_log), method: :delete, class: "btn btn--negative", form: { data: { turbo_frame: "_top" } } %>
+    </div>
+  </div>
+<% end %>

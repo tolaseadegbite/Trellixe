@@ -1,7 +1,7 @@
 class InteractionLogsController < DashboardsController
   before_action :set_follow_up_task, only: [ :new, :create ]
-  before_action :set_interaction_log, only: [ :edit, :update, :destroy ]
-  before_action :authorize_owner!, only: [ :edit, :update, :destroy ]
+  before_action :set_interaction_log, only: [ :edit, :update, :destroy, :confirm_delete ]
+  before_action :authorize_owner!, only: [ :edit, :update, :destroy, :confirm_delete ]
 
   def new
     @interaction_log = @follow_up_task.interaction_logs.build(
@@ -11,6 +11,9 @@ class InteractionLogsController < DashboardsController
   end
 
   def edit
+  end
+
+  def confirm_delete
   end
 
   def create
@@ -26,26 +29,33 @@ class InteractionLogsController < DashboardsController
 
       mark_related_notifications_read
 
-      # format.turbo_stream
+      format.turbo_stream
       format.html { redirect_to follow_up_tasks_path, notice: "Follow-up successfully logged!" }
 
     rescue ActiveRecord::RecordInvalid
-      # format.turbo_stream { render :new, status: :unprocessable_entity }
+      format.turbo_stream { render :new, status: :unprocessable_entity }
       format.html { render :new, status: :unprocessable_entity }
     end
   end
 
   def update
-    if @interaction_log.update(interaction_log_params)
-      redirect_back_or_to contact_path(@interaction_log.contact), notice: "Log updated."
-    else
-      render :edit, status: :unprocessable_entity
+    respond_to do |format|
+      if @interaction_log.update(interaction_log_params)
+        format.turbo_stream
+        format.html { redirect_back_or_to contact_path(@interaction_log.contact), notice: "Log updated." }
+      else
+        format.turbo_stream { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @interaction_log.destroy!
-    redirect_back_or_to contact_path(@interaction_log.contact), notice: "Log deleted."
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_back_or_to contact_path(@interaction_log.contact), notice: "Log deleted." }
+    end
   end
 
   private

@@ -103,7 +103,11 @@ Rails.application.routes.draw do
   end
 
   resources :follow_up_tasks, only: [ :index ] do
-    resources :interaction_logs, only: [ :new, :create, :edit, :update, :destroy ], shallow: true
+    resources :interaction_logs, only: [ :new, :create, :edit, :update, :destroy ], shallow: true do
+      member do
+        get :confirm_delete
+      end
+    end
 
     # Bulk operations
     collection do

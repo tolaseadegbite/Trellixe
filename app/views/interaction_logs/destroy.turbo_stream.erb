@@ -1,0 +1,12 @@
+<%= turbo_stream.remove @interaction_log %>
+<%= turbo_stream.remove dom_id(@interaction_log, :desktop) %>
+<%= turbo_stream.remove dom_id(@interaction_log, :mobile) %>
+<%= turbo_stream.remove dom_id(@interaction_log, :past) %>
+
+<% if @interaction_log.follow_up_task.interaction_logs.none? %>
+  <%= turbo_stream.replace dom_id(@interaction_log.follow_up_task, :past) do %>
+    <%= render "follow_up_tasks/past_task", task: @interaction_log.follow_up_task %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.prepend "flash", partial: "shared/flash", locals: { notice: "Log deleted." } %>

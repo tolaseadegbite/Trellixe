@@ -1,0 +1,16 @@
+<div id="<%= dom_id(log, :past) %>" class="flex items-start justify-between gap-2 mbs-1">
+  <div class="text-sm text-primary whitespace-pre-wrap"><%= log.note %></div>
+  <div class="flex items-center gap-2 shrink-0">
+    <% if log.user == current_user %>
+      <div class="flex gap-1 shrink-0">
+        <%= link_to edit_interaction_log_path(log), class: "btn btn--icon btn--subtle", style: "block-size: 1.5rem; inline-size: 1.5rem;", data: { turbo_frame: "modal" } do %>
+          <span class="icon icon--pen" style="--icon-size: 0.75rem" aria-hidden="true"></span>
+        <% end %>
+        <%= link_to confirm_delete_interaction_log_path(log), class: "btn btn--icon btn--subtle", style: "block-size: 1.5rem; inline-size: 1.5rem;", data: { turbo_frame: "modal" } do %>
+          <span class="icon icon--trash-2" style="--icon-size: 0.75rem" aria-hidden="true"></span>
+        <% end %>
+      </div>
+    <% end %>
+    <%= link_to "Log follow-up", new_follow_up_task_interaction_log_path(log.follow_up_task), class: "btn btn--subtle text-xs", data: { turbo_frame: "modal" } %>
+  </div>
+</div>
