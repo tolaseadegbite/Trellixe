@@ -2,7 +2,7 @@
 
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
-    <h2 class="font-semibold text-2xl mbe-4">Log Follow-Up with <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact), class: "text-link", data: { turbo_frame: "_top" } %></h2>
+    <h2 class="font-semibold text-2xl mbe-4">Log Follow-Up with <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact), class: "text-emerald-500", data: { turbo_frame: "_top" } %></h2>
     <%= render "form", interaction_log: @interaction_log, follow_up_task: @follow_up_task %>
   </div>
 <% end %>

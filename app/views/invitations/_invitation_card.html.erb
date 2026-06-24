@@ -41,12 +41,12 @@
         <% end %>
       </div>
       <% if invitation.interaction_logs.count > 2 %>
-        <div class="p-3 pbs-0" style="margin-inline-start: 5em;">
+        <div class="p-3 pbs-0">
           <%= link_to "View all →", contact_path(invitation.contact), class: "text-xs text-emerald-600 hover:underline font-medium", data: { turbo_frame: "_top" } %>
         </div>
       <% end %>
       <% if task %>
-        <div class="p-3 pbs-0" style="margin-inline-start: 5em;">
+        <div class="p-3 pbs-0">
           <%= link_to "Log follow-up", new_follow_up_task_interaction_log_path(task), class: "text-xs text-emerald-600 hover:underline font-medium", data: { turbo_frame: "modal" } %>
         </div>
       <% end %>

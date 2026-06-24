@@ -9,7 +9,7 @@
   --color-border: light-dark(var(--zinc-200), var(--zinc-700));
   --color-border-dark: light-dark(var(--zinc-400), var(--zinc-600));
   --color-selected: light-dark(var(--sky-100), var(--sky-950));
-  --color-selected-dark: light-dark(var(--blue-300), var(--blue-800));
+  --color-selected-dark: light-dark(var(--emerald-300), var(--emerald-700));
   --color-highlight: light-dark(var(--yellow-200), var(--yellow-900));
 
   --color-primary: light-dark(var(--emerald-600), var(--emerald-400));

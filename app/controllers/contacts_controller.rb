@@ -6,8 +6,7 @@ class ContactsController < DashboardsController
     @search = records.ransack(params[:q])
     @pagy, @contacts = pagy(@search.result)
     @filterable_events = Current.account.events.order(:name)
-    @bulk_event_options = Current.account.events
-                                 .where("starts_at >= ?", Time.current.beginning_of_day)
+    @bulk_event_options = Current.account.events.upcoming
                                  .order(starts_at: :asc)
                                  .map { |e| [ e.name, e.id ] }
   end

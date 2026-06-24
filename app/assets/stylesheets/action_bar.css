@@ -1,0 +1,21 @@
+.action-bar {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: calc(100% - 2rem);
+  max-inline-size: 600px;
+  transform: translateX(-50%) translateY(calc(100% + 2rem));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.action-bar.is-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}

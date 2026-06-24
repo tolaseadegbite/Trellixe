@@ -6,14 +6,14 @@
 
 <% content_for :header_action_buttons do %>
     <%= link_to new_contact_path,
-                  class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
+                  class: "btn btn--icon btn--primary",
                   data: { turbo_frame: "modal" } do %>
       <span class="icon icon--user-round-pen"></span>
     <% end %>
 <% end %>
 
 <div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
-  <%= link_to new_contact_path, class: "btn bg-blue-500 hover:bg-blue-600 text-gray-50 p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_contact_path, class: "btn p-5 btn--primary rounded-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--pen"></span>
   <% end %>
 </div>
@@ -45,8 +45,7 @@
 
       <div id="bulk_actions_bar">
         <div id="bulk_actions_bar_inner" data-check-all-target="actionBar" 
-            class="bg-black text-white p-2 rounded-md shadow-lg items-center justify-between border" 
-            style="position: fixed; display: none; bottom: 2rem; inline-size: calc(100% - 2rem); max-inline-size: 600px; left: 50%; transform: translateX(-50%); z-index: 10000;">
+            class="action-bar bg-black text-reversed p-2 rounded-md shadow-lg border">
           
           <div class="flex items-center gap">
             <span class="font-bold text-sm mis-2" data-check-all-target="count">0 selected</span>
@@ -59,23 +58,39 @@
               <%= form.select :event_id, 
                     @bulk_event_options, 
                     { prompt: "Select Event..." }, 
-                    class: "input cursor-pointer border-0", 
+                    class: "input cursor-pointer border-0 bg-gray-50", 
                     style: "min-inline-size: 140px; padding-block: 0.25rem;" %>
               
               <%= form.button "Add", 
                     formaction: bulk_assign_event_contacts_path, 
                     formmethod: :post,
-                    class: "btn bg-teal-600 hover:bg-teal-700 text-gray-50 font-semibold rounded-sm text-xs border-0",
+                    class: "btn btn--primary text-xs",
                     style: "padding: 0.25rem 0.75rem;" %>
             </div>
 
             <%# Delete Control %>
-            <%= form.button formaction: bulk_destroy_contacts_path, 
-                            formmethod: :delete,
-                            data: { turbo_confirm: "Delete selected contacts?" },
-                            class: "btn bg-red-600 hover:bg-red-700 text-gray-50 border-0 text-xs" do %>
-              <span class="icon icon--btn icon--trash-2"></span>
-            <% end %>
+            <div data-controller="dialog">
+              <button type="button" 
+                      class="btn bg-red-600 hover:bg-red-700 text-gray-50 border-0 text-xs"
+                      data-action="click->dialog#showModal"
+                      title="Delete selected contacts">
+                <span class="icon icon--btn icon--trash-2"></span>
+              </button>
+              <dialog class="dialog" data-dialog-target="content" style="--dialog-size: 450px;">
+                <button type="button" class="btn btn--plain dialog__close" data-action="click->dialog#close">
+                  <span class="icon icon--x" aria-hidden="true"></span>
+                  <span class="sr-only">Close</span>
+                </button>
+                <div class="dialog__content">
+                  <h2 class="font-semibold text-lg mbe-4">Delete selected contacts?</h2>
+                  <p class="text-sm text-subtle mbe-4">This will permanently delete the selected contacts. This action cannot be undone.</p>
+                  <div class="flex items-center justify-end gap">
+                    <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
+                    <button type="submit" formaction="<%= bulk_destroy_contacts_path %>" formmethod="delete" class="btn btn--negative" data-action="click->dialog#close">Continue</button>
+                  </div>
+                </div>
+              </dialog>
+            </div>
 
           </div>
         </div>
@@ -92,7 +107,7 @@
                 <th class="p-3"><%= sort_link(@search, :last_name, class: "flex items-center") %></th>
                 <th class="p-3"><%= sort_link(@search, :email, class: "flex items-center") %></th>
                 <th class="p-3"><%= sort_link(@search, :phone_number, class: "flex items-center") %></th>
-                <th class="p-3 text-end"></th>
+                <th class="p-3 text-end">ACTIONS</th>
               </tr>
             </thead>
             <tbody id="contacts-table">

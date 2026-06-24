@@ -10,15 +10,11 @@
   <%= turbo_stream.remove "card_contact_#{id}" %>
 <% end %>
 
-<%# 3. Hide the Action Bar (Since selection is cleared) %>
-<%# We simply replace the action bar container with its hidden state %>
-<%# Ensure your action bar div in index.html.erb has id="bulk_actions_bar" %>
-<%= turbo_stream.update "bulk_actions_bar" do %>
-  <div data-check-all-target="actionBar" 
-       class="fixed bg-black text-reversed p-4 rounded-md shadow-lg items-center justify-between" 
-       style="display: none; bottom: 2rem; inline-size: calc(100% - 2rem); max-inline-size: 600px; left: 50%; transform: translateX(-50%); z-index: 10000;">
-       <%# Content doesn't matter here as it is display:none %>
-  </div>
+<%# 3. Reset UI via Stimulus (uncheck boxes, hide action bar) %>
+<%= turbo_stream.append "contacts-bulk-form" do %>
+  <script>
+    document.getElementById("contacts-bulk-form").dispatchEvent(new CustomEvent("reset-bulk-ui"));
+  </script>
 <% end %>
 
 <%# 4. Optional: Update pagination or count if you want perfection %>

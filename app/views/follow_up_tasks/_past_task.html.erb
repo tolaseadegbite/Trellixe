@@ -1,5 +1,5 @@
 <div id="<%= dom_id(task, :past) %>" class="flex items-start gap-3 p-4 border-b border-main last:border-0 hover:bg-highlight transition">
-  <div class="flex flex-item-no-shrink items-center justify-center font-bold text-xs text-reversed rounded-full bg-teal-600"
+  <div class="flex flex-item-no-shrink items-center justify-center font-bold text-xs text-reversed rounded-full bg-black"
        style="inline-size: 2rem; block-size: 2rem;">
     <%= task.contact.full_name.split.first(2).map(&:first).join.upcase %>
   </div>

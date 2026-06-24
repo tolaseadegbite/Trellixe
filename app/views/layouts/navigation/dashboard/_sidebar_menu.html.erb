@@ -22,7 +22,7 @@
   <%# --- WORKSPACE SWITCHER --- %>
   <div contents class="mbe-6" data-controller="popover" data-popover-placement-value="bottom-start" data-action="click@window->popover#clickOutside">
     <%= button_tag type: "button", class: "btn sidebar-menu__button workspace-button i-full", data: { action: "click->popover#toggle", popover_target: "trigger" } do %>
-      <div class="flex flex-item-no-shrink overflow-hidden rounded-md bg-blue-500">
+      <div class="flex flex-item-no-shrink overflow-hidden rounded-md bg-emerald-500">
         <div class="flex items-center justify-center font-bold text-gray-50 text-sm" style="inline-size: 2.25rem; block-size: 2.25rem;">
           <%= account_initials(Current.account) %> 
         </div>
@@ -45,7 +45,7 @@
             
             <% if is_active %>
               <%# Non-clickable Active State %>
-              <div class="btn menu__item justify-between i-full bg-blue-700 hover:bg-blue-700 text-gray-50" style="cursor: default;" role="menuitem">
+              <div class="btn menu__item justify-between i-full bg-emerald-700 hover:bg-emerald-700 text-gray-50" style="cursor: default;" role="menuitem">
                 <div class="flex items-center gap-2">
                   <div class="p-1 rounded-md flex items-center justify-center text-xs font-bold bg-black text-reversed" style="inline-size: 1.7rem; block-size: 1.7rem;">
                     <%= account_initials(account) %>

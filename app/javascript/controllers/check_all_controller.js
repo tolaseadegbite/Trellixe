@@ -51,13 +51,13 @@ export default class extends Controller {
     const selectedCheckboxes = this.dependantTargets.filter(it => it.checked)
     
     if (selectedCheckboxes.length > 0) {
-      this.actionBarTarget.style.display = "flex"
+      this.actionBarTarget.classList.add("is-visible")
       if (this.hasCountTarget) {
         const uniqueValues = new Set(selectedCheckboxes.map(it => it.value))
         this.countTarget.textContent = `${uniqueValues.size} selected`
       }
     } else {
-      this.actionBarTarget.style.display = "none"
+      this.actionBarTarget.classList.remove("is-visible")
     }
   }
 
