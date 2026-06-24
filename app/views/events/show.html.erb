@@ -73,6 +73,9 @@
     <div class="mbe-4">
       <h2 class="font-bold text-lg mbe-2">Guest List</h2>
       
+      <%= render "invitations/search_form" %>
+      
+      <%= turbo_frame_tag "guest_list" do %>
       <%# WRAP TABLE IN FORM %>
       <%= form_with url: bulk_update_invitations_path, method: :patch, id: "invitations-bulk-form", data: { controller: "check-all", action: "reset-bulk-ui->check-all#deselectAll" } do |form| %>
 
@@ -154,6 +157,7 @@
         </div>
 
       <% end %> <%# End Form %>
+    <% end %> <%# End guest_list turbo_frame %>
     </div>
     
   </div>
