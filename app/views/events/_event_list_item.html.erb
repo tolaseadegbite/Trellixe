@@ -28,6 +28,17 @@
             </div>
         </div>
 
+        <%# Status Badge %>
+        <div class="mbe-1">
+            <span class="text-xs font-medium rounded-full pi-2 pb-1 
+              <%= event.ends_at < Time.current ? 'bg-gray-100 text-gray-500' :
+                 event.starts_at > Time.current ? 'bg-emerald-100 text-emerald-700' :
+                 'bg-amber-100 text-amber-700' %>">
+              <%= event.ends_at < Time.current ? 'Past' :
+                  event.starts_at > Time.current ? 'Upcoming' : 'Live' %>
+            </span>
+        </div>
+
         <%# Date & Time %>
         <div class="flex items-center gap-half text-sm text-subtle">
             <span class="icon icon--calendar-range text-subtle" aria-hidden="true"></span>
@@ -39,6 +50,9 @@
                 <% else %>
                     <%= event.starts_at.strftime("%b %d") %> - <%= event.ends_at.strftime("%b %d") %>
                 <% end %>
+                <span class="mis-1 text-xs font-medium <%= event.starts_at > Time.current ? 'text-emerald-600' : 'text-subtle' %>">
+                    <%= event.starts_at > Time.current ? "in #{distance_of_time_in_words(Time.current, event.starts_at)}" : "#{time_ago_in_words(event.ends_at)} ago" %>
+                </span>
             </span>
         </div>
     </div>
@@ -60,6 +74,10 @@
                 </div>
             <% end %>
 
+        </div>
+    <% else %>
+        <div class="bg-shade border rounded-md pi-3 pb-2 flex items-center gap-3 mbs-2">
+            <span class="text-xs text-subtle">No guests yet — invite contacts</span>
         </div>
     <% end %>
 
