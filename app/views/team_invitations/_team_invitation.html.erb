@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(team_invitation) %>" class="border-b border-main last:border-0 hover:bg-highlight transition">
+<tr id="<%= dom_id(team_invitation) %>" class="border-b border-main last:border-0">
   <td class="p-3 font-medium text-primary">
     <%= team_invitation.email %>
   </td>
@@ -23,9 +23,7 @@
         <% end %>
 
         <%# Revoke %>
-        <%= button_to team_invitation_path(team_invitation), method: :delete, class: "btn text-xs text-negative hover:underline", form: { data: { turbo_confirm: "Revoke this invitation?" } } do %>
-          Revoke
-        <% end %>
+        <%= button_to "Revoke", team_invitation_path(team_invitation), method: :delete, class: "btn btn--negative text-xs", form: { data: { turbo_confirm: "Revoke this invitation?" } } %>
       </div>
     <% end %>
   </td>

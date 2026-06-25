@@ -1,12 +1,13 @@
 <div id="<%= dom_id(interaction_log) %>" class="flex gap-3 p-4 border-be hover:bg-surface transition">
   <%# 1. Avatar of the Team Member who logged it %>
-  <div class="flex flex-item-no-shrink items-center justify-center font-bold text-xs text-reversed rounded-full bg-teal-600" 
+  <div class="flex flex-item-no-shrink rounded-full overflow-hidden bg-black mbs-2" 
        style="inline-size: 2rem; block-size: 2rem;"
        title="Logged by <%= interaction_log.user.full_name %>">
-    <%= interaction_log.user.initials %>
+    <%= image_tag user_avatar_url(interaction_log.user, size: 32), size: 32, class: "rounded-full", alt: interaction_log.user.full_name %>
   </div>
 
   <div class="flex flex-col gap-1 i-full">
+    <%# Header: User + Timestamp | Edit/Delete %>
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
         <span class="font-semibold text-sm"><%= interaction_log.user.full_name %></span>
@@ -14,15 +15,7 @@
         <span class="text-xs text-subtle"><%= time_ago_in_words(interaction_log.created_at) %> ago</span>
       </div>
 
-      <div class="flex items-center gap-2">
-        <%# Context Badge (e.g. "Lagos Tech Summit") %>
-        <% if interaction_log.follow_up_task&.invitation&.event %>
-          <span class="text-xs bg-shade pi-2 pb-1 rounded-md border border-main text-subtle">
-            <%= interaction_log.follow_up_task.invitation.event.name %>
-          </span>
-        <% end %>
-
-        <%# Edit/Delete actions — only for the creator %>
+      <div class="flex items-center gap-2 shrink-0">
         <% if interaction_log.user == current_user %>
           <%= link_to edit_interaction_log_path(interaction_log), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
             <span class="icon icon--pen" aria-hidden="true"></span>
@@ -34,7 +27,14 @@
       </div>
     </div>
 
-    <%# The Note Content %>
+    <%# Event Badge (own row) %>
+    <% if interaction_log.follow_up_task&.invitation&.event %>
+      <%= link_to event_path(interaction_log.follow_up_task.invitation.event), class: "text-xs bg-emerald-50 text-emerald-700 pi-2 pb-1 rounded-md border border-emerald-200 hover:underline self-start", data: { turbo_frame: "_top" } do %>
+        <%= interaction_log.follow_up_task.invitation.event.name %>
+      <% end %>
+    <% end %>
+
+    <%# Note %>
     <div class="text-sm text-primary whitespace-pre-wrap"><%= interaction_log.note %></div>
   </div>
 </div>

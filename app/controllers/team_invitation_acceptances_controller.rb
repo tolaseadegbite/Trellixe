@@ -60,6 +60,7 @@ class TeamInvitationAcceptancesController < ApplicationController
     admins.each do |admin|
       TeamNotifier::MemberJoined.with(
         account_id: account.id,
+        user_id: user.id,
         user_name: user.full_name,
         account_name: account.name
       ).deliver_later(admin)

@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(task) %>" class="border-b border-main last:border-0 hover:bg-highlight transition">
+<tr id="<%= dom_id(task) %>" class="border-b border-main last:border-0">
   <td class="p-3">
     <%= check_box_tag "task_ids[]", task.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
   </td>
@@ -8,7 +8,7 @@
   </td>
 
   <td class="p-3 text-sm text-subtle">
-    <%= task.event.name %>
+    <%= link_to task.event.name, event_path(task.event), class: "text-primary hover:underline", data: { turbo_frame: "_top" } %>
   </td>
 
   <td class="p-3 text-sm <%= task.due_at < Time.current ? 'text-red-600 font-bold' : 'text-subtle' %>">

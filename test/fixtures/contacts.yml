@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  creator: lazaro_nixon
   owner: one
   owner_type: Owner
   first_name: MyString
@@ -9,6 +10,7 @@ one:
   phone_number: MyString
 
 two:
+  creator: lazaro_nixon
   owner: two
   owner_type: Owner
   first_name: MyString

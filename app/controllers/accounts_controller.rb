@@ -61,7 +61,7 @@ class AccountsController < DashboardsController
     target_account = Current.user.accounts.find_by_public_id!(params[:id])
 
     session[:current_account_id] = target_account.id
-    redirect_back fallback_location: root_path, notice: "Switched to #{target_account.name}"
+    redirect_to dashboard_path, notice: "Switched to #{target_account.name}"
   end
 
   private

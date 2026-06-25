@@ -22,4 +22,17 @@ module ApplicationHelper
   def today_class(date)
     "bg-sky-300" if today?(date)
   end
+
+  def user_avatar_url(user, size: 80)
+    if user.avatar.attached? && user.avatar.attachment&.persisted?
+      url_for(user.avatar)
+    else
+      user.gravatar_url(size: size)
+    end
+  end
+
+  def gravatar_url(email, size: 80)
+    hash = Digest::MD5.hexdigest(email.strip.downcase)
+    "https://www.gravatar.com/avatar/#{hash}?s=#{size}&d=mp"
+  end
 end

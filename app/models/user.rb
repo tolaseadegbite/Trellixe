@@ -24,6 +24,9 @@ class User < ApplicationRecord
   has_many :user_activities, dependent: :destroy
   has_many :web_push_subscriptions, dependent: :destroy
 
+  # Avatar
+  has_one_attached :avatar
+
   # Notifications
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
 
@@ -31,7 +34,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 12 }
   validates :password, not_pwned: { message: "might easily be guessed" }
-  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) + ActiveSupport::TimeZone::MAPPING.values }, allow_nil: true
+  validate :valid_time_zone
 
   normalizes :email, with: -> { _1.strip.downcase }
 
@@ -48,11 +51,23 @@ class User < ApplicationRecord
   end
 
   def initials
-    # Simple fallback if name is just one word or nil
     (name || email).first.upcase
   end
 
+  def gravatar_url(size: 80)
+    hash = Digest::MD5.hexdigest(email.strip.downcase)
+    "https://www.gravatar.com/avatar/#{hash}?s=#{size}&d=mp"
+  end
+
   private
+
+  def valid_time_zone
+    return if time_zone.blank?
+
+    if ActiveSupport::TimeZone[time_zone].nil?
+      errors.add(:time_zone, "is not included in the list")
+    end
+  end
 
   def create_personal_workspace
     # Only create if they didn't join via an invitation

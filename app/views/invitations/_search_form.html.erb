@@ -39,7 +39,7 @@
         <%# --- Form Actions --- %>
         <div class="flex items-center gap">
             <%#= f.submit "Search", class: "btn bg-blue-600 hover:bg-blue-700 border-0 text-gray-50" %>
-            <%= link_to "Reset", event_path(@event), class: "btn btn--primary i-full" %>
+            <%= link_to "Reset", event_path(@event), class: "btn btn--primary i-full", data: { turbo_frame: "guest_list" } %>
         </div>
 
     </div>

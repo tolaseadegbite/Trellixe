@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(contact, :table_row) %>" class="border-b border-main last:border-0 hover:bg-highlight transition">
+<tr id="<%= dom_id(contact, :table_row) %>" class="border-b border-main last:border-0">
   <td class="p-3">
     <%= check_box_tag "contact_ids[]", contact.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
   </td>
@@ -10,7 +10,7 @@
         </span>
       </div>
 
-      <span class="overflow-ellipsis"><%= contact.first_name.titleize %></span>
+      <%= link_to contact.first_name.titleize, contact, class: "overflow-ellipsis text-primary hover:underline", data: { turbo_frame: "_top" } %>
     </div>
   </td>
   <td class="p-3 text-sm text-subtle">

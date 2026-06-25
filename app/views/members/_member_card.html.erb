@@ -1,17 +1,22 @@
 <div id="<%= dom_id membership, :mobile_card %>" class="card p-2 border rounded-md shadow-sm bg-main flex flex-col gap-3">
   <%# Card Header: User & Role %>
   <div class="flex items-start justify-between">
-    <div>
-      <div class="font-semibold leading-tight">
-        <%= membership.user.name.presence || membership.user.email %>
+    <div class="flex items-center gap-3">
+      <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black" style="inline-size: 2rem; block-size: 2rem;">
+        <%= image_tag user_avatar_url(membership.user, size: 32), size: 32, class: "rounded-full", alt: membership.user.name %>
       </div>
-      <span class="text-sm text-subtle"><%= membership.user.email %></span>
+      <div>
+        <div class="font-semibold leading-tight">
+          <%= membership.user.name.presence || membership.user.email %>
+        </div>
+        <span class="text-sm text-subtle"><%= membership.user.email %></span>
+      </div>
     </div>
 
     <%# --- ROLE SECTION: Editable if Admin, Static if not --- %>
     <% if current_role == "admin" %>
        <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" } do |f| %>
-          <% select_class = membership.admin? ? "text-blue-700 border-blue-700 bg-blue-50" : "text-subtle bg-shade border-main" %>
+          <% select_class = membership.admin? ? "text-emerald-700 border-emerald-200 bg-emerald-50" : "text-subtle bg-shade border-main" %>
           <%= f.select :role, 
               Membership.roles.keys.map { |r| [r.humanize, r] }, 
               {}, 

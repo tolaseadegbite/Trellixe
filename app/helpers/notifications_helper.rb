@@ -7,9 +7,9 @@ module NotificationsHelper
     case event.type
     when "TeamNotifier::RoleChanged"
       if recipient.id == params[:user_id]
-        "Your role in #{params[:account_name]} was changed to #{params[:role].humanize}."
+        "Your role in #{params[:account_name]} was changed to #{params[:role].humanize} by #{params[:actor_name]}."
       else
-        "#{params[:user_name]}'s role was changed to #{params[:role].humanize}."
+        "#{params[:user_name]}'s role was changed to #{params[:role].humanize} by #{params[:actor_name]}."
       end
 
     when "TeamNotifier::MemberRemoved"
@@ -61,23 +61,36 @@ module NotificationsHelper
     end
   end
 
+  def notification_avatar_url(notification)
+    event_type = notification.event.type
+    return nil if event_type == "TeamNotifier::RoleChanged"
+
+    params = notification.event.params
+    if params[:user_id].present?
+      user = User.find_by(id: params[:user_id])
+      return user_avatar_url(user) if user
+    end
+    nil
+  end
+
+  def notification_actor_avatar_url(notification)
+    params = notification.event.params
+    if params[:actor_id].present?
+      actor = User.find_by(id: params[:actor_id])
+      return user_avatar_url(actor) if actor
+    end
+    nil
+  end
+
   def notification_avatar_initials(notification)
+    event_type = notification.event.type
     params = notification.event.params
     if params[:task].present?
       params[:task].contact.full_name.split.first(2).map(&:first).join.upcase
-    elsif params[:user_name].present?
+    elsif params[:user_name].present? && event_type != "TeamNotifier::RoleChanged"
       params[:user_name].split.first(2).map(&:first).join.upcase
     else
-      notification.account&.name&.first(2)&.upcase || "??"
-    end
-  end
-
-  def notification_avatar_style(notification)
-    params = notification.event.params
-    if params[:task].present? || params[:user_name].present?
-      "rounded-full bg-teal-600"
-    else
-      "rounded-md bg-black"
+      params[:account_name]&.split&.first(2)&.map(&:first)&.join&.upcase || notification.account&.name&.first(2)&.upcase || "??"
     end
   end
 end

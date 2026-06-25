@@ -17,15 +17,26 @@ class MembershipsController < DashboardsController
     end
 
     if @membership.update(role: new_role)
-      # Notify if changed
       if @membership.saved_change_to_role?
-        TeamNotifier::RoleChanged.with(
+        changed_user = @membership.user
+
+        # Notify the user whose role changed
+        notifier_params = {
           account_id: Current.account.id,
           account_name: Current.account.name,
-          user_id: @membership.user_id,
-          user_name: @membership.user.full_name,
+          user_id: changed_user.id,
+          user_name: changed_user.full_name,
+          actor_id: Current.user.id,
+          actor_name: Current.user.full_name,
           role: new_role
-        ).deliver_later(@membership.user)
+        }
+
+        TeamNotifier::RoleChanged.with(notifier_params).deliver_later(changed_user)
+
+        other_admins = Current.account.memberships.admin.where.not(user_id: changed_user.id).includes(:user).map(&:user)
+        other_admins.each do |admin|
+          TeamNotifier::RoleChanged.with(notifier_params).deliver_later(admin)
+        end
       end
 
       respond_to do |format|
@@ -62,6 +73,7 @@ class MembershipsController < DashboardsController
       admins.each do |admin|
         TeamNotifier::MemberLeft.with(
           account_id: account.id,
+          user_id: user_left.id,
           user_name: user_left.full_name,
           account_name: account.name
         ).deliver_later(admin)

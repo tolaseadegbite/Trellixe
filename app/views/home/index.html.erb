@@ -19,6 +19,9 @@
       <%= link_to "Change email address", edit_identity_email_path,
             class: "btn sidebar-menu__button",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
+      <%= link_to "Profile Photo", edit_identity_avatar_path,
+            class: "btn sidebar-menu__button",
+            data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
       <%#= link_to "Two-Factor Authentication", new_two_factor_authentication_profile_totp_path,
             class: "btn sidebar-menu__button",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
@@ -70,6 +73,7 @@
     <%= link_to "Change name", edit_identity_name_path, class: "btn sidebar-menu__button" %>
     <%= link_to "Change password", edit_password_path, class: "btn sidebar-menu__button" %>
     <%= link_to "Change email address", edit_identity_email_path, class: "btn sidebar-menu__button" %>
+    <%= link_to "Profile Photo", edit_identity_avatar_path, class: "btn sidebar-menu__button" %>
     <%#= link_to "Two-Factor Authentication", new_two_factor_authentication_profile_totp_path, class: "btn sidebar-menu__button" %>
     <%# if Current.user.otp_required_for_sign_in? %>
       <%#= link_to "Recovery Codes", two_factor_authentication_profile_recovery_codes_path, class: "btn sidebar-menu__button" %>

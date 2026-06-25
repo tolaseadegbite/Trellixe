@@ -47,3 +47,24 @@
   --badge-min-inline-size: var(--size-5);
   --badge-radius: var(--rounded-full);
 }
+
+.badge--attended {
+  --badge-background: var(--emerald-50);
+  --badge-border-color: var(--emerald-200);
+  --badge-color: var(--emerald-700);
+  --badge-radius: var(--rounded-full);
+}
+
+.badge--declined {
+  --badge-background: var(--red-50);
+  --badge-border-color: var(--red-200);
+  --badge-color: var(--red-700);
+  --badge-radius: var(--rounded-full);
+}
+
+.badge--invited {
+  --badge-background: var(--gray-100);
+  --badge-border-color: var(--gray-200);
+  --badge-color: var(--gray-700);
+  --badge-radius: var(--rounded-full);
+}

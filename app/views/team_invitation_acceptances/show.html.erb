@@ -6,8 +6,8 @@
      <%# --- SCENARIO A: LOGGED IN USER --- %>
      <div class="flex flex-col gap-4">
        <div class="p-4 bg-surface border border-main rounded-md flex items-center gap-3">
-         <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black text-reversed items-center justify-center font-bold text-xs" style="inline-size: 2rem; block-size: 2rem;">
-            <%= current_user.initials %>
+         <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black" style="inline-size: 2rem; block-size: 2rem;">
+            <%= image_tag user_avatar_url(current_user, size: 32), size: 32, class: "rounded-full", alt: current_user.name %>
          </div>
          <div class="flex flex-col">
            <span class="font-semibold text-sm">Signed in as <%= current_user.email %></span>
@@ -15,7 +15,7 @@
          </div>
        </div>
 
-       <%= button_to "Join Team", team_invitation_acceptance_path(token: @invitation.token), method: :put, class: "btn bg-blue-500 hover:bg-blue-600 border-0 i-full justify-center text-gray-50" %>
+       <%= button_to "Join Team", team_invitation_acceptance_path(token: @invitation.token), method: :put, class: "btn btn--primary i-full justify-center" %>
      </div>
 
   <% else %>
@@ -46,7 +46,7 @@
         <%= f.password_field :password, required: true, class: "input " %>
       </div>
 
-      <%= f.submit "Create Account & Join", class: "btn bg-blue-500 hover:bg-blue-600 border-0 i-full justify-center text-gray-50" %>
+      <%= f.submit "Create Account & Join", class: "btn btn--primary i-full justify-center" %>
     <% end %>
 
     <div class="mbs-4 text-sm text-center">

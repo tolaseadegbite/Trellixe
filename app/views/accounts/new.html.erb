@@ -21,7 +21,7 @@
         <%= link_to "Cancel", root_path, class: "btn" %>
         
         <%# turbo_frame: "_top" ensures the redirect to the new workspace reloads the full page context %>
-        <%= form.submit "Create Workspace", class: "btn bg-blue-900 border-0 text-gray-50 hover:bg-blue-700", data: { turbo_frame: "_top" } %>
+        <%= form.submit "Create Workspace", class: "btn btn--primary", data: { turbo_frame: "_top" } %>
       </div>
     <% end %>
   </div>

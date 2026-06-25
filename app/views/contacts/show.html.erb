@@ -33,7 +33,7 @@
         </div>
 
         <%= link_to edit_contact_path(@contact), class: "flex items-start", data: { turbo_frame: "modal" } do %>
-          <span class="btn btn--icon rounded-full bg-blue-600 hover:bg-blue-700 border-0 text-gray-50">
+          <span class="btn btn--icon rounded-full btn--primary">
             <span class="icon icon--pen" aria-hidden="true"></span>
           </span>
         <% end %>
@@ -55,8 +55,8 @@
           </div>
           <div class="flex items-center gap-2 border-t border-main pt-3 mt-1">
             <span class="text-xs text-subtle">Added by</span>
-            <div class="bg-black rounded-full flex items-center justify-center font-bold text-xs text-reversed" style="block-size: 1.5rem; inline-size: 1.5rem;">
-              <%= @contact.creator.initials %>
+            <div class="bg-black rounded-full" style="block-size: 1.5rem; inline-size: 1.5rem;">
+              <%= image_tag user_avatar_url(@contact.creator, size: 24), size: 24, class: "rounded-full", alt: @contact.creator.name %>
             </div>
             <span class="text-xs font-semibold"><%= @contact.creator.full_name %></span>
           </div>

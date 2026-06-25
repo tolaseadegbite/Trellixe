@@ -8,13 +8,13 @@
   <div class="show@md">
     <div class="flex gap items-center">
       <%= link_to new_contact_path,
-                    class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
+                    class: "btn btn--icon btn--primary",
                     data: { turbo_frame: "modal" } do %>
         <span class="icon icon--user-round-pen"></span>
       <% end %>
 
       <%= link_to new_event_path,
-                    class: "btn btn--icon bg-blue-500 hover:bg-blue-600 border-0 text-gray-50 i-full",
+                    class: "btn btn--icon btn--primary",
                     data: { turbo_frame: "modal" } do %>
         <span class="icon icon--calendar-plus"></span>
       <% end %>
@@ -23,13 +23,13 @@
 <% end %>
 
 <div class="absolute hide@md" style="bottom: 8.5rem; right: 1.8rem; z-index: 9999">
-  <%= link_to new_contact_path, class: "btn bg-blue-500 hover:bg-blue-600 text-gray-50 p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_contact_path, class: "btn btn--primary p-5 rounded-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--pen"></span>
   <% end %>
 </div>
 
 <div class="absolute hide@md" style="bottom: 4rem; right: 1.8rem; z-index: 9999">
-  <%= link_to new_event_path, class: "btn bg-blue-500 hover:bg-blue-600 text-gray-50 p-5 border-0 rounded-full", data: { turbo_frame: "modal" } do %>
+  <%= link_to new_event_path, class: "btn btn--primary p-5 rounded-full", data: { turbo_frame: "modal" } do %>
     <span class="icon icon--calendar-range"></span>
   <% end %>
 </div>

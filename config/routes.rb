@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resource  :password, only: [ :edit, :update ]
 
   namespace :identity do
+    resource :avatar,             only: [ :edit, :update, :destroy ]
     resource :email,              only: [ :edit, :update ]
     resource :name,               only: [ :edit, :update ]
     resource :email_verification, only: [ :show, :create ]

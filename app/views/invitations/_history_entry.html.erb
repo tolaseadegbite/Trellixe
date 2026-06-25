@@ -1,7 +1,7 @@
-<%= link_to invitation.event, class: "block pb-3 border-be hover:bg-shade", data: { turbo_frame: "_top" } do %>
+<%= link_to invitation.event, class: "block pb-3 pi-2 rounded-md border-be hover:bg-shade transition", data: { turbo_frame: "_top" } do %>
   <div class="flex items-center justify-between">
     <div class="flex-col min-i-0"> <%# min-i-0 prevents text overflow issues in flexbox %>
-      <p class="font-medium text-link overflow-ellipsis"><%= invitation.event.name %></p>
+      <p class="font-medium text-emerald-600 overflow-ellipsis"><%= invitation.event.name %></p>
       <p class="text-sm text-subtle"><%= invitation.event.starts_at.strftime("%B %d, %Y") %></p>
 
       <% if invitation.notes.present? %>

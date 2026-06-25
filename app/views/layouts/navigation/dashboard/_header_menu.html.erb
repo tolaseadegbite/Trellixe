@@ -9,7 +9,7 @@
 
       <div data-controller="push-subscription">
         <%# This button will now be a "target". It shows when NOT subscribed. %>
-        <button data-push-subscription-target="subscribeButton" data-action="push-subscription#subscribe" class="btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50">
+        <button data-push-subscription-target="subscribeButton" data-action="push-subscription#subscribe" class="btn btn--primary">
           <span class="icon icon--bell"></span>
           Enable Push Notifications
         </button>
@@ -62,9 +62,11 @@
       <% end %>
 
       <% trigger = button_tag type: "button", class: "btn btn--icon border-0 cursor-pointer hide@md", data: { action: "dialog#showModal" } do %>
-        <div class="bg-black rounded-full flex items-center justify-center font-semibold text-reversed" style="block-size: 2rem; inline-size: 2rem;">
-          <%= current_user.initials %>
-        </div>
+        <span id="header_avatar">
+          <div class="avatar" style="--avatar-size: 2rem;">
+            <%= image_tag user_avatar_url(current_user, size: 32), alt: current_user.name %>
+          </div>
+        </span>
       <% end %>
 
       <%# 2. Call our generic modal_dialog helper with the trigger and a title. %>

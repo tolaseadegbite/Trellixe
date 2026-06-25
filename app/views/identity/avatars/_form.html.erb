@@ -1,0 +1,22 @@
+<%= form_with url: identity_avatar_path, method: :patch, multipart: true, data: { controller: "avatar-preview", avatar_preview_fallback_value: user.gravatar_url(size: 160) } do |form| %>
+  <div class="flex items-start gap-6 mbe-6">
+    <div class="avatar shrink-0" style="--avatar-size: var(--size-20);">
+      <%= image_tag user_avatar_url(user, size: 160), size: 160, alt: user.name, data: { avatar_preview_target: "preview" }, class: "rounded-full" %>
+    </div>
+
+    <div class="flex flex-col gap">
+      <%= form.file_field :avatar, accept: "image/*", class: "input cursor-pointer", data: { action: "change->avatar-preview#preview", avatar_preview_target: "input" } %>
+      <p class="text-xs text-subtle">PNG, JPG, GIF, WebP. Max 10MB.</p>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-2 mbs-4">
+    <%= form.submit "Save", class: "btn btn--primary" %>
+  </div>
+<% end %>
+
+<% if user.avatar.attached? && user.avatar.attachment&.persisted? %>
+  <div class="mbs-4">
+    <%= button_to "Remove photo", identity_avatar_path, method: :delete, class: "btn btn--negative", data: { turbo_confirm: "Remove your profile photo?" } %>
+  </div>
+<% end %>

@@ -1,4 +1,4 @@
-<div class="card p-4 border rounded-md shadow-sm bg-surface flex flex-col gap-3">
+<div class="card p-4 border rounded-md shadow-sm bg-main flex flex-col gap-3">
     <div class="flex items-start justify-between">
     <div class="font-semibold leading-tight break-all">
         <%= invitation.email %>
@@ -12,8 +12,9 @@
         <span class="text-subtle">Role:</span>
         <span class="font-medium capitalize"><%= invitation.role %></span>
     </div>
-    <div class="text-subtle">
-        <%= time_ago_in_words(invitation.created_at) %> ago
+    <div class="flex items-center gap">
+        <span class="icon icon--calendar-range"></span>
+        <span class="text-subtle"><%= time_ago_in_words(invitation.created_at) %> ago</span>
     </div>
     </div>
     <div class="flex items-center justify-end text-xs gap-4 border-t pt-3 mt-1">
@@ -22,6 +23,6 @@
           Resend
         <% end %>
 
-        <%= button_to "Revoke Invitation", team_invitation_path(invitation), method: :delete, class: "text-red-600 font-medium hover:text-red-700 cursor-pointer" %>
+        <%= button_to "Revoke", team_invitation_path(invitation), method: :delete, class: "btn btn--negative text-xs", form: { data: { turbo_confirm: "Revoke this invitation?" } } %>
     </div>
 </div>

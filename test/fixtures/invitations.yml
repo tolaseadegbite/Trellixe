@@ -3,11 +3,11 @@
 one:
   contact: one
   event: one
-  status: MyString
+  status: invited
   notes: MyText
 
 two:
   contact: two
   event: two
-  status: MyString
+  status: invited
   notes: MyText

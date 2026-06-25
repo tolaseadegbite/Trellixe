@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(invitation) %>" class="border-b last:border-0 hover:bg-highlight transition">
+<tr id="<%= dom_id(invitation) %>" class="border-b last:border-0">
   <%# 1. Checkbox for Bulk Actions (Gated) %>
   <td class="p-3">
     <% if invitation.event.starts_at > Time.current %>
@@ -20,15 +20,14 @@
         <span class="font-semibold text-xs"><%= invitation.contact.full_name.split.first(2).map(&:first).join.upcase %></span>
       </div>
       <div class="flex flex-col">
-        <span><%= invitation.contact.full_name %></span>
+        <%= link_to invitation.contact.full_name, contact_path(invitation.contact), class: "text-primary hover:underline overflow-ellipsis", data: { turbo_frame: "_top" } %>
         <span class="text-xs text-subtle"><%= invitation.contact.email %></span>
       </div>
     </div>
   </td>
   
   <td class="p-3">
-    <% status_color = invitation.attended? ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800" %>
-    <span class="<%= status_color %> pi-2 pb-1 rounded-full text-xs font-medium capitalize">
+    <span class="badge badge--<%= invitation.status %> text-xs font-medium capitalize">
       <%= invitation.status %>
     </span>
   </td>

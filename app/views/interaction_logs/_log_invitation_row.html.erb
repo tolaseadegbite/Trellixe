@@ -2,7 +2,9 @@
   <div class="flex flex-col gap-1 i-full" style="min-inline-size: 0">
     <div class="flex items-center justify-between gap-2" style="flex-wrap: wrap">
       <div class="flex items-center gap-2" style="min-inline-size: 0">
-        <span class="text-subtle shrink-0">—</span>
+        <div class="flex items-center justify-center rounded-full overflow-hidden bg-black shrink-0" style="block-size: 1.25rem; inline-size: 1.25rem;">
+          <%= image_tag user_avatar_url(log.user, size: 20), size: 20, class: "rounded-full", alt: log.user.full_name %>
+        </div>
         <span class="font-semibold text-sm text-emerald-600 shrink-0"><%= log.user.full_name %></span>
         <span class="text-xs text-subtle shrink-0">followed up with</span>
         <%= link_to log.contact.full_name, contact_path(log.contact), class: "font-semibold text-sm text-emerald-600 hover:underline", style: "overflow: hidden; text-overflow: ellipsis; white-space: nowrap;", data: { turbo_frame: "_top" } %>
@@ -10,7 +12,7 @@
       <span class="text-xs text-subtle shrink-0"><%= time_ago_in_words(log.created_at) %> ago</span>
     </div>
     <div class="flex items-start justify-between gap-2 mbs-1">
-      <div class="text-sm text-primary" style="white-space: pre-wrap"><%= log.note %></div>
+      <div class="text-sm text-primary" style="white-space: pre-wrap; overflow-wrap: break-word; word-break: break-word"><%= log.note %></div>
       <% if log.user == current_user %>
         <div class="flex gap-1 shrink-0">
           <%= link_to edit_interaction_log_path(log), class: "btn btn--icon btn--subtle", style: "block-size: 1.5rem; inline-size: 1.5rem;", data: { turbo_frame: "modal" } do %>

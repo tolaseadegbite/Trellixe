@@ -2,12 +2,12 @@
 
 one:
   contact: one
-  user: one
+  user: lazaro_nixon
   follow_up_task: one
   note: MyText
 
 two:
   contact: two
-  user: two
+  user: lazaro_nixon
   follow_up_task: two
   note: MyText

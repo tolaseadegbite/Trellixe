@@ -78,7 +78,7 @@
 
       <%# --- Form Actions --- %>
       <div class="flex items-center justify-end gap mbe-4">
-        <%= link_to "Reset", events_path(view: "events-list"), class: "btn btn--primary" %>
+        <%= link_to "Reset", events_path(view: "events-list"), class: "btn btn--primary", data: { turbo_frame: "events_table" } %>
         <%#= f.submit "Search", class: "btn btn--primary" %>
       </div>
     <% end %>
