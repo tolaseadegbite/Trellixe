@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   include Pagy::Backend
   include SetCurrentRequestDetails
+  include Permissionable
 
   # Make these methods available as helpers in all views
   helper_method :current_user, :user_signed_in?, :current_role, :admin?
@@ -95,6 +96,10 @@ class ApplicationController < ActionController::Base
     unless Current.session.sudo?
       redirect_to new_sessions_sudo_path(proceed_to_url: request.original_url)
     end
+  end
+
+  def ensure_admin!
+    redirect_to(root_path, alert: "Access denied.") and return unless admin?
   end
 
   def switch_time_zone(&block)

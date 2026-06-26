@@ -1,5 +1,6 @@
 class TeamInvitationsController < DashboardsController
   before_action :authenticate
+  before_action :ensure_admin!, only: [ :new, :create, :destroy, :resend ]
   before_action :set_invitation, only: [ :destroy, :resend ]
 
   def new

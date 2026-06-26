@@ -71,7 +71,7 @@ class InteractionLogsController < DashboardsController
   end
 
   def authorize_owner!
-    unless @interaction_log.user == current_user
+    unless can_edit_log?(@interaction_log)
       redirect_back_or_to contact_path(@interaction_log.contact), alert: "You can only edit your own logs."
     end
   end

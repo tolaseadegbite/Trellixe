@@ -16,7 +16,7 @@
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
-        <% if interaction_log.user == current_user %>
+        <% if can_edit_log?(interaction_log) %>
           <%= link_to edit_interaction_log_path(interaction_log), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
             <span class="icon icon--pen" aria-hidden="true"></span>
           <% end %>

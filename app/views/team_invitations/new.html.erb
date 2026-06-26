@@ -18,7 +18,7 @@
 
       <div class="flex flex-col gap-1 mbe-6">
         <%= form.label :role, "Role", class: "text-sm font-medium" %>
-        <%= form.select :role, [["Member (Can edit)", "member"], ["Admin (Can manage billing)", "admin"]], {}, { class: "input i-full" } %>
+        <%= form.select :role, [["Member (Can edit contacts, events, tasks)", "member"], ["Admin (Full access — manage team, settings, billing)", "admin"]], {}, { class: "input i-full" } %>
       </div>
 
       <div class="flex justify-end gap-2">

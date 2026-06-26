@@ -139,6 +139,44 @@ Views: `image_tag user_avatar_url(user, size: 32), size: 32, class: "rounded-ful
 - Non-bang `update`/`create`: check return value, branch on success/failure
 - Bang `destroy!`: raises on failure
 - User-facing errors: `@contact.errors.full_messages.to_sentence`
+### Permissions
+Roles (`member`/`admin`) live on `Membership` as a string enum. Always use semantic helpers from the `Permissionable` concern (included in `ApplicationController`):
+
+| Helper | Member | Admin |
+|--------|--------|-------|
+| `can_view_team?` | ✅ | ✅ |
+| `can_invite_members?` | ❌ | ✅ |
+| `can_manage_members?` | ❌ | ✅ |
+| `can_manage_settings?` | ❌ | ✅ |
+| `can_manage_billing?` | ❌ | ✅ |
+| `can_manage_all_logs?` | ❌ | ✅ |
+| `can_edit_log?(log)` | owner only | ✅ |
+| `can_delete_workspace?` | ❌ | ✅ |
+
+```erb
+<%# Views — use semantic helpers, never inline current_role == "admin" %>
+<% if can_manage_members? %>
+  <%= link_to "Invite", new_team_invitation_path %>
+<% end %>
+```
+
+```ruby
+# Controllers — use ensure_admin! before_action for admin-only actions
+class TeamInvitationsController < DashboardsController
+  before_action :ensure_admin!, only: %i[ new create destroy resend ]
+end
+
+# For ownership-based gating, use can_edit_log?
+def authorize_owner!
+  unless can_edit_log?(@interaction_log)
+    redirect_back_or_to contact_path(@interaction_log.contact), alert: "Permission denied."
+  end
+end
+```
+- `ensure_admin!` is defined in `ApplicationController` (redirects to `root_path`)
+- Ownership checks (e.g., `@log.user == current_user`) are still valid for personal resources
+- Add new semantic methods to `app/models/concerns/permissionable.rb` as roles evolve
+
 ### Multi-tenancy Pattern
 ```ruby
 # app/models/current.rb

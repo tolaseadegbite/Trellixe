@@ -15,7 +15,7 @@
   </td>
 
   <td class="p-3 text-end">
-    <% if current_role == "admin" %>
+    <% if can_manage_members? %>
       <div class="flex items-center justify-end gap-3">
         <%# Resend %>
         <%= button_to resend_team_invitation_path(team_invitation), method: :post, class: "btn text-xs text-subtle hover:text-primary hover:underline", form: { data: { turbo_submits_with: "Sending..." } } do %>

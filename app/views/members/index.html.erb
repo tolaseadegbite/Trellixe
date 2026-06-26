@@ -5,7 +5,7 @@
 <% end %>
 
 <%# --- MOBILE FAB --- %>
-<% if current_role == "admin" %>
+<% if can_invite_members? %>
   <% unless Current.account.seat_limit_reached? %>
     <div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
       <%= link_to new_team_invitation_path, class: "btn btn--primary p-5 rounded-full", data: { turbo_frame: "modal" } do %>
@@ -30,7 +30,7 @@
     </div>
 
     <%# --- BUTTONS --- %>
-    <% if current_role == "admin" %>
+    <% if can_invite_members? %>
       <% if Current.account.seat_limit_reached? %>
         <div class="show@md">
           <%= link_to "#", class: "btn btn--primary font-semibold p-2 flex items-center gap-2" do %>
@@ -52,7 +52,7 @@
   </div>
 
   <%# --- MOBILE UPGRADE BANNER --- %>
-  <% if current_role == "admin" && Current.account.seat_limit_reached? %>
+  <% if can_invite_members? && Current.account.seat_limit_reached? %>
     <div class="hide@md i-full mbe-6">
       <%= link_to "#", class: "flex items-center justify-between gap-3 bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg p-4 shadow-sm transition text-left no-underline" do %>
         <div class="flex items-center gap-3">

@@ -69,8 +69,4 @@ class AccountsController < DashboardsController
   def account_params
     params.require(:account).permit(:name)
   end
-
-  def ensure_admin!
-    redirect_to(root_path, alert: "Access denied.") and return unless admin?
-  end
 end

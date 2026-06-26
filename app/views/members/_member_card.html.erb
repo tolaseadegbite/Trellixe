@@ -14,7 +14,7 @@
     </div>
 
     <%# --- ROLE SECTION: Editable if Admin, Static if not --- %>
-    <% if current_role == "admin" %>
+    <% if can_manage_members? %>
        <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" } do |f| %>
           <% select_class = membership.admin? ? "text-emerald-700 border-emerald-200 bg-emerald-50" : "text-subtle bg-shade border-main" %>
           <%= f.select :role, 
@@ -54,7 +54,7 @@
         </div>
       <% end %>
 
-    <% elsif current_role == "admin" %>
+    <% elsif can_manage_members? %>
       <%# Admin: Remove Others %>
       <% delete_trigger = button_tag type: "button", class: "text-subtle hover:text-negative", data: { action: "dialog#showModal" } do %>
          <span class="icon icon--trash-2"></span>

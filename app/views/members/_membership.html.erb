@@ -14,7 +14,7 @@
   </td>
   
   <td class="p-3">
-    <% if current_role == "admin" %>
+    <% if can_manage_members? %>
       <%# --- ADMIN VIEW: Editable Dropdown --- %>
       <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" } do |f| %>
         
@@ -63,7 +63,7 @@
         </div>
       <% end %>
 
-    <% elsif current_role == "admin" %>
+    <% elsif can_manage_members? %>
       <%# CASE 2: REMOVE (Others) %>
       <% delete_trigger = button_tag type: "button", class: "btn btn--plain text-subtle hover:text-negative p-2 rounded-md transition", data: { action: "dialog#showModal" } do %>
         <span class="icon icon--trash-2"></span>

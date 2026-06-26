@@ -123,10 +123,6 @@ class MembershipsController < DashboardsController
     @membership = Current.account.memberships.includes(:user).find_by!(public_id: params[:id])
   end
 
-  def ensure_admin!
-    redirect_to(members_path, alert: "Admins only.") and return unless admin?
-  end
-
   def membership_params
     params.require(:membership).permit(:role)
   end

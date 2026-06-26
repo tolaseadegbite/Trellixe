@@ -126,7 +126,7 @@
           </summary>
           <nav class="sidebar-menu__sub">
             
-            <% if current_role == "admin" %>
+            <% if can_manage_settings? %>
               <%= link_to edit_account_path(Current.account), class: "btn sidebar-menu__button" do %>
                 <span class="sidebar-label">General</span>
               <% end %>
@@ -136,7 +136,7 @@
               <span class="sidebar-label">Team Members</span>
             <% end %>
 
-            <% if current_role == "admin" %>
+            <% if can_manage_billing? %>
               <%= link_to "#", class: "btn sidebar-menu__button" do %>
                 <span class="sidebar-label">Billing</span>
               <% end %>
