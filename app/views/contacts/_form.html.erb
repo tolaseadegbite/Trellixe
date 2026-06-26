@@ -13,27 +13,27 @@
 
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :first_name, class: "font-medium leading-none" %>
-    <%= form.text_field :first_name, autofocus: true, class: "input" %>
+    <%= form.text_field :first_name, autofocus: true, placeholder: "e.g. Jane", class: "input" %>
   </div>
 
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :last_name, class: "font-medium leading-none" %>
-    <%= form.text_field :last_name, class: "input" %>
+    <%= form.text_field :last_name, placeholder: "e.g. Smith", class: "input" %>
   </div>
 
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :email, class: "font-medium leading-none" %>
-    <%= form.text_field :email, class: "input" %>
+    <%= form.text_field :email, placeholder: "jane@example.com", class: "input" %>
   </div>
 
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :phone_number, class: "font-medium leading-none" %>
-    <%= form.text_field :phone_number, class: "input" %>
+    <%= form.text_field :phone_number, placeholder: "+1 (555) 123-4567", class: "input" %>
   </div>
 
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :how_we_met, class: "font-medium leading-none" %>
-    <%= form.text_area :how_we_met, class: "input" %>
+    <%= form.text_area :how_we_met, placeholder: "e.g. Networking event at SXSW", class: "input" %>
   </div>
 
   <div class="inline-flex items-center mbs-2 mie-1 i-full">

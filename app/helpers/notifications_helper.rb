@@ -7,9 +7,17 @@ module NotificationsHelper
     case event.type
     when "TeamNotifier::RoleChanged"
       if recipient.id == params[:user_id]
-        "Your role in #{params[:account_name]} was changed to #{params[:role].humanize} by #{params[:actor_name]}."
+        if recipient.id == params[:actor_id]
+          "Your role in #{params[:account_name]} was changed to #{params[:role].humanize} by you."
+        else
+          "Your role in #{params[:account_name]} was changed to #{params[:role].humanize} by #{params[:actor_name]}."
+        end
       else
-        "#{params[:user_name]}'s role was changed to #{params[:role].humanize} by #{params[:actor_name]}."
+        if recipient.id == params[:actor_id]
+          "#{params[:user_name]}'s role was changed to #{params[:role].humanize} by you."
+        else
+          "#{params[:user_name]}'s role was changed to #{params[:role].humanize} by #{params[:actor_name]}."
+        end
       end
 
     when "TeamNotifier::MemberRemoved"

@@ -12,31 +12,29 @@
       <% end %>
 
       <%= tag.div popover: true, id: "notifications-popover", class: "popover overflow-hidden", style: "--popover-size: 29rem; block-size: 30rem; padding: 0;", data: { popover_target: "content" } do %>
-        <%# ... Notification List Logic ... %>
-        <div class="flex flex-col b-full">
-            <div class="flex flex-item-no-shrink items-center justify-between p-3 border-be border-main bg-surface">
-              <h3 class="font-semibold text-lg">Notifications</h3>
-              <%= link_to "Mark all as read", mark_all_as_read_notifications_path, data: { turbo_method: :post }, class: "hover:text-emerald-700 text-xs text-emerald-600", style: "text-decoration: none;" if context_notifications.any? %>
-            </div>
+  <div class="flex flex-col b-full">
+    <div class="flex flex-item-no-shrink items-center justify-between p-3 border-be border-main bg-surface">
+      <h3 class="font-semibold text-lg">Notifications</h3>
+      <%= link_to "Mark all as read", mark_all_as_read_notifications_path, data: { turbo_method: :post }, class: "hover:text-emerald-700 text-xs text-emerald-600", style: "text-decoration: none;" if context_notifications.any? %>
+    </div>
 
-            <div class="flex-1 overflow-y-auto" id="sidebar-notifications-list">
-              <%# Account ID + Global (nil) %>
-              <%= render partial: "notifications/notification", 
-            collection: context_notifications.limit(10) %>
-              <% if current_user.notifications.empty? %>
-                <div class="p-4 text-center text-subtle text-sm">No notifications.</div>
-              <% end %>
-            </div>
-
-            <% if current_user.notifications.any? %>
-              <div class="flex flex-item-no-shrink p-2 border-bs border-main bg-surface">
-                <%= link_to notifications_path, class: "btn btn--primary text-xs i-full justify-center" do %>
-                  <span>View all notifications</span>
-                <% end %>
-              </div>
-            <% end %>
-        </div>
+    <div class="flex-1 overflow-y-auto" id="sidebar-notifications-list">
+      <%= render partial: "notifications/notification", collection: context_notifications.limit(10) %>
+      <% if current_user.notifications.empty? %>
+        <div class="p-4 text-center text-subtle text-sm">No notifications.</div>
       <% end %>
+    </div>
+
+    <% if current_user.notifications.any? %>
+      <div class="flex flex-item-no-shrink p-2 border-bs border-main bg-surface">
+        <%= link_to notifications_path, class: "btn btn--primary text-xs i-full justify-center" do %>
+          <span>View all notifications</span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
     </div>
 
     <%# Theme switcher popover %>

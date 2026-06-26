@@ -9,7 +9,7 @@
   <%= form_with(url: sign_in_path) do |form| %>
     <div class="mbe-5">
       <%= form.label :email, style: "display: block", class: "font-semibold mbe-2" %>
-      <%= form.email_field :email, value: params[:email_hint], required: true, autofocus: true, autocomplete: "email", class: "input" %>
+      <%= form.email_field :email, value: params[:email_hint], placeholder: "you@example.com", required: true, autofocus: true, autocomplete: "email", class: "input" %>
     </div>
 
     <div class="mbe-5">

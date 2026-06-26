@@ -13,7 +13,7 @@
 
     <div class="flex flex-col items-start gap-half mbe-4">
         <%= form.label :email, "New email", class: "text-sm font-medium leading-none" %>
-        <%= form.email_field :email, required: true, autofocus: true, value: Current.user.email, class: "input i-full" %>
+        <%= form.email_field :email, required: true, autofocus: true, value: Current.user.email, placeholder: "newemail@example.com", class: "input i-full" %>
     </div>
 
     <div class="flex flex-col items-start gap-half mbe-4">

@@ -9,7 +9,7 @@
   <%= form_with(url: identity_password_reset_path) do |form| %>
     <div class="mbe-5">
       <%= form.label :email, style: "display: block", class: "mbe-1" %>
-      <%= form.email_field :email, required: true, autofocus: true, class: "input" %>
+      <%= form.email_field :email, required: true, autofocus: true, placeholder: "you@example.com", class: "input" %>
     </div>
 
     <div>

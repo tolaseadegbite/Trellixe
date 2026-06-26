@@ -38,7 +38,7 @@
         <%# Assuming you don't have separate first/last name columns in Trellixe User model yet based on schema provided earlier, usually it is just 'name'. 
             If you added split names, use first_name/last_name. I will use 'name' based on your provided schema. %>
         <%= f.label :name, "Full Name", class: "text-sm font-bold" %>
-        <%= f.text_field :name, required: true, class: "input i-full", autofocus: true %>
+        <%= f.text_field :name, required: true, placeholder: "e.g. Jane Smith", class: "input i-full", autofocus: true %>
       </div>
 
       <div class="flex flex-col gap-half mbe-6">

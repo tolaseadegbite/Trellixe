@@ -1,13 +1,16 @@
 <%= link_to notification_path(notification),
     id: dom_id(notification),
-    class: "block p-3 rounded-md hover:bg-shade transition #{'bg-shade' if notification.unread?}",
-    style: "text-decoration: none;",
+    class: "block p-3 rounded-md hover:bg-shade #{'bg-shade' if notification.unread?}",
+    style: "text-decoration: none; display: grid; grid-template-columns: minmax(0, 1fr); inline-size: 100%; transition: background-color 0.3s;",
     data: notification.event.type == "FollowUpTaskNotifier" ? { turbo_frame: "modal" } : {} do %>
-  <div class="flex items-center gap min-i-0">
+  
+  <%# FIX 1: Changed align-items to center to align the avatar and text box vertically %>
+  <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; align-items: center; inline-size: 100%;">
     
-    <%# Avatar: single image, initials, or avatar group (initials + actor) %>
+    <%# Avatar: single image, initials, or avatar group %>
     <% if (actor_url = notification_actor_avatar_url(notification)) %>
-      <div class="avatar-group items-end">
+      <%# FIX 2: Changed to items-center for the internal avatar stack alignment %>
+      <div class="avatar-group items-center" style="flex-shrink: 0;">
         <div class="avatar" style="--avatar-size: 2rem;">
           <span role="img" class="font-bold text-xs text-reversed" style="background-color: var(--color-text);"><%= notification_avatar_initials(notification) %></span>
         </div>
@@ -16,18 +19,18 @@
         </div>
       </div>
     <% elsif (avatar_url = notification_avatar_url(notification)) %>
-      <%= image_tag avatar_url, size: 32, class: "rounded-full", style: "inline-size: 2rem; block-size: 2rem;", alt: notification_avatar_initials(notification) %>
+      <%= image_tag avatar_url, size: 32, class: "rounded-full", style: "inline-size: 2rem; block-size: 2rem; flex-shrink: 0;", alt: notification_avatar_initials(notification) %>
     <% else %>
-      <div class="avatar" style="--avatar-size: 2rem;">
+      <div class="avatar" style="--avatar-size: 2rem; flex-shrink: 0;">
         <span role="img" class="font-bold text-xs text-reversed" style="background-color: var(--color-text);"><%= notification_avatar_initials(notification) %></span>
       </div>
     <% end %>
 
-    <div class="flex flex-col gap-half min-i-0 flex-1 wrap-break-word">
-      <p class="font-semibold text-sm text-primary leading-tight">
+    <div style="min-inline-size: 0; display: flex; flex-direction: column; gap: 0.25rem;">
+      <p class="font-semibold text-sm text-primary leading-tight" style="overflow-wrap: break-word; word-break: break-word; white-space: normal; margin: 0;">
         <%= notification_message(notification) %>
       </p>
-      <p class="text-xs text-subtle">
+      <p class="text-xs text-subtle" style="margin: 0;">
         <%= time_ago_in_words(notification.created_at) %> ago
       </p>
     </div>

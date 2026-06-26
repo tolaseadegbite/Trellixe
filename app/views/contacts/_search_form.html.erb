@@ -58,7 +58,7 @@
         <%# 4. Date Filter %>
         <div class="col-span-12 col-span-3@lg">
            <%= f.label :created_at_gteq, "Date Added", class: "text-xs font-bold text-subtle uppercase tracking-wide mbe-1 block" %>
-           <%= f.date_field :created_at_gteq, class: "input", data: { action: "input->debounce#submit" } %>
+           <%= f.date_field :created_at_gteq, placeholder: "From date...", class: "input", data: { action: "input->debounce#submit" } %>
         </div>
 
       </div>
