@@ -5,6 +5,7 @@
   <%# --- SUCCESS CASE --- %>
 
   <%= turbo_stream.replace @event, partial: "events/event_list_item", locals: { event: @event } %>
+  <%= turbo_stream.replace dom_id(@event, :show_header), partial: "events/show_header", locals: { event: @event } %>
 
   <%= turbo_stream.replace "calendar_view", partial: "events/calendar" %>
 

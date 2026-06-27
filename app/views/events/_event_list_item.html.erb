@@ -3,8 +3,8 @@
     <%# --- MAIN CONTENT AREA (White/Surface) --- %>
     <div>
         <%# Header: Name & Menu %>
-        <div class="flex items-start justify-between mbe-1 gap">
-            <%= link_to event, class: "text-primary hover:text-link", data: { turbo_frame: "_top" } do %>
+        <div class="flex items-start justify-between mbe-1 gap min-i-0">
+            <%= link_to event, class: "text-primary hover:text-link min-i-0", style: "overflow-wrap: break-word; word-break: break-word;", data: { turbo_frame: "_top" } do %>
                 <h3 class="font-semibold text-base leading-tight"><%= event.name %></h3>
             <% end %>
 
@@ -40,7 +40,7 @@
         </div>
 
         <%# Date & Time %>
-        <div class="flex items-center gap-half text-sm text-subtle">
+        <div class="flex gap-half text-sm text-subtle mb-3">
             <span class="icon icon--calendar-range text-subtle" aria-hidden="true"></span>
             <span>
                 <% if event.starts_at.to_date == event.ends_at.to_date %>

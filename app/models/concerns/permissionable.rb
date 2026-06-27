@@ -2,9 +2,9 @@ module Permissionable
   extend ActiveSupport::Concern
 
   included do
-    helper_method :can_view_team?, :can_invite_members?, :can_manage_members?,
-                  :can_manage_settings?, :can_manage_billing?,
-                  :can_manage_all_logs?, :can_delete_workspace?
+      helper_method :can_view_team?, :can_invite_members?, :can_manage_members?,
+                    :can_manage_settings?, :can_manage_billing?,
+                    :can_manage_all_logs?, :can_delete_workspace?, :can_edit_log?
   end
 
   def can_view_team?

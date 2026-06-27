@@ -48,10 +48,11 @@ class Event < ApplicationRecord
   end
 
   def invitation_summary
-    all_invites = invitations.loaded? ? invitations : invitations.to_a
+    all_invites = invitations.reload
     {
       total:    all_invites.size,
-      attended: all_invites.count { |i| i.attended? }
+      attended: all_invites.count { |i| i.attended? },
+      declined: all_invites.count { |i| i.declined? }
     }
   end
 

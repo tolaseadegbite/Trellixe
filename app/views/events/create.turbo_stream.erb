@@ -1,7 +1,7 @@
 <% if @event.persisted? %>
   <%# SUCCESS %>
   <%= turbo_stream.replace "empty_state", "" %>
-  <%= turbo_stream.prepend "events-list", partial: "events/event_list_item", locals: { event: @event } %>
+  <%= turbo_stream.prepend "events", partial: "events/event_list_item", locals: { event: @event } %>
   <%= turbo_stream.replace "calendar_view", partial: "events/calendar" %>
   <turbo-stream action="dispatch_event" name="dialog:close"></turbo-stream>
 <% else %>

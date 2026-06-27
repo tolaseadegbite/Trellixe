@@ -61,13 +61,6 @@ class EventsController < DashboardsController
     @invitations_search = base_invitations.ransack(params[:q])
     filtered_invitations = @invitations_search.result
 
-    raw_counts = @event.invitations.group(:status).count
-    @stats = {
-      total: raw_counts.values.sum,
-      attended: raw_counts["attended"] || 0,
-      declined: raw_counts["declined"] || 0
-    }
-
     @pagy, @invitations = pagy(filtered_invitations.order("contacts.first_name ASC"))
 
     @new_invitation = @event.invitations.build

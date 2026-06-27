@@ -1,0 +1,48 @@
+<div id="<%= dom_id(event, :show_header) %>">
+  <div class="card p-3 bg-surface border border-main rounded-md shadow-sm overflow-hidden">
+
+    <%# Main Header row optimized for breaking safely %>
+    <div class="p-3 flex justify-between gap-4">
+      <%# FIX: Added rigid layout limits to the title zone %>
+      <div style="flex: 1 1 0%; min-inline-size: 0; max-inline-size: 100%;">
+        <h1 class="text-xl font-bold mbe-1" style="overflow-wrap: break-word; word-break: break-word; white-space: normal;">
+          <%= event.name %>
+        </h1>
+        <p class="text-subtle text-sm">
+          <%= format_full_event_datetime_range(event) rescue l(event.starts_at, format: :long) %>
+        </p>
+      </div>
+
+      <%# MATCHED FIX: Substituted text button with the identical pen icon layout %>
+      <%= link_to edit_event_path(event), class: "flex items-start shrink-0", data: { turbo_frame: "modal" } do %>
+        <span class="btn btn--icon rounded-full btn--primary">
+          <span class="icon icon--pen" aria-hidden="true"></span>
+        </span>
+      <% end %>
+    </div>
+
+    <div class="bg-shade border border-main rounded-md p-3 flex flex-wrap items-center gap-8" style="max-inline-size: 100%;">
+      <% stats = event.invitation_summary %>
+      <div class="flex flex-col">
+        <span class="text-xs uppercase font-bold text-subtle mbe-1">Total Guests</span>
+        <span class="text-2xl font-bold text-primary"><%= stats[:total] %></span>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="text-xs uppercase font-bold text-green-500 mbe-1">Attended</span>
+        <div class="flex items-center gap-half">
+          <span class="icon icon--user-check text-green-500" aria-hidden="true"></span>
+          <span class="text-2xl font-bold text-primary"><%= stats[:attended] %></span>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="text-xs uppercase font-bold text-red-500 mbe-1">Declined</span>
+        <div class="flex items-center gap-half">
+          <span class="icon icon--user-x text-red-500" aria-hidden="true"></span>
+          <span class="text-2xl font-bold text-primary"><%= stats[:declined] %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
