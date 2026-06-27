@@ -128,6 +128,7 @@ GEM
     hashie (5.0.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
+    ice_cube (0.17.0)
     importmap-rails (2.2.2)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -434,6 +435,7 @@ DEPENDENCIES
   css-zero (~> 2.2)!
   debug
   faker (~> 3.5)
+  ice_cube
   importmap-rails
   jbuilder
   kamal

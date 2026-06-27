@@ -82,6 +82,17 @@ Rails.application.routes.draw do
     end
   end
 
+  # --- Tags ---
+  resources :tags, only: [ :index, :create, :destroy ]
+
+  # --- Event Series ---
+  resources :event_series, only: [ :index, :new, :create, :edit, :update, :destroy ] do
+    member do
+      post :generate_occurrence
+      patch :toggle_cancellation
+    end
+  end
+
   # --- CRM Core (Existing) ---
 
   resources :contacts do

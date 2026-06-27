@@ -13,6 +13,26 @@ class EventsController < DashboardsController
 
     @events_by_date = calendar_events.group_by { |e| e.starts_at.to_date }
 
+    # 1b. Merge virtual occurrences from event series
+    series = Current.account.event_series.active
+                    .where("starts_at <= ?", @date.end_of_month.end_of_week)
+                    .where("ends_on IS NULL OR ends_on >= ?", @date.beginning_of_month.beginning_of_week)
+
+    series.each do |s|
+      occurrences = s.occurrences(from: @date.beginning_of_month.beginning_of_week,
+                                  to: @date.end_of_month.end_of_week)
+      occurrences.each do |occ|
+        day = occ.to_date
+        real = @events_by_date[day]&.any? { |e| e.event_series_id == s.id }
+        next if real
+
+        vir = Event.new(name: s.name, starts_at: occ,
+                        duration_in_minutes: s.duration_in_minutes, event_series: s)
+        @events_by_date[day] ||= []
+        @events_by_date[day] << vir
+      end
+    end
+
     # 2. List Logic (Past vs Upcoming)
     @scope = params.fetch(:scope, "upcoming")
 

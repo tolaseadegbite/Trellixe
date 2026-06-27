@@ -1,5 +1,16 @@
-<%= link_to event, 
-            class: "block p-1 bg-black rounded-sm text-xs text-reversed overflow-ellipsis", 
-            data: { turbo_frame: "_top" } do %>
-  <%= event.name %>
+<% if event.nil? %>
+
+<% elsif event.persisted? %>
+  <%= link_to event, 
+              class: "block p-1 bg-black rounded-sm text-xs text-reversed overflow-ellipsis", 
+              data: { turbo_frame: "_top" } do %>
+    <%= event.name %>
+  <% end %>
+<% else %>
+  <%= tag.div id: dom_id(event.event_series, :virtual) do %>
+    <%= button_to generate_occurrence_event_series_path(event.event_series, date: event.starts_at.to_date),
+                  method: :post, class: "block p-1 bg-shade border border-dashed rounded-sm text-xs overflow-ellipsis i-full text-start cursor-pointer" do %>
+      + <%= event.name %>
+    <% end %>
+  <% end %>
 <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_24_234333) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_26_025038) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -52,6 +52,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_24_234333) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "contact_tags", force: :cascade do |t|
+    t.bigint "contact_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_id", "tag_id"], name: "index_contact_tags_on_contact_id_and_tag_id", unique: true
+    t.index ["contact_id"], name: "index_contact_tags_on_contact_id"
+    t.index ["tag_id"], name: "index_contact_tags_on_tag_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.string "owner_type", null: false
     t.bigint "owner_id", null: false
@@ -71,6 +81,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_24_234333) do
     t.index ["owner_type", "owner_id"], name: "index_contacts_on_owner"
   end
 
+  create_table "event_series", force: :cascade do |t|
+    t.string "owner_type", null: false
+    t.bigint "owner_id", null: false
+    t.string "name", null: false
+    t.integer "duration_in_minutes", null: false
+    t.datetime "starts_at", null: false
+    t.jsonb "recurrence_rule", default: {}, null: false
+    t.date "ends_on"
+    t.boolean "cancelled_series", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_type", "owner_id"], name: "index_event_series_on_owner"
+  end
+
   create_table "events", force: :cascade do |t|
     t.string "owner_type", null: false
     t.bigint "owner_id", null: false
@@ -79,6 +103,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_24_234333) do
     t.integer "duration_in_minutes", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "event_series_id"
+    t.index ["event_series_id"], name: "index_events_on_event_series_id"
     t.index ["owner_type", "owner_id", "starts_at"], name: "index_events_on_owner_and_starts_at"
     t.index ["owner_type", "owner_id"], name: "index_events_on_owner"
   end
@@ -180,6 +206,26 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_24_234333) do
     t.index ["user_id"], name: "index_sign_in_tokens_on_user_id"
   end
 
+  create_table "tagged_event_series", force: :cascade do |t|
+    t.bigint "event_series_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_series_id", "tag_id"], name: "index_tagged_event_series_on_event_series_id_and_tag_id", unique: true
+    t.index ["event_series_id"], name: "index_tagged_event_series_on_event_series_id"
+    t.index ["tag_id"], name: "index_tagged_event_series_on_tag_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "owner_type", null: false
+    t.bigint "owner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_type", "owner_id", "name"], name: "index_tags_on_owner_type_and_owner_id_and_name", unique: true
+    t.index ["owner_type", "owner_id"], name: "index_tags_on_owner"
+  end
+
   create_table "team_invitations", force: :cascade do |t|
     t.string "email", null: false
     t.bigint "account_id", null: false
@@ -232,7 +278,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_24_234333) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "contact_tags", "contacts"
+  add_foreign_key "contact_tags", "tags"
   add_foreign_key "contacts", "users", column: "creator_id"
+  add_foreign_key "events", "event_series"
   add_foreign_key "follow_up_tasks", "invitations"
   add_foreign_key "follow_up_tasks", "users"
   add_foreign_key "interaction_logs", "contacts"
@@ -245,6 +294,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_24_234333) do
   add_foreign_key "noticed_notifications", "accounts"
   add_foreign_key "sessions", "users"
   add_foreign_key "sign_in_tokens", "users"
+  add_foreign_key "tagged_event_series", "event_series"
+  add_foreign_key "tagged_event_series", "tags"
   add_foreign_key "team_invitations", "accounts"
   add_foreign_key "user_activities", "users"
   add_foreign_key "web_push_subscriptions", "users"

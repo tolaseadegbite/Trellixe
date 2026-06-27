@@ -38,4 +38,8 @@ export default class extends Controller {
 
     // Handle "No events" state if needed (optional logic could go here)
   }
+
+  stopProp(event) {
+    event.stopPropagation()
+  }
 }

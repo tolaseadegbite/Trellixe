@@ -1,0 +1,14 @@
+<%= form_with(model: tag, class: "flex items-end gap-2") do |form| %>
+  <% if tag.errors.any? %>
+    <div class="text-negative text-sm mbe-2 i-full">
+      <%= tag.errors.full_messages.to_sentence %>
+    </div>
+  <% end %>
+
+  <div class="flex-1">
+    <%= form.label :name, "New Tag", class: "text-sm font-medium" %>
+    <%= form.text_field :name, placeholder: "e.g. Sunday Regulars", class: "input i-full", autofocus: true %>
+  </div>
+
+  <%= form.submit "Add", class: "btn btn--primary" %>
+<% end %>

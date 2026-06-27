@@ -1,0 +1,65 @@
+<%= form_with(model: event_series) do |form| %>
+  <% if event_series.errors.any? %>
+    <div class="alert alert--negative mbe-4">
+      <%= event_series.errors.full_messages.to_sentence %>
+    </div>
+  <% end %>
+
+  <div class="flex flex-col items-start gap-half mbe-4">
+    <%= form.label :name, class: "font-medium leading-none" %>
+    <%= form.text_field :name, autofocus: true, placeholder: "e.g. Sunday Service", class: "input i-full" %>
+  </div>
+
+  <div class="flex flex-col items-start gap-half mbe-4">
+    <%= form.label :starts_at, "First occurrence", class: "font-medium leading-none" %>
+    <%= form.datetime_field :starts_at, class: "input i-full" %>
+  </div>
+
+  <div class="flex flex-col items-start gap-half mbe-4">
+    <%= form.label :duration_in_minutes, class: "font-medium leading-none" %>
+    <%= form.number_field :duration_in_minutes, placeholder: "e.g. 90", class: "input i-full" %>
+  </div>
+
+  <div data-controller="visibility" data-visibility-show-value="weekly">
+    <div class="flex flex-col items-start gap-half mbe-4">
+      <%= form.label :recurrence_frequency, "Repeats", class: "font-medium leading-none" %>
+      <%= form.select :recurrence_frequency,
+          [["Weekly", "weekly"], ["Monthly", "monthly"]],
+          { include_blank: true },
+          { class: "input i-full cursor-pointer",
+            data: { visibility_target: "input",
+                    action: "change->visibility#toggle" } } %>
+    </div>
+
+    <div class="flex flex-col items-start gap-half mbe-4"
+         data-visibility-target="toggleable"
+         <%= "hidden" unless event_series.persisted? && event_series.recurrence_frequency == "weekly" %>>
+      <span class="font-medium leading-none">On</span>
+      <div class="flex flex-wrap gap">
+        <% Date::DAYNAMES.each_with_index do |name, i| %>
+          <label class="flex items-center gap-half text-sm cursor-pointer">
+            <%= form.check_box :day_of_week, { multiple: true, checked: event_series.day_of_week&.include?(i.to_s) || event_series.day_of_week&.include?(i) }, i, nil %>
+            <%= name.first(3) %>
+          </label>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-start gap-half mbe-4">
+    <%= form.label :ends_on, "Ends on (optional)", class: "font-medium leading-none" %>
+    <%= form.date_field :ends_on, class: "input i-full" %>
+  </div>
+
+  <div class="flex flex-col items-start gap-half mbe-4">
+    <%= form.label :tag_ids, "Auto-invite from tags", class: "font-medium leading-none" %>
+    <%= form.collection_select :tag_ids,
+        Current.account.tags.order(:name),
+        :id, :name, { include_hidden: false },
+        { multiple: true, class: "i-full", data: { controller: "combobox" } } %>
+  </div>
+
+  <div class="flex items-center gap mbs-4">
+    <%= form.submit class: "btn btn--primary i-full" %>
+  </div>
+<% end %>

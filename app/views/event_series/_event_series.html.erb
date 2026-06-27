@@ -1,0 +1,33 @@
+<div id="<%= dom_id(event_series) %>" class="flex items-center justify-between p-3 rounded-md bg-surface border border-main gap-2">
+  <div class="flex flex-col min-i-0">
+    <div class="font-medium"><%= event_series.name %></div>
+    <div class="text-xs text-subtle">
+      <%= l(event_series.starts_at, format: :long) %> &middot;
+      <%= pluralize(event_series.events.count, "occurrence") %>
+      <% if event_series.tags.any? %>
+        &middot; <%= event_series.tags.map(&:name).join(", ") %>
+      <% end %>
+    </div>
+  </div>
+  <div class="flex items-center gap">
+    <% if event_series.cancelled_series? || (event_series.ends_on.present? && event_series.ends_on < Date.current) %>
+
+    <% else %>
+      <%= button_to generate_occurrence_event_series_path(event_series,
+                      date: event_series.occurrences(from: Time.current, to: 60.days.from_now).first&.to_date || Date.today),
+          method: :post, class: "btn btn--icon btn--subtle", title: "Generate next occurrence" do %>
+        <span class="icon icon--calendar-plus" aria-hidden="true"></span>
+      <% end %>
+    <% end %>
+
+    <%= button_to toggle_cancellation_event_series_path(event_series),
+        method: :patch, class: "btn btn--icon btn--subtle",
+        title: event_series.cancelled_series? ? "Reactivate" : "Cancel series" do %>
+      <span class="icon icon--<%= event_series.cancelled_series? ? 'check' : 'x' %>" aria-hidden="true"></span>
+    <% end %>
+
+    <%= link_to edit_event_series_path(event_series), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
+      <span class="icon icon--pen" aria-hidden="true"></span>
+    <% end %>
+  </div>
+</div>

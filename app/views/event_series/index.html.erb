@@ -1,0 +1,45 @@
+<% content_for :title, "Event Series" %>
+<% content_for :page_header do %>
+  <h4 class="font-semibold">Event Series (<%= @event_series.count %>)</h4>
+<% end %>
+
+<% content_for :header_action_buttons do %>
+  <%= link_to new_event_series_path, class: "btn btn--icon btn--primary", data: { turbo_frame: "modal" } do %>
+    <span class="icon icon--calendar-plus"></span>
+  <% end %>
+<% end %>
+
+<div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
+  <%= link_to new_event_series_path, class: "btn btn--primary p-5 rounded-full", data: { turbo_frame: "modal" } do %>
+    <span class="icon icon--calendar-plus"></span>
+  <% end %>
+</div>
+
+<div class="flex flex-col container p-4 i-full">
+  <div class="flex items-center justify-between flex-wrap gap mbe-4">
+    <nav class="tabs__list border" aria-label="Events and Series">
+      <%= link_to "Events list",
+                  events_path(view: 'events-list'),
+                  class: "btn tabs__button",
+                  data: { turbo_frame: "_top" } %>
+      <%= link_to "Calendar",
+                  events_path(view: 'calendar'),
+                  class: "btn tabs__button",
+                  data: { turbo_frame: "_top" } %>
+      <%= link_to "Series",
+                  event_series_index_path,
+                  class: "btn tabs__button",
+                  aria: { current: "page" } %>
+    </nav>
+  </div>
+
+  <div id="event-series-list" class="flex flex-col gap-2">
+    <%= render @event_series %>
+  </div>
+
+  <% unless @event_series.any? %>
+    <div id="series-empty-state" class="text-center p-8 border border-dashed border-main rounded-md">
+      <p class="text-subtle text-sm">No series yet. Create your first one!</p>
+    </div>
+  <% end %>
+</div>

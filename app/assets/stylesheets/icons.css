@@ -65,6 +65,8 @@ img.icon {
 .icon--settings { --svg: url("settings.svg"); }
 .icon--settings-2 { --svg: url("settings-2.svg"); }
 .icon--check { --svg: url("check.svg"); }
+.icon--tag { --svg: url("tag.svg"); }
+.icon--tags { --svg: url("tags.svg"); }
 .icon--plus { --svg: url("plus.svg"); }
 .icon--log-out { --svg: url("log-out.svg"); }
 .icon--trash-2 { --svg: url("trash-2.svg"); }

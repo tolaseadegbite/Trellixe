@@ -1,0 +1,6 @@
+<div id="<%= dom_id(tag) %>" class="flex items-center justify-between p-2 rounded-md hover:bg-shade transition gap-1">
+  <span class="text-sm font-medium"><%= tag.name %></span>
+  <%= button_to tag_path(tag), method: :delete, class: "btn btn--icon btn--subtle text-subtle hover:bg-red-50 hover:text-red-700 transition", form: { data: { turbo_confirm: "Remove this tag?" } } do %>
+    <span class="icon icon--x" aria-hidden="true"></span>
+  <% end %>
+</div>

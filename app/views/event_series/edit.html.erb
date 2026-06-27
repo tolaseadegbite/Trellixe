@@ -1,0 +1,6 @@
+<%= render "shared/modal" do %>
+  <div data-action="turbo:submit-end->modal#submitEnd">
+    <h3 class="text-lg font-bold mbe-4">Edit Event Series</h3>
+    <%= render "form", event_series: @event_series %>
+  </div>
+<% end %>

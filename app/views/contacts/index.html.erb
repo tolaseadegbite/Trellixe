@@ -25,6 +25,12 @@
     <%= render "contacts/search_form" %>
   </div>
 
+  <div class="flex items-center justify-end mbe-2">
+    <%= link_to tags_path, class: "btn btn--subtle text-xs", data: { turbo_frame: "modal" } do %>
+      <span class="icon icon--tags"></span> Manage Tags
+    <% end %>
+  </div>
+
   <%= turbo_frame_tag :contacts_table do %>
 
     <%# --- 2. ACTIVE FILTERS (New) --- %>

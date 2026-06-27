@@ -81,3 +81,4 @@ gem "pagy", "~> 9.4"
 gem "web-push"
 
 gem "noticed", "~> 2.9"
+gem "ice_cube"

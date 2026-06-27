@@ -1,0 +1,5 @@
+<%= turbo_stream.replace dom_id(@event_series), partial: "event_series/event_series", locals: { event_series: @event_series } %>
+<% if @event %>
+  <%= turbo_stream.replace dom_id(@event_series, :virtual), partial: "events/calendar_event_badge", locals: { event: @event } %>
+<% end %>
+<%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>

@@ -143,6 +143,6 @@ class ContactsController < DashboardsController
     end
 
     def contact_params
-      params.require(:contact).permit(:first_name, :last_name, :email, :phone_number, :how_we_met)
+      params.require(:contact).permit(:first_name, :last_name, :email, :phone_number, :how_we_met, tag_ids: [])
     end
 end

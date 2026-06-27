@@ -1,0 +1,19 @@
+<%= render "shared/modal" do %>
+  <div data-action="turbo:submit-end->modal#submitEnd">
+    <div class="flex items-center justify-between mbe-4">
+      <h3 class="text-lg font-bold">Manage Tags</h3>
+    </div>
+
+    <%= render "form", tag: @tag %>
+
+    <div class="mbs-4">
+      <% if @tags.any? %>
+        <div class="flex flex-wrap gap-2" id="tags-list">
+          <%= render @tags %>
+        </div>
+      <% else %>
+        <p class="text-sm text-subtle text-center p-4">No tags yet. Create one above.</p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

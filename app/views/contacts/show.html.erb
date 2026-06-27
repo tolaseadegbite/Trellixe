@@ -60,6 +60,15 @@
             </div>
             <span class="text-xs font-semibold"><%= @contact.creator.full_name %></span>
           </div>
+
+          <% if @contact.tags.any? %>
+            <div class="flex flex-wrap items-center gap-1 border-t border-main pt-3 mt-1">
+              <span class="text-xs text-subtle">Tags</span>
+              <% @contact.tags.each do |tag| %>
+                <span class="bg-emerald-50 text-emerald-700 text-xs font-medium pi-2 pb-1 rounded-full border border-emerald-200"><%= tag.name %></span>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

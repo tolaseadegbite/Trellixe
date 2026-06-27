@@ -112,6 +112,7 @@
 
 .border-main { border-color: var(--color-border); }
 .border-dark { border-color: var(--color-border-dark); }
+.border-dashed { border-style: dashed; }
 
 .rounded-none { border-radius: 0; }
 .rounded-xs { border-radius: var(--rounded-xs); }

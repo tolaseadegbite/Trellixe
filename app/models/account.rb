@@ -10,6 +10,8 @@ class Account < ApplicationRecord
   # Trellixe Domain Data (Polymorphic Ownership)
   has_many :contacts, as: :owner, dependent: :destroy
   has_many :events, as: :owner, dependent: :destroy
+  has_many :tags, as: :owner, dependent: :destroy
+  has_many :event_series, as: :owner, dependent: :destroy
 
   # Through associations for deep querying
   has_many :invitations, through: :events

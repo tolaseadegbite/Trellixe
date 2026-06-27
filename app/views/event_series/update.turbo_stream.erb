@@ -1,0 +1,8 @@
+<% if @event_series.errors.none? %>
+  <%= turbo_stream.replace dom_id(@event_series), partial: "event_series/event_series", locals: { event_series: @event_series } %>
+  <turbo-stream action="dispatch_event" name="dialog:close"></turbo-stream>
+<% else %>
+  <%= turbo_stream.update "modal", partial: "event_series/form", locals: { event_series: @event_series } %>
+<% end %>
+
+<%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>

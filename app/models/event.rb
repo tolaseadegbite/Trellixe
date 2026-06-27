@@ -1,5 +1,6 @@
 class Event < ApplicationRecord
   belongs_to :owner, polymorphic: true
+  belongs_to :event_series, optional: true
 
   validates :name, :starts_at, :duration_in_minutes, presence: true
   validates :starts_at, presence: true
@@ -59,7 +60,6 @@ class Event < ApplicationRecord
   def create_invitations_for_contacts
     return unless contact_ids
     clean_ids = contact_ids.reject(&:blank?).map(&:to_i)
-    return if clean_ids.empty?
 
     if persisted?
       existing_ids = invitations.pluck(:contact_id)

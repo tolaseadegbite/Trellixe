@@ -6,11 +6,11 @@
         controller: "debounce" 
       }
     ) do |f| %>
-    <div class="grid grid-cols-1 grid-cols-3@sm grid-cols-3@md gap mbe-4">
+    <%# FIX: Added min-inline-size: 0; to stop form controls from ignoring mobile margins %>
+    <div class="grid grid-cols-1 grid-cols-3@sm grid-cols-3@md gap mbe-4" style="min-inline-size: 0;">
         
         <%# --- Search by Contact Name/Email --- %>
-        <div>
-            <%#= f.label :contact_first_name_or_contact_last_name_or_contact_email_cont, "Search by Contact", class: "font-medium" %>
+        <div style="min-inline-size: 0;">
             <%= f.search_field :contact_first_name_or_contact_last_name_or_contact_email_cont,
                                 placeholder: "Search by contact's name or email...",
                                 class: "input i-full mbs-1",
@@ -21,9 +21,7 @@
         </div>
 
         <%# --- Filter by Status --- %>
-        <div>
-            <%#= f.label :status_eq, "Filter by Status", class: "font-medium" %>
-            <%# Creates a dropdown from your Invitation enum %>
+        <div style="min-inline-size: 0;">
             <%= f.select :status_eq,
                Invitation.statuses.map { |name, value| [name.humanize, value] },
                { include_blank: 'Filter by invitation status' },
@@ -38,7 +36,6 @@
 
         <%# --- Form Actions --- %>
         <div class="flex items-center gap">
-            <%#= f.submit "Search", class: "btn bg-blue-600 hover:bg-blue-700 border-0 text-gray-50" %>
             <%= link_to "Reset", event_path(@event), class: "btn btn--primary i-full", data: { turbo_frame: "guest_list" } %>
         </div>
 

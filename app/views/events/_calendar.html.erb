@@ -91,12 +91,16 @@
            
         <h4 class="text-xs font-bold text-subtle uppercase mbe-1"><%= day.strftime("%A, %b %d") %></h4>
         
-        <% if @events_by_date[day].present? %>
-          <div class="flex flex-col gap-2">
-            <% @events_by_date[day].each do |event| %>
-              <%= render "events/event_list_item", event: event %>
-            <% end %>
-          </div>
+          <% if @events_by_date[day].present? %>
+            <div class="flex flex-col gap-2">
+              <% @events_by_date[day].each do |event| %>
+                <% if event.persisted? %>
+                  <%= render "events/event_list_item", event: event %>
+                <% else %>
+                  <%= render "events/calendar_event_badge", event: event %>
+                <% end %>
+              <% end %>
+            </div>
         <% else %>
            <div class="p-4 text-center border border-dashed border-main rounded-md">
              <p class="text-subtle text-sm">No events for this day.</p>

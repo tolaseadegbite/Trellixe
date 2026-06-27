@@ -32,6 +32,10 @@
                     events_path(view: 'calendar'), 
                     class: "btn tabs__button", 
                     **(params[:view] == 'calendar' ? { aria: { current: "page" } } : {}) %>
+        <%= link_to "Series", 
+                    event_series_index_path, 
+                    class: "btn tabs__button",
+                    data: { turbo_frame: "_top" } %>
       </nav>
 
       <% if params[:view] != 'calendar' %>

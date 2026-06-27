@@ -1,4 +1,5 @@
-<div id="<%= dom_id(invitation, :card) %>" class="card bg-main p-3 flex flex-col gap-3">
+<%# FIX: Added min-inline-size: 0; to prevent dynamic sub-rows from blowing past the screen margin %>
+<div id="<%= dom_id(invitation, :card) %>" class="card bg-main p-3 flex flex-col gap-3" style="min-inline-size: 0;">
   <div class="flex items-center gap-4">
     <div class="flex items-center gap shrink-0">
       <% if invitation.event.starts_at <= Time.current %>
@@ -12,6 +13,7 @@
         <span class="font-semibold"><%= invitation.contact.full_name.split.first(2).map(&:first).join.upcase %></span>
       </div>
     </div>
+    
     <div class="flex flex-col grow gap-1" style="min-inline-size: 0">
       <div class="flex items-center justify-between gap-2">
         <div class="flex flex-col" style="min-inline-size: 0">
@@ -33,8 +35,9 @@
 
 <% task = invitation.follow_up_tasks.find { |t| t.user_id == current_user.id } %>
 <% if invitation.interaction_logs.any? || task %>
-    <div class="border-t border-main">
-      <div id="<%= dom_id(invitation, :logs_mobile) %>">
+    <%# FIX: Swapped border-t to style="border-block-start: 1px solid var(--border-main);" or your global class equivalent %>
+    <div style="border-block-start: 1px solid var(--color-border, #ccc); min-inline-size: 0; overflow: hidden;">
+      <div id="<%= dom_id(invitation, :logs_mobile) %>" style="min-inline-size: 0;">
         <% invitation.interaction_logs.order(created_at: :desc).limit(2).each do |log| %>
           <%= render "interaction_logs/log_invitation_row", log: log, prefix: :mobile %>
         <% end %>

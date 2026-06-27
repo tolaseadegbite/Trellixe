@@ -1,0 +1,2 @@
+<%= turbo_stream.replace dom_id(@event_series), partial: "event_series/event_series", locals: { event_series: @event_series } %>
+<%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>
