@@ -1,9 +1,20 @@
 <%= turbo_stream.remove @event %>
 <%= turbo_stream.replace "calendar_view", partial: "events/calendar" %>
 
-<%# 2. If no events remain, render the empty state partials directly %>
 <% unless Current.account.events.exists? %>
   <%= turbo_stream.update "events-list", partial: "shared/empty_state" %>
+<% end %>
+
+<% if @event.event_series_id && (series = @event.event_series) %>
+  <%= turbo_stream.replace "series-stats", partial: "event_series/stats", locals: { event_series: series } %>
+  <% unless series.events.exists? %>
+    <%= turbo_stream.replace "series-events-empty", "" %>
+    <%= turbo_stream.update "series-events" do %>
+      <h2 class="font-bold text-lg mbe-2">Generated Events</h2>
+      <div id="series-events-list" class="grid grid-cols-1 grid-cols-2@sm grid-cols-3@md gap"></div>
+      <p id="series-events-empty" class="p-8 text-center text-subtle text-sm border border-dashed border-main rounded-md mbs-2">No events generated yet.</p>
+    <% end %>
+  <% end %>
 <% end %>
 
 <%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice] } %>

@@ -1,5 +1,10 @@
 <%= turbo_stream.replace dom_id(@event_series), partial: "event_series/event_series", locals: { event_series: @event_series } %>
 <% if @event %>
   <%= turbo_stream.replace dom_id(@event_series, :virtual), partial: "events/calendar_event_badge", locals: { event: @event } %>
+  <% if @from_show %>
+    <%= turbo_stream.replace "series-events-empty", "" %>
+    <%= turbo_stream.prepend "series-events-list", partial: "events/event_list_item", locals: { event: @event } %>
+    <%= turbo_stream.replace "series-stats", partial: "event_series/stats", locals: { event_series: @event_series } %>
+  <% end %>
 <% end %>
 <%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>

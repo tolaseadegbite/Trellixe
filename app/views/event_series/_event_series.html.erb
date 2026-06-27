@@ -1,6 +1,8 @@
 <div id="<%= dom_id(event_series) %>" class="flex items-center justify-between p-3 rounded-md bg-surface border border-main gap-2">
   <div class="flex flex-col min-i-0">
-    <div class="font-medium"><%= event_series.name %></div>
+    <%= link_to event_series, class: "font-medium text-primary hover:text-link no-underline", data: { turbo_frame: "_top" } do %>
+      <%= event_series.name %>
+    <% end %>
     <div class="text-xs text-subtle">
       <%= l(event_series.starts_at, format: :long) %> &middot;
       <%= pluralize(event_series.events.count, "occurrence") %>

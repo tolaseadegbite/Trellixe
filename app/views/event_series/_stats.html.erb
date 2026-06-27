@@ -1,0 +1,10 @@
+<div id="series-stats" class="bg-shade border border-main rounded-md p-3 flex flex-wrap items-center gap-8">
+  <div class="flex flex-col">
+    <span class="text-xs uppercase font-bold text-subtle mbe-1">Occurrences</span>
+    <span class="text-2xl font-bold text-primary"><%= event_series.events.count %></span>
+  </div>
+  <div class="flex flex-col">
+    <span class="text-xs uppercase font-bold text-subtle mbe-1">Upcoming</span>
+    <span class="text-2xl font-bold text-primary"><%= event_series.events.upcoming.count %></span>
+  </div>
+</div>

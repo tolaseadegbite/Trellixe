@@ -86,7 +86,7 @@ Rails.application.routes.draw do
   resources :tags, only: [ :index, :create, :destroy ]
 
   # --- Event Series ---
-  resources :event_series, only: [ :index, :new, :create, :edit, :update, :destroy ] do
+  resources :event_series, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
     member do
       post :generate_occurrence
       patch :toggle_cancellation

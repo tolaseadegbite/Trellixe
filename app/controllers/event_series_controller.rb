@@ -7,7 +7,8 @@ class EventSeriesController < DashboardsController
   end
 
   def show
-    redirect_to edit_event_series_path(@event_series)
+    @events = @event_series.events.order(starts_at: :desc)
+    @pagy, @events = pagy(@events)
   end
 
   def new
@@ -61,6 +62,7 @@ class EventSeriesController < DashboardsController
     date = Date.parse(params[:date])
     start_time = @event_series.starts_at.change(year: date.year, month: date.month, day: date.day)
     @event = @event_series.generate_occurrence!(start_time)
+    @from_show = params[:from] == "show"
 
     if @event
       flash.now[:notice] = "Occurrence created."

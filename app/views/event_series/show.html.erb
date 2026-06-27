@@ -1,0 +1,53 @@
+<% content_for :title, @event_series.name %>
+
+<% content_for :page_header do %>
+  <div class="flex items-center gap text-sm i-full">
+    <%= link_to event_series_index_path, class: "flex items-center text-subtle hover:text-primary no-underline", data: { turbo_frame: "_top" } do %>
+      <span class="icon icon--chevron-left" style="--icon-size: 1.25rem" aria-hidden="true"></span>
+    <% end %>
+    <span class="text-subtle mi-2">/</span>
+    <span class="text-primary font-medium overflow-ellipsis"><%= @event_series.name %></span>
+  </div>
+<% end %>
+
+<div class="flex flex-col gap p-2 i-full">
+
+  <%= render "event_series/show_details", event_series: @event_series %>
+
+  <%# --- ACTION BUTTONS --- %>
+  <div class="flex items-center gap">
+    <%= link_to edit_event_series_path(@event_series), class: "btn btn--icon btn--subtle", title: "Edit", data: { turbo_frame: "modal" } do %>
+      <span class="icon icon--pen" aria-hidden="true"></span>
+    <% end %>
+
+    <% unless @event_series.cancelled_series? || (@event_series.ends_on.present? && @event_series.ends_on < Date.current) %>
+      <%= button_to generate_occurrence_event_series_path(@event_series,
+                      date: @event_series.occurrences(from: Time.current, to: 60.days.from_now).first&.to_date || Date.today,
+                      from: "show"),
+          method: :post, class: "btn btn--icon btn--subtle", title: "Generate next occurrence" do %>
+        <span class="icon icon--calendar-plus" aria-hidden="true"></span>
+      <% end %>
+    <% end %>
+
+    <%= button_to toggle_cancellation_event_series_path(@event_series),
+        method: :patch, class: "btn btn--icon btn--subtle",
+        title: @event_series.cancelled_series? ? "Reactivate" : "Cancel series" do %>
+      <span class="icon icon--<%= @event_series.cancelled_series? ? 'check' : 'x' %>" aria-hidden="true"></span>
+    <% end %>
+  </div>
+
+  <%# --- GENERATED EVENTS --- %>
+  <div id="series-events" class="mbs-4">
+    <h2 class="font-bold text-lg mbe-2">Generated Events</h2>
+
+    <div id="series-events-list" class="grid grid-cols-1 grid-cols-2@sm grid-cols-3@md gap">
+      <%= render partial: "events/event_list_item", collection: @events, as: :event %>
+    </div>
+
+    <% if @events.any? %>
+      <%= render "shared/pagination", pagy: @pagy %>
+    <% else %>
+      <p id="series-events-empty" class="p-8 text-center text-subtle text-sm border border-dashed border-main rounded-md mbs-2">No events generated yet.</p>
+    <% end %>
+  </div>
+</div>
