@@ -10,7 +10,7 @@ class MembershipsController < DashboardsController
     if @membership.admin? && new_role == "member" && Current.account.memberships.admin.count <= 1
       flash.now[:alert] = "You cannot demote the only Admin."
       render turbo_stream: [
-        turbo_stream.replace(@membership, partial: "members/membership", locals: { membership: @membership }),
+        turbo_stream.replace(@membership, partial: "members/member_row", locals: { membership: @membership }),
         turbo_stream.update("flash_messages", partial: "shared/flash")
       ]
       return

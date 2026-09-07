@@ -1,0 +1,59 @@
+<%# Unified member row — the only member list item at every width.
+    Locals: membership. Role control stays inline (autosubmit); leave and
+    remove actions keep their confirm dialogs. %>
+<div id="<%= dom_id(membership) %>" class="flex min-h-16 items-center gap-3 px-4 py-3">
+  <%= image_tag user_avatar_url(membership.user, size: 64), size: 36, alt: membership.user.name,
+      class: "h-9 w-9 shrink-0 rounded-full object-cover" %>
+  <span class="min-w-0 flex-1">
+    <span class="block truncate text-[14.5px] font-semibold"><%= membership.user.full_name %></span>
+    <span class="mt-0.5 block truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]"><%= membership.user.email %></span>
+  </span>
+  <% if can_manage_members? %>
+    <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" }, class: "shrink-0" do |f| %>
+      <%= f.select :role,
+          Membership.roles.keys.map { |r| [r.humanize, r] },
+          {},
+          {
+            class: "cursor-pointer rounded-lg border border-[#D9DDE0] px-2.5 py-2 pr-8 text-[13px] font-semibold capitalize outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 #{membership.admin? ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'bg-white text-[#1c2420] dark:bg-[#0C1210] dark:text-[#E7ECE9]'} dark:border-white/10",
+            onchange: "this.form.requestSubmit()",
+            aria: { label: "Role for #{membership.user.full_name}" }
+          } %>
+    <% end %>
+  <% else %>
+    <span class="inline-flex shrink-0 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize <%= membership.admin? ? 'border-[#A2E494] bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'border-[#D9DDE0] bg-[#F6F9F7] text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]' %>">
+      <%= membership.role %>
+    </span>
+  <% end %>
+  <span class="hidden shrink-0 text-[13px] tabular-nums text-[#8a938d] sm:block dark:text-[#9AA6A0]">
+    <%= time_ago_in_words(membership.created_at) %> ago
+  </span>
+  <span class="flex shrink-0 items-center">
+    <% if membership.user == current_user %>
+      <% leave_trigger = button_tag type: "button", title: "Leave workspace",
+          class: "flex h-9 w-9 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-red-700 dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-red-400",
+          data: { action: "dialog#showModal" } do %>
+        <%= icon("log-out", css: "h-[18px] w-[18px]") %>
+      <% end %>
+      <%= modal_dialog leave_trigger, size: "400px", title: "Leave workspace?" do %>
+        <p class="text-sm leading-relaxed text-[#6b7672] dark:text-[#9AA6A0]">Are you sure you want to leave <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= Current.account.name %></strong>?</p>
+        <div class="mt-5 flex justify-end gap-2">
+          <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Leave team", membership_path(membership), method: :delete, class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white" %>
+        </div>
+      <% end %>
+    <% elsif can_manage_members? %>
+      <% delete_trigger = button_tag type: "button", title: "Remove member",
+          class: "flex h-9 w-9 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-red-700 dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-red-400",
+          data: { action: "dialog#showModal" } do %>
+        <%= icon("trash-2", css: "h-[18px] w-[18px]") %>
+      <% end %>
+      <%= modal_dialog delete_trigger, size: "400px", title: "Remove member?" do %>
+        <p class="text-sm leading-relaxed text-[#6b7672] dark:text-[#9AA6A0]">Are you sure you want to remove <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= membership.user.full_name %></strong>?</p>
+        <div class="mt-5 flex justify-end gap-2">
+          <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Remove member", membership_path(membership), method: :delete, class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white" %>
+        </div>
+      <% end %>
+    <% end %>
+  </span>
+</div>

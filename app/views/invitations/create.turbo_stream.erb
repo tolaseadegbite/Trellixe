@@ -1,9 +1,7 @@
 <%# Loop through all newly created invitations and append them %>
 <% @new_invitations.each do |invitation| %>
   <% if invitation.persisted? %>
-    <%= turbo_stream.prepend "invitations-table" do %>
-      <%= render invitation %>
-    <% end %>
+    <%= turbo_stream.prepend "invitations-list", partial: "invitations/invitation_row", locals: { invitation: invitation } %>
   <% end %>
 <% end %>
 

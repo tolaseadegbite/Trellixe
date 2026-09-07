@@ -62,63 +62,27 @@
 
     <%# --- TAB 1: ACTIVE MEMBERS --- %>
     <div id="tab_active" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_active" class="pt-4">
-      <div class="hidden overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white md:block dark:border-white/10 dark:bg-[#131B17]">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead>
-              <tr class="border-b border-[#E9EBED] bg-[#F6F9F7] text-xs uppercase tracking-wide text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
-                <th class="px-4 py-3 font-semibold">User</th>
-                <th class="px-3 py-3 font-semibold">Role</th>
-                <th class="px-3 py-3 font-semibold">Joined</th>
-                <th class="px-4 py-3 text-right font-semibold"><span class="sr-only">Actions</span></th>
-              </tr>
-            </thead>
-            <tbody id="members-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
-              <%= render partial: "members/membership", collection: @active_memberships %>
-            </tbody>
-          </table>
+      <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+        <div id="members-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
+          <% if @active_memberships.empty? %>
+            <div class="px-4 py-8"><%= render "shared/empty_state", title: "No active members", body: "Invite your team to share contacts, events, and follow-ups.", icon_name: "user" %></div>
+          <% else %>
+            <%= render partial: "members/member_row", collection: @active_memberships, as: :membership %>
+          <% end %>
         </div>
-      </div>
-
-      <div class="space-y-2.5 md:hidden">
-        <% if @active_memberships.empty? %>
-          <%= render "shared/empty_state", title: "No active members", body: "Invite your team to share contacts, events, and follow-ups.", icon_name: "user" %>
-        <% else %>
-          <%= render partial: "members/member_card", collection: @active_memberships, as: :membership %>
-        <% end %>
       </div>
     </div>
 
     <%# --- TAB 2: PENDING INVITES --- %>
     <div hidden id="tab_pending" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_pending" class="pt-4">
-      <div class="hidden overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white md:block dark:border-white/10 dark:bg-[#131B17]">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead>
-              <tr class="border-b border-[#E9EBED] bg-[#F6F9F7] text-xs uppercase tracking-wide text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
-                <th class="px-4 py-3 font-semibold">Email</th>
-                <th class="px-3 py-3 font-semibold">Role</th>
-                <th class="px-3 py-3 font-semibold">Sent</th>
-                <th class="px-4 py-3 text-right font-semibold"><span class="sr-only">Actions</span></th>
-              </tr>
-            </thead>
-            <tbody id="invitations-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
-              <% if @pending_invitations.any? %>
-                <%= render partial: "team_invitations/team_invitation", collection: @pending_invitations %>
-              <% else %>
-                <tr><td colspan="4" class="px-4 py-8"><%= render "shared/empty_state", title: "No pending invites", body: "Invite a teammate and they'll show up here until they accept.", icon_name: "mail" %></td></tr>
-              <% end %>
-            </tbody>
-          </table>
+      <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+        <div id="invitations-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
+          <% if @pending_invitations.any? %>
+            <%= render partial: "team_invitations/team_invite_row", collection: @pending_invitations, as: :team_invitation %>
+          <% else %>
+            <div class="px-4 py-8"><%= render "shared/empty_state", title: "No pending invites", body: "Invite a teammate and they'll appear here until they accept.", icon_name: "mail" %></div>
+          <% end %>
         </div>
-      </div>
-
-      <div id="invitations-cards" class="space-y-2.5 md:hidden">
-        <% if @pending_invitations.empty? %>
-          <%= render "shared/empty_state", title: "No pending invites", body: "Invite a teammate and they'll show up here until they accept.", icon_name: "mail" %>
-        <% else %>
-          <%= render partial: "team_invitations/invitation-card", collection: @pending_invitations, as: :invitation %>
-        <% end %>
       </div>
     </div>
   </div>

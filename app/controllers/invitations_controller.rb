@@ -50,7 +50,7 @@ class InvitationsController < DashboardsController
         format.turbo_stream
         format.html { redirect_to @invitation.event, notice: "Invitation was successfully updated." }
       else
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@invitation, partial: "invitations/invitation", locals: { invitation: @invitation }), status: :unprocessable_entity }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@invitation, partial: "invitations/invitation_row", locals: { invitation: @invitation }), status: :unprocessable_entity }
         format.html { render :edit, status: :unprocessable_entity }
       end
     end

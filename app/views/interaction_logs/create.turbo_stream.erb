@@ -9,10 +9,6 @@
   <%= render "log_invitation_row", log: @interaction_log, prefix: :desktop %>
 <% end %>
 
-<%= turbo_stream.prepend dom_id(invitation, :logs_mobile) do %>
-  <%= render "log_invitation_row", log: @interaction_log, prefix: :mobile %>
-<% end %>
-
 <%= turbo_stream.prepend "flash", partial: "shared/flash", locals: { notice: "Follow-up successfully logged!" } %>
 
 <%# When logging from the follow-up queue, advance it in place. %>

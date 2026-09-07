@@ -158,6 +158,9 @@ already in use — compose from them before inventing anything new:
      `events/_checkin_counter` (`summary`) and `events/_checkin_row`
      (`invitation`)
    - `contacts/_contact_row` (`contact`) — the single list item at all widths
+   - `invitations/_invitation_row` (`invitation`) — guest row with logs thread
+   - `members/_member_row` (`membership`), `team_invitations/_team_invite_row`
+     (`team_invitation`)
 3. **Layout-partials for shells** — `render layout:` (auth shell pattern)
    for page/modal shells.
 

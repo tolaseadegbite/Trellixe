@@ -4,10 +4,6 @@
   <%= render "log_invitation_row", log: @interaction_log, prefix: :desktop %>
 <% end %>
 
-<%= turbo_stream.replace dom_id(@interaction_log, :mobile) do %>
-  <%= render "log_invitation_row", log: @interaction_log, prefix: :mobile %>
-<% end %>
-
 <%= turbo_stream.replace dom_id(@interaction_log, :past) do %>
   <%= render "log_past_card", log: @interaction_log %>
 <% end %>
