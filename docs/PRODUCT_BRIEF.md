@@ -151,6 +151,9 @@ already in use — compose from them before inventing anything new:
    - `tags/_manager` (`tags, tag, list_id`)
    - `dashboards/_follow_up_row`, `dashboards/_upcoming_event_row`
      (`task` / `event`)
+   - `follow_up_tasks/_queue` (`queue, pagy, context`) with
+     `follow_up_tasks/_queue_current` (`task, context`) and
+     `follow_up_tasks/_queue_up_next_row` (`task, context`)
 3. **Layout-partials for shells** — `render layout:` (auth shell pattern)
    for page/modal shells.
 

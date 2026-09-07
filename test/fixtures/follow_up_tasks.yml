@@ -11,3 +11,13 @@ two:
   user: lazaro_nixon
   due_at: 2025-10-25 16:03:40
   completed_at: 2025-10-25 16:03:40
+
+three:
+  invitation: three
+  user: lazaro_nixon
+  due_at: <%= 2.days.from_now %>
+
+four:
+  invitation: four
+  user: lazaro_nixon
+  due_at: <%= 1.day.from_now %>

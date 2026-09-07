@@ -1,0 +1,16 @@
+<%# Compact up-next row. Locals: task, context ({scope:, q?}) %>
+<% contact = task.invitation.contact %>
+<% overdue = task.due_at < Time.current %>
+<%= link_to follow_up_tasks_path(context.merge(focus: task.id)),
+    class: "flex items-center gap-3 rounded-2xl border border-[#D9DDE0] bg-white px-4 py-3 transition hover:border-[#A2E494] dark:border-white/10 dark:bg-[#131B17]" do %>
+  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-algae-900 text-[13px] font-bold text-white">
+    <%= (contact.full_name&.first || contact.first_name&.first || "?").upcase %>
+  </span>
+  <span class="min-w-0 flex-1">
+    <span class="block truncate text-[14px] font-semibold"><%= contact.full_name %></span>
+    <span class="block truncate text-[13px] tabular-nums <%= overdue ? 'font-medium text-red-700 dark:text-red-400' : 'text-[#8a938d] dark:text-[#9AA6A0]' %>">
+      <%= overdue ? "#{time_ago_in_words(task.due_at)} overdue" : "due #{task.due_at.today? ? 'today' : l(task.due_at, format: :short)}" %>
+    </span>
+  </span>
+  <%= icon("chevron-right", css: "h-4 w-4 shrink-0 text-[#c3c9c5]") %>
+<% end %>

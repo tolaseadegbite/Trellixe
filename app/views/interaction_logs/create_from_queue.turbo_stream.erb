@@ -1,0 +1,10 @@
+<%# Queue-only log response: every target below exists on the follow-ups
+    queue page, so no missing-target console errors. Other contexts keep
+    using the shared create.turbo_stream.erb untouched. %>
+<%= turbo_stream.remove @follow_up_task %>
+
+<%= turbo_stream.update "flash_messages", partial: "shared/flash",
+      locals: { notice: "Follow-up successfully logged!" } %>
+
+<%= turbo_stream.replace "follow_up_queue", partial: "follow_up_tasks/queue",
+      locals: { queue: @queue, pagy: @pagy, context: @queue_context } %>

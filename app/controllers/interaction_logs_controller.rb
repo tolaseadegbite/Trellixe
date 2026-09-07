@@ -8,6 +8,9 @@ class InteractionLogsController < DashboardsController
       contact: @follow_up_task.invitation.contact,
       user: current_user
     )
+    # When logging from the follow-up queue, the form posts back with this
+    # context so the queue can advance in place after a successful save.
+    @queue_context = params[:from] == "queue" ? params.slice(:from, :scope, :q).to_unsafe_h : nil
   end
 
   def edit
@@ -20,6 +23,9 @@ class InteractionLogsController < DashboardsController
     @interaction_log = @follow_up_task.interaction_logs.build(interaction_log_params)
     @interaction_log.contact = @follow_up_task.invitation.contact
     @interaction_log.user = current_user
+    # Preserved for the re-rendered form on validation failure, and used
+    # below to advance the queue on success.
+    @queue_context = params[:from] == "queue" ? params.slice(:from, :scope, :q).to_unsafe_h : nil
 
     respond_to do |format|
       ActiveRecord::Base.transaction do
@@ -29,7 +35,13 @@ class InteractionLogsController < DashboardsController
 
       mark_related_notifications_read
 
-      format.turbo_stream
+      if params[:from] == "queue"
+        @queue = FollowUpQueue.load_for(current_user, Current.account, params[:q])
+        @pagy, _page = pagy(@queue.records)
+        @queue_context = FollowUpQueue.context_for(params, "pending")
+      end
+
+      format.turbo_stream { render(@queue ? :create_from_queue : :create) }
       format.html { redirect_to follow_up_tasks_path, notice: "Follow-up successfully logged!" }
 
     rescue ActiveRecord::RecordInvalid

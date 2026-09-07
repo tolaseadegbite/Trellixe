@@ -14,3 +14,8 @@
 <% end %>
 
 <%= turbo_stream.prepend "flash", partial: "shared/flash", locals: { notice: "Follow-up successfully logged!" } %>
+
+<%# When logging from the follow-up queue, advance it in place. %>
+<% if @queue %>
+  <%= turbo_stream.replace "follow_up_queue", partial: "follow_up_tasks/queue", locals: { queue: @queue, pagy: @pagy, context: @queue_context } %>
+<% end %>

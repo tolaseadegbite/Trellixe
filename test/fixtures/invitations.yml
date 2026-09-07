@@ -11,3 +11,15 @@ two:
   event: two
   status: invited
   notes: MyText
+
+three:
+  contact: one
+  event: two
+  status: attended
+  notes: Came with a friend.
+
+four:
+  contact: two
+  event: one
+  status: attended
+  notes: Met after the service.
