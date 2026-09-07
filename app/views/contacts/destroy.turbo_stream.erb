@@ -1,12 +1,9 @@
 <%= turbo_stream.remove dom_id(@contact) %>
-<%= turbo_stream.remove dom_id(@contact, :card) %>
-<%= turbo_stream.remove dom_id(@contact, :table_row) %>
 
-<%# 2. If no contacts remain, render the empty state directly %>
+<%# If no contacts remain, render the empty state directly %>
 <% unless Current.account.contacts.exists? %>
-  <%= turbo_stream.update "contacts-table", partial: "shared/empty_state", locals: { title: "No contacts yet", body: "Add your first person from Saturday outreach.", icon_name: "card-sim" } %>
-  <%= turbo_stream.update "contacts-cards", partial: "shared/empty_state", locals: { title: "No contacts yet", body: "Add your first person from Saturday outreach.", icon_name: "card-sim" } %>
+  <%= turbo_stream.update "contacts-list", partial: "shared/empty_state", locals: { title: "No contacts yet", body: "Add your first person from Saturday outreach.", icon_name: "card-sim" } %>
 <% end %>
 
-<%# 3. Flash Messages %>
+<%# Flash Messages %>
 <%= turbo_stream.update "flash_messages", partial: "shared/flash" %>

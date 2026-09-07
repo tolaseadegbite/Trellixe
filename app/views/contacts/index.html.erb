@@ -63,39 +63,23 @@
         </div>
       </div>
 
-      <div class="hidden overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white md:block dark:border-white/10 dark:bg-[#131B17]">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead>
-              <tr class="border-b border-[#E9EBED] bg-[#F6F9F7] text-xs uppercase tracking-wide text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
-                <th class="w-10 px-4 py-3"><%= check_box_tag :check_all, nil, false, class: "h-4 w-4 accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
-                <th class="px-3 py-3 font-semibold"><%= sort_link(@search, :first_name, "First name") %></th>
-                <th class="px-3 py-3 font-semibold"><%= sort_link(@search, :last_name, "Last name") %></th>
-                <th class="px-3 py-3 font-semibold"><%= sort_link(@search, :email, "Email") %></th>
-                <th class="px-3 py-3 font-semibold"><%= sort_link(@search, :phone_number, "Phone") %></th>
-                <th class="px-4 py-3 text-right font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="contacts-table" class="divide-y divide-[#E9EBED] dark:divide-white/10">
-              <% if @contacts.empty? %>
-                <tr><td colspan="6" class="px-4 py-8"><%= render "shared/empty_state", title: "No contacts yet", body: "Add your first person from Saturday outreach — name, number, one line of context.", icon_name: "card-sim" %></td></tr>
-              <% else %>
-                <%= render @contacts %>
-              <% end %>
-            </tbody>
-          </table>
+      <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#E9EBED] px-4 py-2.5 dark:border-white/10">
+          <label class="flex cursor-pointer items-center gap-2 text-[13px] font-medium text-[#3d4742] dark:text-[#C6CFC9]">
+            <%= check_box_tag :check_all, nil, false, class: "h-4 w-4 cursor-pointer accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependee" } %>
+            Select all
+          </label>
+          <div class="flex items-center gap-1.5 text-[13px]">
+            <span class="font-medium text-[#8a938d] dark:text-[#9AA6A0]">Sort:</span>
+            <%= sort_link(@search, :first_name, "First name", class: "rounded-md px-2 py-1 font-semibold text-algae-900 hover:underline dark:text-algae-300") %>
+            <%= sort_link(@search, :created_at, "Recently added", class: "rounded-md px-2 py-1 font-semibold text-algae-900 hover:underline dark:text-algae-300") %>
+          </div>
         </div>
-      </div>
-
-      <div class="space-y-2.5 md:hidden">
-        <label class="flex items-center gap-2 px-1 text-sm font-medium">
-          <%= check_box_tag "check_all_mobile", nil, false, class: "h-4 w-4 accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependee" } %> Select all
-        </label>
-        <div id="contacts-cards" class="space-y-2.5">
+        <div id="contacts-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
           <% if @contacts.empty? %>
-            <%= render "shared/empty_state", title: "No contacts yet", body: "Add your first person from Saturday outreach.", icon_name: "card-sim" %>
+            <div class="px-4 py-8"><%= render "shared/empty_state", title: "No contacts yet", body: "Add your first person from Saturday outreach — name, number, one line of context.", icon_name: "card-sim" %></div>
           <% else %>
-            <%= render partial: "contacts/contact_card", collection: @contacts, as: :contact %>
+            <%= render partial: "contacts/contact_row", collection: @contacts, as: :contact %>
           <% end %>
         </div>
       </div>

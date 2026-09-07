@@ -1,0 +1,36 @@
+<%# Unified contact row — the only contact list item at every width.
+    Locals: contact. Lives inside the contacts bulk form; the checkbox
+    feeds the bulk bar, the popover holds Edit + Delete. %>
+<div id="<%= dom_id(contact) %>" class="flex min-h-16 items-center gap-3 px-4 py-3">
+  <%= check_box_tag "contact_ids[]", contact.id, false,
+      class: "h-5 w-5 shrink-0 cursor-pointer accent-[#13714C]",
+      data: { action: "check-all#check", check_all_target: "dependant" } %>
+  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-algae-900 text-sm font-bold text-white">
+    <%= (contact.full_name&.first || contact.first_name&.first || contact.email.first).upcase %>
+  </span>
+  <span class="min-w-0 flex-1">
+    <%= link_to contact.full_name.titleize, contact, data: { turbo_frame: "_top" },
+        class: "block truncate text-[14.5px] font-semibold hover:text-algae-900 hover:underline dark:hover:text-algae-300" %>
+    <span class="mt-0.5 block truncate text-[13px] tabular-nums text-[#8a938d] dark:text-[#9AA6A0]">
+      <%= [ contact.email.presence, contact.phone_number.presence ].compact.join(" · ") %>
+    </span>
+  </span>
+  <span class="flex shrink-0 items-center gap-1">
+    <%= link_to contact, data: { turbo_frame: "_top" }, title: "View",
+        class: "flex h-9 w-9 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]" do %><%= icon("eye", css: "h-[18px] w-[18px]") %><% end %>
+    <span data-controller="popover" data-popover-placement-value="bottom-end" data-action="click@window->popover#clickOutside" class="relative">
+      <button type="button" class="flex h-9 w-9 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] dark:text-[#9AA6A0] dark:hover:bg-white/10" popovertarget="popover-<%= contact.id %>" data-popover-target="trigger" aria-haspopup="true"><%= icon("ellipsis", css: "h-[18px] w-[18px]") %></button>
+      <%= tag.div popover: "auto", id: "popover-#{contact.id}", class: "tlx-popover w-36 p-1.5", data: { popover_target: "content" } do %>
+        <%= link_to "Edit", edit_contact_path(contact), data: { turbo_frame: "modal" }, class: "flex rounded-lg px-2.5 py-2 text-[13px] hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+        <% delete_trigger = button_tag "Delete", type: "button", class: "flex w-full rounded-lg px-2.5 py-2 text-left text-[13px] text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10", data: { action: "dialog#showModal" } %>
+        <%= modal_dialog delete_trigger, size: "450px", title: "Delete '#{contact.first_name} #{contact.last_name}'?" do %>
+          <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">This permanently deletes this contact. This can't be undone.</p>
+          <div class="mt-5 flex justify-end gap-2">
+            <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+            <%= link_to "Delete", contact, data: { turbo_method: :delete }, class: "rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white" %>
+          </div>
+        <% end %>
+      <% end %>
+    </span>
+  </span>
+</div>

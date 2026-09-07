@@ -1,7 +1,4 @@
-<%# 1. Replace the table row using its unique ID %>
-<%= turbo_stream.replace dom_id(@contact, :table_row), partial: "contacts/contact", locals: { contact: @contact } %>
-
-<%# 2. Replace the card using its unique ID %>
-<%= turbo_stream.replace dom_id(@contact, :card), partial: "contacts/contact_card", locals: { contact: @contact } %>
+<%# Replace the unified row using its unique ID %>
+<%= turbo_stream.replace dom_id(@contact), partial: "contacts/contact_row", locals: { contact: @contact } %>
 
 <%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>

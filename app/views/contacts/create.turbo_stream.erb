@@ -1,6 +1,5 @@
 <% if @contact.persisted? %>
-  <%= turbo_stream.prepend "contacts-table", partial: "contacts/contact", locals: { contact: @contact } %>
-  <%= turbo_stream.prepend "contacts-cards", partial: "contacts/contact_card", locals: { contact: @contact } %>
+  <%= turbo_stream.prepend "contacts-list", partial: "contacts/contact_row", locals: { contact: @contact } %>
   <%= turbo_stream.update("new_contact_form") { render "form", contact: Contact.new } %>
 <% else %>
   <%= turbo_stream.update "new_contact_form", partial: "form", locals: { contact: @contact } %>

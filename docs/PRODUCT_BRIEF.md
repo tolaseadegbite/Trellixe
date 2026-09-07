@@ -157,6 +157,7 @@ already in use — compose from them before inventing anything new:
    - `events/_checkin` (`event, invitations, pagy, search, summary`) with
      `events/_checkin_counter` (`summary`) and `events/_checkin_row`
      (`invitation`)
+   - `contacts/_contact_row` (`contact`) — the single list item at all widths
 3. **Layout-partials for shells** — `render layout:` (auth shell pattern)
    for page/modal shells.
 

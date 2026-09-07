@@ -1,13 +1,9 @@
 <%# 1. Update Flash Messages %>
 <%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
 
-<%# 2. Loop through the deleted IDs and remove elements %>
+<%# 2. Loop through the deleted IDs and remove the unified rows %>
 <% @contact_ids.each do |id| %>
-  <%# Remove Desktop Row: "table_row_contact_22" %>
-  <%= turbo_stream.remove "table_row_contact_#{id}" %>
-  
-  <%# Remove Mobile Card: "card_contact_22" %>
-  <%= turbo_stream.remove "card_contact_#{id}" %>
+  <%= turbo_stream.remove "contact_#{id}" %>
 <% end %>
 
 <%# 3. Reset UI via Stimulus (uncheck boxes, hide action bar) %>
@@ -16,6 +12,3 @@
     document.getElementById("contacts-bulk-form").dispatchEvent(new CustomEvent("reset-bulk-ui"));
   </script>
 <% end %>
-
-<%# 4. Optional: Update pagination or count if you want perfection %>
-<%# <%= turbo_stream.update "page_header", ... %>
