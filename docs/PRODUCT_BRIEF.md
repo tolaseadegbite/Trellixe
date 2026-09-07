@@ -152,8 +152,11 @@ already in use — compose from them before inventing anything new:
    - `dashboards/_follow_up_row`, `dashboards/_upcoming_event_row`
      (`task` / `event`)
    - `follow_up_tasks/_queue` (`queue, pagy, context`) with
-     `follow_up_tasks/_queue_current` (`task, context`) and
+     `follow_up_tasks/_queue_current` (`task, context, queue`) and
      `follow_up_tasks/_queue_up_next_row` (`task, context`)
+   - `events/_checkin` (`event, invitations, pagy, search, summary`) with
+     `events/_checkin_counter` (`summary`) and `events/_checkin_row`
+     (`invitation`)
 3. **Layout-partials for shells** — `render layout:` (auth shell pattern)
    for page/modal shells.
 

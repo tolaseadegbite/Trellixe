@@ -1,0 +1,16 @@
+<%# Check-in mode progress header. Locals: summary ({total:, attended:, declined:}) %>
+<div id="checkin-counter" class="sticky top-[61px] z-20 rounded-2xl border border-[#D9DDE0] bg-white/95 p-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#131B17]/95">
+  <div class="flex items-baseline justify-between gap-3">
+    <p class="font-display text-xl font-bold tabular-nums tracking-tight">
+      <%= summary[:attended] %> <span class="text-sm font-semibold text-[#8a938d] dark:text-[#9AA6A0]">of <%= summary[:total] %> checked in</span>
+    </p>
+    <% if summary[:declined] > 0 %>
+      <p class="text-[13px] tabular-nums text-[#8a938d] dark:text-[#9AA6A0]"><%= summary[:declined] %> declined</p>
+    <% end %>
+  </div>
+  <div class="mt-2.5 h-2 overflow-hidden rounded-full bg-[#E9EBED] dark:bg-white/10" role="progressbar"
+       aria-valuenow="<%= summary[:attended] %>" aria-valuemin="0" aria-valuemax="<%= summary[:total] %>"
+       aria-label="Guests checked in">
+    <div class="h-full rounded-full bg-algae-600 transition-all" style="width: <%= summary[:total].positive? ? (summary[:attended] * 100.0 / summary[:total]).round : 0 %>%"></div>
+  </div>
+</div>

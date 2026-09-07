@@ -11,8 +11,21 @@
 <% end %>
 
 <div class="space-y-5">
-  <%= render "events/show_header", event: @event %>
+  <%= render "events/show_header", event: @event, checkin: @checkin_mode %>
 
+  <nav class="flex gap-1 rounded-xl border border-[#D9DDE0] bg-white p-1 self-start dark:border-white/10 dark:bg-[#131B17]" aria-label="Guest list mode">
+    <%= link_to "Manage", event_path(@event),
+        class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@checkin_mode ? 'text-[#6b7672] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]' : 'bg-algae-900 text-white'}",
+        **(@checkin_mode ? {} : { aria: { current: "page" } }) %>
+    <%= link_to "Check in", event_path(@event, mode: "checkin"),
+        class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@checkin_mode ? 'bg-algae-900 text-white' : 'text-[#6b7672] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]' }",
+        **(@checkin_mode ? { aria: { current: "page" } } : {}) %>
+  </nav>
+
+  <% if @checkin_mode %>
+    <%= render "events/checkin", event: @event, invitations: @invitations,
+        pagy: @pagy, search: @invitations_search, summary: @checkin_summary %>
+  <% else %>
   <div class="rounded-2xl border border-[#D9DDE0] bg-white p-6 dark:border-white/10 dark:bg-[#131B17]">
     <h3 class="font-display text-[15px] font-semibold">Invite contacts</h3>
     <%= turbo_frame_tag "new_invitation_form" do %>
@@ -92,4 +105,5 @@
       <% end %>
     <% end %>
   </div>
+  <% end %>
 </div>

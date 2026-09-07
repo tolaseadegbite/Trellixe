@@ -2,6 +2,7 @@
 
 lazaro_nixon:
   email: lazaronixon@hotmail.com
-  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  # Low cost keeps auth fast under parallel test load (production uses cost 12+).
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*", cost: 4) %>
   verified: true
   public_id: user_testlazaro01

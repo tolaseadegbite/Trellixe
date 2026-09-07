@@ -57,11 +57,13 @@ class EventsController < DashboardsController
   end
 
   def show
+    @checkin_mode = params[:mode] == "checkin"
     base_invitations = @event.invitations.includes(:contact, :event, :follow_up_tasks, interaction_logs: :user)
     @invitations_search = base_invitations.ransack(params[:q])
     filtered_invitations = @invitations_search.result
 
     @pagy, @invitations = pagy(filtered_invitations.order("contacts.first_name ASC"))
+    @checkin_summary = @event.invitation_summary if @checkin_mode
 
     @new_invitation = @event.invitations.build
     invited_contact_ids = @event.invitations.select(:contact_id)

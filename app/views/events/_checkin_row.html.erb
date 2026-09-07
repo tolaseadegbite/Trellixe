@@ -1,0 +1,26 @@
+<%# One-tap attendance row. Locals: invitation. The whole row submits:
+    attended → back to invited (instant undo), anything else → attended. %>
+<% checked = invitation.attended? %>
+<% contact = invitation.contact %>
+<% context_line = invitation.notes.presence || contact.how_we_met %>
+
+<%= form_with url: bulk_update_invitations_path(mode: "checkin"), method: :patch,
+      html: { id: dom_id(invitation, :checkin) } do %>
+  <%= hidden_field_tag "invitation_ids[]", invitation.id %>
+  <%= hidden_field_tag :status, checked ? "invited" : "attended" %>
+  <button type="submit"
+      class="flex min-h-16 w-full cursor-pointer items-center gap-3.5 rounded-2xl border p-4 text-left transition <%= checked ? 'border-algae-600 bg-algae-50 dark:border-algae-600/60 dark:bg-algae-600/15' : 'border-[#D9DDE0] bg-white hover:border-[#A2E494] dark:border-white/10 dark:bg-[#131B17]' %>">
+    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full <%= checked ? 'bg-algae-600 text-white' : 'border-2 border-[#D9DDE0] text-transparent dark:border-white/20' %>" aria-hidden="true">
+      <%= icon("check", css: "h-5 w-5") %>
+    </span>
+    <span class="min-w-0 flex-1">
+      <span class="block truncate text-[16px] font-bold"><%= contact.full_name %></span>
+      <% if context_line.present? %>
+        <span class="mt-0.5 block truncate text-[13px] text-[#6b7672] dark:text-[#9AA6A0]"><%= truncate(context_line, length: 80) %></span>
+      <% end %>
+      <span class="mt-1 block text-[13px] font-semibold <%= checked ? 'text-algae-900 dark:text-algae-300' : 'text-[#8a938d] dark:text-[#9AA6A0]' %>">
+        <%= checked ? "Checked in — tap to undo" : (invitation.declined? ? "Declined — tap to check in" : "Tap to check in") %>
+      </span>
+    </span>
+  </button>
+<% end %>

@@ -1,0 +1,10 @@
+<%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
+
+<%# Check-in rows live in their own mode with a live counter — answering
+    with the manage-mode stream would target absent rows and spam the
+    console with missing-target errors. %>
+<% @invitations.each do |invitation| %>
+  <%= turbo_stream.replace dom_id(invitation, :checkin), partial: "events/checkin_row", locals: { invitation: invitation } %>
+<% end %>
+
+<%= turbo_stream.replace "checkin-counter", partial: "events/checkin_counter", locals: { summary: @checkin_summary } %>

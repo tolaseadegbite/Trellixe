@@ -106,7 +106,15 @@ class InvitationsController < DashboardsController
     flash.now[:notice] = "Marked #{updated_count} as #{target_status.humanize}."
 
     respond_to do |format|
-      format.turbo_stream
+      if params[:mode] == "checkin" && (@checkin_event = @invitations.first&.event)
+        # Check-in rows live in a separate mode with their own row partial
+        # and counter — answering with the manage-mode stream would target
+        # absent rows and spam the console with missing-target errors.
+        @checkin_summary = @checkin_event.invitation_summary
+        format.turbo_stream { render :bulk_update_checkin }
+      else
+        format.turbo_stream
+      end
       format.html { redirect_back fallback_location: events_path, notice: flash.now[:notice] }
     end
   end

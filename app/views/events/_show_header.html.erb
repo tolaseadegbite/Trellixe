@@ -7,9 +7,11 @@
           <%= format_full_event_datetime_range(event) rescue l(event.starts_at, format: :long) %>
         </p>
       </div>
+      <% unless local_assigns[:checkin] %>
       <%= link_to edit_event_path(event), data: { turbo_frame: "modal" }, title: "Edit",
           class: "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-algae-900 text-white transition hover:bg-[#0f5c3e]" do %>
         <%= icon("pen", css: "h-4 w-4") %>
+      <% end %>
       <% end %>
     </div>
 
