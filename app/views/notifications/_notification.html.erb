@@ -1,39 +1,21 @@
 <%= link_to notification_path(notification),
     id: dom_id(notification),
-    class: "block p-3 rounded-md hover:bg-shade #{'bg-shade' if notification.unread?}",
-    style: "text-decoration: none; display: grid; grid-template-columns: minmax(0, 1fr); inline-size: 100%; transition: background-color 0.3s;",
+    class: "block border-b border-[#E9EBED] px-4 py-3 transition last:border-0 hover:bg-[#F6F9F7] dark:border-white/10 dark:hover:bg-white/[0.04] #{'bg-algae-50/60 dark:bg-algae-600/10' if notification.unread?}",
     data: notification.event.type == "FollowUpTaskNotifier" ? { turbo_frame: "modal" } : {} do %>
-  
-  <%# FIX 1: Changed align-items to center to align the avatar and text box vertically %>
-  <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; align-items: center; inline-size: 100%;">
-    
-    <%# Avatar: single image, initials, or avatar group %>
+  <div class="flex items-center gap-3">
     <% if (actor_url = notification_actor_avatar_url(notification)) %>
-      <%# FIX 2: Changed to items-center for the internal avatar stack alignment %>
-      <div class="avatar-group items-center" style="flex-shrink: 0;">
-        <div class="avatar" style="--avatar-size: 2rem;">
-          <span role="img" class="font-bold text-xs text-reversed" style="background-color: var(--color-text);"><%= notification_avatar_initials(notification) %></span>
-        </div>
-        <div class="avatar border" style="--avatar-size: 1.5rem; border-color: var(--color-text);">
-          <%= image_tag actor_url, alt: "" %>
-        </div>
-      </div>
+      <%= image_tag actor_url, size: 32, alt: "", class: "h-8 w-8 shrink-0 rounded-full object-cover" %>
     <% elsif (avatar_url = notification_avatar_url(notification)) %>
-      <%= image_tag avatar_url, size: 32, class: "rounded-full", style: "inline-size: 2rem; block-size: 2rem; flex-shrink: 0;", alt: notification_avatar_initials(notification) %>
+      <%= image_tag avatar_url, size: 32, alt: notification_avatar_initials(notification), class: "h-8 w-8 shrink-0 rounded-full object-cover" %>
     <% else %>
-      <div class="avatar" style="--avatar-size: 2rem; flex-shrink: 0;">
-        <span role="img" class="font-bold text-xs text-reversed" style="background-color: var(--color-text);"><%= notification_avatar_initials(notification) %></span>
-      </div>
+      <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-algae-900 text-xs font-bold text-white"><%= notification_avatar_initials(notification) %></span>
     <% end %>
-
-    <div style="min-inline-size: 0; display: flex; flex-direction: column; gap: 0.25rem;">
-      <p class="font-semibold text-sm text-primary leading-tight" style="overflow-wrap: break-word; word-break: break-word; white-space: normal; margin: 0;">
-        <%= notification_message(notification) %>
-      </p>
-      <p class="text-xs text-subtle" style="margin: 0;">
-        <%= time_ago_in_words(notification.created_at) %> ago
-      </p>
-    </div>
-
+    <span class="min-w-0 flex-1">
+      <span class="block truncate-2 text-[13.5px] font-medium leading-snug text-[#1c2420] dark:text-[#E7ECE9]" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;"><%= notification_message(notification) %></span>
+      <span class="mt-0.5 block text-xs tabular-nums text-[#8a938d] dark:text-[#9AA6A0]"><%= time_ago_in_words(notification.created_at) %> ago</span>
+    </span>
+    <% if notification.unread? %>
+      <span class="h-2 w-2 shrink-0 rounded-full bg-algae-600"></span>
+    <% end %>
   </div>
 <% end %>

@@ -1,62 +1,62 @@
 <% content_for :title, "Settings" %>
 <% content_for :page_header, "Settings" %>
 
-<div class="show@lg flex i-full mi-auto">
-  
+<div class="hidden w-full lg:flex">
+
   <aside
     class="shrink-0 p-4"
     style="width: 280px;"
     data-controller="settings-sidebar">
 
-    <nav class="flex flex-col gap settings-sidebar">
-      
+    <nav class="flex flex-col gap-1">
+
       <%= link_to "Change name", edit_identity_name_path,
-            class: "btn sidebar-menu__button",
+            class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
       <%= link_to "Change password", edit_password_path,
-            class: "btn sidebar-menu__button",
+            class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
       <%= link_to "Change email address", edit_identity_email_path,
-            class: "btn sidebar-menu__button",
+            class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
       <%= link_to "Profile Photo", edit_identity_avatar_path,
-            class: "btn sidebar-menu__button",
+            class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
       <%#= link_to "Two-Factor Authentication", new_two_factor_authentication_profile_totp_path,
-            class: "btn sidebar-menu__button",
+            class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
-            
+
       <%# if Current.user.otp_required_for_sign_in? %>
-        <%#= link_to "Recovery Codes", two_factor_authentication_profile_recovery_codes_path, class: "btn sidebar-menu__button", data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
-        <%#= link_to "Security keys", two_factor_authentication_profile_security_keys_path, class: "btn sidebar-menu__button", data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
+        <%#= link_to "Recovery Codes", two_factor_authentication_profile_recovery_codes_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300", data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
+        <%#= link_to "Security keys", two_factor_authentication_profile_security_keys_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300", data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
       <%# end %>
 
       <%#= link_to "Send invitation", new_invitation_path,
-            class: "btn sidebar-menu__button",
+            class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
-            
-      <hr class="menu__separator" role="separator"/>
-      
-      <h2 class="font-semibold text-lg mbs-4 pi-2">Access History</h2>
+
+      <hr class="my-2 border-t border-[#E9EBED] dark:border-white/10" role="separator"/>
+
+      <h2 class="mt-4 px-2 text-lg font-semibold">Access History</h2>
       <%= link_to "Devices & Sessions", sessions_path,
-            class: "btn sidebar-menu__button",
+            class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
       <%= link_to "Activity Log", authentications_user_activities_path,
-            class: "btn sidebar-menu__button",
+            class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] aria-[current=page]:bg-algae-50 aria-[current=page]:font-semibold aria-[current=page]:text-algae-900 dark:hover:bg-white/5 dark:aria-[current=page]:bg-algae-600/15 dark:aria-[current=page]:text-algae-300",
             data: { turbo_frame: "settings_content", action: "click->settings-sidebar#select", settings_sidebar_target: "link" } %>
-            
-      <%# <div class="border-b border-main mbs-4"></div> %>
 
-      <%= button_to "Log out", Current.session, method: :delete, class: "btn btn--negative w-full text-left" %>
+      <%# <div class="border-b border-[#E9EBED] mt-4 dark:border-white/10"></div> %>
+
+      <%= button_to "Log out", Current.session, method: :delete, class: "w-full cursor-pointer rounded-lg bg-red-700 px-3 py-2 text-left text-sm font-semibold text-white transition hover:bg-red-800" %>
     </nav>
   </aside>
 
   <%# --- RIGHT COLUMN: DESKTOP DYNAMIC CONTENT AREA --- %>
-  <main class="grow border-is border-main">
+  <main class="grow border-l border-[#E9EBED] dark:border-white/10">
     <%= turbo_frame_tag "settings_content", src: edit_identity_name_path do %>
-      <div class="p-4 flex items-center gap-3">
+      <div class="flex items-center gap-3 p-4">
         <h2 class="text-2xl">Loading settings</h2>
-        <span class="icon icon--loading animate-spin p-4" aria-hidden="true"></span>
+        <%= icon("loading", css: "h-8 w-8 animate-spin text-[#8a938d] dark:text-[#9AA6A0]") %>
       </div>
     <% end %>
   </main>
@@ -66,27 +66,27 @@
 
 
 <%# --- MOBILE LAYOUT (Visible on small screens) --- %>
-<div class="hide@lg i-full p-4 mi-auto"> <%# Use the opposite breakpoint class %>
-  <nav class="flex flex-col gap">
-    
+<div class="mx-auto w-full p-4 lg:hidden"> <%# Use the opposite breakpoint class %>
+  <nav class="flex flex-col gap-1">
+
     <%# These are NORMAL links for full-page navigation on mobile. NO Turbo Frame attributes. %>
-    <%= link_to "Change name", edit_identity_name_path, class: "btn sidebar-menu__button" %>
-    <%= link_to "Change password", edit_password_path, class: "btn sidebar-menu__button" %>
-    <%= link_to "Change email address", edit_identity_email_path, class: "btn sidebar-menu__button" %>
-    <%= link_to "Profile Photo", edit_identity_avatar_path, class: "btn sidebar-menu__button" %>
-    <%#= link_to "Two-Factor Authentication", new_two_factor_authentication_profile_totp_path, class: "btn sidebar-menu__button" %>
+    <%= link_to "Change name", edit_identity_name_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+    <%= link_to "Change password", edit_password_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+    <%= link_to "Change email address", edit_identity_email_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+    <%= link_to "Profile Photo", edit_identity_avatar_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+    <%#= link_to "Two-Factor Authentication", new_two_factor_authentication_profile_totp_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
     <%# if Current.user.otp_required_for_sign_in? %>
-      <%#= link_to "Recovery Codes", two_factor_authentication_profile_recovery_codes_path, class: "btn sidebar-menu__button" %>
-      <%#= link_to "Security keys", two_factor_authentication_profile_security_keys_path, class: "btn sidebar-menu__button" %>
+      <%#= link_to "Recovery Codes", two_factor_authentication_profile_recovery_codes_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+      <%#= link_to "Security keys", two_factor_authentication_profile_security_keys_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
     <%# end %>
-    <%#= link_to "Send invitation", new_invitation_path, class: "btn sidebar-menu__button" %>
-    
-    <hr class="menu__separator" role="separator"/>
+    <%#= link_to "Send invitation", new_invitation_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
 
-    <h2 class="font-semibold text-lg mbs-4 pi-2">Access History</h2>
-    <%= link_to "Devices & Sessions", sessions_path, class: "btn sidebar-menu__button" %>
-    <%= link_to "Activity Log", authentications_user_activities_path, class: "btn sidebar-menu__button" %>
+    <hr class="my-2 border-t border-[#E9EBED] dark:border-white/10" role="separator"/>
 
-    <%= button_to "Log out", Current.session, method: :delete, class: "btn btn--negative w-full text-left" %>
+    <h2 class="mt-4 px-2 text-lg font-semibold">Access History</h2>
+    <%= link_to "Devices & Sessions", sessions_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+    <%= link_to "Activity Log", authentications_user_activities_path, class: "flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium transition hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+
+    <%= button_to "Log out", Current.session, method: :delete, class: "w-full cursor-pointer rounded-lg bg-red-700 px-3 py-2 text-left text-sm font-semibold text-white transition hover:bg-red-800" %>
   </nav>
 </div>

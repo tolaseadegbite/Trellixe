@@ -1,28 +1,24 @@
 <% if pagy.pages > 1 %>
-  <div class="flex items-center mb-5">
-    <div class="text-sm text-subtle show@md">Total of <%= pagy.count %> record(s).</div>
-    <div class="flex items-center mis-auto justify-end" style="column-gap: 1rem">
-      <%= form_with url: pagy_url_for(pagy, 1), class: "flex items-center gap show@md", method: :get, data: { controller: "form", action: "change->form#submit" } do |form| %>
-        <%= form.label :limit, "Rows per page", class: "text-sm font-medium" %>
-        <%= form.select :limit, [10, 20, 30, 40, 50], { selected: pagy.limit }, { class: "input", style: "--input-inline-size: 70px" } %>
+  <div class="mb-5 flex items-center justify-between gap-4">
+    <p class="hidden text-sm text-[#8a938d] md:block dark:text-[#9AA6A0]">Total of <%= pagy.count %> records.</p>
+    <div class="ml-auto flex items-center gap-4">
+      <%= form_with url: pagy_url_for(pagy, 1), class: "hidden items-center gap-2 md:flex", method: :get, data: { controller: "form", action: "change->form#submit" } do |form| %>
+        <%= form.label :limit, "Rows", class: "text-sm font-medium text-[#3d4742] dark:text-[#C6CFC9]" %>
+        <%= form.select :limit, [ 10, 20, 30, 40, 50 ], { selected: pagy.limit }, { class: "rounded-lg border border-[#D9DDE0] bg-white px-2 py-1.5 text-sm dark:border-white/10 dark:bg-white/5" } %>
       <% end %>
-      <div class="text-sm font-medium"><%= "Page #{pagy.page} of #{pagy.pages}" %></div>
-      <nav class="flex items-center gap shrink-0" style="--btn-padding: .5rem;" aria-label="Pagination">
-        <%= link_to pagy_url_for(pagy, 1), class: "btn", aria: { disabled: pagy.prev.nil? }.compact_blank do %>
-          <span class="icon icon--chevrons-left" aria-hidden="true"></span>
-          <span class="sr-only">Go to first page</span>
+      <p class="text-sm font-medium tabular-nums text-[#3d4742] dark:text-[#C6CFC9]">Page <%= pagy.page %> of <%= pagy.pages %></p>
+      <nav class="flex items-center gap-1" aria-label="Pagination">
+        <%= link_to pagy_url_for(pagy, 1), class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5 dark:hover:border-algae-600/50 #{'pointer-events-none opacity-40' if pagy.prev.nil?}", aria: { disabled: pagy.prev.nil? }.compact_blank do %>
+          <%= icon("chevrons-left", css: "h-4 w-4") %><span class="sr-only">First page</span>
         <% end %>
-        <%= link_to pagy_url_for(pagy, pagy.prev || pagy.page), class: "btn", aria: { disabled: pagy.prev.nil? }.compact_blank do %>
-          <span class="icon icon--chevron-left" aria-hidden="true"></span>
-          <span class="sr-only">Go to previous page</span>
+        <%= link_to pagy_url_for(pagy, pagy.prev || pagy.page), class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5 dark:hover:border-algae-600/50 #{'pointer-events-none opacity-40' if pagy.prev.nil?}", aria: { disabled: pagy.prev.nil? }.compact_blank do %>
+          <%= icon("chevron-left", css: "h-4 w-4") %><span class="sr-only">Previous page</span>
         <% end %>
-        <%= link_to pagy_url_for(pagy, pagy.next || pagy.page), class: "btn", aria: { disabled: pagy.next.nil? }.compact_blank do %>
-          <span class="icon icon--chevron-right" aria-hidden="true"></span>
-          <span class="sr-only">Go to next page</span>
+        <%= link_to pagy_url_for(pagy, pagy.next || pagy.page), class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5 dark:hover:border-algae-600/50 #{'pointer-events-none opacity-40' if pagy.next.nil?}", aria: { disabled: pagy.next.nil? }.compact_blank do %>
+          <%= icon("chevron-right", css: "h-4 w-4") %><span class="sr-only">Next page</span>
         <% end %>
-        <%= link_to pagy_url_for(pagy, pagy.last), class: "btn", aria: { disabled: pagy.next.nil? }.compact_blank do %>
-          <span class="icon icon--chevrons-right" aria-hidden="true"></span>
-          <span class="sr-only">Go to last page</span>
+        <%= link_to pagy_url_for(pagy, pagy.last), class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5 dark:hover:border-algae-600/50 #{'pointer-events-none opacity-40' if pagy.next.nil?}", aria: { disabled: pagy.next.nil? }.compact_blank do %>
+          <%= icon("chevrons-right", css: "h-4 w-4") %><span class="sr-only">Last page</span>
         <% end %>
       </nav>
     </div>

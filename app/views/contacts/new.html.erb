@@ -2,7 +2,9 @@
 
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
-    <h2 class="font-semibold text-2xl mbe-4">Create new contact</h2>
-    <%= render "form", contact: @contact %>
+    <h2 class="mb-4 font-display text-xl font-bold tracking-tight">Add a contact</h2>
+    <div id="new_contact_form">
+      <%= render "form", contact: @contact %>
+    </div>
   </div>
 <% end %>

@@ -1,14 +1,15 @@
 <%= form_with(model: tag, class: "flex items-end gap-2") do |form| %>
   <% if tag.errors.any? %>
-    <div class="text-negative text-sm mbe-2 i-full">
+    <div class="mb-3 w-full rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300" role="alert">
       <%= tag.errors.full_messages.to_sentence %>
     </div>
   <% end %>
 
   <div class="flex-1">
-    <%= form.label :name, "New Tag", class: "text-sm font-medium" %>
-    <%= form.text_field :name, placeholder: "e.g. Sunday Regulars", class: "input i-full", autofocus: true %>
+    <%= form.label :name, "New tag", class: "mb-1 block text-[13px] font-semibold" %>
+    <%= form.text_field :name, placeholder: "e.g. Sunday Regulars", autofocus: true,
+        class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
   </div>
 
-  <%= form.submit "Add", class: "btn btn--primary" %>
+  <%= form.submit "Add", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
 <% end %>

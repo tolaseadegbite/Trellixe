@@ -1,55 +1,13 @@
-<div class="flex items-center justify-between i-full sticky text-primary">
-  <div class="flex items-center gap">
-    <%= link_to root_path, class: "flex items-center gap mie-2" do %>
-      <span class="font-semibold text-lg">Trellixe</span>
+<div class="flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <%= link_to root_path, class: "flex items-center gap-2" do %>
+      <%= image_tag "logo/trellixe-mark.svg", size: 30, alt: "Trellixe", class: "h-[30px] w-[30px] rounded-lg" %>
+      <span class="font-display text-lg font-bold tracking-tight text-[#13714C]">Trellixe</span>
     <% end %>
   </div>
-
-  <nav class="flex items-center gap-10 font-semibold show@md" style="--column-gap: 1rem">
-    <%#= link_to "Pricing", "#", id: "pricing" %>
-    <a href="#join_us">Join Us</a>
-    <a href="#features">Features</a>
-    <a href="#who_is_it_for">Who is it for?</a>
-    <a href="#">Blog</a>
-    <a href="#faq">FAQ</a>
-  </nav>
-
-    <%= link_to "Log In", sign_in_path, class: "btn btn--primary font-semibold" %>
-
-    <!--<div contents 
-         data-controller="popover" 
-         data-popover-placement-value="right-center" 
-         data-action="click@window->popover#clickOutside">
-      <%#= button_tag type: "button", class: "btn", data: { action: "click->popover#toggle", popover_target: "trigger" }, aria: { haspopup: "true" } do %>
-        <span class="icon icon--sun icon--color-scheme-light" aria-hidden="true"></span>
-        <span class="icon icon--moon icon--color-scheme-dark" aria-hidden="true"></span>
-        <span class="sr-only">Theme switcher</span>
-        Theme
-      <%# end %>
-      <%#= tag.div popover: true, id: "dashboard-theme-switcher-popover", class: "popover", style: "--popover-size: 12rem;", data: { popover_target: "content" } do %>
-        <div class="menu" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
-          <button type="button" class="btn menu__item" data-action="popover#hide color-scheme#setLight" data-menu-target="item" role="menuitem">Light</button>
-          <button type="button" class="btn menu__item" data-action="popover#hide color-scheme#setDark" data-menu-target="item" role="menuitem">Dark</button>
-          <button type="button" class="btn menu__item" data-action="popover#hide color-scheme#setSystem" data-menu-target="item" role="menuitem">System</button>
-        </div>
-      <%# end %>
-    </div>-->
-
-    <!--<div contents data-controller="popover" data-popover-placement-value="bottom-start">
-      <button type="button" class="btn avatar" data-popover-target="trigger" popovertarget="popover" aria-haspopup="true">
-        <%#= image_tag "avatar.jpg", size: 48, alt: "CN" %>
-      </button>
-
-      <div popover id="popover" class="popover" style="--popover-size: 8rem;" data-popover-target="content">
-        <div class="menu" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
-          <%#= link_to "Settings", settings_path, class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
-          <%#= link_to "Usage analytics", "", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
-          <%# if user_signed_in? %>
-            <hr class="menu__separator" role="separator"/>
-            <%#= button_to "Sign out", Current.session, class: "btn menu__item i-full", method: :delete, role: "menuitem" %>
-          <%# end %>
-        </div>
-      </div>
-    </div>-->
-  </div>
+  <% if user_signed_in? %>
+    <%= link_to "Open dashboard", dashboard_path, class: "rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white" %>
+  <% else %>
+    <%= link_to "Log in", sign_in_path, class: "rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white" %>
+  <% end %>
 </div>

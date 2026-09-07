@@ -1,15 +1,11 @@
 <% if notice.present? %>
-  <div popover="manual" class="flash rounded-md i-fit"
-       data-controller="flash"
-       data-action="animationend->flash#remove"
-       role="status">
-    <div class="flash__content"><%= notice %></div>
+  <div popover="manual" class="mx-auto mt-3 w-fit max-w-[calc(100vw-2rem)] rounded-xl border border-[#A2E494] bg-white px-4 py-2.5 text-sm font-medium text-[#13714C] shadow-lg dark:border-algae-600/50 dark:bg-[#131B17] dark:text-algae-300"
+       data-controller="flash" data-action="animationend->flash#remove" role="status">
+    <%= notice %>
   </div>
 <% elsif alert.present? %>
-  <div popover="manual" class="flash flash--negative rounded-md i-fit"
-       data-controller="flash"
-       data-action="animationend->flash#remove"
-       role="alert">
-    <div class="flash__content"><%= alert %></div>
+  <div popover="manual" class="mx-auto mt-3 w-fit max-w-[calc(100vw-2rem)] rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-medium text-red-700 shadow-lg dark:border-red-500/40 dark:bg-[#1d1214] dark:text-red-300"
+       data-controller="flash" data-action="animationend->flash#remove" role="alert">
+    <%= alert %>
   </div>
 <% end %>

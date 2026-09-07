@@ -1,142 +1,121 @@
 <% content_for :title, "Team Members" %>
-
-<% content_for :page_header do %>
-  <h4 class="font-semibold">Team</h4>
-<% end %>
-
-<%# --- MOBILE FAB --- %>
-<% if can_invite_members? %>
-  <% unless Current.account.seat_limit_reached? %>
-    <div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
-      <%= link_to new_team_invitation_path, class: "btn btn--primary p-5 rounded-full", data: { turbo_frame: "modal" } do %>
-        <span class="icon icon--plus"></span>
+<% content_for :page_header, "Team · #{@active_memberships.count}" %>
+<% content_for :header_action_buttons do %>
+  <% if can_invite_members? %>
+    <% if Current.account.seat_limit_reached? %>
+      <%= link_to "#", class: "hidden items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e] sm:flex" do %>
+        <%= icon("sparkles", css: "h-4 w-4") %> Upgrade plan
       <% end %>
-    </div>
-  <% end %>
-<% end %>
-
-<div class="i-full p-2 mi-auto container p-4">
-  <div class="flex items-center justify-between mbe-6">
-    <div>
-      <h2 class="text-2xl font-bold">Team Members</h2>
-      <div class="flex flex-col gap-2 text-sm text-subtle mts-1">
-        <span>Manage access to <strong><%= Current.account.name %></strong>.</span>
-        
-        <%# Seat Counter %>
-        <span class="bg-shade pi-2 pb-1 text-xs font-medium border rounded-md" style="inline-size: ;">
-          <%= Current.account.seats_used %> / <%= Current.account.seat_limit %> Seats Used
-        </span>
-      </div>
-    </div>
-
-    <%# --- BUTTONS --- %>
-    <% if can_invite_members? %>
-      <% if Current.account.seat_limit_reached? %>
-        <div class="show@md">
-          <%= link_to "#", class: "btn btn--primary font-semibold p-2 flex items-center gap-2" do %>
-            <span class="icon icon--sparkles"></span>
-            <span>Upgrade Plan</span>
-          <% end %>
-        </div>
-      <% else %>
-        <div class="show@md">
-          <%= link_to new_team_invitation_path, 
-                      class: "btn btn--primary p-2 flex items-center gap-2", 
-                      data: { turbo_frame: "modal" } do %>
-            <span class="icon icon--plus"></span>
-            <span>Invite Member</span>
-          <% end %>
-        </div>
+    <% else %>
+      <%= link_to new_team_invitation_path, data: { turbo_frame: "modal" },
+          class: "hidden items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e] sm:flex" do %>
+        <%= icon("plus", css: "h-4 w-4") %> Invite member
       <% end %>
     <% end %>
+  <% end %>
+<% end %>
+
+<% if can_invite_members? && !Current.account.seat_limit_reached? %>
+  <%= link_to new_team_invitation_path, data: { turbo_frame: "modal" }, aria: { label: "Invite member" },
+      class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-[#0f5c3e] md:hidden" do %>
+    <%= icon("plus", css: "h-5 w-5") %>
+  <% end %>
+<% end %>
+
+<div class="space-y-4">
+  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div>
+        <h2 class="font-display text-[15px] font-semibold">Team members</h2>
+        <p class="text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Manage access to <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= Current.account.name %></strong>.</p>
+      </div>
+      <span class="inline-flex items-center rounded-full border border-[#D9DDE0] bg-[#F6F9F7] px-2.5 py-1 text-xs font-semibold tabular-nums text-[#1c2420] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#E7ECE9]">
+        <%= Current.account.seats_used %> / <%= Current.account.seat_limit %> seats used
+      </span>
+    </div>
   </div>
 
-  <%# --- MOBILE UPGRADE BANNER --- %>
   <% if can_invite_members? && Current.account.seat_limit_reached? %>
-    <div class="hide@md i-full mbe-6">
-      <%= link_to "#", class: "flex items-center justify-between gap-3 bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg p-4 shadow-sm transition text-left no-underline" do %>
-        <div class="flex items-center gap-3">
-          <span class="icon icon--sparkles" style="--icon-size: 1.5rem;"></span>
-          <div>
-            <div class="font-semibold text-sm">Upgrade Plan</div>
-            <div class="text-xs text-emerald-100">You've reached your seat limit</div>
-          </div>
-        </div>
-        <span class="icon icon--chevron-right"></span>
-      <% end %>
-    </div>
+    <%= link_to "#", class: "flex items-center justify-between gap-3 rounded-2xl bg-algae-900 p-4 text-left text-white shadow-sm transition hover:bg-[#0f5c3e] md:hidden" do %>
+      <span class="flex items-center gap-3">
+        <%= icon("sparkles", css: "h-6 w-6") %>
+        <span>
+          <span class="block text-sm font-semibold">Upgrade plan</span>
+          <span class="block text-xs text-white/80">You've reached your seat limit</span>
+        </span>
+      </span>
+      <%= icon("chevron-right", css: "h-4 w-4") %>
+    <% end %>
   <% end %>
 
-  <%# --- TABS COMPONENT --- %>
-  <div class="tabs i-full" data-controller="tabs">
-    <div class="tabs__list border-b border-main mbe-4" role="tablist">
-      <button type="button" id="trigger_active" class="btn tabs__button" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_active" aria-selected="true">
-        Active Members (<%= @active_memberships.count %>)
+  <div data-controller="tabs">
+    <div class="flex gap-1 border-b border-[#E9EBED] dark:border-white/10" role="tablist">
+      <button type="button" id="trigger_active" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_active" aria-selected="true"
+          class="rounded-t-lg px-3 py-2.5 text-[13px] font-semibold text-[#6b7672] transition aria-selected:bg-white aria-selected:text-algae-900 dark:text-[#9AA6A0] dark:aria-selected:bg-[#131B17] dark:aria-selected:text-algae-300">
+        Active members (<%= @active_memberships.count %>)
       </button>
-      <button type="button" id="trigger_pending" class="btn tabs__button" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_pending">
-        Pending Invites (<%= @pending_invitations.count %>)
+      <button type="button" id="trigger_pending" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_pending" aria-selected="false"
+          class="rounded-t-lg px-3 py-2.5 text-[13px] font-semibold text-[#6b7672] transition aria-selected:bg-white aria-selected:text-algae-900 dark:text-[#9AA6A0] dark:aria-selected:bg-[#131B17] dark:aria-selected:text-algae-300">
+        Pending invites (<%= @pending_invitations.count %>)
       </button>
     </div>
 
     <%# --- TAB 1: ACTIVE MEMBERS --- %>
-    <div id="tab_active" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_active">
-      
-      <%# DESKTOP TABLE %>
-      <div class="show@md relative i-full overflow-x-auto border border-main rounded-lg bg-main">
-        <table class="table i-full text-left">
-          <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
-            <tr>
-              <th class="p-3">User</th>
-              <th class="p-3">Role</th>
-              <th class="p-3">Joined</th>
-              <th class="p-3 text-end"></th>
-            </tr>
-          </thead>
-          <tbody id="members-list">
-            <%= render partial: "members/membership", collection: @active_memberships %>
-          </tbody>
-        </table>
+    <div id="tab_active" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_active" class="pt-4">
+      <div class="hidden overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white md:block dark:border-white/10 dark:bg-[#131B17]">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-[#E9EBED] bg-[#F6F9F7] text-xs uppercase tracking-wide text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
+                <th class="px-4 py-3 font-semibold">User</th>
+                <th class="px-3 py-3 font-semibold">Role</th>
+                <th class="px-3 py-3 font-semibold">Joined</th>
+                <th class="px-4 py-3 text-right font-semibold"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="members-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
+              <%= render partial: "members/membership", collection: @active_memberships %>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <%# MOBILE CARDS %>
-      <div class="hide@md flex flex-col gap-4">
+      <div class="space-y-2.5 md:hidden">
         <% if @active_memberships.empty? %>
-          <p class="text-subtle text-center p-8">No active members.</p>
+          <%= render "shared/empty_state", title: "No active members", body: "Invite your team to share contacts, events, and follow-ups.", icon_name: "user" %>
         <% else %>
-          <%# Render the new partial %>
           <%= render partial: "members/member_card", collection: @active_memberships, as: :membership %>
         <% end %>
       </div>
     </div>
 
     <%# --- TAB 2: PENDING INVITES --- %>
-    <div hidden id="tab_pending" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_pending">
-      
-      <%# DESKTOP TABLE %>
-      <div class="show@md relative i-full overflow-x-auto border border-main rounded-lg bg-main">
-        <table class="table i-full text-left">
-          <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
-            <tr>
-              <th class="p-3">Email</th>
-              <th class="p-3">Role</th>
-              <th class="p-3">Sent</th>
-              <th class="p-3 text-end"></th>
-            </tr>
-          </thead>
-          <tbody id="invitations-list">
-            <% if @pending_invitations.any? %>
-              <%= render partial: "team_invitations/team_invitation", collection: @pending_invitations %>
-            <% else %>
-              <%= render "shared/empty_state_desktop" %>
-            <% end %>
-          </tbody>
-        </table>
+    <div hidden id="tab_pending" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_pending" class="pt-4">
+      <div class="hidden overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white md:block dark:border-white/10 dark:bg-[#131B17]">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-[#E9EBED] bg-[#F6F9F7] text-xs uppercase tracking-wide text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
+                <th class="px-4 py-3 font-semibold">Email</th>
+                <th class="px-3 py-3 font-semibold">Role</th>
+                <th class="px-3 py-3 font-semibold">Sent</th>
+                <th class="px-4 py-3 text-right font-semibold"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="invitations-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
+              <% if @pending_invitations.any? %>
+                <%= render partial: "team_invitations/team_invitation", collection: @pending_invitations %>
+              <% else %>
+                <tr><td colspan="4" class="px-4 py-8"><%= render "shared/empty_state", title: "No pending invites", body: "Invite a teammate and they'll show up here until they accept.", icon_name: "mail" %></td></tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <%# MOBILE CARDS %>
-      <div id="invitations-cards" class="hide@md flex flex-col gap-4">
+      <div id="invitations-cards" class="space-y-2.5 md:hidden">
         <% if @pending_invitations.empty? %>
-          <%= render "shared/empty_state_mobile" %>
+          <%= render "shared/empty_state", title: "No pending invites", body: "Invite a teammate and they'll show up here until they accept.", icon_name: "mail" %>
         <% else %>
           <%= render partial: "team_invitations/invitation-card", collection: @pending_invitations, as: :invitation %>
         <% end %>

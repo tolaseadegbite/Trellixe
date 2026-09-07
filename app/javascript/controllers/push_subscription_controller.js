@@ -15,12 +15,22 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 export default class extends Controller {
-  // NEW: This method runs when the controller is first connected to the page.
+  static targets = [ "subscribeButton", "label" ];
+
   connect() {
+    // Read the server key up front so a missing key shows an explanatory
+    // disabled state instead of silently vanishing on click.
+    this.vapidKey = (document.querySelector("meta[name='vapid_key']")?.content || "").trim();
+
     // 1. Check if the browser supports push notifications at all.
     if (!("serviceWorker" in navigator && "PushManager" in window)) {
       console.warn("Push notifications are not supported.");
       this.element.style.display = 'none'; // Hide the button if not supported
+      return;
+    }
+
+    if (!this.vapidKey) {
+      this.#setUnavailable();
       return;
     }
 
@@ -36,7 +46,9 @@ export default class extends Controller {
       // 3. If a subscription exists, the user is already subscribed.
       if (subscription) {
         console.log("User is already subscribed.");
-        this.element.style.display = 'none'; // Hide the whole <div>
+        this.#setLabel("Alerts on");
+        this.subscribeButtonTarget.disabled = true;
+        this.subscribeButtonTarget.title = "Push notifications are enabled on this device.";
       } else {
         // 4. If no subscription, make sure the button is visible.
         console.log("User is not subscribed.");
@@ -47,23 +59,24 @@ export default class extends Controller {
     }
   }
 
-  // Your existing subscribe method (no changes needed)
   async subscribe(event) {
     event.preventDefault();
 
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      alert("Permission denied.");
+      this.#setLabel("Blocked — allow in browser");
+      this.subscribeButtonTarget.title = "Notifications are blocked. Allow them in your browser site settings, then try again.";
+      return;
+    }
+
+    if (!this.vapidKey) {
+      this.#setUnavailable();
       return;
     }
 
     try {
       const registration = await navigator.serviceWorker.ready;
-      const vapidKey = document.querySelector("meta[name='vapid_key']").content;
-      const applicationServerKey = urlBase64ToUint8Array(vapidKey);
-
-      console.log("Subscribing with VAPID key:", vapidKey);
-      console.log("Converted applicationServerKey:", applicationServerKey);
+      const applicationServerKey = urlBase64ToUint8Array(this.vapidKey);
 
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
@@ -79,14 +92,25 @@ export default class extends Controller {
       });
 
       if (response.ok) {
-        alert("Successfully subscribed!");
-        // We can now hide the button immediately after successful subscription
-        this.element.style.display = "none";
+        this.#setLabel("Alerts on");
+        this.subscribeButtonTarget.disabled = true;
+        this.subscribeButtonTarget.title = "Push notifications are enabled on this device.";
       } else {
-        alert("Subscription failed.");
+        this.#setLabel("Failed — tap to retry");
       }
     } catch (error) {
       console.error("Push subscription error: ", error);
+      this.#setLabel("Failed — tap to retry");
     }
+  }
+
+  #setUnavailable() {
+    this.#setLabel("Push unavailable");
+    this.subscribeButtonTarget.disabled = true;
+    this.subscribeButtonTarget.title = "Push notifications aren't configured on this server (missing VAPID key).";
+  }
+
+  #setLabel(text) {
+    if (this.hasLabelTarget) this.labelTarget.textContent = text;
   }
 }

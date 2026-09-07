@@ -1,28 +1,15 @@
-<p style="color: red"><%= alert %></p>
-
-<h1>Enter your password to continue</h1>
-
-<%= form_with(url: sessions_sudo_path) do |form| %>
-
-  <%= form.hidden_field :proceed_to_url, value: params[:proceed_to_url] %>
-
-  <div>
-    <%= form.password_field :password, required: true, autofocus: true, autocomplete: "current-password" %>
-  </div>
-
-  <div>
-    <%= form.submit "Continue" %>
-  </div>
+<% content_for :title, "Confirm it's you" %>
+<%= render layout: "shared/auth_shell", locals: { title: "Confirm it's you", subtitle: "For your team's security, confirm your password to continue." } do %>
+  <%= form_with(url: sessions_sudo_path, class: "space-y-4") do |form| %>
+    <%= form.hidden_field :proceed_to_url, value: params[:proceed_to_url] %>
+    <div>
+      <%= form.label :password, class: "mb-1.5 block text-[13px] font-semibold" %>
+      <%= form.password_field :password, required: true, autofocus: true, autocomplete: "current-password",
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+    </div>
+    <%= form.submit "Continue", class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+  <% end %>
+  <p class="mt-6 text-center text-[13.5px] text-[#5b6660] dark:text-[#9AA6A0]">
+    Forgot it? <%= link_to "Reset your password", new_identity_password_reset_path, class: "font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
+  </p>
 <% end %>
-
-<br>
-
-<p>
-  <strong>Why are you asking me to do this?</strong><br>
-  To better protect your account, we'll occasionally ask you to confirm your password before performing sensitive actions.
-</p>
-
-<p>
-  <strong>Forgot your password?</strong><br>
-  We'll help you <%= link_to "reset it", new_identity_password_reset_path %> so you can continue.
-</p>

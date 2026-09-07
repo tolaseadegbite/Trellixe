@@ -1,22 +1,26 @@
 <%= form_with url: identity_avatar_path, method: :patch, multipart: true, data: { controller: "avatar-preview", avatar_preview_fallback_value: user.gravatar_url(size: 160) } do |form| %>
-  <div class="flex items-start gap-6 mbe-6">
-    <div class="avatar shrink-0" style="--avatar-size: var(--size-20);">
-      <%= image_tag user_avatar_url(user, size: 160), size: 160, alt: user.name, data: { avatar_preview_target: "preview" }, class: "rounded-full" %>
+  <div class="mb-6 flex items-start gap-6">
+    <div class="h-20 w-20 shrink-0 overflow-hidden rounded-full bg-algae-50 dark:bg-algae-600/15">
+      <%= image_tag user_avatar_url(user, size: 160), size: 160, alt: user.name, data: { avatar_preview_target: "preview" }, class: "h-20 w-20 rounded-full object-cover" %>
     </div>
 
-    <div class="flex flex-col gap">
-      <%= form.file_field :avatar, accept: "image/*", class: "input cursor-pointer", data: { action: "change->avatar-preview#preview", avatar_preview_target: "input" } %>
-      <p class="text-xs text-subtle">PNG, JPG, GIF, WebP. Max 10MB.</p>
+    <div class="flex flex-col gap-2">
+      <%= form.file_field :avatar, accept: "image/*",
+          class: "w-full cursor-pointer rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-algae-50 file:px-3 file:py-1.5 file:text-[13px] file:font-semibold file:text-algae-900 focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210] dark:file:bg-algae-600/15 dark:file:text-algae-300",
+          data: { action: "change->avatar-preview#preview", avatar_preview_target: "input" } %>
+      <p class="text-xs text-[#6b7672] dark:text-[#9AA6A0]">PNG, JPG, GIF, WebP. Max 10MB.</p>
     </div>
   </div>
 
-  <div class="flex items-center gap-2 mbs-4">
-    <%= form.submit "Save", class: "btn btn--primary" %>
+  <div class="mt-4 flex items-center gap-2">
+    <%= form.submit "Save", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
   </div>
 <% end %>
 
 <% if user.avatar.attached? && user.avatar.attachment&.persisted? %>
-  <div class="mbs-4">
-    <%= button_to "Remove photo", identity_avatar_path, method: :delete, class: "btn btn--negative", data: { turbo_confirm: "Remove your profile photo?" } %>
+  <div class="mt-4">
+    <%= button_to "Remove photo", identity_avatar_path, method: :delete,
+        class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-800",
+        data: { turbo_confirm: "Remove your profile photo?" } %>
   </div>
 <% end %>

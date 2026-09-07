@@ -1,8 +1,11 @@
-<% content_for :title, "Edit Invitation" %>
+<% content_for :title, "Edit invitation" %>
 
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
-    <h2 class="font-semibold text-2xl mbe-4">Update Invitation for <%= link_to @invitation.contact.full_name, contact_path(@invitation.contact), class: "text-link", data: { turbo_frame: "_top" } %></h2>
-    <%= render "edit_form", invitation: @invitation %>
+    <h2 class="font-display text-lg font-semibold">Update invitation for <%= link_to @invitation.contact.full_name, contact_path(@invitation.contact), class: "text-algae-900 hover:underline dark:text-algae-300", data: { turbo_frame: "_top" } %></h2>
+    <p class="mt-1 text-sm tabular-nums text-[#8a938d] dark:text-[#9AA6A0]"><%= @invitation.event.name %> · <%= @invitation.event.starts_at.strftime("%a, %b %-d") %></p>
+    <div class="mt-4">
+      <%= render "edit_form", invitation: @invitation %>
+    </div>
   </div>
 <% end %>

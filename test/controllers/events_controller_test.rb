@@ -2,6 +2,8 @@ require "test_helper"
 
 class EventsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @user = users(:lazaro_nixon)
+    sign_in_as(@user)
     @event = events(:one)
   end
 
@@ -17,10 +19,16 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create event" do
     assert_difference("Event.count") do
-      post events_url, params: { event: { duration_in_minutes: @event.duration_in_minutes, name: @event.name, owner_id: @event.owner_id, owner_type: @event.owner_type, starts_at: @event.starts_at } }
+      post events_url, params: {
+        event: {
+          name: "Sunday Service",
+          starts_at: 3.days.from_now,
+          duration_in_minutes: 120
+        }
+      }
     end
 
-    assert_redirected_to event_url(Event.last)
+    assert_redirected_to events_path
   end
 
   test "should show event" do
@@ -34,8 +42,10 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update event" do
-    patch event_url(@event), params: { event: { duration_in_minutes: @event.duration_in_minutes, name: @event.name, owner_id: @event.owner_id, owner_type: @event.owner_type, starts_at: @event.starts_at } }
-    assert_redirected_to event_url(@event)
+    patch event_url(@event), params: {
+      event: { name: "Updated Service" }
+    }
+    assert_redirected_to events_path
   end
 
   test "should destroy event" do

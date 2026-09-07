@@ -1,15 +1,14 @@
 <% if event.nil? %>
-
 <% elsif event.persisted? %>
-  <%= link_to event, 
-              class: "block p-1 bg-black rounded-sm text-xs text-reversed overflow-ellipsis", 
+  <%= link_to event,
+              class: "block truncate rounded-md bg-algae-900 px-1.5 py-1 text-xs font-medium text-white transition hover:bg-[#0f5c3e]",
               data: { turbo_frame: "_top" } do %>
     <%= event.name %>
   <% end %>
 <% else %>
   <%= tag.div id: dom_id(event.event_series, :virtual) do %>
     <%= button_to generate_occurrence_event_series_path(event.event_series, date: event.starts_at.to_date),
-                  method: :post, class: "block p-1 bg-shade border border-dashed rounded-sm text-xs overflow-ellipsis i-full text-start cursor-pointer" do %>
+                  method: :post, class: "block w-full cursor-pointer truncate rounded-md border border-dashed border-[#A2E494] bg-algae-50 px-1.5 py-1 text-left text-xs font-medium text-algae-900 transition hover:bg-algae-100 dark:bg-algae-600/15 dark:text-algae-300 dark:hover:bg-algae-600/25" do %>
       + <%= event.name %>
     <% end %>
   <% end %>

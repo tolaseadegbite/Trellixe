@@ -1,15 +1,19 @@
-<div>
-  <%# --- RANSACK SEARCH FORM --- %>
-  <%= render "events/search_form" %>
+<div class="space-y-4">
+  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
+    <%= render "events/search_form" %>
+  </div>
 
-  <%# --- PAGINATED LIST OF EVENTS --- %>
-  <div id="events-list" class="flex flex-col gap-3">
+  <% if params[:q].present? %>
+    <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Found <strong class="text-[#1c2420] tabular-nums dark:text-[#E7ECE9]"><%= @pagy.count %></strong> <%= "event".pluralize(@pagy.count) %> matching your filters.</p>
+  <% end %>
+
+  <div id="events-list">
     <% if @list_events.any? %>
-      <%= content_tag(:"turbo-frame", id: "events", target: "_top", class: "grid grid-cols-1 grid-cols-2@sm grid-cols-3@md gap mbe-4") do %>
+      <%= content_tag(:"turbo-frame", id: "events", target: "_top", class: "grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3") do %>
         <%= render partial: "events/event_list_item", collection: @list_events, as: :event %>
       <% end %>
     <% else %>
-      <%= render "shared/empty_state" %>
+      <%= render "shared/empty_state", title: "No events yet", body: "Create your first event — name it, pick a time, invite a few contacts.", icon_name: "calendar-range" %>
     <% end %>
   </div>
 

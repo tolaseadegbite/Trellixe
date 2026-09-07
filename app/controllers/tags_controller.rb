@@ -8,17 +8,28 @@ class TagsController < DashboardsController
 
   def create
     @tag = Current.account.tags.new(tag_params)
-    if @tag.save
-      redirect_to tags_path, notice: "Tag created."
-    else
-      @tags = Current.account.tags.order(:name)
-      render :index, status: :unprocessable_entity
+    respond_to do |format|
+      if @tag.save
+        flash.now[:notice] = "Tag created."
+        format.turbo_stream
+        format.html { redirect_to tags_path, notice: "Tag created." }
+      else
+        @tags = Current.account.tags.order(:name)
+        flash.now[:alert] = @tag.errors.full_messages.to_sentence
+        format.turbo_stream { render :create, status: :unprocessable_entity }
+        format.html { render :index, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @tag.destroy
-    redirect_to tags_path, notice: "Tag removed."
+    @tags_empty = Current.account.tags.none?
+    respond_to do |format|
+      flash.now[:notice] = "Tag removed."
+      format.turbo_stream
+      format.html { redirect_to tags_path, notice: "Tag removed." }
+    end
   end
 
   private

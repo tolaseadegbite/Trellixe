@@ -1,69 +1,60 @@
-<div id="<%= dom_id membership, :mobile_card %>" class="card p-2 border rounded-md shadow-sm bg-main flex flex-col gap-3">
-  <%# Card Header: User & Role %>
-  <div class="flex items-start justify-between">
-    <div class="flex items-center gap-3">
-      <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black" style="inline-size: 2rem; block-size: 2rem;">
-        <%= image_tag user_avatar_url(membership.user, size: 32), size: 32, class: "rounded-full", alt: membership.user.name %>
-      </div>
-      <div>
-        <div class="font-semibold leading-tight">
-          <%= membership.user.name.presence || membership.user.email %>
-        </div>
-        <span class="text-sm text-subtle"><%= membership.user.email %></span>
-      </div>
-    </div>
+<div id="<%= dom_id membership, :mobile_card %>" class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
+  <div class="flex items-start justify-between gap-3">
+    <span class="flex min-w-0 items-center gap-2.5">
+      <%= image_tag user_avatar_url(membership.user, size: 32), size: 32, class: "h-9 w-9 shrink-0 rounded-full object-cover", alt: membership.user.name %>
+      <span class="min-w-0">
+        <span class="block truncate text-sm font-semibold"><%= membership.user.name.presence || membership.user.email %></span>
+        <span class="block truncate text-xs text-[#6b7672] dark:text-[#9AA6A0]"><%= membership.user.email %></span>
+      </span>
+    </span>
 
-    <%# --- ROLE SECTION: Editable if Admin, Static if not --- %>
     <% if can_manage_members? %>
-       <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" } do |f| %>
-          <% select_class = membership.admin? ? "text-emerald-700 border-emerald-200 bg-emerald-50" : "text-subtle bg-shade border-main" %>
-          <%= f.select :role, 
-              Membership.roles.keys.map { |r| [r.humanize, r] }, 
-              {}, 
-              { 
-                class: "input text-xs font-medium pb-1 pi-2 rounded-md border #{select_class} cursor-pointer capitalize",
-                onchange: "this.form.requestSubmit()" 
-              } 
-          %>
-       <% end %>
+      <%= form_with model: membership, url: membership_path(membership), method: :patch, data: { turbo_frame: "_top" }, class: "shrink-0" do |f| %>
+        <%= f.select :role,
+            Membership.roles.keys.map { |r| [r.humanize, r] },
+            {},
+            {
+              class: "w-auto cursor-pointer rounded-lg border border-[#D9DDE0] px-2.5 py-1.5 pr-8 text-xs font-semibold capitalize outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 #{membership.admin? ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'bg-white text-[#1c2420] dark:bg-[#0C1210] dark:text-[#E7ECE9]'} dark:border-white/10",
+              onchange: "this.form.requestSubmit()"
+            } %>
+      <% end %>
     <% else %>
-       <span class="bg-shade font-medium pi-2 pb-1 rounded-md text-xs uppercase border">
-         <%= membership.role %>
-       </span>
+      <span class="inline-flex shrink-0 items-center rounded-full border border-[#D9DDE0] bg-[#F6F9F7] px-2.5 py-0.5 text-xs font-semibold capitalize text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
+        <%= membership.role %>
+      </span>
     <% end %>
   </div>
 
-  <%# Card Footer: Details & Actions --- %>
-  <div class="flex items-center justify-between text-sm text-subtle">
-    <div class="flex items-center gap">
-      <span class="icon icon--calendar-range"></span>
+  <div class="mt-3 flex items-center justify-between border-t border-[#E9EBED] pt-3 text-[13px] text-[#6b7672] dark:border-white/10 dark:text-[#9AA6A0]">
+    <span class="flex items-center gap-1.5">
+      <%= icon("calendar-range", css: "h-4 w-4") %>
       Joined <%= membership.created_at.strftime("%b %d, %Y") %>
-    </div>
+    </span>
 
-    <%# --- ACTIONS SECTION: Delete/Leave Logic --- %>
     <% if membership.user == current_user %>
-      <%# Self: Leave %>
-      <% leave_trigger = button_tag type: "button", class: "text-subtle hover:text-negative", data: { action: "dialog#showModal" } do %>
-         <span class="icon icon--log-out"></span>
+      <% leave_trigger = button_tag type: "button", title: "Leave workspace",
+          class: "flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-red-700 dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-red-400",
+          data: { action: "dialog#showModal" } do %>
+        <%= icon("log-out", css: "h-4 w-4") %>
       <% end %>
-      <%= modal_dialog leave_trigger, size: "400px", title: "Leave Workspace?" do %>
-        <p class="text-sm text-subtle mbe-6">Are you sure you want to leave <strong><%= Current.account.name %></strong>?</p>
-        <div class="flex items-center justify-end gap-3">
-          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
-          <%= button_to "Leave Team", membership_path(membership), method: :delete, class: "btn btn--negative" %>
+      <%= modal_dialog leave_trigger, size: "400px", title: "Leave workspace?" do %>
+        <p class="text-sm leading-relaxed text-[#6b7672] dark:text-[#9AA6A0]">Are you sure you want to leave <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= Current.account.name %></strong>?</p>
+        <div class="mt-5 flex justify-end gap-2">
+          <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Leave team", membership_path(membership), method: :delete, class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white" %>
         </div>
       <% end %>
-
     <% elsif can_manage_members? %>
-      <%# Admin: Remove Others %>
-      <% delete_trigger = button_tag type: "button", class: "text-subtle hover:text-negative", data: { action: "dialog#showModal" } do %>
-         <span class="icon icon--trash-2"></span>
+      <% delete_trigger = button_tag type: "button", title: "Remove member",
+          class: "flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-red-700 dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-red-400",
+          data: { action: "dialog#showModal" } do %>
+        <%= icon("trash-2", css: "h-4 w-4") %>
       <% end %>
-      <%= modal_dialog delete_trigger, size: "400px", title: "Remove Member?" do %>
-        <p class="text-sm text-subtle mbe-6">Remove <strong><%= membership.user.full_name %></strong> from the team?</p>
-        <div class="flex items-center justify-end gap-3">
-          <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
-          <%= button_to "Remove Member", membership_path(membership), method: :delete, class: "btn btn--negative" %>
+      <%= modal_dialog delete_trigger, size: "400px", title: "Remove member?" do %>
+        <p class="text-sm leading-relaxed text-[#6b7672] dark:text-[#9AA6A0]">Remove <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= membership.user.full_name %></strong> from the team?</p>
+        <div class="mt-5 flex justify-end gap-2">
+          <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+          <%= button_to "Remove member", membership_path(membership), method: :delete, class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white" %>
         </div>
       <% end %>
     <% end %>

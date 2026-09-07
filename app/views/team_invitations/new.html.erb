@@ -1,29 +1,30 @@
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
-    <div class="flex items-center justify-between mbe-4">
-      <h3 class="text-lg font-bold">Invite Team Member</h3>
-    </div>
+    <h3 class="font-display text-lg font-semibold tracking-tight">Invite team member</h3>
+    <p class="mt-1 text-[13px] text-[#6b7672] dark:text-[#9AA6A0]">They'll get an email invite to join <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= Current.account.name %></strong>.</p>
 
-    <%= form_with(model: @invitation, url: team_invitations_path) do |form| %>
+    <%= form_with(model: @invitation, url: team_invitations_path, class: "mt-4") do |form| %>
       <% if @invitation.errors.any? %>
-        <div class="bg-red-50 text-negative p-3 rounded-md text-sm mbe-4">
+        <div class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300" role="alert">
           <%= @invitation.errors.full_messages.to_sentence %>
         </div>
       <% end %>
 
-      <div class="flex flex-col gap-1 mbe-4">
-        <%= form.label :email, "Email Address", class: "text-sm font-medium" %>
-        <%= form.email_field :email, required: true, autofocus: true, placeholder: "colleague@company.com", class: "input i-full" %>
+      <div>
+        <%= form.label :email, "Email address", class: "mb-1 block text-[13px] font-semibold" %>
+        <%= form.email_field :email, required: true, autofocus: true, placeholder: "colleague@company.com",
+            class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
       </div>
 
-      <div class="flex flex-col gap-1 mbe-6">
-        <%= form.label :role, "Role", class: "text-sm font-medium" %>
-        <%= form.select :role, [["Member (Can edit contacts, events, tasks)", "member"], ["Admin (Full access — manage team, settings, billing)", "admin"]], {}, { class: "input i-full" } %>
+      <div class="mt-3">
+        <%= form.label :role, "Role", class: "mb-1 block text-[13px] font-semibold" %>
+        <%= form.select :role, [["Member — can edit contacts, events, tasks", "member"], ["Admin — full access: team, settings, billing", "admin"]], {},
+            { class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" } %>
       </div>
 
-      <div class="flex justify-end gap-2">
-        <%= link_to "Cancel", members_path, class: "btn" %>
-        <%= form.submit "Send Invitation", class: "btn btn--primary" %>
+      <div class="mt-5 flex justify-end gap-2">
+        <%= link_to "Cancel", members_path, class: "rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold transition hover:border-[#A2E494] dark:border-white/10" %>
+        <%= form.submit "Send invitation", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
       </div>
     <% end %>
   </div>

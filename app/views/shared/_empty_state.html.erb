@@ -1,3 +1,11 @@
-<div id="empty_state" class="card text-center p-8 border rounded-md bg-surface shadow-sm text-subtle">
-  No records found.
+<%# Unified empty state. Locals: title, body, action (optional), icon_name (default "card-sim") %>
+<div id="empty_state" class="rounded-2xl border border-dashed border-[#D9DDE0] bg-white px-6 py-12 text-center dark:border-white/15 dark:bg-white/[0.02]">
+  <div class="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300">
+    <%= icon(local_assigns[:icon_name] || "card-sim", css: "h-5 w-5") %>
+  </div>
+  <h3 class="mt-4 font-display text-[15px] font-semibold"><%= local_assigns[:title] || "Nothing here yet" %></h3>
+  <p class="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-[#8a938d] dark:text-[#9AA6A0]"><%= local_assigns[:body] || "No records found." %></p>
+  <% if local_assigns[:action] %>
+    <div class="mt-5 flex justify-center"><%= action %></div>
+  <% end %>
 </div>

@@ -1,22 +1,22 @@
 <%= form_with(url: identity_name_path, method: :patch) do |form| %>
-    <% if user.errors.any? %>
-        <div style="color: red">
-            <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-            <ul>
-                <% user.errors.each do |error| %>
-                <li><%= error.full_message %></li>
-                <% end %>
-            </ul>
-        </div>
-    <% end %>
-
-    <div class="flex flex-col items-start gap-half mbe-4">
-        <%= form.label :name, "Edit name", class: "text-sm font-medium leading-none" %>
-        <%= form.text_field :name, required: true, autofocus: true, value: Current.user.name, placeholder: "e.g. Jane Smith", class: "input i-full" %>
+  <% if user.errors.any? %>
+    <div class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300" role="alert">
+      <p class="font-semibold"><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</p>
+      <ul class="mt-1 list-disc pl-5">
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
+  <% end %>
 
-    <div class="inline-flex items-center gap-2 mbs-4">
-        <%= form.submit "Save changes", class: "btn btn--primary" %>
-    </div>
+  <div class="mb-4 flex flex-col items-start gap-1.5">
+    <%= form.label :name, "Edit name", class: "mb-1 block text-[13px] font-semibold" %>
+    <%= form.text_field :name, required: true, autofocus: true, value: Current.user.name, placeholder: "e.g. Jane Smith",
+        class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+  </div>
+
+  <div class="mt-4 inline-flex items-center gap-2">
+    <%= form.submit "Save changes", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+  </div>
 <% end %>

@@ -1,0 +1,49 @@
+<%# Shared auth shell: deep algae story panel + white form card. Locals: title, subtitle %>
+<div class="flex min-h-screen">
+  <div class="hidden w-[44%] shrink-0 flex-col justify-between bg-algae-900 p-10 text-white lg:flex">
+    <div>
+      <%= link_to root_path, class: "flex items-center gap-2.5" do %>
+        <%= image_tag "logo/trellixe-mark.svg", size: 34, alt: "Trellixe", class: "h-[34px] w-[34px] rounded-lg bg-white/10" %>
+        <span class="font-display text-xl font-bold tracking-tight">Trellixe</span>
+      <% end %>
+    </div>
+    <div class="max-w-md">
+      <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-[#A2E494]">For outreach teams</p>
+      <h2 class="mt-3 font-display text-[32px] font-bold leading-[1.15] tracking-tight">Every visitor remembered.<br>Every follow-up kept.</h2>
+      <p class="mt-4 text-[15px] leading-relaxed text-white/75">Street invitations, Sunday guests, cell meetings — Trellixe keeps one shared list so no one slips through the cracks between Saturday outreach and Sunday service.</p>
+      <dl class="mt-8 grid grid-cols-3 gap-6 border-t border-white/15 pt-6">
+        <div>
+          <dt class="text-[12px] text-white/60">Check-in</dt>
+          <dd class="mt-1 font-display text-xl font-bold tabular-nums">1-tap</dd>
+        </div>
+        <div>
+          <dt class="text-[12px] text-white/60">Reminders</dt>
+          <dd class="mt-1 font-display text-xl font-bold tabular-nums">Auto</dd>
+        </div>
+        <div>
+          <dt class="text-[12px] text-white/60">History</dt>
+          <dd class="mt-1 font-display text-xl font-bold tabular-nums">Shared</dd>
+        </div>
+      </dl>
+    </div>
+    <p class="text-[13px] leading-relaxed text-white/60">“Saturday we met 40 people on the street. Sunday we knew every name at the door.”<br><span class="text-white/80">— Welcome team, cell network pilot</span></p>
+  </div>
+
+  <div class="flex min-w-0 flex-1 items-center justify-center px-4 py-10 sm:px-8">
+    <div class="w-full max-w-[400px]">
+      <div class="mb-8 flex items-center gap-2 lg:hidden">
+        <%= link_to root_path, class: "flex items-center gap-2" do %>
+          <%= image_tag "logo/trellixe-mark.svg", size: 32, alt: "Trellixe", class: "h-8 w-8 rounded-lg" %>
+          <span class="font-display text-lg font-bold tracking-tight text-[#13714C] dark:text-algae-300">Trellixe</span>
+        <% end %>
+      </div>
+      <h1 class="font-display text-[26px] font-bold tracking-tight"><%= title %></h1>
+      <% if local_assigns[:subtitle] %>
+        <p class="mt-1.5 text-[14.5px] leading-relaxed text-[#5b6660] dark:text-[#9AA6A0]"><%= subtitle %></p>
+      <% end %>
+      <div class="mt-7">
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+</div>

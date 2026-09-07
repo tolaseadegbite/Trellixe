@@ -1,0 +1,13 @@
+<%= link_to event, class: "flex items-center gap-3.5 px-5 py-3.5 transition hover:bg-[#F6F9F7] dark:hover:bg-white/[0.04]", data: { turbo_frame: "_top" } do %>
+  <span class="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl border border-[#E9EBED] bg-[#F6F9F7] dark:border-white/10 dark:bg-white/[0.03]">
+    <span class="text-[10px] font-bold uppercase tracking-wide text-algae-900 dark:text-algae-300"><%= event.starts_at.strftime("%b") %></span>
+    <span class="font-display text-[17px] font-bold leading-none tabular-nums"><%= event.starts_at.strftime("%-d") %></span>
+  </span>
+  <span class="min-w-0 flex-1">
+    <span class="block truncate text-[14px] font-semibold"><%= event.name %></span>
+    <span class="mt-0.5 block truncate text-[13px] tabular-nums text-[#8a938d] dark:text-[#9AA6A0]">
+      <%= event.starts_at.strftime("%a · %-l:%M %p") %> · <%= pluralize(event.invitations.size, "guest") %>
+    </span>
+  </span>
+  <%= icon("chevron-right", css: "h-4 w-4 shrink-0 text-[#c3c9c5]") %>
+<% end %>

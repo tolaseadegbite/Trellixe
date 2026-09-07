@@ -1,124 +1,84 @@
 <% content_for :title, "Contacts" %>
-
-<% content_for :page_header do %>
-  <h4 class="font-semibold">Contacts (<%= @pagy.count %>)</h4>
-<% end %>
-
+<% content_for :page_header, "Contacts · #{@pagy.count}" %>
 <% content_for :header_action_buttons do %>
-    <%= link_to new_contact_path,
-                  class: "btn btn--icon btn--primary",
-                  data: { turbo_frame: "modal" } do %>
-      <span class="icon icon--user-round-pen"></span>
-    <% end %>
+  <%= link_to "Manage tags", tags_path, data: { turbo_frame: "modal" },
+      class: "hidden rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-[13px] font-medium transition hover:border-[#A2E494] sm:flex dark:border-white/10 dark:bg-white/5" %>
+  <%= link_to new_contact_path, data: { turbo_frame: "modal" },
+      class: "flex items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e]" do %>
+    <%= icon("plus", css: "h-4 w-4") %> New contact
+  <% end %>
 <% end %>
 
-<div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
-  <%= link_to new_contact_path, class: "btn p-5 btn--primary rounded-full", data: { turbo_frame: "modal" } do %>
-    <span class="icon icon--pen"></span>
-  <% end %>
-</div>
+<%= link_to new_contact_path, data: { turbo_frame: "modal" }, aria: { label: "New contact" },
+    class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-[#0f5c3e] md:hidden" do %>
+  <%= icon("plus", css: "h-5 w-5") %>
+<% end %>
 
-<div class="flex flex-col i-full p-3" style="max-inline-size: 100%; overflow-x: clip">
-  
-  <%# --- 1. SEARCH FORM --- %>
-  <div class="search-form pbs-2">
+<div class="space-y-4">
+  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
     <%= render "contacts/search_form" %>
   </div>
 
-  <div class="flex items-center justify-end mbe-2">
-    <%= link_to tags_path, class: "btn btn--subtle text-xs", data: { turbo_frame: "modal" } do %>
-      <span class="icon icon--tags"></span> Manage Tags
-    <% end %>
-  </div>
+  <%= turbo_frame_tag :contacts_table, class: "block space-y-4" do %>
+    <%= render "contacts/active_filters" %>
 
-  <%= turbo_frame_tag :contacts_table do %>
-
-    <%# --- 2. ACTIVE FILTERS (New) --- %>
-    <div class="mbe-2">
-      <%= render "contacts/active_filters" %>
-    </div>
-
-    <%# --- 3. RESULT COUNT FEEDBACK --- %>
-    <%# Only show this line if a search is actually active %>
     <% if params[:q].present? %>
-      <div class="mbe-4 text-sm text-subtle">
-        Found <strong class="text-primary"><%= @pagy.count %></strong> <%= "contact".pluralize(@pagy.count) %> matching your filters.
-      </div>
+      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Found <strong class="text-[#1c2420] tabular-nums dark:text-[#E7ECE9]"><%= @pagy.count %></strong> <%= "contact".pluralize(@pagy.count) %> matching your filters.</p>
     <% end %>
-    
-    <%# --- 4. BULK ACTIONS FORM --- %>
-    <%= form_with url: bulk_destroy_contacts_path, method: :delete, id: "contacts-bulk-form", data: { controller: "check-all", action: "reset-bulk-ui->check-all#deselectAll" } do |form| %>
 
+    <%= form_with url: bulk_destroy_contacts_path, method: :delete, id: "contacts-bulk-form",
+        data: { controller: "check-all", action: "reset-bulk-ui->check-all#deselectAll" } do |form| %>
       <div id="bulk_actions_bar">
-        <div id="bulk_actions_bar_inner" data-check-all-target="actionBar" 
-            class="action-bar bg-black text-reversed p-2 rounded-md shadow-lg border">
-          
-          <div class="flex items-center gap">
-            <span class="font-bold text-sm mis-2" data-check-all-target="count">0 selected</span>
-          </div>
-
-          <div class="flex items-center gap">
-            
-            <%# Event Assignment Controls %>
-            <div class="flex items-center gap-half bg-surface p-1 rounded-sm border border-main">
-              <%= form.select :event_id, 
-                    @bulk_event_options, 
-                    { prompt: "Select Event..." }, 
-                    class: "input cursor-pointer border-0 bg-gray-50", 
-                    style: "min-inline-size: 140px; padding-block: 0.25rem;" %>
-              
-              <%= form.button "Add", 
-                    formaction: bulk_assign_event_contacts_path, 
-                    formmethod: :post,
-                    class: "btn btn--primary text-xs",
-                    style: "padding: 0.25rem 0.75rem;" %>
-            </div>
-
-            <%# Delete Control %>
-            <div data-controller="dialog">
-              <button type="button" 
-                      class="btn bg-red-600 hover:bg-red-700 text-gray-50 border-0 text-xs"
-                      data-action="click->dialog#showModal"
-                      title="Delete selected contacts">
-                <span class="icon icon--btn icon--trash-2"></span>
-              </button>
-              <dialog class="dialog" data-dialog-target="content" style="--dialog-size: 450px;">
-                <button type="button" class="btn btn--plain dialog__close" data-action="click->dialog#close">
-                  <span class="icon icon--x" aria-hidden="true"></span>
-                  <span class="sr-only">Close</span>
-                </button>
-                <div class="dialog__content">
-                  <h2 class="font-semibold text-lg mbe-4">Delete selected contacts?</h2>
-                  <p class="text-sm text-subtle mbe-4">This will permanently delete the selected contacts. This action cannot be undone.</p>
-                  <div class="flex items-center justify-end gap">
-                    <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
-                    <button type="submit" formaction="<%= bulk_destroy_contacts_path %>" formmethod="delete" class="btn btn--negative" data-action="click->dialog#close">Continue</button>
+        <div id="bulk_actions_bar_inner" data-check-all-target="actionBar"
+            class="action-bar flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-[#1c2420]/95 p-2 pl-3 text-white shadow-2xl backdrop-blur">
+          <span class="flex min-w-0 shrink-0 items-center gap-2 text-sm font-semibold tabular-nums">
+            <span class="h-2 w-2 shrink-0 rounded-full bg-algae-500"></span>
+            <span class="truncate" data-check-all-target="count">0 selected</span>
+          </span>
+          <span class="min-w-32 order-last w-full flex-1 basis-40 sm:order-none sm:w-auto sm:basis-auto">
+            <%= form.select :event_id, @bulk_event_options, { prompt: "Add to an event…" },
+                class: "w-full cursor-pointer truncate rounded-lg border border-white/10 bg-white/10 px-2.5 py-2 text-[13px] text-white outline-none transition hover:bg-white/15 focus:border-algae-500 [&>option]:text-[#1c2420]" %>
+          </span>
+          <%= form.button "Add", formaction: bulk_assign_event_contacts_path, formmethod: :post, title: "Add selected to event",
+              class: "shrink-0 cursor-pointer rounded-lg bg-algae-600 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-algae-500" %>
+          <span class="hidden h-6 w-px shrink-0 bg-white/15 sm:block" aria-hidden="true"></span>
+          <span class="flex shrink-0 items-center gap-1.5">
+            <span data-controller="dialog">
+              <button type="button" class="flex h-9 w-9 items-center justify-center rounded-lg text-white/80 transition hover:bg-white/10 hover:text-white"
+                  data-action="click->dialog#showModal" title="Delete selected"><%= icon("trash-2", css: "h-4 w-4") %></button>
+              <dialog class="tlx-dialog" data-dialog-target="content" data-action="click->dialog#closeOnClickOutside" aria-label="Delete contacts">
+                <div class="p-6">
+                  <h2 class="font-display text-lg font-semibold">Delete selected contacts?</h2>
+                  <p class="mt-2 text-sm leading-relaxed text-[#6b7672] dark:text-[#9AA6A0]">This permanently removes them and their history. This can't be undone.</p>
+                  <div class="mt-5 flex justify-end gap-2">
+                    <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+                    <button type="submit" formaction="<%= bulk_destroy_contacts_path %>" formmethod="delete" class="rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white">Delete</button>
                   </div>
                 </div>
               </dialog>
-            </div>
-
-          </div>
+            </span>
+            <button type="button" class="flex h-9 w-9 items-center justify-center rounded-lg text-white/80 transition hover:bg-white/10 hover:text-white"
+                data-action="click->check-all#deselectAll" title="Clear selection"><%= icon("x", css: "h-4 w-4") %></button>
+          </span>
         </div>
       </div>
 
-      <%# --- DESKTOP VIEW --- %>
-      <div class="show@md">
-        <div class="relative i-full overflow-x-auto border border-main rounded-lg">
-          <table class="table i-full text-left">
-            <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
-              <tr>
-                <th class="p-3 w-8"><%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
-                <th class="p-3"><%= sort_link(@search, :first_name, class: "flex items-center") %></th>
-                <th class="p-3"><%= sort_link(@search, :last_name, class: "flex items-center") %></th>
-                <th class="p-3"><%= sort_link(@search, :email, class: "flex items-center") %></th>
-                <th class="p-3"><%= sort_link(@search, :phone_number, class: "flex items-center") %></th>
-                <th class="p-3 text-end">ACTIONS</th>
+      <div class="hidden overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white md:block dark:border-white/10 dark:bg-[#131B17]">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-[#E9EBED] bg-[#F6F9F7] text-xs uppercase tracking-wide text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
+                <th class="w-10 px-4 py-3"><%= check_box_tag :check_all, nil, false, class: "h-4 w-4 accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
+                <th class="px-3 py-3 font-semibold"><%= sort_link(@search, :first_name, "First name") %></th>
+                <th class="px-3 py-3 font-semibold"><%= sort_link(@search, :last_name, "Last name") %></th>
+                <th class="px-3 py-3 font-semibold"><%= sort_link(@search, :email, "Email") %></th>
+                <th class="px-3 py-3 font-semibold"><%= sort_link(@search, :phone_number, "Phone") %></th>
+                <th class="px-4 py-3 text-right font-semibold">Actions</th>
               </tr>
             </thead>
-            <tbody id="contacts-table">
+            <tbody id="contacts-table" class="divide-y divide-[#E9EBED] dark:divide-white/10">
               <% if @contacts.empty? %>
-                <%= render "shared/empty_state_desktop" %>
+                <tr><td colspan="6" class="px-4 py-8"><%= render "shared/empty_state", title: "No contacts yet", body: "Add your first person from Saturday outreach — name, number, one line of context.", icon_name: "card-sim" %></td></tr>
               <% else %>
                 <%= render @contacts %>
               <% end %>
@@ -127,23 +87,20 @@
         </div>
       </div>
 
-      <%# --- MOBILE VIEW --- %>
-      <div class="hide@md flex flex-col">
-        <div class="flex items-center gap pb-2 pi-1">
-          <%= check_box_tag "check_all_mobile", nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %>
-          <label for="check_all_mobile" class="font-medium cursor-pointer">Select all</label>
-        </div>
-        
-        <div id="contacts-cards">
+      <div class="space-y-2.5 md:hidden">
+        <label class="flex items-center gap-2 px-1 text-sm font-medium">
+          <%= check_box_tag "check_all_mobile", nil, false, class: "h-4 w-4 accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependee" } %> Select all
+        </label>
+        <div id="contacts-cards" class="space-y-2.5">
           <% if @contacts.empty? %>
-            <%= render "shared/empty_state_mobile" %>
+            <%= render "shared/empty_state", title: "No contacts yet", body: "Add your first person from Saturday outreach.", icon_name: "card-sim" %>
           <% else %>
             <%= render partial: "contacts/contact_card", collection: @contacts, as: :contact %>
           <% end %>
         </div>
       </div>
 
-      <%= render "shared/pagination", pagy: @pagy %>
-    <% end %> <%# End form_with %>
-  <% end %> <%# End turbo_frame %>
+      <div class="mt-4"><%= render "shared/pagination", pagy: @pagy %></div>
+    <% end %>
+  <% end %>
 </div>

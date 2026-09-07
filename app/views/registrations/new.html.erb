@@ -1,69 +1,43 @@
-<div class="card i-full" style="max-inline-size: 25rem;">
-  <div class="flex flex-col items-center gap-5 mbe-8">
-    <%= link_to root_path, class: "" do %>
-      <%= image_tag("logo/logo.png", size: 50) %>
-    <% end %>
-    <h1 class="font-bold text-3xl text-center">Sign up to Trellixe</h1>
-  </div>
-  
-  <%= form_with(url: sign_up_path, data: { controller: "timezone" }) do |form| %>
+<% content_for :title, "Sign up" %>
+<%= render layout: "shared/auth_shell", locals: { title: "Start your workspace", subtitle: "One shared list for your cell — from street invitation to Sunday seat." } do %>
+  <%= form_with(url: sign_up_path, data: { controller: "timezone" }, class: "space-y-4") do |form| %>
     <% if @user.errors.any? %>
-      <div class="alert alert--negative flex items-start mbe-5" role="alert">
-        <span class="icon icon--circle-alert" aria-hidden="true"></span>
-        <div class="flex flex-col mis-3">
-          <h5 class="font-medium leading-none mbe-1">Unable to create user.</h5>
-          <div class="flex flex-col text-sm">
-            <p class="mbe-2"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</p>
-            <ul class="mis-3" style="list-style: disc">
-              <% @user.errors.each do |error| %>
-                <li><%= error.full_message %></li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
+      <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-500/10 dark:border-red-500/30 dark:text-red-300" role="alert">
+        <p class="font-semibold">Couldn't create your account.</p>
+        <ul class="mt-1 list-disc pl-5">
+          <% @user.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
       </div>
     <% end %>
 
-    <%# Hidden field that JS will populate automatically %>
     <%= form.hidden_field :time_zone, data: { timezone_target: "input" } %>
 
-    <div class="mbe-5">
-      <%= form.label :name, style: "display: block", class: "font-semibold mbe-1" %>
-      <%= form.text_field :name, value: @user.name, placeholder: "Enter your name", required: true, autofocus: true, class: "input" %>
-    </div>
-      
-    <div class="mbe-5">
-      <%= form.label :email, style: "display: block", class: "font-semibold mbe-1" %>
-      <%= form.email_field :email, value: @user.email, placeholder: "jane@example.com", required: true, autocomplete: "email", class: "input" %>
-    </div>
-
-    <div class="mbe-5">
-      <%= form.label :password, style: "display: block", class: "font-semibold mbe-1" %>
-      <%= form.password_field :password, required: true, autocomplete: "new-password", class: "input" %>
-      <div class="text-sm text-end">12 characters minimum.</div>
-    </div>
-
-    <div class="mbe-5">
-      <%= form.label :password_confirmation, style: "display: block", class: "font-semibold mbe-1" %>
-      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", class: "input" %>
-    </div>
-
     <div>
-      <%= form.submit "Sign up", class: "btn btn--primary i-full" %>
+      <%= form.label :name, class: "mb-1.5 block text-[13px] font-semibold" %>
+      <%= form.text_field :name, value: @user.name, placeholder: "Adaeze Okafor", required: true, autofocus: true,
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
     </div>
+    <div>
+      <%= form.label :email, class: "mb-1.5 block text-[13px] font-semibold" %>
+      <%= form.email_field :email, value: @user.email, placeholder: "you@example.com", required: true, autocomplete: "email",
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+    </div>
+    <div>
+      <%= form.label :password, class: "mb-1.5 block text-[13px] font-semibold" %>
+      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "12 characters minimum",
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+    </div>
+    <div>
+      <%= form.label :password_confirmation, class: "mb-1.5 block text-[13px] font-semibold" %>
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repeat password",
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+    </div>
+    <%= form.submit "Create workspace", class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
   <% end %>
 
-  <br>
-
-  <div class="text-sm text-center">
-    <%= link_to "Sign in", sign_in_path %> | <%= link_to "Sign in without password", new_sessions_passwordless_path %>
-  </div>
-
-  <div class="text-sm text-center">
-    <%#= button_to "Sign in with OmniAuth", "/auth/developer", "data-turbo" => false %>
-  </div>
-
-  <div class="text-sm text-center">
-    <%= link_to "Forgot your password?", new_identity_password_reset_path %>
-  </div>
-</div>
+  <p class="mt-6 text-center text-[13.5px] text-[#5b6660] dark:text-[#9AA6A0]">
+    Already have an account? <%= link_to "Sign in", sign_in_path, class: "font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
+  </p>
+<% end %>

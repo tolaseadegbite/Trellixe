@@ -1,265 +1,164 @@
-<% content_for :title, "Never Forget a Follow-Up Again" %>
+<% content_for :title, "Trellixe — Every visitor remembered" %>
 
-<section class="mbs-3 mi-3 rounded-lg" style="background-image: linear-gradient(to right, var(--blue-500), var(--teal-500)); max-block-size: 97dvh;">
-
-    <%= render "layouts/navigation/application/navbar" %>
-
-    <div class="section-padding text-center">
-        <div class="flex flex-col gap-8">
-            <h1 class="font-bold leading-tight" style="font-size: 3.5rem;">Never Forget a Follow-Up Again.</h1>
-            <p class="text-lg mt-4 mi-auto" style="max-inline-size: 48rem;">
-                Trellixe is the simple app for Inviters, salespeople, and networkers that automates post-event reminders so you can build lasting connections.
-            </p>
-            <div class="mt-8">
-                <%= link_to "Get Free Early Access", sign_up_path, class: "btn btn--primary text-lg" %>
-                <p class="text-xs mbs-2">Become a founding member. No credit card required.</p>
-            </div>
-        </div>
-            
-        <div class="container mbs-10 shadow-lg">
-            <div class="flex items-center relative">
-                <%= image_tag("landing_page/image_1.png", class: "home-image border rounded-lg") %>
-            </div>
-        </div>
+<div class="bg-white dark:bg-[#131B17]">
+  <section class="mx-auto grid w-full max-w-6xl gap-10 px-4 pb-14 pt-12 md:grid-cols-2 md:items-center md:px-8 md:pt-20">
+    <div>
+      <p class="inline-flex items-center gap-2 rounded-full border border-[#A2E494] bg-algae-50 px-3 py-1 text-xs font-semibold text-algae-900 dark:bg-algae-600/15 dark:text-algae-300">
+        <span class="h-1.5 w-1.5 rounded-full bg-algae-600"></span>
+        Built for outreach teams &amp; cell networks
+      </p>
+      <h1 class="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-[52px]">No visitor falls through the cracks.</h1>
+      <p class="mt-5 max-w-md text-[17px] leading-relaxed text-[#3d4742] dark:text-[#C6CFC9]">Trellixe carries one shared list from Saturday street invitation to Sunday seat to Monday follow-up — so your team always knows who to call, and why it matters.</p>
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <%= link_to "Start free — no card needed", sign_up_path, class: "rounded-lg bg-algae-900 px-5 py-3 text-[15px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+        <%= link_to "See how it works", "#how-it-works", class: "rounded-lg border border-[#D9DDE0] px-5 py-3 text-[15px] font-semibold transition hover:border-[#A2E494] hover:text-algae-900 dark:border-white/10 dark:hover:text-algae-300" %>
+      </div>
+      <p class="mt-4 text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Set up in an afternoon. Your cell of five can run Sunday on it.</p>
     </div>
-</section>
 
-<section id="features" class="bg-shade mi-3 rounded-lg" style="padding: 25rem 0 6rem;">
-    <div class="container flex justify-center" style="margin-bottom: 5rem;">
+    <div class="relative">
+      <div class="rounded-2xl border border-[#D9DDE0] bg-[#F6F9F7] p-4 shadow-[0_24px_60px_-24px_rgb(19_113_76/0.25)] dark:border-white/10 dark:bg-white/[0.03]">
+        <div class="flex items-center justify-between px-1 pb-3">
+          <p class="text-[13px] font-semibold">Saturday outreach — Ring Road</p>
+          <span class="rounded-full bg-algae-100 px-2.5 py-0.5 text-xs font-semibold text-algae-900 dark:text-algae-300">12 new</span>
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3 rounded-xl border border-[#E9EBED] bg-white px-3.5 py-3 dark:bg-[#131B17] dark:border-white/10">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-algae-900 text-xs font-bold text-white">BK</span>
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-sm font-semibold">Blessing K. <span class="font-normal text-[#8a938d] dark:text-[#9AA6A0]">· invited to Sunday 9am</span></p>
+              <p class="truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">“Pray for mum's surgery Thursday.”</p>
+            </div>
+            <%= icon("check", css: "h-4 w-4 text-algae-600") %>
+          </div>
+          <div class="flex items-center gap-3 rounded-xl border border-[#E9EBED] bg-white px-3.5 py-3 dark:bg-[#131B17] dark:border-white/10">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-[#1c2420] text-xs font-bold text-white">DA</span>
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-sm font-semibold">Daniel A. <span class="font-normal text-[#8a938d] dark:text-[#9AA6A0]">· needs transport</span></p>
+              <p class="truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">New in town, works nights.</p>
+            </div>
+            <%= icon("check", css: "h-4 w-4 text-algae-600") %>
+          </div>
+          <div class="flex items-center gap-3 rounded-xl border border-[#A2E494] bg-algae-50 px-3.5 py-3 dark:bg-algae-600/15">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-algae-600 text-xs font-bold text-white">MF</span>
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-sm font-semibold">Monday 9:12am — call Funmi</p>
+              <p class="truncate text-[13px] text-[#5b6660] dark:text-[#9AA6A0]">Attended Sunday · “Ask about the job interview.”</p>
+            </div>
+            <span class="rounded-md bg-algae-900 px-2 py-1 text-xs font-semibold text-white">Due</span>
+          </div>
+        </div>
+      </div>
+      <p class="mt-3 text-center text-xs text-[#8a938d] dark:text-[#9AA6A0]">Real workflow: capture on the street, check in at the door, follow up Monday.</p>
+    </div>
+  </section>
+
+  <section class="border-y border-[#E9EBED] bg-[#F6F9F7] dark:border-white/10 dark:bg-white/[0.03]">
+    <div class="mx-auto grid w-full max-w-6xl gap-3 px-4 py-6 text-[13.5px] md:grid-cols-4 md:px-8">
+      <p><span class="font-bold text-algae-900 dark:text-algae-300">01 — Invite.</span> <span class="text-[#3d4742] dark:text-[#C6CFC9]">Names, numbers, prayer points, straight into the phone.</span></p>
+      <p><span class="font-bold text-algae-900 dark:text-algae-300">02 — Remind.</span> <span class="text-[#3d4742] dark:text-[#C6CFC9]">Saturday-night nudge before Sunday service.</span></p>
+      <p><span class="font-bold text-[#3d4742] dark:text-[#C6CFC9]"><span class="font-bold text-algae-900 dark:text-algae-300">03 — Welcome.</span> One-tap attendance at the door.</span></p>
+      <p><span class="font-bold text-algae-900 dark:text-algae-300">04 — Keep.</span> <span class="text-[#3d4742] dark:text-[#C6CFC9]">Monday calls queued with full context.</span></p>
+    </div>
+  </section>
+
+  <section id="how-it-works" class="mx-auto w-full max-w-6xl px-4 py-16 md:px-8 md:py-24">
+    <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-algae-900 dark:text-algae-300">How it works</p>
+    <h2 class="mt-2 max-w-xl font-display text-3xl font-bold tracking-tight md:text-4xl">A simple loop your volunteers will actually keep.</h2>
+    <div class="mt-10 space-y-4">
+      <div class="grid gap-6 rounded-2xl border border-[#D9DDE0] p-6 md:grid-cols-[64px_1fr_1fr] md:items-center md:p-8 dark:border-white/10">
+        <span class="font-display text-4xl font-bold text-[#A2E494]">1</span>
         <div>
-            <h2 class="font-bold leading-tight text-4xl mbe-10" style="max-inline-size: 50dvh;">Just enough tools you need to build lasting connections.</h2>
-            <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
-                Trellixe provides a simple, focused toolkit to guide you from the first handshake to a meaningful follow-up. No complicated features, just the essentials done right
-            </p>
+          <h3 class="font-display text-lg font-semibold">Capture with context</h3>
+          <p class="mt-1.5 text-[15px] leading-relaxed text-[#3d4742] dark:text-[#C6CFC9]">Not just a phone number. Who they came with, what they're carrying, what to pray about — written once, visible to the whole cell.</p>
         </div>
-    </div>
-
-    <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-10">
-        <div class="mt-8 flex flex-col items-start gap-4">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <span class="icon icon--user-check" style="--icon-size: 1.5rem" aria-hidden="true"></span>
-                <span class="sr-only">Go forward</span>
-            <% end %>
-            <h2 class="font-bold leading-tight text-lg">Remember Every Detail, Not Just a Name</h2>
-            <p class="text-lg">
-                Go beyond a simple contact list. Use the dedicated <strong>notes field</strong> to capture the crucial context of how you met, what you discussed, and what matters to them. This turns a cold follow-up into a warm, personal conversation
-            </p>
-        </div>
-
-        <div class="mt-8 flex flex-col items-start gap-4">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <span class="icon icon--calendar-range" style="--icon-size: 1.5rem" aria-hidden="true"></span>
-                <span class="sr-only">Go forward</span>
-            <% end %>
-            <h2 class="font-bold leading-tight text-lg">Simple Event Tracking</h2>
-            <p class="text-lg">
-                Create an event, invite your contacts, and with a single tap, mark who attended. This simple action is the key that tells Trellixe a meaningful connection was made and it's time to follow up
-            </p>
-        </div>
-
-        <div class="mt-8 flex flex-col items-start gap-4">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <span class="icon icon--bell" style="--icon-size: 1.5rem" aria-hidden="true"></span>
-                <span class="sr-only">Go forward</span>
-            <% end %>
-            <h2 class="font-bold leading-tight text-lg">Automated Follow-Up Reminders</h2>
-            <p class="text-lg">
-                This is the magic. Trellixe automatically reminds you to connect with every single person who attended your event. Never let a valuable relationship fall through the cracks again
-            </p>
-        </div>
-    </div>
-
-</section>
-
-<section class="bg-black text-reversed mi-3 rounded-lg" style="padding: 6rem 0;">
-    <div class="container flex gap-8 justify-center">
-        <div class="flex flex-col gap-8">
-            <h2 class="font-bold leading-tight text-4xl" style="max-inline-size: 60dvh;">Manage Your Entire Relationship Workflow</h2>
-            
-            <p class="text-lg mt-4" style="max-inline-size: 60dvh;">
-                Trellixe is built with intention at its heart and is loaded with features to help you connect more effectively. It's quick to learn, fast to navigate, and empowering to use
-            </p>
-
-            <ul>
-                <li class="flex items-center gap-2 mbe-2" style="--icon-size: 1rem"><span class="icon icon--circle-check"></span>Focused Contact Management</li>
-                <li class="flex items-center gap-2 mbe-2" style="--icon-size: 1rem"><span class="icon icon--circle-check"></span>One-Tap Attendance Tracking</li>
-                <li class="flex items-center gap-2 mbe-2" style="--icon-size: 1rem"><span class="icon icon--circle-check"></span>Rich Contextual Notes</li>
-                <li class="flex items-center gap-2 mbe-2" style="--icon-size: 1rem"><span class="icon icon--circle-check"></span>Automated Post-Event Reminders</li>
-                <li class="flex items-center gap-2 mbe-2" style="--icon-size: 1rem"><span class="icon icon--circle-check"></span>Simple Interaction Logging</li>
-                <li class="flex items-center gap-2 mbe-2" style="--icon-size: 1rem"><span class="icon icon--circle-check"></span>Clean, Uncluttered Interface</li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<section class="bg-light mi-3 rounded-lg" style="padding: 6rem 0;">
-    <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@lg gap-10 mbs-10 items-center">
-        <div class="container flex flex-col gap-8">
-            <h2 class="font-bold leading-tight text-4xl" style="max-inline-size: 38dvh;">Remember the Story, Not Just the Name</h2>
-            <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
-                A great follow-up starts with great context. Trellixe’s rich contact profiles give you a dedicated space to capture the details that matter—where you met, what you talked about, and what their interests are—so your next conversation always feels personal and genuine
-            </p>
-        </div>
-
-        <div class="">
-            <%= image_tag("landing_page/image_2.png", class: "rounded-lg shadow-lg", size: "max-block-size: 70dvh;") %>
-        </div>
-    </div>
-</section>
-
-<section class="bg-shade mi-3 rounded-lg" style="padding: 6rem 0; background-image: linear-gradient(to right, var(--blue-300), var(--teal-500));">
-    <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@lg gap-10 mbs-10 items-center">
-        <div class="">
-            <%= image_tag("landing_page/image_2.png", class: "rounded-lg shadow-lg", size: "max-block-size: 70dvh;") %>
-        </div>
-
-        <div class="container flex flex-col gap-8">
-            <h2 class="font-bold leading-tight text-4xl" style="max-inline-size: 38dvh;">Know Exactly Who to Follow Up With</h2>
-            <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
-                The automated reminder system is your personal assistant. After an event, Trellixe sends you a timely notification for every person you marked as "Attended." It cuts through the noise and gives you a clear, actionable to-do list, ensuring you never miss the crucial window to build a connection.
-            </p>
-        </div>
-    </div>
-</section>
-
-<section class="mi-3 rounded-lg" style="padding: 6rem 0;">
-    <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@lg gap-10 mbs-10 items-center">
-        <div class="container flex flex-col gap-8">
-            <h2 class="font-bold leading-tight text-4xl" style="max-inline-size: 38dvh;">Build a History of Your Relationship</h2>
-            <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
-                Closing the loop is satisfying. After you've made your call or sent your text, a simple log entry creates a permanent record of the interaction. Over time, you'll build a complete history for each contact, allowing you to see their entire journey from first-time visitor to valued community member.
-            </p>
-        </div>
-
-        <div class="">
-            <%= image_tag("landing_page/image_2.png", class: "rounded-lg shadow-lg", size: "max-block-size: 70dvh;") %>
-        </div>
-    </div>
-</section>
-
-<section id="who_is_it_for" class="bg-black text-reversed mi-3 rounded-lg" style="padding: 6rem 0;">
-    <div class="container section-header flex justify-center" style="margin-bottom: 4rem;">
+        <div class="rounded-xl bg-[#F6F9F7] p-4 text-sm text-[#3d4742] dark:text-[#C6CFC9] dark:bg-white/[0.03]"><span class="font-semibold">Sat 4:40pm</span> · “Met at the junction. Two kids. Invited to cell Thursday.”</div>
+      </div>
+      <div class="grid gap-6 rounded-2xl border border-[#D9DDE0] p-6 md:grid-cols-[64px_1fr_1fr] md:items-center md:p-8 dark:border-white/10">
+        <span class="font-display text-4xl font-bold text-[#A2E494]">2</span>
         <div>
-            <h2 class="font-bold leading-tight text-4xl mbe-8" style="max-inline-size: 50dvh;">Designed for Connectors</h2>
-            <p class="text-lg mt-4" style="max-inline-size: 50dvh;">
-                If your success depends on the strength of your relationships, Trellixe is built for you.
-            </p>
+          <h3 class="font-display text-lg font-semibold">Show up prepared</h3>
+          <p class="mt-1.5 text-[15px] leading-relaxed text-[#3d4742] dark:text-[#C6CFC9]">Sunday morning the welcome team sees every expected guest, who invited them, and where to seat them. Check-in is one tap.</p>
         </div>
+        <div class="rounded-xl bg-[#F6F9F7] p-4 text-sm text-[#3d4742] dark:text-[#C6CFC9] dark:bg-white/[0.03]"><span class="font-semibold">Sun 8:15am</span> · “6 expected · 2 need transport · Blessing — first row, friend of Adaeze.”</div>
+      </div>
+      <div class="grid gap-6 rounded-2xl border border-[#D9DDE0] p-6 md:grid-cols-[64px_1fr_1fr] md:items-center md:p-8 dark:border-white/10">
+        <span class="font-display text-4xl font-bold text-[#A2E494]">3</span>
+        <div>
+          <h3 class="font-display text-lg font-semibold">Follow up while it's warm</h3>
+          <p class="mt-1.5 text-[15px] leading-relaxed text-[#3d4742] dark:text-[#C6CFC9]">Monday morning each volunteer gets their short list with context. Every call and visit is logged, so the next person never starts cold.</p>
+        </div>
+        <div class="rounded-xl bg-[#F6F9F7] p-4 text-sm text-[#3d4742] dark:text-[#C6CFC9] dark:bg-white/[0.03]"><span class="font-semibold">Mon 9:00am</span> · “3 calls · each with last week's note attached.”</div>
+      </div>
     </div>
+  </section>
 
-    <div class="container grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-8">
-        <div class="mt-8 flex flex-col items-start gap-4 border rounded-lg p-5">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <svg class="i-full" style="inline-size: 2rem; block-size: 2rem; color: var(--color-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.25278C12 6.25278 5.68478 3 5.68478 3C5.68478 3 4.5 12 12 12C19.5 12 18.3152 3 18.3152 3C18.3152 3 12 6.25278 12 6.25278Z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12V21" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21H5.68478" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21H18.3152" /></svg>
-            <% end %>
-            <h2 class="font-bold leading-tight text-lg">Pastors & Church Leaders</h2>
-            <p class="text-lg">
-                Nurture your congregation and make every visitor feel seen and remembered.
-            </p>
+  <section id="who-its-for" class="border-y border-[#E9EBED] bg-algae-900 text-white">
+    <div class="mx-auto w-full max-w-6xl px-4 py-16 md:px-8 md:py-20">
+      <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-[#A2E494]">Who it's for</p>
+      <h2 class="mt-2 max-w-xl font-display text-3xl font-bold tracking-tight md:text-4xl">Built with cell leaders, not for CRMs.</h2>
+      <div class="mt-10 grid gap-8 md:grid-cols-3">
+        <div class="border-t border-white/15 pt-5">
+          <h3 class="font-display text-[17px] font-semibold">Cell groups of five</h3>
+          <p class="mt-2 text-[14.5px] leading-relaxed text-white/70">Share one list on five phones. No duplicates, no “who has her number?” — whoever meets someone, the whole cell knows.</p>
         </div>
-
-        <div class="mt-8 flex flex-col items-start gap-4 border rounded-lg p-5">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <svg class="i-full" style="inline-size: 2rem; block-size: 2rem; color: var(--color-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-            <% end %>
-            <h2 class="font-bold leading-tight text-lg">Sales Professionals</h2>
-            <p class="text-lg">
-                Turn conference leads into clients with timely, personal follow-ups that stand out.
-            </p>
+        <div class="border-t border-white/15 pt-5">
+          <h3 class="font-display text-[17px] font-semibold">Welcome &amp; assimilation teams</h3>
+          <p class="mt-2 text-[14.5px] leading-relaxed text-white/70">Route guests between cells by area or need, assign transport or a visit, and see every touch in one timeline.</p>
         </div>
-
-        <div class="mt-8 flex flex-col items-start gap-4 border rounded-lg p-5">
-            <%= button_tag type: "button", class: "btn btn--icon mbe-2", style: "background-image: linear-gradient(to right, var(--blue-500), var(--teal-500));" do %>
-                <svg class="i-full" style="inline-size: 2rem; block-size: 2rem; color: var(--color-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a3.001 3.001 0 015.652 0M12 11a3 3 0 100-6 3 3 0 000 6z" /></svg>
-            <% end %>
-            <h2 class="font-bold leading-tight text-lg">Community Organizers</h2>
-            <p class="text-lg">
-                Build a dedicated network of volunteers and supporters, one personal connection at a time.
-            </p>
+        <div class="border-t border-white/15 pt-5">
+          <h3 class="font-display text-[17px] font-semibold">Branch overseers</h3>
+          <p class="mt-2 text-[14.5px] leading-relaxed text-white/70">Watch outreach turn into attendance and attendance turn into belonging — cell by cell, week by week.</p>
         </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<section class="bg-shade mi-4 rounded-lg" style="padding: 6rem 0;">
-    <div class="container flex gap-8 justify-center">
-        <div class="flex flex-col gap-8 text-center">
-            <h2 class="font-bold leading-tight text-3xl">A Note from the Founder</h2>
-            <p class="text-lg mt-4" style="max-inline-size: 60dvh;">
-                "I created Trellixe to solve a problem I faced every day: meeting wonderful people but failing to follow up. Right now, I'm looking for a small group of passionate connectors to help shape the future of this tool. In exchange for your valuable feedback, you get to use Trellixe completely free as a founding member." 
-            </p>
-
-            <div class="flex items-center justify-center gap-5">
-                <%= image_tag("avatar.jpg", size: "50", class: "rounded-full") %>
-                <div class="text-start">
-                    <h3 class="font-bold leading-tight">Tolase Adegbite</h3>
-                    <p class="text-subtle text-sm">Founder of Trellixe</p>
-                </div>
-            </div>
-        </div>
+  <section id="field-notes" class="mx-auto w-full max-w-6xl px-4 py-16 md:px-8 md:py-24">
+    <div class="grid gap-10 md:grid-cols-2 md:items-center">
+      <div>
+        <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-algae-900 dark:text-algae-300">Field notes</p>
+        <blockquote class="mt-3 font-display text-2xl font-bold leading-snug tracking-tight md:text-[32px]">“We used to lose half our Saturday names by Sunday. Last month we followed up with every single one.”</blockquote>
+        <p class="mt-4 text-[15px] text-[#3d4742] dark:text-[#C6CFC9]">Welcome coordinator, 4-cell network · 200 Sunday attendance</p>
+      </div>
+      <div class="rounded-2xl border border-[#D9DDE0] bg-[#F6F9F7] p-6 dark:border-white/10 dark:bg-white/[0.03]">
+        <p class="text-sm font-semibold">What changes in the first month</p>
+        <ul class="mt-3 space-y-2.5 text-[14.5px] text-[#3d4742] dark:text-[#C6CFC9]">
+          <li class="flex gap-2.5"><%= icon("check", css: "mt-0.5 h-4 w-4 shrink-0 text-algae-600") %> Saturday names land in the shared list before you get home.</li>
+          <li class="flex gap-2.5"><%= icon("check", css: "mt-0.5 h-4 w-4 shrink-0 text-algae-600") %> Sunday check-in takes seconds at a crowded door.</li>
+          <li class="flex gap-2.5"><%= icon("check", css: "mt-0.5 h-4 w-4 shrink-0 text-algae-600") %> Monday calls come with the prayer point attached.</li>
+          <li class="flex gap-2.5"><%= icon("check", css: "mt-0.5 h-4 w-4 shrink-0 text-algae-600") %> New volunteers inherit history instead of starting blind.</li>
+        </ul>
+      </div>
     </div>
-</section>
+  </section>
 
-<section id="faq" class="mi-4 rounded-lg" style="padding: 6rem 0;">
-    <div class="container" style="max-inline-size: 48rem;">
-        <div class="text-center mbe-10">
-            <h2 class="font-bold leading-tight text-4xl">Your Questions, Answered</h2>
-        </div>
-
-        <div class="accordion">
-          <details name="my_accordion">
-            <summary class="font-bold text-lg cursor-pointer">What does 'Free Early Access' mean?</summary>
-            <p class="pbe-4 text-subtle text-base">
-              It means you get full access to the Trellixe Pro plan for an extended period (at least 3-6 months) completely free, without needing a credit card. In exchange for your early support and valuable feedback, you'll help us shape the future of the app and will receive a special lifetime discount if you choose to subscribe when we officially launch our paid plans.
-            </p>
-          </details>
-
-          <details name="my_accordion">
-            <summary class="font-bold text-lg cursor-pointer">Is this just another complex CRM?</summary>
-            <p class="pbe-4 text-subtle text-base">
-              No. Trellixe is designed with extreme focus and simplicity. It is not a CRM for managing sales pipelines or complex projects. It is a dedicated <strong>follow-up assistant</strong> designed to do one job exceptionally well: ensure you never forget to connect with the people you meet. You can learn its entire workflow in under five minutes.
-            </p>
-          </details>
-
-          <details name="my_accordion">
-            <summary class="font-bold text-lg cursor-pointer">What happens when the free access period ends?</summary>
-            <p class="pbe-4 text-subtle text-base">
-              Your data is always yours. You will not be charged automatically. We will give you plenty of notice before the early access period concludes. At that point, you can decide if you want to subscribe to one of our official plans (with your special founder's discount) or easily export your contact data.
-            </p>
-          </details>
-        </div>
+  <section class="border-t border-[#E9EBED] bg-[#F6F9F7] dark:border-white/10 dark:bg-white/[0.03]">
+    <div class="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-6 px-4 py-14 md:flex-row md:items-center md:px-8">
+      <div>
+        <h2 class="font-display text-2xl font-bold tracking-tight md:text-3xl">This Sunday's guests deserve Monday's call.</h2>
+        <p class="mt-2 text-[15px] text-[#3d4742] dark:text-[#C6CFC9]">Create your workspace, invite your cell, log your first outreach.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <%= link_to "Start free", sign_up_path, class: "rounded-lg bg-algae-900 px-5 py-3 text-[15px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+        <%= link_to "Log in", sign_in_path, class: "rounded-lg border border-[#D9DDE0] bg-white px-5 py-3 text-[15px] font-semibold transition hover:border-[#A2E494] dark:bg-[#131B17] dark:border-white/10" %>
+      </div>
     </div>
-</section>
+  </section>
 
-<section id="join_us" class="bg-black text-reversed mbe-4 mi-4 rounded-lg" style="padding: 6rem 0;">
-    <div class="container flex justify-center">
-        <div class="flex flex-col gap-8 text-center items-center">
-            <h2 class="font-bold leading-tight text-4xl">Become a Founding Member</h2>
-            <p class="text-lg" style="max-inline-size: 50dvh;">
-                Get free, extended access to Trellixe and help us build the future of personal relationship management.
-            </p>
-
-            <!-- Embedded Sign-Up Form -->
-            <div class="mbs-4" style="max-inline-size: 400px; inline-size: 100%;">
-                <%= form_with url: sign_up_path, html: { autocomplete: "off" }, class: "card flex flex-col gap text-start text-primary" do |form| %>
-                    <div class="flex flex-col gap-half">
-                        <%= form.label :name, class: "text-sm font-medium leading-none font-semibold" %>
-                        <%= form.text_field :name, placeholder: "John Doe", required: true, class: "input" %>
-                    </div>
-
-                    <div class="flex flex-col gap-half">
-                        <%= form.label :email, "Email", class: "text-sm font-medium leading-none font-semibold" %>
-                        <%= form.email_field :email, placeholder: "you@example.com", required: true, class: "input" %>
-                    </div>
-                    
-                    <div class="flex flex-col gap-half">
-                        <%= form.label :password, class: "text-sm font-medium leading-none font-semibold" %>
-                        <%= form.password_field :password, placeholder: "************", required: true, class: "input" %>
-                    </div>
-
-                    <%= form.submit "Get My Free Account", class: "btn btn--primary mbs-2" %>
-                <% end %>
-                <p class="text-xs mbs-2">No credit card required. Ever.</p>
-            </div>
-        </div>
+  <footer class="bg-algae-900 text-white">
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-10 md:flex-row md:items-center md:justify-between md:px-8">
+      <span class="flex items-center gap-2">
+        <%= image_tag "logo/trellixe-mark.svg", size: 28, alt: "Trellixe", class: "h-7 w-7 rounded-md" %>
+        <span class="font-display text-[15px] font-bold">Trellixe</span>
+        <span class="text-[13px] text-white/60">· Every visitor remembered.</span>
+      </span>
+      <nav class="flex flex-wrap gap-x-6 gap-y-2 text-[13.5px] text-white/70">
+        <%= link_to "Help", help_path, class: "hover:text-white" %>
+        <%= link_to "Privacy", privacy_path, class: "hover:text-white" %>
+        <%= link_to "Contact", contact_us_path, class: "hover:text-white" %>
+        <%= link_to "Sign in", sign_in_path, class: "hover:text-white" %>
+      </nav>
     </div>
-</section>
+  </footer>
+</div>

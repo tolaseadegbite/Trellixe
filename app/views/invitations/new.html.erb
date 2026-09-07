@@ -1,32 +1,15 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Invite contacts" %>
 
-<h1>Send invitation</h1>
-
-<%= form_with(url: invitation_path) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<%= render "shared/modal" do %>
+  <div data-action="turbo:submit-end->modal#submitEnd">
+    <h2 class="font-display text-lg font-semibold">Invite contacts<% if @event %> to <%= @event.name %><% end %></h2>
+    <p class="mt-1 text-sm text-[#8a938d] dark:text-[#9AA6A0]">Pick people from your contacts — they land on the guest list as invited.</p>
+    <div class="mt-4">
+      <% if @event %>
+        <%= render "form", event: @event, invitation: (@invitation || @event.invitations.build) %>
+      <% else %>
+        <%= render "shared/empty_state", title: "Pick an event first", body: "Open an event and invite contacts from its guest list.", icon_name: "calendar-range" %>
+      <% end %>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.email_field :email, placeholder: "colleague@company.com", required: true, autofocus: true %>
-  </div>
-
-  <div>
-    <%= form.submit "Send an invitation" %>
   </div>
 <% end %>
-
-<br>
-
-<div>
-  <%= link_to "Back", root_path %>
-</div>

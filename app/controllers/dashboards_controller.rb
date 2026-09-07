@@ -2,33 +2,18 @@ class DashboardsController < ApplicationController
   layout "dashboard"
 
   def show
-    base = current_user.follow_up_tasks
-                        .pending
-                        .for_account(Current.account)
-                        .includes(invitation: [ :event, :contact ])
-                        .order(due_at: :asc)
-
-    @overdue = base.where(due_at: ...Time.current).limit(5)
-    @due_today = base.where(due_at: Time.current.beginning_of_day..Time.current.end_of_day).limit(5)
-    @due_this_week = base.where(due_at: (Time.current + 1.day).beginning_of_day..(Time.current + 7.days).end_of_day).limit(5)
-
-    @events_today = Current.account.events
-                             .where(starts_at: Time.current.all_day)
-                             .order(starts_at: :asc)
-
-    @upcoming_events = Current.account.events
-                                .where("starts_at > ?", Time.current.end_of_day)
-                                .order(starts_at: :asc)
-                                .limit(5)
-
-    @contacts_count = Current.account.contacts.count
-    @events_this_month = Current.account.events
-                                .where(starts_at: Time.current.beginning_of_month..Time.current.end_of_month)
-                                .count
-    @total_tasks = current_user.follow_up_tasks.for_account(Current.account).count
-    @done_tasks = current_user.follow_up_tasks.for_account(Current.account).where.not(completed_at: nil).count
-    @pending_tasks = @total_tasks - @done_tasks
-    @task_completion = @total_tasks > 0 ? ((@done_tasks.to_f / @total_tasks) * 100).round : 0
-    @team_count = Current.account.memberships.count
+    account = Current.account
+    @upcoming_events = account.events.upcoming.order(starts_at: :asc).limit(4).includes(:invitations)
+    @pending_tasks = current_user.follow_up_tasks.for_account(account).pending
+                                 .order(due_at: :asc).limit(8)
+                                 .includes(invitation: [ :event, :contact ])
+    @overdue_count = current_user.follow_up_tasks.for_account(account).pending.where("due_at < ?", Time.current).count
+    @contacts_count = account.contacts.count
+    @week_contacts = account.contacts.where("contacts.created_at >= ?", 7.days.ago).count
+    invites = Invitation.joins(:event).where(events: { owner_type: "Account", owner_id: account.id })
+    @attendance_rate = invites.any? ? (invites.attended.count * 100.0 / invites.count).round : 0
+    @invites_count = invites.count
+    @follow_ups_count = invites.joins(:follow_up_tasks).distinct.count
+    @follow_up_rate = @invites_count.positive? ? (@follow_ups_count * 100.0 / @invites_count).round : 0
   end
 end

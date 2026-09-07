@@ -1,62 +1,55 @@
-<div class=""
-     data-controller="search-filter"
-     data-action="click@window->search-filter#closeOnClickOutside">
+<% events = @filterable_events || Current.account.events.order(:name) %>
+<div data-controller="search-filter" data-action="click@window->search-filter#closeOnClickOutside">
+  <div class="flex flex-wrap items-center gap-2">
+    <%= search_form_for(@q, url: follow_up_tasks_path,
+        data: { turbo_frame: "tasks_table", turbo_action: "advance", controller: "debounce" },
+        html: { class: "flex min-w-0 flex-1 items-center gap-2" }) do |f| %>
+      <%= hidden_field_tag :scope, @scope %>
+      <span class="relative min-w-0 flex-1">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a938d] dark:text-[#9AA6A0]"><%= icon("search", css: "h-4 w-4") %></span>
+        <%= f.search_field :contact_first_name_or_contact_last_name_or_contact_email_or_event_name_cont,
+            placeholder: "Search name, email, or event…",
+            class: "w-full rounded-lg border border-[#D9DDE0] bg-[#F6F9F7] py-2.5 pl-9 pr-3 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:bg-white focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-white/[0.03] dark:focus:bg-[#0C1210]",
+            data: { action: "input->debounce#submit" } %>
+      </span>
+    <% end %>
+    <button type="button" class="flex items-center gap-1.5 rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-[13px] font-medium transition hover:border-[#A2E494] dark:border-white/10 dark:bg-[#131B17]" data-action="search-filter#toggle">
+      <%= icon("search", css: "h-4 w-4") %> Filters
+    </button>
+  </div>
 
-  <%# Button to toggle the visibility of the filters %>
-  <button type="button" class="btn btn--subtle mbe-4" data-action="search-filter#toggle">
-    <span class="icon icon--search"></span>
-    <span>Search events</span>
-  </button>
-
-  <div class="hide p-4 card mbe-4" data-search-filter-target="filters">
-    <%= search_form_for @q, url: follow_up_tasks_path do |f| %>
-      <div class="grid grid-cols-1 grid-cols-2@sm grid-cols-2@md grid-cols-3@lg gap-4 mbe-4">
-
-        <div>
-          <%= f.search_field :contact_first_name_or_contact_last_name_or_contact_email_or_event_name_cont,
-                              class: "input i-full mbs-2",
-                              placeholder: "Search by name, email, or event..." %>
+  <div class="hidden pt-3" data-search-filter-target="filters">
+    <%= search_form_for(@q, url: follow_up_tasks_path,
+        data: { turbo_frame: "tasks_table", turbo_action: "advance", controller: "debounce" }) do |f| %>
+      <%= hidden_field_tag :scope, @scope %>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2">
+          <%= f.label :invitation_event_id_eq, "Event", class: "mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]" %>
+          <%= f.collection_select :invitation_event_id_eq, events, :id, :name, { include_blank: "All events" },
+              { class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0C1210]", data: { controller: "combobox", action: "input->debounce#submit" } } %>
         </div>
-
-        <div>
-          <%= f.collection_select :invitation_event_id_eq,
-                            @filterable_events,
-                            :id,
-                            :name,
-                            { include_blank: 'Filter by Events' },
-                            { class: "i-full mbs-2", data: { controller: "combobox" } } %>
-        </div>
-
-        <div>
+        <div class="col-span-2">
+          <span class="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]">Due</span>
           <%
             base_params = params.fetch(:q, {}).except(:due_at_lt, :due_at_gteq, :due_at_lteq, :page).permit!
-            
             q_params = params.fetch(:q, {})
             is_all_active = !q_params.key?("due_at_lt") && !q_params.key?("due_at_gteq")
             is_overdue_active = q_params.key?("due_at_lt")
             is_today_active = q_params.key?("due_at_gteq")
+            pill = "rounded-lg px-3 py-1.5 text-[13px] font-semibold transition"
           %>
-
-          <div class="flex items-center gap justify-end mbs-2">
-
-            <%= link_to "All", follow_up_tasks_path(q: base_params),
-                        class: "btn #{is_all_active ? 'btn--primary' : 'btn--secondary border border-main'}" %>
-            
-            <%= link_to "Overdue", follow_up_tasks_path(q: base_params.merge(due_at_lt: Time.current)),
-                        class: "btn text-red-400 #{is_overdue_active ? 'btn--primary' : 'btn--secondary border border-main'}" %>
-
-            <%= link_to "Due Today", follow_up_tasks_path(q: base_params.merge(
-                                                              due_at_gteq: Time.current.beginning_of_day,
-                                                              due_at_lteq: Time.current.end_of_day
-                                                            )),
-                        class: "btn #{is_today_active ? 'btn--primary' : 'btn--secondary border border-main'}" %>
+          <div class="flex flex-wrap items-center gap-2">
+            <%= link_to "All", follow_up_tasks_path(scope: @scope, q: base_params),
+                class: "#{pill} #{is_all_active ? 'bg-algae-900 text-white' : 'border border-[#D9DDE0] bg-white hover:border-[#A2E494] dark:border-white/10 dark:bg-[#131B17]'}" %>
+            <%= link_to "Overdue", follow_up_tasks_path(scope: @scope, q: base_params.merge(due_at_lt: Time.current)),
+                class: "#{pill} #{is_overdue_active ? 'bg-red-700 text-white' : 'border border-[#D9DDE0] bg-white text-red-700 hover:border-red-300 dark:border-white/10 dark:bg-[#131B17] dark:text-red-400'}" %>
+            <%= link_to "Due today", follow_up_tasks_path(scope: @scope, q: base_params.merge(due_at_gteq: Time.current.beginning_of_day, due_at_lteq: Time.current.end_of_day)),
+                class: "#{pill} #{is_today_active ? 'bg-algae-900 text-white' : 'border border-[#D9DDE0] bg-white hover:border-[#A2E494] dark:border-white/10 dark:bg-[#131B17]'}" %>
+            <% if params[:q].present? %>
+              <%= link_to "Reset", follow_up_tasks_path(scope: @scope), class: "text-[13px] font-semibold text-red-700 hover:underline dark:text-red-400" %>
+            <% end %>
           </div>
         </div>
-      </div>
-      
-      <div class="flex items-center justify-end gap mbs-4">
-        <%= link_to "Reset All", follow_up_tasks_path, class: "btn" if params[:q].present? %>
-        <%= f.submit "Search", class: "btn btn--primary" %>
       </div>
     <% end %>
   </div>

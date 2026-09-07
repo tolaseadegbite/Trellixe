@@ -2,6 +2,8 @@ require "test_helper"
 
 class ContactsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @user = users(:lazaro_nixon)
+    sign_in_as(@user)
     @contact = contacts(:one)
   end
 
@@ -15,12 +17,20 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create contact" do
+  test "should create contact via turbo stream" do
     assert_difference("Contact.count") do
-      post contacts_url, params: { contact: { email: @contact.email, first_name: @contact.first_name, last_name: @contact.last_name, owner_id: @contact.owner_id, owner_type: @contact.owner_type, phone_number: @contact.phone_number } }
+      post contacts_url, params: {
+        contact: {
+          first_name: "Funmi",
+          last_name: "Bello",
+          email: "funmi@example.com",
+          phone_number: "+2348077778888",
+          how_we_met: "Met at Saturday outreach."
+        }
+      }, as: :turbo_stream
     end
 
-    assert_redirected_to contact_url(Contact.last)
+    assert_response :success
   end
 
   test "should show contact" do
@@ -33,9 +43,11 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should update contact" do
-    patch contact_url(@contact), params: { contact: { email: @contact.email, first_name: @contact.first_name, last_name: @contact.last_name, owner_id: @contact.owner_id, owner_type: @contact.owner_type, phone_number: @contact.phone_number } }
-    assert_redirected_to contact_url(@contact)
+  test "should update contact via turbo stream" do
+    patch contact_url(@contact), params: {
+      contact: { first_name: "Updated", how_we_met: "Updated context." }
+    }, as: :turbo_stream
+    assert_response :success
   end
 
   test "should destroy contact" do

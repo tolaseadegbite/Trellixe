@@ -1,0 +1,14 @@
+<%# Remove from whichever list holds it (full page, modal, or both when stacked) %>
+<%= turbo_stream.remove dom_id(@tag) %>
+<%= turbo_stream.remove dom_id(@tag) %>
+
+<% if @tags_empty %>
+  <%= turbo_stream.append "tags-list" do %>
+    <p id="tags-list-empty" class="rounded-xl border border-dashed border-[#D9DDE0] px-4 py-6 text-center text-sm text-[#6b7672] dark:border-white/10 dark:text-[#9AA6A0]">No tags yet. Create one above.</p>
+  <% end %>
+  <%= turbo_stream.append "modal-tags-list" do %>
+    <p id="modal-tags-list-empty" class="rounded-xl border border-dashed border-[#D9DDE0] px-4 py-6 text-center text-sm text-[#6b7672] dark:border-white/10 dark:text-[#9AA6A0]">No tags yet. Create one above.</p>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>

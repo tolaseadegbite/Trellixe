@@ -1,20 +1,23 @@
-<div class="rounded-md bg-sky-500 m-1 text-center">
-  <div class="flex flex-col gap- p-2 text-center">
-    <h4 class="font-semibold"><%= link_to event.name, event, data: { turbo_frame: "_top" } %></h4>
-    
-    <span class="flex gap-2 items-center justify-center bg-emerald- p-3 rounded-md shadow-">
-      <span class="flex gap-1 text-sm items-center bg-green- p-1 rounded-">
-        <span class="icon icon--user-check" aria-hidden="true"></span>
-        32
-      </span>
-      <span class="flex gap-1 text-sm items-center bg-neutral- p-1 rounded-">
-        <span class="icon icon--user-minus" aria-hidden="true"></span>
-        10
-      </span>
-      <span class="flex gap-1 text-sm items-center bg-red- p-1 rounded-">
-        <span class="icon icon--user-x" aria-hidden="true"></span>
-        4
-      </span>
+<% stats = event.invitation_summary %>
+
+<div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 text-center dark:border-white/10 dark:bg-[#131B17]">
+  <h4 class="break-words font-display text-[15px] font-semibold">
+    <%= link_to event.name, event, class: "hover:text-algae-900 hover:underline dark:hover:text-algae-300", data: { turbo_frame: "_top" } %>
+  </h4>
+  <p class="mt-1 text-xs tabular-nums text-[#8a938d] dark:text-[#9AA6A0]"><%= l(event.starts_at, format: :short) rescue event.starts_at.strftime("%b %d, %l:%M %p") %></p>
+
+  <div class="mt-3 flex items-center justify-center gap-4 rounded-xl border border-[#E9EBED] bg-[#F6F9F7] px-3 py-2 dark:border-white/10 dark:bg-white/[0.03]">
+    <span class="flex items-center gap-1.5 text-xs font-medium text-[#6b7672] dark:text-[#9AA6A0]">
+      <%= icon("user-check", css: "h-3.5 w-3.5 text-algae-900 dark:text-algae-300") %>
+      <span class="tabular-nums"><%= stats[:attended] %> attended</span>
+    </span>
+    <span class="flex items-center gap-1.5 text-xs font-medium text-[#6b7672] dark:text-[#9AA6A0]">
+      <%= icon("user", css: "h-3.5 w-3.5") %>
+      <span class="tabular-nums"><%= stats[:total] %> total</span>
+    </span>
+    <span class="flex items-center gap-1.5 text-xs font-medium text-[#6b7672] dark:text-[#9AA6A0]">
+      <%= icon("user-x", css: "h-3.5 w-3.5 text-red-700 dark:text-red-400") %>
+      <span class="tabular-nums"><%= stats[:declined] %> declined</span>
     </span>
   </div>
 </div>

@@ -1,0 +1,15 @@
+<% if @tag.persisted? %>
+  <%# Prepend to whichever list is present (full page, modal, or both) %>
+  <%= turbo_stream.remove "tags-list-empty" %>
+  <%= turbo_stream.remove "modal-tags-list-empty" %>
+  <%= turbo_stream.prepend "tags-list", partial: "tags/tag", locals: { tag: @tag } %>
+  <%= turbo_stream.prepend "modal-tags-list", partial: "tags/tag", locals: { tag: @tag } %>
+  <%# Reset both forms %>
+  <%= turbo_stream.update "new-tag-form-tags-list", partial: "tags/form", locals: { tag: Tag.new } %>
+  <%= turbo_stream.update "new-tag-form-modal-tags-list", partial: "tags/form", locals: { tag: Tag.new } %>
+<% else %>
+  <%= turbo_stream.update "new-tag-form-tags-list", partial: "tags/form", locals: { tag: @tag } %>
+  <%= turbo_stream.update "new-tag-form-modal-tags-list", partial: "tags/form", locals: { tag: @tag } %>
+<% end %>
+
+<%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>

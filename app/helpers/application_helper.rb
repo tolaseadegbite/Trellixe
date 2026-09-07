@@ -20,7 +20,11 @@ module ApplicationHelper
   end
 
   def today_class(date)
-    "bg-sky-300" if today?(date)
+    "bg-algae-300" if today?(date)
+  end
+
+  def vapid_public_key
+    Rails.application.credentials.dig(:vapid, :public_key) || ENV["VAPID_PUBLIC_KEY"].to_s
   end
 
   def user_avatar_url(user, size: 80)

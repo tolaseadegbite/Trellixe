@@ -2,18 +2,18 @@
 
 one:
   creator: lazaro_nixon
-  owner: one
-  owner_type: Owner
-  first_name: MyString
-  last_name: MyString
-  email: MyString
-  phone_number: MyString
+  owner: workspace_one (Account)
+  first_name: Adaeze
+  last_name: Okafor
+  email: adaeze@example.com
+  phone_number: "+2348012345678"
+  how_we_met: Met at Saturday outreach by the junction.
 
 two:
   creator: lazaro_nixon
-  owner: two
-  owner_type: Owner
-  first_name: MyString
-  last_name: MyString
-  email: MyString
-  phone_number: MyString
+  owner: workspace_one (Account)
+  first_name: Daniel
+  last_name: Adeyemi
+  email: daniel@example.com
+  phone_number: "+2348098765432"
+  how_we_met: Invited by a friend to Sunday service.

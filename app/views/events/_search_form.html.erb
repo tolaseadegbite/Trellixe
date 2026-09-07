@@ -1,85 +1,49 @@
-<div class=""
-     data-controller="search-filter"
-     data-action="click@window->search-filter#closeOnClickOutside">
+<div data-controller="search-filter" data-action="click@window->search-filter#closeOnClickOutside">
+  <div class="flex flex-wrap items-center gap-2">
+    <%= search_form_for(@search, url: events_path,
+        data: { turbo_frame: "events_table", turbo_action: "advance", controller: "debounce" },
+        html: { class: "flex min-w-0 flex-1 items-center gap-2" }) do |f| %>
+      <%= hidden_field_tag :view, "events-list" %>
+      <span class="relative min-w-0 flex-1">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a938d] dark:text-[#9AA6A0]"><%= icon("search", css: "h-4 w-4") %></span>
+        <%= f.search_field :name_cont, placeholder: "Search events by name…",
+            class: "w-full rounded-lg border border-[#D9DDE0] bg-[#F6F9F7] py-2.5 pl-9 pr-3 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:bg-white focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-white/[0.03] dark:focus:bg-[#0C1210]",
+            data: { action: "input->debounce#submit" } %>
+      </span>
+    <% end %>
+    <button type="button" class="flex items-center gap-1.5 rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-[13px] font-medium transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" data-action="search-filter#toggle">
+      <%= icon("search", css: "h-4 w-4") %> Filters
+    </button>
+  </div>
 
-  <%# Button to toggle the visibility of the filters %>
-  <button type="button" class="btn btn--subtle mbe-4 events-search-button" data-action="search-filter#toggle">
-    <span class="icon icon--search"></span>
-    <span>Search events</span>
-  </button>
-
-  <div class="hide card bg-main p-4 mbe-4" data-search-filter-target="filters">
-    <%= search_form_for(@search, 
-      url: events_path, 
-      data: { 
-        turbo_frame: "events_table", 
-        turbo_action: "advance",
-        controller: "debounce" 
-      }
-    ) do |f| %>
-      <%= hidden_field_tag :view, 'events-list' %>
-
-      <div class="grid grid-cols-1 grid-cols-12@md gap-4 mbe-6">
-        <%# --- Search by Name (existing) --- %>
-        <div class="col-span-12 col-span-3@lg">
-          <%#= f.label :name_cont, "Event Name", class: "font-medium" %>
-          <%= f.search_field :name_cont, 
-                             placeholder: "Name", 
-                             class: "input i-full mbs-1",
-                             data: { action: "input->debounce#submit" }
-          %>
+  <div class="hidden pt-3" data-search-filter-target="filters">
+    <%= search_form_for(@search, url: events_path,
+        data: { turbo_frame: "events_table", turbo_action: "advance", controller: "debounce" }) do |f| %>
+      <%= hidden_field_tag :view, "events-list" %>
+      <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div>
+          <%= f.label :starts_at_gteq, "From", class: "mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]" %>
+          <%= f.date_field :starts_at_gteq, placeholder: "Date from…",
+              class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0C1210]",
+              data: { controller: "datepicker", action: "input->debounce#submit" } %>
         </div>
-
-        <%# --- Filter by Date Range (new) --- %>
-        <div class="col-span-6 col-span-1@lg">
-          <%#= f.label :starts_at_gteq, "From", class: "font-medium mbs-1" %>
-          <%= f.date_field :starts_at_gteq, 
-                            placeholder: "Date from...", 
-                            class: "input i-full mbs-1", 
-                            data: { 
-                              controller: "datepicker",
-                              action: "input->debounce#submit" 
-                            } 
-          %>
+        <div>
+          <%= f.label :starts_at_lteq, "To", class: "mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]" %>
+          <%= f.date_field :starts_at_lteq, placeholder: "Date to…",
+              class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0C1210]",
+              data: { controller: "datepicker", action: "input->debounce#submit" } %>
         </div>
-        
-        <div class="col-span-6 col-span-1@lg">
-          <%#= f.label :starts_at_lteq, "To", class: "font-medium" %>
-          <%= f.date_field :starts_at_lteq, 
-                            placeholder: "Date to...", 
-                            class: "input i-full mbs-1", 
-                            data: { 
-                              controller: "datepicker",
-                              action: "input->debounce#submit" 
-                            } 
-          %>
+        <div>
+          <%= f.label :invited_contacts_id_eq, "Contact", class: "mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]" %>
+          <%= f.collection_select :invited_contacts_id_eq, @filterable_contacts, :id, :full_name,
+              { include_blank: "All contacts" },
+              { class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0C1210]",
+                data: { controller: "combobox", action: "input->debounce#submit" } } %>
         </div>
-
-        <%# --- Filter by Invited Contact (new) --- %>
-        <div class="col-span-12 col-span-1@lg">
-          <%#= f.label :invited_contacts_id_eq, "Contact", class: "font-medium" %>
-          <%= f.collection_select :invited_contacts_id_eq, 
-                                  @filterable_contacts, 
-                                  :id, 
-                                  :full_name, 
-                                  { 
-                                    include_blank: 'Select Contact' 
-                                  }, 
-                                  { 
-                                    class: "i-full mbs-1", 
-                                    data: { 
-                                      controller: "combobox",
-                                      action: "input->debounce#submit" 
-                                    } 
-                                  } 
-          %>
+        <div class="flex items-end">
+          <%= link_to "Reset", events_path(view: "events-list"), data: { turbo_frame: "events_table" },
+              class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-center text-sm font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" %>
         </div>
-      </div>
-
-      <%# --- Form Actions --- %>
-      <div class="flex items-center justify-end gap mbe-4">
-        <%= link_to "Reset", events_path(view: "events-list"), class: "btn btn--primary", data: { turbo_frame: "events_table" } %>
-        <%#= f.submit "Search", class: "btn btn--primary" %>
       </div>
     <% end %>
   </div>

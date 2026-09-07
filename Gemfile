@@ -66,7 +66,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "css-zero", "~> 2.2", github: "lazaronixon/css-zero"
+gem "tailwindcss-rails"
 
 gem "authentication-zero", "~> 4.0"
 # Use Pwned to check if a password has been found in any of the huge data breaches [https://github.com/philnash/pwned]

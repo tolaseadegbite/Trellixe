@@ -1,8 +1,24 @@
-<div>
-  <header class="card app-header container bg-light mi-auto pb-3 mbs-10" style="max-inline-size: ;">
-    <div class="flex justify-between container">
-      <%= render "layouts/navigation/application/mobile_menu" %>
-      <%= render "layouts/navigation/application/header_menu" %>
+<div class="sticky top-0 z-40 border-b border-[#D9DDE0] bg-white/90 backdrop-blur dark:border-white/10 dark:bg-[#0C1210]/90">
+  <div class="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 md:px-8">
+    <%= link_to root_path, class: "flex items-center gap-2" do %>
+      <%= image_tag "logo/trellixe-mark.svg", size: 30, alt: "Trellixe", class: "h-[30px] w-[30px] rounded-lg" %>
+      <span class="font-display text-lg font-bold tracking-tight text-[#13714C] dark:text-algae-300">Trellixe</span>
+    <% end %>
+
+    <nav class="hidden items-center gap-7 text-[14px] font-medium text-[#3d4742] md:flex dark:text-[#C6CFC9]">
+      <a href="#how-it-works" class="transition hover:text-[#13714C] dark:hover:text-algae-300">How it works</a>
+      <a href="#who-its-for" class="transition hover:text-[#13714C] dark:hover:text-algae-300">Who it's for</a>
+      <a href="#field-notes" class="transition hover:text-[#13714C] dark:hover:text-algae-300">Field notes</a>
+      <%= link_to "Help", help_path, class: "transition hover:text-[#13714C] dark:hover:text-algae-300" %>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <% if user_signed_in? %>
+        <%= link_to "Open dashboard", dashboard_path, class: "rounded-lg bg-algae-900 px-4 py-2 text-[14px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+      <% else %>
+        <%= link_to "Log in", sign_in_path, class: "rounded-lg px-3.5 py-2 text-[14px] font-medium text-[#3d4742] transition hover:bg-[#E9EBED] dark:text-[#C6CFC9] dark:hover:bg-white/5" %>
+        <%= link_to "Start free", sign_up_path, class: "rounded-lg bg-algae-900 px-4 py-2 text-[14px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+      <% end %>
     </div>
-  </header>
+  </div>
 </div>

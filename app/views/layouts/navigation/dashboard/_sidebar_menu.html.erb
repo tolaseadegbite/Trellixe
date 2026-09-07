@@ -1,156 +1,119 @@
-<div class="sidebar-menu b-full flex flex-col">
-  
-  <%# --- HEADER: Logo & Toggle --- %>
-  <div class="flex items-center justify-between mbs-2 mbe- pis-1">
-    <%= link_to root_path, class: "flex items-center gap-2 text-decoration-none" do %>
-      <%# Fixed-width container for logo alignment in collapsed mode %>
-      <div class="flex items-center justify-center" style="inline-size: 2.25rem;">
-        <%= image_tag("logo/logo.png", style: "inline-size: 30px; block-size: auto;") %>
-      </div>
-      <%# <h3 class="text-xl sidebar-label font-bold text-primary">Trellixe</h3> %>
-    <% end %>
-    
-    <%# Toggle Button (Desktop Only) %>
-    <!--<button type="button" 
-            class="btn btn--icon show@md border-0 cursor-pointer sidebar-label" 
-            data-action="sidebar#toggle"
-            title="Toggle Sidebar">
-      <span class="icon icon--panel-left"></span>
-    </button>-->
-  </div>
-
-  <%# --- WORKSPACE SWITCHER --- %>
-  <div contents class="mbe-6" data-controller="popover" data-popover-placement-value="bottom-start" data-action="click@window->popover#clickOutside">
-    <%= button_tag type: "button", class: "btn sidebar-menu__button workspace-button i-full", data: { action: "click->popover#toggle", popover_target: "trigger" } do %>
-      <div class="flex flex-item-no-shrink overflow-hidden rounded-md bg-emerald-500">
-        <div class="flex items-center justify-center font-bold text-gray-50 text-sm" style="inline-size: 2.25rem; block-size: 2.25rem;">
-          <%= account_initials(Current.account) %> 
-        </div>
-      </div>
-
-      <div class="flex flex-col text-start leading-tight overflow-hidden mis-2 sidebar-label">
-        <span class="overflow-ellipsis font-semibold text-primary"><%= Current.account.name %></span>
-        <span class="overflow-ellipsis text-xs text-subtle capitalize"><%= current_role %></span>
-      </div>
-      
-      <span class="icon icon--chevrons-up-down mis-auto text-subtle sidebar-label" aria-hidden="true"></span>
-    <% end %>
-
-    <%# Switcher Popover %>
-    <%= tag.div popover: true, id: "workspace-switcher-popover", class: "popover", style: "--popover-size: 16rem;", data: { popover_target: "content" } do %>
-       <div class="p-2 text-xs font-semibold text-subtle uppercase i-full">Switch Workspace</div>
-       <div class="menu i-full" role="menu">
-          <% Current.user.accounts.each do |account| %>
-            <% is_active = account == Current.account %>
-            
-            <% if is_active %>
-              <%# Non-clickable Active State %>
-              <div class="btn menu__item justify-between i-full bg-emerald-700 hover:bg-emerald-700 text-gray-50" style="cursor: default;" role="menuitem">
-                <div class="flex items-center gap-2">
-                  <div class="p-1 rounded-md flex items-center justify-center text-xs font-bold bg-black text-reversed" style="inline-size: 1.7rem; block-size: 1.7rem;">
-                    <%= account_initials(account) %>
-                  </div>
-                  <span class="font-bold"><%= account.name %></span>
-                </div>
-                <span class="icon icon--check text-gray-50"></span>
-              </div>
-            <% else %>
-              <%# Clickable Link %>
-              <%= link_to switch_account_path(account), data: { turbo_method: :post }, class: "btn menu__item justify-between i-full hover:bg-shade", role: "menuitem" do %>
-                <div class="flex items-center gap-2">
-                  <div class="p-1 rounded-md flex items-center justify-center text-xs bg-black text-reversed" style="inline-size: 1.7rem; block-size: 1.7rem;">
-                    <%= account_initials(account) %>
-                  </div>
-                  <span><%= account.name %></span>
-                </div>
-              <% end %>
-            <% end %>
-          <% end %>
-          <hr class="menu__separator m-1" />
-          <%= link_to new_account_path, class: "btn menu__item", data: { turbo_frame: "modal" } do %>
-            <span class="icon icon--plus"></span> Create Workspace
-          <% end %>
-       </div>
+<% active = ->(path) { current_page?(path) || request.path.start_with?(path.to_s) } %>
+<div class="flex h-full flex-col">
+  <% unless local_assigns[:hide_logo] %>
+  <div class="flex items-center gap-2.5 px-4 pb-4 pt-5">
+    <%= link_to root_path, class: "flex items-center gap-2.5" do %>
+      <%= image_tag "logo/trellixe-mark.svg", size: 32, alt: "Trellixe", class: "h-8 w-8 rounded-lg" %>
+      <span class="font-display text-[19px] font-bold tracking-tight text-[#13714C] dark:text-algae-300">Trellixe</span>
     <% end %>
   </div>
+  <% end %>
 
-  <%# --- MAIN CONTENT --- %>
-  <div class="sidebar-menu__content flex-1">
-    
-    <%# GROUP 1: CRM (Core Features) %>
-    <div class="sidebar-menu__group">
-      <div class="sidebar-menu__group-label sidebar-label">PRM</div>
-      <div class="sidebar-menu__items">
-        
-        <%= link_to dashboard_path, class: "btn sidebar-menu__button", aria: (current_page?(dashboard_path) ? { current: "page" } : {}) do %>
-          <span class="icon icon--chart-pie"></span>
-          <span class="sidebar-label mis-2">Dashboard</span>
-        <% end %>
+  <div class="px-3 <%= "pt-3" if local_assigns[:hide_logo] %>">
+    <div data-controller="popover" data-popover-placement-value="bottom-start" data-action="click@window->popover#clickOutside" class="relative">
+      <%= button_tag type: "button",
+          class: "flex w-full items-center gap-2.5 rounded-xl border border-[#D9DDE0] bg-white px-2.5 py-2 text-left transition hover:border-[#A2E494] hover:bg-[#EEF9F1] dark:border-white/10 dark:bg-white/5 dark:hover:border-algae-600/50 dark:hover:bg-white/10",
+          popovertarget: "workspace-switcher-popover",
+          data: { popover_target: "trigger" } do %>
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-algae-900 text-[13px] font-bold text-white">
+          <%= account_initials(Current.account) %>
+        </span>
+        <span class="min-w-0 flex-1 leading-tight">
+          <span class="block truncate text-[13.5px] font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= Current.account.name %></span>
+          <span class="block truncate text-xs capitalize text-[#5b6660] dark:text-[#9AA6A0]"><%= current_role %></span>
+        </span>
+        <%= icon("chevrons-up-down", css: "h-4 w-4 shrink-0 text-[#5b6660]") %>
+      <% end %>
 
-        <%= link_to contacts_path, class: "btn sidebar-menu__button", aria: (current_page?(contacts_path) ? { current: "page" } : {}) do %>
-          <span class="icon icon--card-sim"></span>
-          <span class="sidebar-label mis-2">Contacts</span>
-        <% end %>
-
-        <%= link_to events_path, class: "btn sidebar-menu__button", aria: (current_page?(events_path) ? { current: "page" } : {}) do %>
-          <span class="icon icon--calendar-range"></span>
-          <span class="sidebar-label mis-2">Events</span>
-        <% end %>
-
-        <%= link_to follow_up_tasks_path, class: "btn sidebar-menu__button", aria: (current_page?(follow_up_tasks_path) ? { current: "page" } : {}) do %>
-          <span class="icon icon--list-checks"></span>
-          <span class="sidebar-label mis-2 flex-1">Follow ups</span>
-          
-          <%# Task Counter %>
-          <% task_count = current_user.follow_up_tasks.for_account(Current.account).where(completed_at: nil).count %>
-          <% if task_count > 0 %>
-            <div class="badge badge--number badge--negative sidebar-label">
-              <%= task_count %>
+      <%= tag.div popover: "auto", id: "workspace-switcher-popover", class: "tlx-popover w-64 p-2", data: { popover_target: "content" } do %>
+        <p class="px-2.5 pb-1.5 pt-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#5b6660] dark:text-[#9AA6A0]">Switch workspace</p>
+        <div class="space-y-1">
+        <% Current.user.accounts.each do |account| %>
+          <% is_active = account == Current.account %>
+          <% if is_active %>
+            <div class="flex items-center justify-between rounded-xl bg-algae-900 px-2.5 py-2 text-white">
+              <span class="flex min-w-0 items-center gap-2">
+                <span class="flex h-7 w-7 items-center justify-center rounded-md bg-white/15 text-xs font-bold"><%= account_initials(account) %></span>
+                <span class="truncate text-[13px] font-semibold"><%= account.name %></span>
+              </span>
+              <%= icon("check", css: "h-4 w-4") %>
             </div>
+          <% else %>
+            <%= link_to switch_account_path(account), data: { turbo_method: :post },
+                class: "flex items-center gap-2 rounded-xl px-2.5 py-2 text-[13px] text-[#1c2420] transition hover:bg-[#EEF9F1] dark:text-[#E7ECE9] dark:hover:bg-white/5" do %>
+              <span class="flex h-7 w-7 items-center justify-center rounded-md bg-[#1c2420] text-xs font-bold text-white"><%= account_initials(account) %></span>
+              <span class="truncate"><%= account.name %></span>
+            <% end %>
           <% end %>
         <% end %>
-
-      </div>
-    </div>
-
-    <%# GROUP 2: CONFIGURATION (Team/Settings) %>
-    <div class="sidebar-menu__group mbs-4">
-      <div class="sidebar-menu__group-label sidebar-label">Configuration</div>
-      <div class="sidebar-menu__items">
-        <% settings_active = request.path.include?('settings') || request.path.include?('members') %>
-        
-        <details <%= 'open' if settings_active ? 'open' : '' %>>
-          <summary class="btn sidebar-menu__button">
-            <span class="icon icon--settings"></span>
-            <span class="sidebar-label mis-2">Workspace Settings</span>
-          </summary>
-          <nav class="sidebar-menu__sub">
-            
-            <% if can_manage_settings? %>
-              <%= link_to edit_account_path(Current.account), class: "btn sidebar-menu__button" do %>
-                <span class="sidebar-label">General</span>
-              <% end %>
-            <% end %>
-
-            <%= link_to members_path, class: "btn sidebar-menu__button" do %>
-              <span class="sidebar-label">Team Members</span>
-            <% end %>
-
-            <% if can_manage_billing? %>
-              <%= link_to "#", class: "btn sidebar-menu__button" do %>
-                <span class="sidebar-label">Billing</span>
-              <% end %>
-            <% end %>
-
-            <%= link_to "#", class: "btn sidebar-menu__button" do %>
-              <span class="sidebar-label">Limits</span>
-            <% end %>
-          </nav>
-        </details>
-      </div>
+        </div>
+        <div class="my-2 border-t border-[#E9EBED] dark:border-white/10"></div>
+        <%= link_to new_account_path, data: { turbo_frame: "modal" },
+            class: "flex items-center gap-2 rounded-lg px-2.5 py-2 text-[13px] font-medium text-algae-900 transition hover:bg-[#EEF9F1] dark:text-algae-300 dark:hover:bg-white/5" do %>
+          <%= icon("plus", css: "h-4 w-4") %> New workspace
+        <% end %>
+      <% end %>
     </div>
   </div>
 
-  <%# --- FOOTER (Notifications & Profile) --- %>
+  <nav class="tlx-scroll mt-4 flex-1 overflow-y-auto px-3 pb-4" aria-label="Primary">
+    <p class="px-2.5 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a938d] dark:text-[#9AA6A0]">Outreach</p>
+    <div class="space-y-0.5">
+      <%= link_to dashboard_path,
+          class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition #{active.(dashboard_path) ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5'}" do %>
+        <%= icon("chart-pie", css: "h-[18px] w-[18px] #{active.(dashboard_path) ? 'text-algae-900 dark:text-algae-300' : 'text-[#8a938d] dark:text-[#9AA6A0]'}") %>
+        Dashboard
+      <% end %>
+      <%= link_to contacts_path,
+          class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition #{active.(contacts_path) ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5'}" do %>
+        <%= icon("card-sim", css: "h-[18px] w-[18px] #{active.(contacts_path) ? 'text-algae-900 dark:text-algae-300' : 'text-[#8a938d] dark:text-[#9AA6A0]'}") %>
+        Contacts
+      <% end %>
+      <%= link_to events_path,
+          class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition #{active.(events_path) && !request.path.include?('event_series') ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5'}" do %>
+        <%= icon("calendar-range", css: "h-[18px] w-[18px] text-[#8a938d] dark:text-[#9AA6A0]") %>
+        Events
+      <% end %>
+      <%= link_to event_series_index_path,
+          class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition #{request.path.include?('event_series') ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5'}" do %>
+        <%= icon("calendar-plus", css: "h-[18px] w-[18px] text-[#8a938d] dark:text-[#9AA6A0]") %>
+        Series
+      <% end %>
+      <%= link_to follow_up_tasks_path,
+          class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition #{active.(follow_up_tasks_path) ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5'}" do %>
+        <%= icon("list-checks", css: "h-[18px] w-[18px] #{active.(follow_up_tasks_path) ? 'text-algae-900 dark:text-algae-300' : 'text-[#8a938d] dark:text-[#9AA6A0]'}") %>
+        <span class="flex-1">Follow-ups</span>
+        <% task_count = current_user.follow_up_tasks.for_account(Current.account).where(completed_at: nil).count %>
+        <% if task_count > 0 %>
+          <span class="flex h-5 min-w-5 items-center justify-center rounded-full bg-algae-900 px-1.5 text-[11px] font-bold tabular-nums text-white"><%= task_count %></span>
+        <% end %>
+      <% end %>
+      <%= link_to tags_path,
+          class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition #{active.(tags_path) ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5'}" do %>
+        <%= icon("tags", css: "h-[18px] w-[18px] text-[#8a938d] dark:text-[#9AA6A0]") %>
+        Tags
+      <% end %>
+    </div>
+
+    <p class="px-2.5 pb-1.5 pt-5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a938d] dark:text-[#9AA6A0]">Workspace</p>
+    <div class="space-y-0.5">
+      <% settings_active = request.path.start_with?("/settings") || controller_name.in?(%w[accounts members notifications]) %>
+      <details <%= "open" if settings_active %> class="group">
+        <summary class="flex cursor-pointer list-none items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition <%= settings_active ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5' %> [&::-webkit-details-marker]:hidden">
+          <%= icon("settings", css: "h-[18px] w-[18px] #{settings_active ? 'text-algae-900 dark:text-algae-300' : 'text-[#8a938d] dark:text-[#9AA6A0]'}") %>
+          <span class="flex-1">Settings</span>
+          <%= icon("chevron-down", css: "h-4 w-4 text-[#8a938d] dark:text-[#9AA6A0] transition group-open:rotate-180") %>
+        </summary>
+        <div class="ml-[26px] mt-0.5 space-y-0.5 border-l border-[#E9EBED] pl-3 dark:border-white/10">
+          <% if can_manage_settings? %>
+            <%= link_to "General", edit_account_path(Current.account), class: "block rounded-md px-2 py-1.5 text-[13px] text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5 hover:text-algae-900 dark:hover:text-algae-300" %>
+          <% end %>
+          <%= link_to "Team members", members_path, class: "block rounded-md px-2 py-1.5 text-[13px] text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5 hover:text-algae-900 dark:hover:text-algae-300" %>
+          <%= link_to "Notifications", notifications_path, class: "block rounded-md px-2 py-1.5 text-[13px] text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5 hover:text-algae-900 dark:hover:text-algae-300" %>
+        </div>
+      </details>
+    </div>
+  </nav>
+
   <%= render "layouts/navigation/dashboard/sidebar_bottom_menu" %>
 </div>

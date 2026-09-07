@@ -10,35 +10,28 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="icon" href="/icon.png" type="image/png">
-    <%# <link rel="icon" href="/icon.svg" type="image/svg+xml"> %>
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <%= stylesheet_link_tag "css-zero/reset", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "css-zero/variables", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "css-zero/utilities", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= render "shared/font_faces" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <%# --- This layout is for PUBLIC and AUTH pages --- %>
+  <% auth_pages = controller_name.in?(%w[sessions passwords registrations passwordlesses password_resets]) %>
 
-  <% auth_pages = controller_name.in?(['sessions', 'passwords', 'registrations', 'passwordlesses', 'password_resets']) %>
-
-  <%# pages = controller_name.in?(['pages']) %>
-
-  <body class="<%= 'min-b-screen flex flex-col justify-center items-center' if auth_pages %> bg-main" data-controller="color-scheme">
+  <body class="min-h-screen bg-[#F1F4F2] font-sans text-[#1c2420] antialiased dark:bg-[#0C1210] dark:text-[#E7ECE9]" data-controller="color-scheme">
 
     <div id="flash_messages">
       <%= render "shared/flash" %>
     </div>
 
-    <%# if controller_name == 'pages' %>
-      <%#= render "layouts/navigation/application/navbar" %>
-    <%# end %>
+    <% if controller_name == "pages" %>
+      <%= render "layouts/navigation/application/navbar" %>
+    <% end %>
 
     <% if auth_pages %>
       <%= yield %>

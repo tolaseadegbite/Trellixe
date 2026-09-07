@@ -1,25 +1,20 @@
 <% content_for :title, "Notifications" %>
 <% content_for :page_header, "Notifications" %>
 
-<div class="container i-full p-2 mi-auto" style="max-inline-size: 70rem">
-  <div class="flex items-center justify-between mbe-4">
-    <h2 class="font-bold">All Notifications</h2>
-    
-    <%# FIX: Use turbo_method: :post here as well %>
-    <p>
-      <%= link_to "Mark all as read", 
-          mark_all_as_read_notifications_path, 
-          data: { turbo_method: :post },
-          class: "text-emerald-600 text-xs" %>
-    </p>
+<div class="mx-auto w-full max-w-3xl space-y-4">
+  <div class="flex items-center justify-between px-1">
+    <h2 class="font-display text-[15px] font-semibold">All notifications</h2>
+    <%= link_to "Mark all as read", mark_all_as_read_notifications_path,
+        data: { turbo_method: :post },
+        class: "text-[13px] font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
   </div>
-  
-  <div class="flex flex-col border border-main rounded-lg bg-main">
+
+  <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
     <div id="notifications-list">
       <% if @notifications.any? %>
         <%= render partial: "notifications/notification", collection: @notifications, as: :notification %>
       <% else %>
-        <div class="p-8 text-center text-subtle">You have no notifications.</div>
+        <%= render "shared/empty_state", title: "You're all caught up", body: "New invites, mentions, and follow-up reminders will land here.", icon_name: "bell" %>
       <% end %>
     </div>
   </div>

@@ -1,8 +1,11 @@
-<% content_for :title, "Edit Log" %>
+<% content_for :title, "Edit log" %>
 
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
-    <h2 class="font-semibold text-2xl mbe-4">Edit Log</h2>
-    <%= render "form", interaction_log: @interaction_log %>
+    <h2 class="font-display text-lg font-semibold">Edit log</h2>
+    <p class="mt-1 text-sm text-[#8a938d] dark:text-[#9AA6A0]">with <%= @interaction_log.contact.full_name %></p>
+    <div class="mt-4">
+      <%= render "form", interaction_log: @interaction_log %>
+    </div>
   </div>
 <% end %>

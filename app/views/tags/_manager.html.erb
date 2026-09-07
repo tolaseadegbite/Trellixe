@@ -1,0 +1,13 @@
+<%# Shared tag manager. Locals: tags, tag, list_id %>
+<div id="new-tag-form-<%= list_id %>">
+  <%= render "form", tag: tag %>
+</div>
+
+<div class="mt-4">
+  <div class="flex flex-wrap gap-2" id="<%= list_id %>">
+    <%= render tags %>
+  </div>
+  <% if tags.empty? %>
+    <p id="<%= list_id %>-empty" class="rounded-xl border border-dashed border-[#D9DDE0] px-4 py-6 text-center text-sm text-[#6b7672] dark:border-white/10 dark:text-[#9AA6A0]">No tags yet. Create one above.</p>
+  <% end %>
+</div>

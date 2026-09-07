@@ -2,7 +2,9 @@
 
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
-    <h2 class="font-semibold text-2xl mbe-4">Edit event</h2>
-    <%= render "form", event: @event %>
+    <h2 class="font-display text-lg font-semibold">Edit event</h2>
+    <div class="mt-4">
+      <%= render "form", event: @event %>
+    </div>
   </div>
 <% end %>

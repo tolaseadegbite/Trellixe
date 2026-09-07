@@ -3,6 +3,15 @@ class WebPushDelivery < Noticed::DeliveryMethods::Base
   def deliver
     # `recipient` is the User object
     # Find all their subscriptions
+    public_key = Rails.application.credentials.dig(:vapid, :public_key) || ENV["VAPID_PUBLIC_KEY"]
+    private_key = Rails.application.credentials.dig(:vapid, :private_key) || ENV["VAPID_PRIVATE_KEY"]
+    subject = ENV["VAPID_SUBJECT"].presence || "mailto:hello@trellixe.com"
+
+    if public_key.blank? || private_key.blank?
+      Rails.logger.warn "WebPush skipped: missing VAPID keys. Set credentials.vapid or VAPID_PUBLIC_KEY/VAPID_PRIVATE_KEY."
+      return
+    end
+
     recipient.web_push_subscriptions.each do |subscription|
       WebPush.payload_send(
         message: message.to_json,
@@ -10,9 +19,9 @@ class WebPushDelivery < Noticed::DeliveryMethods::Base
         p256dh: subscription.p256dh,
         auth: subscription.auth,
         vapid: {
-          subject: "mailto:your-email@example.com", # Change this
-          public_key: Rails.application.credentials.vapid[:public_key],
-          private_key: Rails.application.credentials.vapid[:private_key]
+          subject: subject,
+          public_key: public_key,
+          private_key: private_key
         }
       )
     rescue WebPush::Error => e

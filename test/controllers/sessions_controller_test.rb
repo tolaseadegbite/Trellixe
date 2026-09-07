@@ -21,7 +21,11 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     post sign_in_url, params: { email: @user.email, password: "Secret1*3*5*" }
     assert_redirected_to root_url
 
+    # Signed-in users are routed from landing to their dashboard
     get root_url
+    assert_redirected_to dashboard_url
+
+    get dashboard_url
     assert_response :success
   end
 
@@ -30,17 +34,18 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to sign_in_url(email_hint: @user.email)
     assert_equal "That email or password is incorrect", flash[:alert]
 
+    # Still logged out, so root renders the public landing page
     get root_url
-    assert_redirected_to sign_in_url
+    assert_response :success
   end
 
   test "should sign out" do
     sign_in_as @user
 
     delete session_url(@user.sessions.last)
-    assert_redirected_to sessions_url
+    assert_redirected_to root_url
 
     follow_redirect!
-    assert_redirected_to sign_in_url
+    assert_response :success
   end
 end

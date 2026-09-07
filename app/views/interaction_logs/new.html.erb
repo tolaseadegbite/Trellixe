@@ -1,8 +1,11 @@
-<% content_for :title, "Log Follow-Up" %>
+<% content_for :title, "Log follow-up" %>
 
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
-    <h2 class="font-semibold text-2xl mbe-4">Log Follow-Up with <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact), class: "text-emerald-500", data: { turbo_frame: "_top" } %></h2>
-    <%= render "form", interaction_log: @interaction_log, follow_up_task: @follow_up_task %>
+    <h2 class="font-display text-lg font-semibold">Log follow-up with <%= link_to @interaction_log.contact.full_name, contact_path(@interaction_log.contact), class: "text-algae-900 hover:underline dark:text-algae-300", data: { turbo_frame: "_top" } %></h2>
+    <p class="mt-1 text-sm text-[#8a938d] dark:text-[#9AA6A0]">from <%= @follow_up_task.invitation.event.name %></p>
+    <div class="mt-4">
+      <%= render "form", interaction_log: @interaction_log, follow_up_task: @follow_up_task %>
+    </div>
   </div>
 <% end %>

@@ -1,65 +1,14 @@
-<%# This is the card view for a single contact, visible on mobile screens. %>
-<%# We add a suffix to the dom_id to keep it unique from the table row's ID. %>
-<div id="<%= dom_id(contact, :card) %>" class="card bg-main p-3 flex items-center gap-4 mbe-3">
-
-  <%# --- Checkbox and Avatar --- %>
-  <div class="flex items-center gap shrink-0">
-    <%= check_box_tag "contact_ids[]", contact.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
-    <!--<div class="flex shrink-0 overflow-hidden rounded-full">
-      <%#= link_to image_tag("avatar.jpg", size: "40x40", alt: "User Avatar"), contact_path(contact), data: { turbo_frame: "_top" } %>
-    </div>-->
-
-    <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2.5rem; inline-size: 2.5rem;">
-      <span class="font-semibold">
-        <%= contact.full_name&.first || contact.first_name&.first || contact.email.first.upcase %>
-      </span>
+<div id="<%= dom_id(contact, :card) %>" class="flex items-center gap-3 rounded-2xl border border-[#D9DDE0] bg-white p-3.5 dark:border-white/10 dark:bg-[#131B17]">
+  <%= check_box_tag "contact_ids[]", contact.id, false, class: "h-4 w-4 shrink-0 accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependant" } %>
+  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-algae-900 text-sm font-bold text-white">
+    <%= (contact.full_name&.first || contact.first_name&.first || contact.email.first).upcase %>
+  </span>
+  <div class="min-w-0 flex-1">
+    <div class="flex items-center justify-between gap-2">
+      <%= link_to contact.full_name.titleize, contact, data: { turbo_frame: "_top" }, class: "truncate text-[14.5px] font-semibold" %>
+      <%= link_to contact, data: { turbo_frame: "_top" }, class: "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#8a938d] hover:bg-[#F1F4F2] dark:text-[#9AA6A0] dark:hover:bg-white/5" do %><%= icon("eye", css: "h-4 w-4") %><% end %>
     </div>
-  </div>
-
-  <%# --- Contact Info --- %>
-  <div class="flex flex-col grow min-i-0">
-    <div class="flex items-center justify-between">
-      <div>
-        <div class="font-semibold overflow-ellipsis"><%= link_to contact.full_name.titleize, contact, data: { turbo_frame: "_top" } %></div>
-      </div>
-      
-      <%# --- Action Buttons --- %>
-      <div class="flex gap items-center shrink-0">
-        <%= link_to contact, class: "btn btn--icon btn--subtle", data: { turbo_frame: "_top" } do %>
-          <span class="icon icon--eye" aria-hidden="true"></span>
-        <% end %>
-        
-        <%# This popover is identical to the one in the table view %>
-        <div contents data-controller="popover" data-popover-placement-value="bottom-end">
-          <button type="button" class="btn btn--icon btn--subtle" data-popover-target="trigger" popovertarget="popover-card-<%= contact.id %>" aria-haspopup="true">
-            <span class="icon icon--ellipsis" aria-hidden="true"></span>
-          </button>
-
-          <div popover id="popover-card-<%= contact.id %>" class="popover" style="--popover-size: 8rem;" data-popover-target="content" role="menu" aria-label="Menu">
-            <div class="menu" data-controller="menu" data-action="keydown->menu#navigate">
-              <%= link_to "Edit", edit_contact_path(contact), class: "btn menu__item w-full text-left", data: { turbo_frame: "modal" } %>
-              <% delete_trigger = button_tag "Delete", type: "button", class: "btn menu__item i-full text-left text-red-500", data: { action: "dialog#showModal", menu_target: "item" }, role: "menuitem" %>
-              <%= modal_dialog delete_trigger, title: "Delete '#{contact.full_name}'?" do %>
-                <p class="text-sm text-subtle mbe-4">This action cannot be undone.</p>
-                <div class="flex items-center justify-end gap">
-                  <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
-                  <%= button_to "Continue", contact, method: :delete, class: "btn btn--negative" %>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <span class="flex gap items-center text-sm text-subtle overflow-ellipsis">
-      <span class="icon icon--mail" aria-hidden="true"></span>
-      <%= contact.email.present? ? contact.email : "Nil" %>
-    </span>
-
-    <span class="flex gap items-center text-sm text-subtle overflow-ellipsis">
-      <span class="icon icon--phone" aria-hidden="true"></span>
-      <%= contact.phone_number.present? ? contact.phone_number : "Nil" %>
-    </span>
+    <p class="flex items-center gap-1.5 truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]"><%= icon("mail", css: "h-3.5 w-3.5") %><%= contact.email.presence || "No email" %></p>
+    <p class="flex items-center gap-1.5 truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]"><%= icon("phone", css: "h-3.5 w-3.5") %><%= contact.phone_number.presence || "No phone" %></p>
   </div>
 </div>

@@ -1,14 +1,7 @@
 <% if @contact.persisted? %>
-  <%# 1. Prepend the new table row to the table body %>
-  <%= turbo_stream.replace "empty_state_mobile", "" %>
-  <%= turbo_stream.replace "empty_state_desktop", "" %>
   <%= turbo_stream.prepend "contacts-table", partial: "contacts/contact", locals: { contact: @contact } %>
-  
-  <%# 2. Prepend the new card to the card list %>
   <%= turbo_stream.prepend "contacts-cards", partial: "contacts/contact_card", locals: { contact: @contact } %>
-  
   <%= turbo_stream.update("new_contact_form") { render "form", contact: Contact.new } %>
-  <%# <turbo-stream action="dispatch_event" name="dialog:close"></turbo-stream> %>
 <% else %>
   <%= turbo_stream.update "new_contact_form", partial: "form", locals: { contact: @contact } %>
 <% end %>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 48" role="img" aria-label="Trellixe">
+  <g>
+    <rect width="48" height="48" rx="11" fill="#13714C"/>
+    <path d="M15 34.5 L24 13.5 L33 34.5" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18.4 27.4 H29.6" stroke="#3AB67D" stroke-width="3" stroke-linecap="round"/>
+    <path d="M24 13.5 C24 9.4 27 7.1 31.1 7.1 C31.1 11.2 28.1 13.9 24 13.5 Z" fill="#A2E494"/>
+    <circle cx="15" cy="34.5" r="2.6" fill="#FFFFFF"/>
+    <circle cx="33" cy="34.5" r="2.6" fill="#FFFFFF"/>
+  </g>
+  <text x="58" y="32" font-family="Google Sans, Verdana, sans-serif" font-weight="700" font-size="26" letter-spacing="-0.5" fill="#13714C">Trellixe</text>
+</svg>

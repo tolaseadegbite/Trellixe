@@ -1,35 +1,40 @@
-<div id="<%= dom_id(event_series) %>" class="flex items-center justify-between p-3 rounded-md bg-surface border border-main gap-2">
-  <div class="flex flex-col min-i-0">
-    <%= link_to event_series, class: "font-medium text-primary hover:text-link no-underline", data: { turbo_frame: "_top" } do %>
-      <%= event_series.name %>
-    <% end %>
-    <div class="text-xs text-subtle">
+<div id="<%= dom_id(event_series) %>" class="flex items-center justify-between gap-3 rounded-2xl border border-[#D9DDE0] bg-white p-4 transition hover:border-[#A2E494] dark:border-white/10 dark:bg-[#131B17]">
+  <div class="min-w-0 flex-1">
+    <div class="flex flex-wrap items-center gap-2">
+      <%= link_to event_series, data: { turbo_frame: "_top" }, class: "truncate font-semibold hover:text-algae-900 hover:underline dark:hover:text-algae-300" do %>
+        <%= event_series.name %>
+      <% end %>
+      <% if event_series.cancelled_series? %>
+        <span class="rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-700 dark:bg-red-500/10 dark:text-red-400">Cancelled</span>
+      <% end %>
+    </div>
+    <p class="mt-1 text-xs tabular-nums text-[#6b7672] dark:text-[#9AA6A0]">
       <%= l(event_series.starts_at, format: :long) %> &middot;
       <%= pluralize(event_series.events.count, "occurrence") %>
       <% if event_series.tags.any? %>
         &middot; <%= event_series.tags.map(&:name).join(", ") %>
       <% end %>
-    </div>
+    </p>
   </div>
-  <div class="flex items-center gap">
-    <% if event_series.cancelled_series? || (event_series.ends_on.present? && event_series.ends_on < Date.current) %>
-
-    <% else %>
+  <div class="flex shrink-0 items-center gap-1">
+    <% unless event_series.cancelled_series? || (event_series.ends_on.present? && event_series.ends_on < Date.current) %>
       <%= button_to generate_occurrence_event_series_path(event_series,
                       date: event_series.occurrences(from: Time.current, to: 60.days.from_now).first&.to_date || Date.today),
-          method: :post, class: "btn btn--icon btn--subtle", title: "Generate next occurrence" do %>
-        <span class="icon icon--calendar-plus" aria-hidden="true"></span>
+          method: :post, title: "Generate next occurrence",
+          class: "flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]" do %>
+        <%= icon("calendar-plus", css: "h-4 w-4") %>
       <% end %>
     <% end %>
 
     <%= button_to toggle_cancellation_event_series_path(event_series),
-        method: :patch, class: "btn btn--icon btn--subtle",
-        title: event_series.cancelled_series? ? "Reactivate" : "Cancel series" do %>
-      <span class="icon icon--<%= event_series.cancelled_series? ? 'check' : 'x' %>" aria-hidden="true"></span>
+        method: :patch, title: event_series.cancelled_series? ? "Reactivate" : "Cancel series",
+        class: "flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]" do %>
+      <%= icon(event_series.cancelled_series? ? "check" : "x", css: "h-4 w-4") %>
     <% end %>
 
-    <%= link_to edit_event_series_path(event_series), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
-      <span class="icon icon--pen" aria-hidden="true"></span>
+    <%= link_to edit_event_series_path(event_series), data: { turbo_frame: "modal" }, title: "Edit",
+        class: "flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]" do %>
+      <%= icon("pen", css: "h-4 w-4") %>
     <% end %>
   </div>
 </div>

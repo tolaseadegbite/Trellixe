@@ -1,101 +1,25 @@
-<div class="flex justify-between items-center i-full min-i-0">
-  <div class="flex items-center min-i-0">
-    <span class="font-bold min-i-0"><%= yield(:page_header) || "Dashboard" %></span>
-  </div>
+<div class="flex min-w-0 flex-1 items-center gap-2">
+  <h1 class="truncate font-display text-[17px] font-bold tracking-tight text-[#1c2420] md:text-lg dark:text-[#E7ECE9]"><%= yield(:page_header) || "Dashboard" %></h1>
+</div>
 
-  <div class="flex items-center gap">
-    <div class="show@md gap flex">
-      <%= yield :header_action_buttons %>
-
-      <div data-controller="push-subscription">
-        <%# This button will now be a "target". It shows when NOT subscribed. %>
-        <button data-push-subscription-target="subscribeButton" data-action="push-subscription#subscribe" class="btn btn--primary">
-          <span class="icon icon--bell"></span>
-          Enable Push Notifications
-        </button>
-
-        <%# This is the new button. It shows when the user IS subscribed. %>
-        <%# We hide it by default and let Stimulus manage its visibility. %>
-        <%# <button data-push-subscription-target="unsubscribeButton" data-action="push-subscription#unsubscribe"  class="btn bg-blue-500 hover:bg-blue-600 border-0 text-gray-50">
-          <span class="icon icon--bell"></span>
-          Disable Notifications
-        </button> %>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-2">
-      <% trigger = button_tag type: "button", class: "btn btn--icon border-0 cursor-pointer hide@md", data: { action: "dialog#showModal" } do %>
-        <span class="icon icon--sun icon--color-scheme-light p-3" aria-hidden="true"></span>
-        <span class="icon icon--moon icon--color-scheme-dark p-3" aria-hidden="true"></span>
-        <span class="sr-only">Theme switcher</span>
-      <% end %>
-
-      <%= modal_dialog trigger, title: "Select a theme" do %>
-      <div class="menu bg-main" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
-        
-        <button type="button" class="btn menu__item bg-main" data-action="dialog#close color-scheme#setLight" data-menu-target="item" role="menuitem">
-          <span class="icon icon--sun"></span>
-          Light
-        </button>
-        <button type="button" class="btn menu__item bg-main" data-action="dialog#close color-scheme#setDark" data-menu-target="item" role="menuitem">
-        <span class="icon icon--moon"></span>
-          Dark
-        </button>
-        <button type="button" class="btn menu__item bg-main" data-action="dialog#close color-scheme#setSystem" data-menu-target="item" role="menuitem">
-          <span class="icon icon--laptop"></span>
-          System
-        </button>
-      </div>
-    <% end %>
-
-      <%# Header Notification Bell (Direct Link for Mobile) %>
-      <%= link_to notifications_path, class: "btn btn--icon border-0 hide@md" do %>
-        <div class="relative">
-          <span class="icon icon--bell p-3"></span>
-          
-          <%# FIX: Use the scoped helper. 
-              Now the dot only appears if there are notifications FOR THIS WORKSPACE. %>
-          <%= render "notifications/badge", 
-              unread: context_notifications.unread.any?, 
-              id_suffix: "header" %>
-        </div>
-      <% end %>
-
-      <% trigger = button_tag type: "button", class: "btn btn--icon border-0 cursor-pointer hide@md", data: { action: "dialog#showModal" } do %>
-        <span id="header_avatar">
-          <div class="avatar" style="--avatar-size: 2rem;">
-            <%= image_tag user_avatar_url(current_user, size: 32), alt: current_user.name %>
-          </div>
-        </span>
-      <% end %>
-
-      <%# 2. Call our generic modal_dialog helper with the trigger and a title. %>
-      <%= modal_dialog trigger, title: "Menu", size: '12rem' do %>
-        <div class="menu bg-main gap-2" data-controller="menu" data-action="keydown->menu#navigate" role="menu">
-          
-          <span class="inline-flex items-center gap-2 overflow-ellipsis max-i-full font-semibold">
-            <span><%= current_user.name %></span>
-            
-            <% if current_user.verified? %>
-              <span class="text-green-500" title="Verified Account">
-                
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-                </svg>
-                
-                <span class="sr-only">(Verified)</span>
-              </span>
-            <% end %>
-          </span>
-
-          <%# <hr class="menu__separator b-2" role="separator"/> %>
-          <%= link_to "Settings", settings_path, class: "btn menu__item bg-main", data: { menu_target: "item" }, role: "menuitem" %>
-          <%#= link_to "API Keys", "", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
-          <%#= link_to "Webhooks", "", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
-          <%#= link_to "Subscription", "", class: "btn menu__item", data: { menu_target: "item" }, role: "menuitem" %>
-          <%= button_to "Sign out", Current.session, class: "btn menu__item i-full bg-main", method: :delete, role: "menuitem" %>
-        </div>
-      <% end %>
+<div class="flex shrink-0 items-center gap-1.5">
+  <div class="mr-1 hidden items-center gap-2 lg:flex">
+    <%= yield :header_action_buttons %>
+    <div data-controller="push-subscription">
+      <button data-push-subscription-target="subscribeButton" data-action="push-subscription#subscribe"
+        class="flex items-center gap-1.5 rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-[13px] font-medium text-[#3d4742] transition hover:border-[#A2E494] hover:text-algae-900 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-[#C6CFC9] dark:hover:text-algae-300">
+        <%= icon("bell", css: "h-4 w-4") %>
+        <span data-push-subscription-target="label">Enable alerts</span>
+      </button>
     </div>
   </div>
+
+  <%= link_to notifications_path, class: "relative flex h-9 w-9 items-center justify-center rounded-lg text-[#3d4742] transition hover:bg-[#F1F4F2] md:hidden dark:text-[#C6CFC9] dark:hover:bg-white/5", aria: { label: "Notifications" } do %>
+    <%= icon("bell", css: "h-5 w-5") %>
+    <%= render "notifications/badge", unread: context_notifications.unread.any?, id_suffix: "header" %>
+  <% end %>
+
+  <%= link_to settings_path, class: "hidden h-9 w-9 items-center justify-center overflow-hidden rounded-full md:flex" do %>
+    <%= image_tag user_avatar_url(current_user, size: 64), size: 32, alt: current_user.name, class: "h-8 w-8 rounded-full object-cover ring-1 ring-[#D9DDE0] dark:ring-white/20" %>
+  <% end %>
 </div>

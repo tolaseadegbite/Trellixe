@@ -1,57 +1,49 @@
-<%# FIX: Added min-inline-size: 0; to prevent dynamic sub-rows from blowing past the screen margin %>
-<div id="<%= dom_id(invitation, :card) %>" class="card bg-main p-3 flex flex-col gap-3" style="min-inline-size: 0;">
-  <div class="flex items-center gap-4">
-    <div class="flex items-center gap shrink-0">
-      <% if invitation.event.starts_at <= Time.current %>
-        <%= check_box_tag "invitation_ids[]", invitation.id, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependant" } %>
-      <% else %>
-        <div class="flex items-center justify-center text-subtle opacity-50" style="inline-size: 1.25rem; block-size: 1.25rem;">
-          <span class="icon icon--clock" aria-hidden="true"></span>
-        </div>
-      <% end %>
-      <div class="flex items-center justify-center rounded-full bg-black text-reversed shrink-0 border-0" style="block-size: 2.5rem; inline-size: 2.5rem;">
-        <span class="font-semibold"><%= invitation.contact.full_name.split.first(2).map(&:first).join.upcase %></span>
-      </div>
-    </div>
-    
-    <div class="flex flex-col grow gap-1" style="min-inline-size: 0">
+<% status_classes = case invitation.status
+   when "attended" then "bg-[#A2E494] text-[#1c2420]"
+   when "declined" then "bg-algae-900 text-white"
+   else "bg-[#E9EBED] text-[#3d4742] dark:bg-white/10 dark:text-[#C6CFC9]"
+   end %>
+<div id="<%= dom_id(invitation, :card) %>" class="rounded-2xl border border-[#D9DDE0] bg-white p-3.5 dark:border-white/10 dark:bg-[#131B17]">
+  <div class="flex items-center gap-3">
+    <% if invitation.event.starts_at <= Time.current %>
+      <%= check_box_tag "invitation_ids[]", invitation.id, false, class: "h-4 w-4 shrink-0 accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependant" } %>
+    <% else %>
+      <span class="flex h-5 w-5 shrink-0 items-center justify-center text-[#c3c9c5]" title="Attendance opens when the event starts"><%= icon("calendar-range", css: "h-4 w-4") %></span>
+    <% end %>
+    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-algae-900 text-sm font-bold text-white">
+      <%= invitation.contact.full_name.split.first(2).map(&:first).join.upcase %>
+    </span>
+    <div class="min-w-0 flex-1">
       <div class="flex items-center justify-between gap-2">
-        <div class="flex flex-col" style="min-inline-size: 0">
-          <%= link_to invitation.contact.full_name, contact_path(invitation.contact), class: "font-semibold text-sm text-primary hover:underline truncate", style: "overflow: hidden; text-overflow: ellipsis; white-space: nowrap;", data: { turbo_frame: "_top" } %>
-          <span class="text-xs text-subtle" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= invitation.contact.email %></span>
-        </div>
-        <div class="flex items-center gap-2 shrink-0">
-          <span class="badge badge--<%= invitation.status %> text-xs font-medium capitalize"><%= invitation.status %></span>
-          <%= link_to edit_invitation_path(invitation), class: "btn btn--icon btn--subtle", data: { turbo_frame: "modal" } do %>
-            <span class="icon icon--pen" aria-hidden="true"></span>
-          <% end %>
-        </div>
+        <%= link_to invitation.contact.full_name, contact_path(invitation.contact), class: "truncate text-[14.5px] font-semibold hover:text-algae-900 dark:hover:text-algae-300", data: { turbo_frame: "_top" } %>
+        <span class="flex shrink-0 items-center gap-1.5">
+          <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize <%= status_classes %>"><%= invitation.status %></span>
+          <%= link_to edit_invitation_path(invitation), data: { turbo_frame: "modal" }, title: "Edit", class: "flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]" do %><%= icon("pen", css: "h-4 w-4") %><% end %>
+        </span>
       </div>
+      <p class="truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]"><%= invitation.contact.email %></p>
       <% if invitation.notes.present? %>
-        <div class="text-xs text-subtle" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= invitation.notes.truncate(100) %></div>
+        <p class="mt-0.5 truncate text-[13px] text-[#6b7672] dark:text-[#9AA6A0]"><%= invitation.notes.truncate(100) %></p>
       <% end %>
     </div>
   </div>
 
-<% task = invitation.follow_up_tasks.find { |t| t.user_id == current_user.id } %>
-<% if invitation.interaction_logs.any? || task %>
-    <%# FIX: Swapped border-t to style="border-block-start: 1px solid var(--border-main);" or your global class equivalent %>
-    <div style="border-block-start: 1px solid var(--color-border, #ccc); min-inline-size: 0; overflow: hidden;">
-      <div id="<%= dom_id(invitation, :logs_mobile) %>" style="min-inline-size: 0;">
+  <% task = invitation.follow_up_tasks.find { |t| t.user_id == current_user.id } %>
+  <% if invitation.interaction_logs.any? || task %>
+    <div class="mt-3 border-t border-[#E9EBED] pt-1.5 dark:border-white/10">
+      <div id="<%= dom_id(invitation, :logs_mobile) %>" class="space-y-0.5">
         <% invitation.interaction_logs.order(created_at: :desc).limit(2).each do |log| %>
           <%= render "interaction_logs/log_invitation_row", log: log, prefix: :mobile %>
         <% end %>
       </div>
-      <% if invitation.interaction_logs.count > 2 %>
-        <div class="p-3 pbs-0">
-          <%= link_to "View all →", contact_path(invitation.contact), class: "text-xs text-emerald-600 hover:underline font-medium", data: { turbo_frame: "_top" } %>
-        </div>
-      <% end %>
-      <% if task %>
-        <div class="p-3 pbs-0">
-          <%= link_to "Log follow-up", new_follow_up_task_interaction_log_path(task), class: "text-xs text-emerald-600 hover:underline font-medium", data: { turbo_frame: "modal" } %>
-        </div>
-      <% end %>
+      <div class="mt-1 flex items-center gap-3">
+        <% if invitation.interaction_logs.count > 2 %>
+          <%= link_to "View all →", contact_path(invitation.contact), class: "text-xs font-semibold text-algae-900 hover:underline dark:text-algae-300", data: { turbo_frame: "_top" } %>
+        <% end %>
+        <% if task %>
+          <%= link_to "Log follow-up", new_follow_up_task_interaction_log_path(task), class: "text-xs font-semibold text-algae-900 hover:underline dark:text-algae-300", data: { turbo_frame: "modal" } %>
+        <% end %>
+      </div>
     </div>
   <% end %>
 </div>

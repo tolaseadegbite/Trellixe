@@ -1,23 +1,23 @@
-<div id="<%= dom_id(task, :past) %>" class="flex items-start gap-3 p-4 border-b border-main last:border-0 hover:bg-shade transition">
-  <div class="flex flex-item-no-shrink items-center justify-center font-bold text-xs text-reversed rounded-full bg-black"
-       style="inline-size: 2rem; block-size: 2rem;">
-    <%= task.contact.full_name.split.first(2).map(&:first).join.upcase %>
-  </div>
-  <div class="flex flex-col gap-1 i-full min-w-0">
-    <div class="flex items-center justify-between gap-2 flex-wrap">
-      <div class="flex items-center gap-2 min-w-0">
-        <%= link_to task.contact.full_name, contact_path(task.contact), class: "font-semibold text-sm text-emerald-600 hover:underline truncate", data: { turbo_frame: "_top" } %>
-        <span class="text-xs text-subtle shrink-0">from</span>
-        <%= link_to task.event.name, event_path(task.event), class: "text-sm text-emerald-600 hover:underline truncate", data: { turbo_frame: "_top" } %>
-      </div>
-      <span class="text-xs text-subtle shrink-0">Completed <%= time_ago_in_words(task.completed_at) %> ago</span>
+<div id="<%= dom_id(task, :past) %>" class="flex items-start gap-3 px-5 py-4">
+  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#A2E494] bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300">
+    <%= icon("check", css: "h-4 w-4") %>
+  </span>
+  <div class="min-w-0 flex-1">
+    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+      <p class="min-w-0 truncate text-sm">
+        <%= link_to task.contact.full_name, contact_path(task.contact), class: "font-semibold hover:text-algae-900 hover:underline dark:hover:text-algae-300", data: { turbo_frame: "_top" } %>
+        <span class="text-[#8a938d] dark:text-[#9AA6A0]"> from </span>
+        <%= link_to task.event.name, event_path(task.event), class: "text-algae-900 hover:underline dark:text-algae-300", data: { turbo_frame: "_top" } %>
+      </p>
+      <span class="shrink-0 text-xs tabular-nums text-[#8a938d] dark:text-[#9AA6A0]">Completed <%= time_ago_in_words(task.completed_at) %> ago</span>
     </div>
     <% if (log = task.interaction_logs.last) %>
       <%= render "interaction_logs/log_past_card", log: log %>
     <% else %>
-      <div class="flex items-center justify-between gap-2 mbs-1">
-        <span class="text-sm text-subtle">No notes recorded.</span>
-        <%= link_to "Log follow-up", new_follow_up_task_interaction_log_path(task), class: "btn btn--subtle text-xs", data: { turbo_frame: "modal" } %>
+      <div class="mt-2 flex items-center justify-between gap-2">
+        <span class="text-sm text-[#8a938d] dark:text-[#9AA6A0]">No notes recorded.</span>
+        <%= link_to "Log follow-up", new_follow_up_task_interaction_log_path(task), data: { turbo_frame: "modal" },
+            class: "shrink-0 rounded-lg border border-[#D9DDE0] px-2.5 py-1 text-xs font-semibold transition hover:border-[#A2E494] hover:text-algae-900 dark:border-white/10 dark:hover:text-algae-300" %>
       </div>
     <% end %>
   </div>

@@ -1,39 +1,30 @@
-<div class="card i-full" style="max-inline-size: 25rem;">
-  <div class="flex flex-col items-center gap-5 mbe-8">
-    <%= link_to root_path, class: "" do %>
-      <%= image_tag("logo/logo.png", size: 50) %>
-    <% end %>
-    <h1 class="font-bold text-3xl text-center">Sign in to Trellixe</h1>
-  </div>
-
-  <%= form_with(url: sign_in_path) do |form| %>
-    <div class="mbe-5">
-      <%= form.label :email, style: "display: block", class: "font-semibold mbe-2" %>
-      <%= form.email_field :email, value: params[:email_hint], placeholder: "you@example.com", required: true, autofocus: true, autocomplete: "email", class: "input" %>
-    </div>
-
-    <div class="mbe-5">
-      <%= form.label :password, style: "display: block", class: "font-semibold mbe-2" %>
-      <%= form.password_field :password, required: true, autocomplete: "current-password", class: "input" %>
-    </div>
-
+<% content_for :title, "Sign in" %>
+<%= render layout: "shared/auth_shell", locals: { title: "Welcome back", subtitle: "Pick up where your team left off — today's follow-ups are waiting." } do %>
+  <%= form_with(url: sign_in_path, class: "space-y-4") do |form| %>
     <div>
-      <%= form.submit "Sign in", class: "btn btn--primary i-full" %>
+      <%= form.label :email, class: "mb-1.5 block text-[13px] font-semibold" %>
+      <%= form.email_field :email, value: params[:email_hint], placeholder: "you@example.com", required: true, autofocus: true, autocomplete: "email",
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
     </div>
+    <div>
+      <div class="mb-1.5 flex items-center justify-between">
+        <%= form.label :password, class: "block text-[13px] font-semibold" %>
+        <%= link_to "Forgot password?", new_identity_password_reset_path, class: "text-[13px] font-medium text-algae-900 hover:underline dark:text-algae-300" %>
+      </div>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "••••••••••••",
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+    </div>
+    <%= form.submit "Sign in", class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
   <% end %>
 
-  <br>
-
-  <div class="text-sm text-center">
-    <%= link_to "Sign in without password", new_sessions_passwordless_path %>
+  <div class="my-5 flex items-center gap-3 text-xs text-[#8a938d] dark:text-[#9AA6A0]">
+    <span class="h-px flex-1 bg-[#E9EBED] dark:bg-white/10"></span> or <span class="h-px flex-1 bg-[#E9EBED] dark:bg-white/10"></span>
   </div>
 
-  <!--<div class="text-sm text-center">
-    <%#= button_to "Sign in with OmniAuth", "/auth/developer", "data-turbo" => false %>
-  </div>-->
+  <%= link_to "Continue without a password", new_sessions_passwordless_path,
+      class: "flex w-full items-center justify-center gap-2 rounded-lg border border-[#D9DDE0] bg-white px-4 py-2.5 text-[14px] font-medium transition hover:border-[#A2E494] hover:text-algae-900 dark:bg-[#131B17] dark:border-white/10 dark:hover:text-algae-300" %>
 
-  <div class="text-sm text-center">
-    <%= link_to "Sign up", sign_up_path %> |
-    <%= link_to "Forgot your password?", new_identity_password_reset_path %>
-  </div>
-</div>
+  <p class="mt-6 text-center text-[13.5px] text-[#5b6660] dark:text-[#9AA6A0]">
+    New to Trellixe? <%= link_to "Create a workspace", sign_up_path, class: "font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
+  </p>
+<% end %>

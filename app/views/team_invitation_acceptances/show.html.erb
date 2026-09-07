@@ -1,57 +1,36 @@
-<div class="mbs-10 mi-auto p-4" style="max-inline-size: 450px;">
-  <h1 class="text-2xl font-bold">Join <%= @invitation.account.name %></h1>
-  <p class="mbe-6 text-subtle">You've been invited by the team.</p>
-
+<% content_for :title, "Join #{@invitation.account.name}" %>
+<%= render layout: "shared/auth_shell", locals: { title: "Join #{@invitation.account.name}", subtitle: "You've been invited to the team. Confirm your details to get in." } do %>
   <% if user_signed_in? %>
-     <%# --- SCENARIO A: LOGGED IN USER --- %>
-     <div class="flex flex-col gap-4">
-       <div class="p-4 bg-surface border border-main rounded-md flex items-center gap-3">
-         <div class="flex flex-item-no-shrink overflow-hidden rounded-full bg-black" style="inline-size: 2rem; block-size: 2rem;">
-            <%= image_tag user_avatar_url(current_user, size: 32), size: 32, class: "rounded-full", alt: current_user.name %>
-         </div>
-         <div class="flex flex-col">
-           <span class="font-semibold text-sm">Signed in as <%= current_user.email %></span>
-           <%= link_to "Not you?", session_path(Current.session), data: { turbo_method: :delete }, class: "text-xs text-subtle hover:text-primary" %>
-         </div>
-       </div>
-
-       <%= button_to "Join Team", team_invitation_acceptance_path(token: @invitation.token), method: :put, class: "btn btn--primary i-full justify-center" %>
-     </div>
-
-  <% else %>
-  
-    <%# --- SCENARIO B: NEW USER REGISTRATION --- %>
-    <%= form_with model: @user, url: team_invitation_acceptance_path(token: @invitation.token), method: :put do |f| %>
-      <% if @user.errors.any? %>
-        <div class="text-negative mbe-4 text-sm">
-          <%= @user.errors.full_messages.to_sentence %>
-        </div>
-      <% end %>
-
-      <!-- Email is read-only because the invite is specifically for this email -->
-      <div class="flex flex-col gap-half mbe-4">
-        <label class="text-sm font-bold">Email</label>
-        <input type="text" value="<%= @invitation.email %>" disabled class="input bg-shade i-full text-subtle" style="cursor: not-allowed;">
+    <div class="flex items-center gap-3 rounded-xl border border-[#D9DDE0] bg-white p-3.5 dark:bg-[#131B17] dark:border-white/10">
+      <%= image_tag user_avatar_url(current_user, size: 64), size: 40, class: "h-10 w-10 rounded-full object-cover", alt: current_user.name %>
+      <div class="min-w-0">
+        <p class="truncate text-sm font-semibold">Signed in as <%= current_user.email %></p>
+        <%= link_to "Not you?", session_path(Current.session), data: { turbo_method: :delete }, class: "text-[13px] font-medium text-algae-900 hover:underline dark:text-algae-300" %>
       </div>
-
-      <div class="flex flex-col gap-half mbe-4">
-        <%# Assuming you don't have separate first/last name columns in Trellixe User model yet based on schema provided earlier, usually it is just 'name'. 
-            If you added split names, use first_name/last_name. I will use 'name' based on your provided schema. %>
-        <%= f.label :name, "Full Name", class: "text-sm font-bold" %>
-        <%= f.text_field :name, required: true, placeholder: "e.g. Jane Smith", class: "input i-full", autofocus: true %>
-      </div>
-
-      <div class="flex flex-col gap-half mbe-6">
-        <%= f.label :password, class: "text-sm font-bold" %>
-        <%= f.password_field :password, required: true, class: "input " %>
-      </div>
-
-      <%= f.submit "Create Account & Join", class: "btn btn--primary i-full justify-center" %>
-    <% end %>
-
-    <div class="mbs-4 text-sm text-center">
-      Already have an account? 
-      <%= link_to "Log in", sign_in_path(return_to: request.fullpath), class: "text-link" %>
     </div>
+    <%= button_to "Join team", team_invitation_acceptance_path(token: @invitation.token), method: :put,
+        class: "mt-4 w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+  <% else %>
+    <%= form_with model: @user, url: team_invitation_acceptance_path(token: @invitation.token), method: :put, class: "space-y-4" do |f| %>
+      <% if @user.errors.any? %>
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-500/10 dark:border-red-500/30 dark:text-red-300"><%= @user.errors.full_messages.to_sentence %></div>
+      <% end %>
+      <div>
+        <label class="mb-1.5 block text-[13px] font-semibold">Email</label>
+        <input type="text" value="<%= @invitation.email %>" disabled class="w-full cursor-not-allowed rounded-lg border border-[#D9DDE0] bg-[#F1F4F2] px-3.5 py-2.5 text-[14.5px] text-[#8a938d] dark:border-white/10 dark:text-[#9AA6A0] dark:bg-white/5">
+      </div>
+      <div>
+        <%= f.label :name, "Full name", class: "mb-1.5 block text-[13px] font-semibold" %>
+        <%= f.text_field :name, required: true, placeholder: "Jane Smith", autofocus: true,
+            class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+      </div>
+      <div>
+        <%= f.label :password, class: "mb-1.5 block text-[13px] font-semibold" %>
+        <%= f.password_field :password, required: true,
+            class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+      </div>
+      <%= f.submit "Create account & join", class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+    <% end %>
+    <p class="mt-6 text-center text-[13.5px] text-[#5b6660] dark:text-[#9AA6A0]">Already have an account? <%= link_to "Log in", sign_in_path(return_to: request.fullpath), class: "font-semibold text-algae-900 hover:underline dark:text-algae-300" %></p>
   <% end %>
-</div>
+<% end %>

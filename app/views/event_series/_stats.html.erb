@@ -1,10 +1,10 @@
-<div id="series-stats" class="bg-shade border border-main rounded-md p-3 flex flex-wrap items-center gap-8">
+<div id="series-stats" class="flex flex-wrap items-center gap-8 rounded-xl border border-[#E9EBED] bg-[#F6F9F7] p-4 dark:border-white/10 dark:bg-white/[0.03]">
   <div class="flex flex-col">
-    <span class="text-xs uppercase font-bold text-subtle mbe-1">Occurrences</span>
-    <span class="text-2xl font-bold text-primary"><%= event_series.events.count %></span>
+    <span class="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]">Occurrences</span>
+    <span class="text-2xl font-bold tabular-nums"><%= event_series.events.count %></span>
   </div>
   <div class="flex flex-col">
-    <span class="text-xs uppercase font-bold text-subtle mbe-1">Upcoming</span>
-    <span class="text-2xl font-bold text-primary"><%= event_series.events.upcoming.count %></span>
+    <span class="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]">Upcoming</span>
+    <span class="text-2xl font-bold tabular-nums"><%= event_series.events.upcoming.count %></span>
   </div>
 </div>

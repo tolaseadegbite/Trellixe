@@ -1,23 +1,16 @@
-<%= form_with(model: [event, invitation], class: "flex flex-col items-start gap") do |form| %>
-
+<%= form_with(model: [ event, invitation ]) do |form| %>
   <% if invitation.errors.any? %>
-    <div class="text-negative">
-      <%# Simplified error display %>
-      <%= invitation.errors.full_messages.to_sentence %>
+    <div class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300" role="alert">
+      <p class="font-semibold"><%= pluralize(invitation.errors.count, "error") %> stopped these invitations from saving:</p>
+      <ul class="mt-1 list-disc pl-5"><% invitation.errors.each do |error| %><li><%= error.full_message %></li><% end %></ul>
     </div>
   <% end %>
 
-  <div class="flex flex-col items-start gap-half i-full">
-    <%#= form.label :contact_ids, "Select contacts to invite", class: "font-medium leading-none" %>
-    <%= form.collection_select :contact_ids,
-                                @available_contacts,
-                                :id,
-                                :full_name,
-                                { include_blank: "Select contacts to invite" },
-                                { class: "i-full mbs-2", multiple: true, data: { controller: "combobox" } }  %>
+  <div>
+    <%= form.label :contact_ids, "Contacts to invite", class: "mb-1 block text-[13px] font-semibold" %>
+    <%= form.collection_select :contact_ids, @available_contacts, :id, :full_name,
+        { include_blank: "Select contacts to invite" },
+        { multiple: true, class: "w-full", data: { controller: "combobox" } } %>
   </div>
-
-  <div class="self-start">
-    <%= form.submit "Add to Invitation List", class: "btn btn--primary" %>
-  </div>
+  <%= form.submit "Add to invitation list", class: "mt-4 w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
 <% end %>

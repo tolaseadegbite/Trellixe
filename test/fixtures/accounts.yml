@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+workspace_one:
+  name: Cell One
+  seat_limit: 5
+  public_id: acct_testcellone01
+
+workspace_two:
+  name: Cell Two
+  seat_limit: 5
+  public_id: acct_testcelltwo02

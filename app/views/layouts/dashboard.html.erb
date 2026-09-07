@@ -5,36 +5,29 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <%= tag.meta name: "vapid_key", content: Rails.application.credentials.vapid[:public_key] %>
+    <%= tag.meta name: "vapid_key", content: vapid_public_key %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="icon" href="/icon.png" type="image/png">
-    <%# <link rel="icon" href="/icon.svg" type="image/svg+xml"> %>
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <%= stylesheet_link_tag "css-zero/reset", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "css-zero/variables", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "css-zero/utilities", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= render "shared/font_faces" %>
     <%= javascript_importmap_tags %>
 
-    <%# 1. Listen for Global Events (Invitations) %>
     <%= turbo_stream_from "notifications_#{current_user.id}_global" %>
-
-    <%# 2. Listen for Context-Specific Events (Role changes in THIS workspace) %>
     <% if Current.account %>
-    <%= turbo_stream_from "notifications_#{current_user.id}_account_#{Current.account.id}" %>
+      <%= turbo_stream_from "notifications_#{current_user.id}_account_#{Current.account.id}" %>
     <% end %>
-
   </head>
 
-  <body class="bg-main" data-controller="color-scheme ">
+  <body class="min-h-screen bg-[#F1F4F2] font-sans text-[#1c2420] antialiased dark:bg-[#0C1210] dark:text-[#E7ECE9]" data-controller="color-scheme">
 
     <div data-controller="timezone" data-timezone-current-value="<%= current_user.time_zone %>"></div>
 
@@ -42,26 +35,27 @@
       <%= render "shared/flash" %>
     </div>
 
-    <%#= render "layouts/navigation/navbar" %>
-
-    <div class="sidebar-layout">
-      <aside id="sidebar">
-        <%= render "layouts/navigation/dashboard/sidebar_menu" %>
+    <div class="flex min-h-screen">
+      <aside id="sidebar" class="hidden w-[264px] shrink-0 md:block">
+        <div class="fixed inset-y-0 w-[264px] border-r border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#101613]">
+          <%= render "layouts/navigation/dashboard/sidebar_menu" %>
+        </div>
       </aside>
 
-      <main id="main" style="padding: 0; gap: 0;">
-        <div class="header-layout mi-auto i-full">
-          <header class="" id="header">
+      <div class="min-w-0 flex-1">
+        <header id="header" class="sticky top-0 z-30 border-b border-[#D9DDE0] bg-white/90 backdrop-blur dark:border-white/10 dark:bg-[#0C1210]/90">
+          <div class="flex items-center gap-2 px-4 py-3 md:px-8">
             <%= render "layouts/navigation/dashboard/mobile_menu" %>
             <%= render "layouts/navigation/dashboard/header_menu" %>
-          </header>
-        
+          </div>
+        </header>
+
+        <main id="main" class="mx-auto w-full max-w-6xl px-4 py-6 md:px-8 md:py-8">
           <%= yield %>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
 
     <%= turbo_frame_tag "modal" %>
-    
   </body>
 </html>

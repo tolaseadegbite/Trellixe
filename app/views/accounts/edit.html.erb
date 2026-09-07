@@ -4,76 +4,76 @@
   <h4 class="font-semibold">Workspace settings</h4>
 <% end %>
 
-<div class="container p-4 i-full mi-auto">
-  
-  <div class="mbe-8">
-    <h1 class="text-2xl font-bold mbe-2">General Settings</h1>
-    <p class="text-subtle">Manage your workspace identity.</p>
+<div class="mx-auto w-full max-w-3xl p-4">
+
+  <div class="mb-8">
+    <h1 class="mb-2 text-2xl font-bold">General Settings</h1>
+    <p class="text-[#6b7672] dark:text-[#9AA6A0]">Manage your workspace identity.</p>
   </div>
 
   <%# --- RENAME CARD --- %>
-  <div class="border border-main rounded-lg bg-main mbe-10 overflow-hidden">
-    <div class="p-6 border-be border-main">
-      <h3 class="font-bold text-lg mbe-1">Workspace Name</h3>
-      <p class="text-sm text-subtle">This name is visible to all team members.</p>
+  <div class="mb-10 overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+    <div class="border-b border-[#E9EBED] p-6 dark:border-white/10">
+      <h3 class="mb-1 text-lg font-bold">Workspace Name</h3>
+      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">This name is visible to all team members.</p>
     </div>
 
     <div class="p-6">
       <%= form_with(model: @account, url: account_path(@account), method: :patch) do |form| %>
         <% if @account.errors.any? %>
-          <div class="text-negative text-sm mbe-4">
+          <div class="mb-4 text-sm text-red-700 dark:text-red-400">
             <%= @account.errors.full_messages.to_sentence %>
           </div>
         <% end %>
 
-        <div class="flex flex-col gap-1 mbe-6">
-          <%= form.label :name, "Display Name", class: "text-sm font-medium" %>
-          <%= form.text_field :name, required: true, placeholder: "e.g. Acme Corp", class: "input" %>
+        <div class="mb-6 flex flex-col gap-1">
+          <%= form.label :name, "Display Name", class: "mb-1 block text-[13px] font-semibold" %>
+          <%= form.text_field :name, required: true, placeholder: "e.g. Acme Corp", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
         </div>
 
         <div class="flex items-center justify-end">
-          <%= form.submit "Save Changes", class: "btn btn--primary" %>
+          <%= form.submit "Save Changes", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
         </div>
       <% end %>
     </div>
   </div>
 
   <%# --- DANGER ZONE --- %>
-  <div class="border rounded-lg bg-main overflow-hidden" style="border-color: var(--color-negative);">
-    <div class="p-6 border-be" style="border-color: var(--color-negative);">
-      <h3 class="font-bold text-lg text-red-600 mbe-1">Danger Zone</h3>
-      <p class="text-sm text-subtle">Irreversible actions for this workspace.</p>
+  <div class="overflow-hidden rounded-2xl border border-red-200 bg-white dark:border-red-500/30 dark:bg-[#1d1214]">
+    <div class="border-b border-red-200 p-6 dark:border-red-500/30">
+      <h3 class="mb-1 text-lg font-bold text-red-600 dark:text-red-400">Danger Zone</h3>
+      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Irreversible actions for this workspace.</p>
     </div>
 
-    <div class="p-6 flex items-center justify-between gap-4 flex-wrap">
+    <div class="flex flex-wrap items-center justify-between gap-4 p-6">
       <div class="flex flex-col">
-        <span class="font-bold text-sm">Delete Workspace</span>
-        <span class="text-xs text-subtle">Permanently remove this workspace and all associated data.</span>
+        <span class="text-sm font-bold">Delete Workspace</span>
+        <span class="text-xs text-[#6b7672] dark:text-[#9AA6A0]">Permanently remove this workspace and all associated data.</span>
       </div>
 
-      <% delete_trigger = button_tag "Delete Workspace", type: "button", class: "btn font-bold text-gray-50 border-0 flex", style: "background-color: var(--color-negative);", data: { action: "dialog#showModal" } %>
-      
+      <% delete_trigger = button_tag "Delete Workspace", type: "button", class: "flex cursor-pointer rounded-lg bg-red-700 px-4 py-2 font-bold text-white transition hover:bg-red-800", data: { action: "dialog#showModal" } %>
+
       <%= modal_dialog delete_trigger, size: "450px", title: "Delete #{@account.name}?" do %>
-        
+
         <%= form_with url: account_path(@account), method: :delete, class: "flex flex-col gap-4" do |f| %>
-          
-          <p class="text-sm text-subtle">
-            Are you sure you want to delete <strong><%= @account.name %></strong>? 
+
+          <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">
+            Are you sure you want to delete <strong><%= @account.name %></strong>?
             <br><br>
-            All contacts, events, and team memberships will be permanently destroyed. 
+            All contacts, events, and team memberships will be permanently destroyed.
             This action <strong>cannot</strong> be undone.
           </p>
 
           <%# PASSWORD CHALLENGE %>
-          <div class="p-3 rounded-md border" style="background-color: rgb(from var(--color-negative) r g b / 0.05); border-color: rgb(from var(--color-negative) r g b / 0.2);">
-            <%= f.label :password_challenge, "Enter your password to confirm", class: "block text-xs font-bold text-negative mbe-2" %>
-            <%= f.password_field :password_challenge, required: true, class: "input i-full", style: "border-color: var(--color-negative);", placeholder: "Your password" %>
+          <div class="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-500/30 dark:bg-red-500/10">
+            <%= f.label :password_challenge, "Enter your password to confirm", class: "mb-2 block text-xs font-bold text-red-700 dark:text-red-300" %>
+            <%= f.password_field :password_challenge, required: true, class: "w-full rounded-lg border border-red-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100 dark:border-red-500/30 dark:bg-[#0C1210]", placeholder: "Your password" %>
           </div>
-          
-          <div class="flex items-center justify-end gap-2 mts-2">
-            <button type="button" class="btn" data-action="click->dialog#close">Cancel</button>
-            
-            <%= f.submit "I understand, delete it", class: "btn text-gray-50 border-0 font-semibold", style: "background-color: var(--color-negative);" %>
+
+          <div class="mt-2 flex items-center justify-end gap-2">
+            <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:hover:border-algae-600/50" data-action="click->dialog#close">Cancel</button>
+
+            <%= f.submit "I understand, delete it", class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-800" %>
           </div>
 
         <% end %>

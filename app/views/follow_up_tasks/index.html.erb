@@ -1,123 +1,93 @@
-<% content_for :title, "Follow Ups" %>
+<% content_for :title, "Follow-ups" %>
+<% content_for :page_header, "Follow-ups · #{@pagy.count}" %>
 
-<% content_for :page_header do %>
-  <h4 class="font-semibold">Follow Up Tasks (<%= @pagy.count %>)</h4>
-<% end %>
+<div class="space-y-4">
+  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
+    <%= render "follow_up_tasks/search_form" %>
+  </div>
 
-<div class="flex flex-col i-full p-3">
-
-  <%= turbo_frame_tag :tasks_table do %>
-
-    <div class="flex items-center justify-between flex-wrap gap mbe-4">
-      <nav class="tabs__list border" aria-label="Task filters">
-        <%= link_to "Pending",
-                    follow_up_tasks_path(scope: "pending"),
-                    class: "btn tabs__button",
-                    **(params[:scope] != "past" ? { aria: { current: "page" } } : {}) %>
-        <%= link_to "Past",
-                    follow_up_tasks_path(scope: "past"),
-                    class: "btn tabs__button",
-                    **(params[:scope] == "past" ? { aria: { current: "page" } } : {}) %>
+  <%= turbo_frame_tag :tasks_table, class: "block space-y-4" do %>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <nav class="flex gap-1 rounded-xl border border-[#D9DDE0] bg-white p-1 dark:border-white/10 dark:bg-[#131B17]" aria-label="Task filters">
+        <%= link_to "Pending", follow_up_tasks_path(scope: "pending"),
+            class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@scope == 'past' ? 'text-[#6b7672] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]' : 'bg-algae-900 text-white'}",
+            **(@scope != "past" ? { aria: { current: "page" } } : {}) %>
+        <%= link_to "Past", follow_up_tasks_path(scope: "past"),
+            class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@scope == 'past' ? 'bg-algae-900 text-white' : 'text-[#6b7672] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]'}",
+            **(@scope == "past" ? { aria: { current: "page" } } : {}) %>
       </nav>
+      <% if params[:q].present? %>
+        <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Found <strong class="tabular-nums text-[#1c2420] dark:text-[#E7ECE9]"><%= @pagy.count %></strong> <%= "task".pluralize(@pagy.count) %> matching your filters.</p>
+      <% end %>
     </div>
 
     <% if @scope == "pending" %>
-
-      <%# --- BULK FORM WRAPPER --- %>
-      <%= form_with url: bulk_update_follow_up_tasks_path,
-                    method: :patch,
-                    id: "tasks-bulk-form",
-                    data: {
-                      controller: "check-all",
-                      action: "reset-bulk-ui->check-all#deselectAll"
-                    } do |form| %>
-
-        <%# --- ACTION BAR --- %>
-        <div id="bulk_actions_bar_inner" data-check-all-target="actionBar"
-                class="action-bar bg-black text-reversed p-2 rounded-md shadow-lg border">
-
-          <div class="flex items-center gap">
-            <span class="font-bold text-sm mis-2" data-check-all-target="count">0 selected</span>
-          </div>
-
-          <div class="flex items-center gap">
-            <%= form.submit "Snooze 24h",
-                  class: "btn bg-surface text-primary border border-main text-xs font-semibold rounded-sm",
-                  style: "padding: 0.25rem 0.75rem;" %>
-
-            <%= form.submit "Mark Complete",
-                  class: "btn bg-green-600 text-reversed border-0 text-xs font-semibold rounded-sm mis-2",
-                  style: "padding: 0.25rem 0.75rem;",
+      <%= form_with url: bulk_update_follow_up_tasks_path, method: :patch, id: "tasks-bulk-form",
+          data: { controller: "check-all", action: "reset-bulk-ui->check-all#deselectAll" } do |form| %>
+        <div id="bulk_actions_bar">
+          <div id="bulk_actions_bar_inner" data-check-all-target="actionBar"
+              class="action-bar border border-[#1c2420] bg-[#1c2420] p-2 rounded-xl shadow-xl text-white">
+            <span class="pl-2 text-sm font-semibold tabular-nums" data-check-all-target="count">0 selected</span>
+            <div class="flex items-center gap-2">
+              <%= form.submit "Snooze 24h",
+                  class: "cursor-pointer rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/20" %>
+              <%= form.submit "Mark Complete",
+                  class: "cursor-pointer rounded-lg bg-algae-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-algae-700",
                   data: { turbo_confirm: "Mark selected tasks as complete?" } %>
+            </div>
           </div>
         </div>
 
-        <%# --- DESKTOP TABLE --- %>
-        <div class="show@md">
-          <div class="relative i-full overflow-x-auto border border-main rounded-lg">
-            <table class="table i-full text-left">
-              <thead class="bg-shade font-semibold text-xs uppercase text-subtle">
-                <tr>
-                  <th class="p-3 w-8">
-                    <%= check_box_tag :check_all, nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %>
-                  </th>
-                  <th class="p-3">Contact</th>
-                  <th class="p-3">Event</th>
-                  <th class="p-3">Due</th>
-                  <th class="p-3 text-end">Action</th>
+        <div class="hidden overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white md:block dark:border-white/10 dark:bg-[#131B17]">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-[#E9EBED] bg-[#F6F9F7] text-xs uppercase tracking-wide text-[#6b7672] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
+                  <th class="w-10 px-4 py-3"><%= check_box_tag :check_all, nil, false, class: "h-4 w-4 accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependee" } %></th>
+                  <th class="px-3 py-3 font-semibold">Contact</th>
+                  <th class="px-3 py-3 font-semibold">Event</th>
+                  <th class="px-3 py-3 font-semibold">Due</th>
+                  <th class="px-4 py-3 text-right font-semibold">Action</th>
                 </tr>
               </thead>
-              <tbody id="tasks-list">
+              <tbody id="tasks-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
                 <% if @follow_up_tasks.any? %>
                   <%= render partial: "follow_up_tasks/follow_up_task", collection: @follow_up_tasks, as: :task %>
                 <% else %>
-                  <tr><td colspan="5" class="p-8 text-center text-subtle text-sm">No pending tasks. Good job!</td></tr>
+                  <tr><td colspan="5" class="px-4 py-8"><%= render "shared/empty_state", title: "No pending tasks", body: "Good job — mark Sunday guests as attended and Monday's calls will queue here.", icon_name: "list-checks" %></td></tr>
                 <% end %>
               </tbody>
             </table>
           </div>
         </div>
 
-        <%# --- MOBILE CARDS --- %>
-        <div class="hide@md flex flex-col gap">
-          <div class="flex items-center gap pb-2 pi-1">
-            <%= check_box_tag "check_all_mobile", nil, false, class: "input cursor-pointer", data: { action: "check-all#check", check_all_target: "dependee" } %>
-            <label for="check_all_mobile" class="font-medium cursor-pointer text-sm">Select all</label>
-          </div>
-
-          <div id="tasks-cards">
+        <div class="space-y-2.5 md:hidden">
+          <label class="flex items-center gap-2 px-1 text-sm font-medium">
+            <%= check_box_tag "check_all_mobile", nil, false, class: "h-4 w-4 accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependee" } %> Select all
+          </label>
+          <div id="tasks-cards" class="space-y-2.5">
             <% if @follow_up_tasks.any? %>
               <%= render partial: "follow_up_tasks/task_card", collection: @follow_up_tasks, as: :task %>
             <% else %>
-              <div class="p-8 text-center text-subtle text-sm">No pending tasks. Good job!</div>
+              <%= render "shared/empty_state", title: "No pending tasks", body: "Good job — everything is followed up.", icon_name: "list-checks" %>
             <% end %>
           </div>
         </div>
 
-        <div class="mbs-4">
-          <%= render "shared/pagination", pagy: @pagy %>
-        </div>
-
+        <div class="mt-4"><%= render "shared/pagination", pagy: @pagy %></div>
       <% end %>
-
     <% else %>
-
-      <%# --- PAST (COMPLETED) TASKS --- %>
-      <div class="border border-main rounded-lg bg-surface overflow-hidden">
+      <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
         <% if @follow_up_tasks.any? %>
-          <%= render partial: "follow_up_tasks/past_task", collection: @follow_up_tasks, as: :task %>
-        <% else %>
-          <div class="p-8 text-center text-subtle">
-            <p>No completed follow-ups yet.</p>
-            <p class="text-xs mt-1">Complete a task to see it here.</p>
+          <div class="divide-y divide-[#E9EBED] dark:divide-white/10">
+            <%= render partial: "follow_up_tasks/past_task", collection: @follow_up_tasks, as: :task %>
           </div>
+        <% else %>
+          <div class="px-4 py-8"><%= render "shared/empty_state", title: "No completed follow-ups yet", body: "Log a follow-up from a pending task and it lands here.", icon_name: "list-checks" %></div>
         <% end %>
       </div>
 
-      <div class="mbs-4">
-        <%= render "shared/pagination", pagy: @pagy %>
-      </div>
-
+      <div class="mt-4"><%= render "shared/pagination", pagy: @pagy %></div>
     <% end %>
   <% end %>
 </div>

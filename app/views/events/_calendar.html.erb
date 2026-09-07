@@ -1,117 +1,91 @@
-<%= tag.div id: "calendar_view", 
-            data: { 
+<%= tag.div id: "calendar_view",
+            data: {
               controller: "mobile-calendar",
-              mobile_calendar_active_class: "bg-selected text-reversed" 
+              mobile_calendar_active_class: "bg-selected text-reversed"
             } do %>
 
-  <%# --- Header Controls --- %>
-  <div class="flex items-center justify-between mbe-4">
-    <h2 class="font-semibold text-xl"><%= @date.strftime('%B %Y') %></h2>
-    <div class="flex items-center gap">
-        <%= link_to events_path(date: @date - 1.month, view: 'calendar'), class: "btn" do %>
-          <span class="icon icon--chevron-left" aria-hidden="true"></span>
-        <% end %>
-        <%= link_to "Today", events_path(view: 'calendar'), class: "btn btn--borderless" %>
-        <%= link_to events_path(date: @date + 1.month, view: 'calendar'), class: "btn" do %>
-          <span class="icon icon--chevron-right" aria-hidden="true"></span>
-        <% end %>
+  <div class="mb-4 flex items-center justify-between gap-3">
+    <h2 class="font-display text-xl font-bold tabular-nums"><%= @date.strftime("%B %Y") %></h2>
+    <div class="flex items-center gap-1.5">
+      <%= link_to events_path(date: @date - 1.month, view: "calendar"), title: "Previous month",
+          class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" do %>
+        <%= icon("chevron-left", css: "h-4 w-4") %>
+      <% end %>
+      <%= link_to "Today", events_path(view: "calendar"),
+          class: "rounded-lg border border-[#D9DDE0] bg-white px-3 py-1.5 text-[13px] font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" %>
+      <%= link_to events_path(date: @date + 1.month, view: "calendar"), title: "Next month",
+          class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" do %>
+        <%= icon("chevron-right", css: "h-4 w-4") %>
+      <% end %>
     </div>
   </div>
 
-  <%# --- Calendar Grid --- %>
-  <%# Box Effect: Border Block-Start (Top) + Inline-Start (Left) on container %>
-  <div class="grid grid-cols-7 border-bs border-is border-main rounded-md bg-surface overflow-hidden">
-    
-    <%# Day Names Header %>
+  <div class="grid grid-cols-7 overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
     <% Date::ABBR_DAYNAMES.rotate.each do |weekday| %>
-      <%# Box Effect: Border Block-End (Bottom) + Inline-End (Right) on cells %>
-      <div class="p-2 text-center font-medium text-subtle text-xs uppercase border-be border-ie border-main bg-surface">
+      <div class="border-b border-[#E9EBED] bg-[#F6F9F7] p-2 text-center text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#9AA6A0]">
         <%= weekday %>
       </div>
     <% end %>
 
-    <%# Calendar Days %>
     <% (@date.beginning_of_month.beginning_of_week..@date.end_of_month.end_of_week).each do |day| %>
       <% is_today = today?(day) %>
       <% is_current_month = day.month == @date.month %>
-      
-      <%# Interactive Cell %>
-      <div class="border-be border-ie border-main flex flex-col relative transition-colors
-                  <%= is_current_month ? 'bg-main' : 'bg-shade' %>"
-           style="cursor: pointer;"
+
+      <div class="flex min-h-[5rem] cursor-pointer flex-col border-b border-r border-[#E9EBED] p-1 transition-colors last:border-r-0 md:min-h-[8rem] <%= is_current_month ? 'bg-white dark:bg-[#131B17]' : 'bg-[#F6F9F7] dark:bg-white/[0.03]' %> dark:border-white/10"
            data-mobile-calendar-target="day"
            data-date="<%= day.to_s %>"
            data-is-today="<%= is_today %>"
            data-action="click->mobile-calendar#select">
-        
-        <%# Mobile Height (5rem) vs Desktop Height (8rem) %>
-        <div class="p-1 flex flex-col h-full" style="min-block-size: 5rem;"> 
-          
-          <%# Date Number %>
-          <div class="flex justify-between items-start mbe-1">
-             <span class="text-sm font-medium p-1 rounded-full leading-none 
-                          <%= is_today ? 'bg-black text-reversed' : (is_current_month ? '' : 'opacity-50') %>">
-              <%= day.day %>
-            </span>
-          </div>
 
-          <% events_that_day = @events_by_date[day] || [] %>
+        <div class="mb-1 flex items-start justify-between">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full text-[13px] tabular-nums <%= is_today ? 'bg-algae-900 font-bold text-white' : is_current_month ? 'font-medium' : 'font-medium opacity-50' %>">
+            <%= day.day %>
+          </span>
+        </div>
 
-          <%# --- DESKTOP VIEW: Use the new badge partial --- %>
-          <div class="flex-col gap-1 show@md" data-action="click->mobile-calendar#stopProp">
-            <% events_that_day.each do |event| %>
-              <%# --- THE CHANGE IS HERE --- %>
-              <%= render "events/calendar_event_badge", event: event %>
-            <% end %>
-          </div>
+        <% events_that_day = @events_by_date[day] || [] %>
 
-          <%# --- MOBILE VIEW: Dots --- %>
-          <div class="flex flex-wrap gap content-start hide@md">
-             <% events_that_day.each do |event| %>
-                <%# bg-selected acts as the blue dot %>
-                 <div class="rounded-full bg-emerald-500" 
-                     style="width: 6px; height: 6px;"></div>
-             <% end %>
-          </div>
-          
+        <div class="hidden flex-col gap-1 md:flex" data-action="click->mobile-calendar#stopProp">
+          <% events_that_day.each do |event| %>
+            <%= render "events/calendar_event_badge", event: event %>
+          <% end %>
+        </div>
+
+        <div class="flex flex-wrap gap-1 md:hidden">
+          <% events_that_day.each do |event| %>
+            <div class="h-1.5 w-1.5 rounded-full bg-algae-600"></div>
+          <% end %>
         </div>
       </div>
     <% end %>
   </div>
 
-  <%# --- MOBILE INTERACTIVE DETAILS SECTION --- %>
-  <div class="hide@md mbs-6" style="min-block-size: 200px;">
-    <h3 class="font-semibold text-lg mbe-3">Selected Date Details</h3>
-    
-    <%# Render a hidden list for EVERY day in the view so JS can toggle it %>
+  <div class="mt-6 md:hidden" style="min-block-size: 200px;">
+    <h3 class="font-display text-[15px] font-semibold">Selected date</h3>
+
     <% (@date.beginning_of_month.beginning_of_week..@date.end_of_month.end_of_week).each do |day| %>
-      <div data-mobile-calendar-target="list" 
-           data-date="<%= day.to_s %>" 
-           style="display: none;">
-           
-        <h4 class="text-xs font-bold text-subtle uppercase mbe-1"><%= day.strftime("%A, %b %d") %></h4>
-        
-          <% if @events_by_date[day].present? %>
-            <div class="flex flex-col gap-2">
-              <% @events_by_date[day].each do |event| %>
-                <% if event.persisted? %>
-                  <%= render "events/event_list_item", event: event %>
-                <% else %>
-                  <%= render "events/calendar_event_badge", event: event %>
-                <% end %>
+      <div data-mobile-calendar-target="list" data-date="<%= day.to_s %>" style="display: none;" class="mt-3">
+        <h4 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] tabular-nums dark:text-[#9AA6A0]"><%= day.strftime("%A, %b %d") %></h4>
+        <% if @events_by_date[day].present? %>
+          <div class="grid grid-cols-1 gap-3">
+            <% @events_by_date[day].each do |event| %>
+              <% if event.persisted? %>
+                <%= render "events/event_list_item", event: event %>
+              <% else %>
+                <%= render "events/calendar_event_badge", event: event %>
               <% end %>
-            </div>
+            <% end %>
+          </div>
         <% else %>
-           <div class="p-4 text-center border border-dashed border-main rounded-md">
-             <p class="text-subtle text-sm">No events for this day.</p>
-           </div>
+          <div class="rounded-2xl border border-dashed border-[#D9DDE0] bg-white p-4 text-center dark:border-white/10 dark:bg-[#131B17]">
+            <p class="text-sm text-[#8a938d] dark:text-[#9AA6A0]">No events for this day.</p>
+          </div>
         <% end %>
       </div>
     <% end %>
-    
-    <%# Fallback State %>
-    <div class="p-4 text-center text-subtle" data-mobile-calendar-target="placeholder">
-      <p class="text-sm">Tap a day above to see details.</p>
+
+    <div class="mt-3 rounded-2xl border border-dashed border-[#D9DDE0] bg-white p-4 text-center dark:border-white/10 dark:bg-[#131B17]" data-mobile-calendar-target="placeholder">
+      <p class="text-sm text-[#8a938d] dark:text-[#9AA6A0]">Tap a day above to see details.</p>
     </div>
   </div>
 <% end %>

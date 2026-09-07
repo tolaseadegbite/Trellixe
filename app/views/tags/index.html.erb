@@ -1,19 +1,20 @@
-<%= render "shared/modal" do %>
-  <div data-action="turbo:submit-end->modal#submitEnd">
-    <div class="flex items-center justify-between mbe-4">
-      <h3 class="text-lg font-bold">Manage Tags</h3>
+<% if turbo_frame_request? && turbo_frame_request_id == "modal" %>
+  <%= render "shared/modal" do %>
+    <h3 class="font-display text-lg font-semibold tracking-tight">Manage tags</h3>
+    <p class="mt-1 text-[13px] text-[#6b7672] dark:text-[#9AA6A0]">Group contacts — regulars, newcomers, follow-ups.</p>
+    <div class="mt-4">
+      <%= render "manager", tags: @tags, tag: @tag, list_id: "modal-tags-list" %>
     </div>
+  <% end %>
+<% else %>
+  <% content_for :title, "Tags" %>
+  <% content_for :page_header, "Tags · #{@tags.size}" %>
 
-    <%= render "form", tag: @tag %>
-
-    <div class="mbs-4">
-      <% if @tags.any? %>
-        <div class="flex flex-wrap gap-2" id="tags-list">
-          <%= render @tags %>
-        </div>
-      <% else %>
-        <p class="text-sm text-subtle text-center p-4">No tags yet. Create one above.</p>
-      <% end %>
+  <div class="max-w-2xl rounded-2xl border border-[#D9DDE0] bg-white p-6 dark:border-white/10 dark:bg-[#131B17]">
+    <h2 class="font-display text-lg font-semibold tracking-tight">All tags</h2>
+    <p class="mt-1 text-sm text-[#6b7672] dark:text-[#9AA6A0]">Group contacts — regulars, newcomers, follow-ups. Tags also power automatic event invitations.</p>
+    <div class="mt-4">
+      <%= render "manager", tags: @tags, tag: @tag, list_id: "tags-list" %>
     </div>
   </div>
 <% end %>

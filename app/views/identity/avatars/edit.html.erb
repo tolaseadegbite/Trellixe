@@ -5,9 +5,9 @@
   <div class="p-4">
     <%= render "shared/settings_back_button" %>
 
-    <div class="max-i-full" style="max-width: 48rem;">
-      <h1 class="font-bold text-2xl mbe-4">Profile Photo</h1>
-      <p class="text-subtle mbe-6">Upload a photo to personalize your account.</p>
+    <div class="w-full max-w-3xl">
+      <h1 class="mb-4 text-2xl font-bold">Profile Photo</h1>
+      <p class="mb-6 text-[#6b7672] dark:text-[#9AA6A0]">Upload a photo to personalize your account.</p>
 
       <div id="edit_avatar_form">
         <%= render "form", user: @user %>

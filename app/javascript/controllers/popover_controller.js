@@ -29,7 +29,11 @@ export default class extends Controller {
   }
 
   toggle() {
-    // This uses the native toggle behavior.
+    // Close any other open popover first so only one menu is ever visible,
+    // then use the native toggle behavior for this one.
+    document.querySelectorAll("[popover]:popover-open").forEach((el) => {
+      if (el !== this.contentTarget) el.hidePopover()
+    })
     this.contentTarget.togglePopover()
   }
 

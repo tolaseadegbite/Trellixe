@@ -9,6 +9,6 @@
 
 <%# Check the database directly, not an instance variable %>
 <% unless Current.account.team_invitations.exists? %>
-  <%= turbo_stream.update "invitations-list", partial: "shared/empty_state_desktop" %>
-  <%= turbo_stream.update "invitations-cards", partial: "shared/empty_state_mobile" %>
+  <%= turbo_stream.update "invitations-list", partial: "shared/empty_state", locals: { title: "No pending invites", body: "Invite teammates and they'll appear here.", icon_name: "mail" } %>
+  <%= turbo_stream.update "invitations-cards", partial: "shared/empty_state", locals: { title: "No pending invites", body: "Invite teammates and they'll appear here.", icon_name: "mail" } %>
 <% end %>

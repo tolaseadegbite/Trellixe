@@ -1,26 +1,19 @@
-<%# This component receives `trigger`, `title`, `label`, `size`, and `content` %>
+<%# Receives `trigger`, `title`, `label`, `size`, and `content` %>
 <div contents data-controller="dialog">
-  <%# Render the trigger button/link that was passed in from the helper %>
   <%= raw(trigger) %>
 
-  <dialog class="dialog"
-          style="--dialog-size: <%= size %>;"
+  <dialog class="tlx-dialog"
+          style="<%= "--dialog-size: #{size};" if size %>"
           data-dialog-target="content"
           data-action="click->dialog#closeOnClickOutside"
           aria-label="<%= label %>">
-
-    <button type="button" class="btn btn--plain dialog__close" data-action="click->dialog#close">
-      <span class="icon icon--x" aria-hidden="true"></span>
-      <span class="sr-only">Close</span>
+    <button type="button" class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#F1F4F2] hover:text-[#1c2420]" data-action="click->dialog#close" aria-label="Close">
+      <%= icon("x", css: "h-4 w-4") %>
     </button>
-
-    <div class="dialog__content">
-      <%# Only render the title if one was provided %>
+    <div class="p-6">
       <% if title.present? %>
-        <h2 class="font-semibold text-lg mbe-4"><%= title %></h2>
+        <h2 class="mb-4 font-display text-lg font-semibold tracking-tight"><%= title %></h2>
       <% end %>
-
-      <%# Render the main content block that was passed in %>
       <%= raw(content) %>
     </div>
   </dialog>

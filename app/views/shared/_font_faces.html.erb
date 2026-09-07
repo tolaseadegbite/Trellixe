@@ -1,0 +1,26 @@
+<%# Self-hosted brand fonts. Served through Propshaft so URLs carry digests.
+    Kept out of the Tailwind build input because the standalone compiler
+    passes url() through untouched, which 404s under Propshaft. %>
+<style>
+  @font-face {
+    font-family: "Google Sans";
+    src: url("<%= asset_path("google_sans/GoogleSans-Bold.ttf") %>") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Google Sans";
+    src: url("<%= asset_path("google_sans/GoogleSans-SemiBold.ttf") %>") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Open Sans";
+    src: url("<%= asset_path("open_sans/OpenSans-Medium.ttf") %>") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>

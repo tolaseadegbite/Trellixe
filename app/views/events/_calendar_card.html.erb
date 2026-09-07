@@ -1,25 +1,20 @@
 <% stats = event.invitation_summary %>
 
-<div class="rounded-md bg-surface border border-main m-1 text-center shadow-sm h-full flex flex-col justify-between overflow-hidden">
-  <%# --- Top Section: Event Name (Unchanged) --- %>
+<div class="flex h-full flex-col justify-between overflow-hidden rounded-xl border border-[#D9DDE0] bg-white text-center shadow-sm dark:border-white/10 dark:bg-[#131B17]">
   <div class="p-2 text-center">
-    <h4 class="font-semibold text-xs break-words">
-      <%= link_to event.name, event, class: "text-primary", data: { turbo_frame: "_top" } %>
+    <h4 class="break-words text-xs font-semibold">
+      <%= link_to event.name, event, class: "hover:text-algae-900 hover:underline dark:hover:text-algae-300", data: { turbo_frame: "_top" } %>
     </h4>
   </div>
 
-  <%# --- ULTRA-MINIMALIST MVP FOOTER --- %>
-  <div class="p-1 border-bs border-main bg-shade">
-    <div class="flex gap-half items-center justify-center" title="<%= stats[:attended] %> of <%= stats[:total] %> Attended">
-      
-      <span class="icon icon--user-check text-green-500 text-xs" aria-hidden="true"></span>
-      
-      <span class="text-xs">
+  <div class="border-t border-[#E9EBED] bg-[#F6F9F7] p-1 dark:border-white/10 dark:bg-white/[0.03]">
+    <div class="flex items-center justify-center gap-1.5" title="<%= stats[:attended] %> of <%= stats[:total] %> attended">
+      <%= icon("user-check", css: "h-3.5 w-3.5 text-algae-900 dark:text-algae-300") %>
+      <span class="text-xs tabular-nums">
         <span class="font-semibold"><%= stats[:attended] %></span>
-        <span class="text-subtle">/</span>
-        <span class="text-subtle"><%= stats[:total] %></span>
+        <span class="text-[#8a938d] dark:text-[#9AA6A0]">/</span>
+        <span class="text-[#8a938d] dark:text-[#9AA6A0]"><%= stats[:total] %></span>
       </span>
-
     </div>
   </div>
 </div>

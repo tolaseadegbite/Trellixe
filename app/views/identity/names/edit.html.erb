@@ -7,9 +7,9 @@
     <%# --- MOBILE-ONLY BACK BUTTON --- %>
     <%= render "shared/settings_back_button" %>
 
-    <div class="max-i-full" style="max-width: 48rem;">
-      <h1 class="font-bold text-2xl mbe-4">Change your name</h1>
-      <p class="text-subtle mbe-2">Add/Edit your name below</p>
+    <div class="w-full max-w-3xl">
+      <h1 class="mb-4 text-2xl font-bold">Change your name</h1>
+      <p class="mb-2 text-[#6b7672] dark:text-[#9AA6A0]">Add/Edit your name below</p>
 
       <div id="edit_name_form">
         <%= render 'form', user: @user %>

@@ -1,65 +1,54 @@
 <% content_for :title, "Events" %>
-<% content_for :page_header do %>
-  <h4 class="font-semibold">Events (<%= @pagy.count %>)</h4>
-<% end %>
-
+<% content_for :page_header, "Events · #{@pagy.count}" %>
 <% content_for :header_action_buttons do %>
-      
-  <%= link_to new_event_path,
-                    class: "btn btn--icon btn--primary",
-                    data: { turbo_frame: "modal" } do %>
-    <span class="icon icon--calendar-plus"></span>
+  <%= link_to new_event_path, data: { turbo_frame: "modal" },
+      class: "flex items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e]" do %>
+    <%= icon("calendar-plus", css: "h-4 w-4") %> New event
   <% end %>
 <% end %>
 
-<div class="absolute hide@md" style="bottom: 4rem; right: 1rem; z-index: 9999">
-  <%= link_to new_event_path, class: "btn btn--primary p-5 rounded-full", data: { turbo_frame: "modal" } do %>
-    <span class="icon icon--calendar-range"></span>
-  <% end %>
-</div>
+<%= link_to new_event_path, data: { turbo_frame: "modal" }, aria: { label: "New event" },
+    class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-[#0f5c3e] md:hidden" do %>
+  <%= icon("calendar-plus", css: "h-5 w-5") %>
+<% end %>
 
-<div id="events-page" class="flex flex-col container p-4 i-full">
-  <%= turbo_frame_tag :events_table do %>
-    <div class="flex items-center justify-between flex-wrap gap mbe-4">
-
-      <%# Main view tabs: List vs Calendar (This is the LEFT side) %>
-      <nav class="tabs__list border" aria-label="Events list and calendar">
+<div class="space-y-4">
+  <%= turbo_frame_tag :events_table, class: "block space-y-4" do %>
+    <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D9DDE0] bg-white p-3 dark:border-white/10 dark:bg-[#131B17]">
+      <%# Main view tabs: List vs Calendar vs Series %>
+      <nav class="inline-flex items-center gap-1 rounded-xl bg-[#F1F4F2] p-1 dark:bg-white/5" aria-label="Events list and calendar">
         <%= link_to "Events list",
-                    events_path(view: 'events-list', q: params.permit(q: [:name_cont, :starts_at_gteq, :starts_at_lteq, :invited_contacts_id_eq])),
-                    class: "btn tabs__button",
-                    **(params[:view] != 'calendar' ? { aria: { current: "page" } } : {}) %>
-        <%= link_to "Calendar", 
-                    events_path(view: 'calendar'), 
-                    class: "btn tabs__button", 
-                    **(params[:view] == 'calendar' ? { aria: { current: "page" } } : {}) %>
-        <%= link_to "Series", 
-                    event_series_index_path, 
-                    class: "btn tabs__button",
-                    data: { turbo_frame: "_top" } %>
+                    events_path(view: "events-list", q: params.permit(q: [ :name_cont, :starts_at_gteq, :starts_at_lteq, :invited_contacts_id_eq ])),
+                    class: params[:view] != "calendar" ? "rounded-lg bg-white px-3.5 py-2 text-[13px] font-semibold shadow-sm dark:bg-[#131B17]" : "rounded-lg px-3.5 py-2 text-[13px] font-medium text-[#6b7672] transition hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]",
+                    **(params[:view] != "calendar" ? { aria: { current: "page" } } : {}) %>
+        <%= link_to "Calendar",
+                    events_path(view: "calendar"),
+                    class: params[:view] == "calendar" ? "rounded-lg bg-white px-3.5 py-2 text-[13px] font-semibold shadow-sm dark:bg-[#131B17]" : "rounded-lg px-3.5 py-2 text-[13px] font-medium text-[#6b7672] transition hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]",
+                    **(params[:view] == "calendar" ? { aria: { current: "page" } } : {}) %>
+        <%= link_to "Series",
+                    event_series_index_path,
+                    data: { turbo_frame: "_top" },
+                    class: "rounded-lg px-3.5 py-2 text-[13px] font-medium text-[#6b7672] transition hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]" %>
       </nav>
 
-      <% if params[:view] != 'calendar' %>
-        <div class="flex items-center gap">
-          <%= link_to "Upcoming", 
-                      events_path(view: 'events-list', scope: 'upcoming'), 
-                      class: "btn btn--subtle " + (@scope == 'upcoming' ? 'font-bold text-primary' : 'text-subtle') %>
-
-          <%= link_to "Past", 
-                      events_path(view: 'events-list', scope: 'past'), 
-                      class: "btn btn--subtle " + (@scope == 'past' ? 'font-bold text-primary' : 'text-subtle') %>
+      <% if params[:view] != "calendar" %>
+        <div class="inline-flex items-center gap-1 rounded-xl bg-[#F1F4F2] p-1 dark:bg-white/5">
+          <%= link_to "Upcoming",
+                      events_path(view: "events-list", scope: "upcoming"),
+                      class: @scope == "upcoming" ? "rounded-lg bg-algae-900 px-3 py-1.5 text-[13px] font-semibold text-white" : "rounded-lg px-3 py-1.5 text-[13px] font-medium text-[#6b7672] transition hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]" %>
+          <%= link_to "Past",
+                      events_path(view: "events-list", scope: "past"),
+                      class: @scope == "past" ? "rounded-lg bg-algae-900 px-3 py-1.5 text-[13px] font-semibold text-white" : "rounded-lg px-3 py-1.5 text-[13px] font-medium text-[#6b7672] transition hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]" %>
         </div>
       <% end %>
-
     </div>
 
     <%= turbo_frame_tag "event_view" do %>
-      <% if params[:view] == 'calendar' %>
-        <%= render 'events/calendar' %>
+      <% if params[:view] == "calendar" %>
+        <%= render "events/calendar" %>
       <% else %>
-        <%= render 'events/events-list' %>
+        <%= render "events/events-list" %>
       <% end %>
     <% end %>
-    
   <% end %>
-
 </div>

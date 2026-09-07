@@ -1,12 +1,20 @@
-<div class="hide@md" data-controller="dialog">
-  <button type="button" class="btn btn--icon mbs-1" data-action="dialog#showModal">
-    <span class="icon icon--panel-left-open" style="--icon-size: 1.25rem" aria-hidden="true"></span>
-    <span class="sr-only">Open menu</span>
+<div class="md:hidden" data-controller="dialog">
+  <button type="button" class="flex h-9 w-9 items-center justify-center rounded-lg text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5" data-action="dialog#showModal" aria-label="Open menu">
+    <%= icon("menu", css: "h-5 w-5") %>
   </button>
 
-  <dialog class="sheet sheet--left" data-dialog-target="content" data-action="click->dialog#closeOnClickOutside">
-    <div class="sheet__content p-2">
-      <%= render "layouts/navigation/dashboard/sidebar_menu" %>
+  <dialog class="tlx-dialog !m-0 mr-auto h-full max-h-none !rounded-none" style="width: min(300px, 90vw);" data-dialog-target="content" data-action="click->dialog#closeOnClickOutside" aria-label="Menu">
+    <div class="flex h-full flex-col overflow-y-auto bg-white dark:bg-[#101613]">
+      <div class="flex items-center justify-between border-b border-[#E9EBED] px-4 py-3 dark:border-white/10">
+        <span class="flex items-center gap-2">
+          <%= image_tag "logo/trellixe-mark.svg", size: 28, alt: "Trellixe", class: "h-7 w-7 rounded-md" %>
+          <span class="font-display text-base font-bold text-[#13714C] dark:text-algae-300">Trellixe</span>
+        </span>
+        <button type="button" class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-[#F1F4F2] dark:hover:bg-white/5" data-action="click->dialog#close" aria-label="Close menu">
+          <%= icon("x", css: "h-5 w-5") %>
+        </button>
+      </div>
+      <%= render "layouts/navigation/dashboard/sidebar_menu", hide_logo: true %>
     </div>
   </dialog>
 </div>

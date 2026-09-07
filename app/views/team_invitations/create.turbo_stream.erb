@@ -1,8 +1,7 @@
 <%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
 
 <%# Remove the empty state messages if they are present %>
-<%= turbo_stream.remove "empty_state_desktop" %>
-<%= turbo_stream.remove "empty_state_mobile" %>
+<%= turbo_stream.remove "empty_state" %>
 
 <%# Prepend the new invitation to both lists %>
 <%= turbo_stream.prepend "invitations-list", partial: "team_invitations/team_invitation", locals: { team_invitation: @invitation } %>
