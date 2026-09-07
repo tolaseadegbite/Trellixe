@@ -26,10 +26,7 @@
   </div>
 
   <div class="mt-3">
-    <%= form.label :contact_ids, "Invite contacts (optional)", class: "mb-1 block text-[13px] font-semibold" %>
-    <%= form.collection_select :contact_ids, Current.account.contacts.order(:first_name), :id, :full_name, {},
-        { multiple: true, class: "w-full", data: { controller: "combobox" } } %>
-    <p class="mt-1 text-xs text-[#8a938d] dark:text-[#9AA6A0]">Hold Ctrl (or Cmd on Mac) to select multiple people.</p>
+    <%= render "events/guest_checklist", form: form, selected: (event.persisted? ? event.invited_contact_ids : []) %>
   </div>
 
   <%= form.submit event.persisted? ? "Save changes" : "Create event",

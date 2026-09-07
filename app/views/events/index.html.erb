@@ -1,13 +1,13 @@
 <% content_for :title, "Events" %>
 <% content_for :page_header, "Events · #{@pagy.count}" %>
 <% content_for :header_action_buttons do %>
-  <%= link_to new_event_path, data: { turbo_frame: "modal" },
+  <%= link_to new_event_path,
       class: "flex items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e]" do %>
     <%= icon("calendar-plus", css: "h-4 w-4") %> New event
   <% end %>
 <% end %>
 
-<%= link_to new_event_path, data: { turbo_frame: "modal" }, aria: { label: "New event" },
+<%= link_to new_event_path, aria: { label: "New event" },
     class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-[#0f5c3e] md:hidden" do %>
   <%= icon("calendar-plus", css: "h-5 w-5") %>
 <% end %>

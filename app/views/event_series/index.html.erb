@@ -1,13 +1,13 @@
 <% content_for :title, "Event Series" %>
 <% content_for :page_header, "Event Series · #{@event_series.count}" %>
 <% content_for :header_action_buttons do %>
-  <%= link_to new_event_series_path, data: { turbo_frame: "modal" },
+  <%= link_to new_event_series_path,
       class: "flex items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e]" do %>
     <%= icon("plus", css: "h-4 w-4") %> New series
   <% end %>
 <% end %>
 
-<%= link_to new_event_series_path, data: { turbo_frame: "modal" }, aria: { label: "New series" },
+<%= link_to new_event_series_path, aria: { label: "New series" },
     class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-[#0f5c3e] md:hidden" do %>
   <%= icon("plus", css: "h-5 w-5") %>
 <% end %>

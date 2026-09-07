@@ -14,7 +14,7 @@
   <%= render "event_series/show_details", event_series: @event_series %>
 
   <div class="flex items-center gap-2">
-    <%= link_to edit_event_series_path(@event_series), data: { turbo_frame: "modal" }, title: "Edit",
+    <%= link_to edit_event_series_path(@event_series), title: "Edit",
         class: "flex h-9 w-9 items-center justify-center rounded-lg bg-algae-900 text-white transition hover:bg-[#0f5c3e]" do %>
       <%= icon("pen", css: "h-4 w-4") %>
     <% end %>

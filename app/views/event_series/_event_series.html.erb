@@ -32,7 +32,7 @@
       <%= icon(event_series.cancelled_series? ? "check" : "x", css: "h-4 w-4") %>
     <% end %>
 
-    <%= link_to edit_event_series_path(event_series), data: { turbo_frame: "modal" }, title: "Edit",
+    <%= link_to edit_event_series_path(event_series), title: "Edit",
         class: "flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]" do %>
       <%= icon("pen", css: "h-4 w-4") %>
     <% end %>

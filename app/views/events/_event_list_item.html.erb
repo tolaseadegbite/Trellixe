@@ -6,7 +6,7 @@
     <span data-controller="popover" data-popover-placement-value="bottom-end" data-action="click@window->popover#clickOutside" class="relative shrink-0">
       <button type="button" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]" popovertarget="popover-<%= event.id %>" data-popover-target="trigger" aria-haspopup="true"><%= icon("ellipsis", css: "h-4 w-4") %></button>
       <%= tag.div popover: "auto", id: "popover-#{event.id}", class: "tlx-popover w-36 p-1.5", data: { popover_target: "content" } do %>
-        <%= link_to "Edit", edit_event_path(event), data: { turbo_frame: "modal" }, class: "flex rounded-lg px-2.5 py-2 text-[13px] hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
+        <%= link_to "Edit", edit_event_path(event), class: "flex rounded-lg px-2.5 py-2 text-[13px] hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
         <% delete_trigger = button_tag "Delete", type: "button", class: "flex w-full rounded-lg px-2.5 py-2 text-left text-[13px] text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10", data: { action: "dialog#showModal" } %>
         <%= modal_dialog delete_trigger, size: "450px", title: "Delete '#{event.name}'?" do %>
           <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">This permanently deletes this event and its guest list. This can't be undone.</p>

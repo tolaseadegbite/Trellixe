@@ -79,32 +79,21 @@ class EventsController < DashboardsController
 
   def create
     @event = Current.account.events.new(event_params)
-    respond_to do |format|
-      if @event.save
-        flash.now[:notice] = "Event was successfully submitted."
-        prepare_calendar_data
-        format.turbo_stream
-        format.html { redirect_to events_path, notice: "Event was successfully submitted." }
-      else
-        flash.now[:alert] = @event.errors.full_messages.to_sentence
-        format.turbo_stream { render :create, status: :unprocessable_entity }
-        format.html { render :new, status: :unprocessable_entity }
-      end
+
+    if @event.save
+      redirect_to events_path, notice: "Event was successfully submitted."
+    else
+      flash.now[:alert] = @event.errors.full_messages.to_sentence
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      if @event.update(event_params)
-        flash.now[:notice] = "Event was successfully updated."
-        prepare_calendar_data
-        format.turbo_stream
-        format.html { redirect_to events_path, notice: "Event was successfully updated." }
-      else
-        flash.now[:alert] = @event.errors.full_messages.to_sentence
-        format.turbo_stream { render :update, status: :unprocessable_entity }
-        format.html { render :edit, status: :unprocessable_entity }
-      end
+    if @event.update(event_params)
+      redirect_to events_path, notice: "Event was successfully updated."
+    else
+      flash.now[:alert] = @event.errors.full_messages.to_sentence
+      render :edit, status: :unprocessable_entity
     end
   end
 

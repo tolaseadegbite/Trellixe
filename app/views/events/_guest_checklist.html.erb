@@ -1,0 +1,46 @@
+<%# Guest checklist for event forms. Locals: form, selected (array of
+    contact ids to pre-check, default none). Replaces the cramped
+    multi-select with visible, thumb-sized rows + live search and count.
+    Posts event[contact_ids][] exactly like the select it replaces. %>
+<%# Scale note: renders every workspace contact. Fine into the hundreds;
+    past the low thousands this wants server-side typeahead instead. %>
+<% guests = Current.account.contacts.order(:first_name) %>
+<% selected_ids = local_assigns[:selected]&.map(&:to_i) || [] %>
+<div data-controller="guest-list">
+  <div class="mb-1 flex items-center justify-between gap-2">
+    <%= form.label :contact_ids, "Invite contacts (optional)", class: "block text-[13px] font-semibold" %>
+    <span class="text-xs tabular-nums text-[#8a938d] dark:text-[#9AA6A0]" data-guest-list-target="count">0 selected</span>
+  </div>
+  <% if guests.any? %>
+    <div class="relative">
+      <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a938d] dark:text-[#9AA6A0]"><%= icon("search", css: "h-4 w-4") %></span>
+      <input type="search" placeholder="Type to filter guests…" aria-label="Filter guests"
+          class="w-full rounded-lg border border-[#D9DDE0] bg-white py-2.5 pl-9 pr-3 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]"
+          data-guest-list-target="filter" data-action="input->guest-list#filter">
+    </div>
+    <div class="tlx-scroll mt-2 max-h-64 space-y-1 overflow-y-auto rounded-xl border border-[#D9DDE0] bg-[#F6F9F7] p-1.5 dark:border-white/10 dark:bg-white/[0.03]" role="group" aria-label="Guests to invite">
+      <% guests.each do |contact| %>
+        <label data-guest-list-target="row" data-search="<%= contact.full_name.downcase %>"
+            class="flex min-h-12 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 transition hover:bg-white dark:hover:bg-white/5">
+          <%= check_box_tag "event[contact_ids][]", contact.id, selected_ids.include?(contact.id),
+              class: "h-5 w-5 shrink-0 cursor-pointer accent-[#13714C]",
+              data: { action: "change->guest-list#updateCount" } %>
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-algae-900 text-xs font-bold text-white">
+            <%= (contact.full_name&.first || contact.first_name&.first || "?").upcase %>
+          </span>
+          <span class="min-w-0">
+            <span class="block truncate text-sm font-semibold"><%= contact.full_name %></span>
+            <% if contact.email.present? %>
+              <span class="block truncate text-xs text-[#8a938d] dark:text-[#9AA6A0]"><%= contact.email %></span>
+            <% end %>
+          </span>
+        </label>
+      <% end %>
+      <p class="hidden px-3 py-6 text-center text-sm text-[#8a938d] dark:text-[#9AA6A0]" data-guest-list-target="emptyHint">No guests match that search.</p>
+    </div>
+  <% else %>
+    <p class="rounded-xl border border-dashed border-[#D9DDE0] px-4 py-5 text-center text-sm text-[#8a938d] dark:border-white/15 dark:text-[#9AA6A0]">
+      No contacts yet — add some first, then invite them here.
+    </p>
+  <% end %>
+</div>

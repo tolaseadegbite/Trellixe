@@ -18,17 +18,12 @@ class EventSeriesController < DashboardsController
   def create
     @event_series = Current.account.event_series.new(event_series_params)
 
-    respond_to do |format|
-      if @event_series.save
-        @event_series.generate_occurrence!(@event_series.starts_at)
-        flash.now[:notice] = "Series created. First occurrence generated."
-        format.turbo_stream
-        format.html { redirect_to events_path, notice: "Series created." }
-      else
-        flash.now[:alert] = @event_series.errors.full_messages.to_sentence
-        format.turbo_stream { render :create, status: :unprocessable_entity }
-        format.html { render :new, status: :unprocessable_entity }
-      end
+    if @event_series.save
+      @event_series.generate_occurrence!(@event_series.starts_at)
+      redirect_to @event_series, notice: "Series created. First occurrence generated."
+    else
+      flash.now[:alert] = @event_series.errors.full_messages.to_sentence
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -36,16 +31,11 @@ class EventSeriesController < DashboardsController
   end
 
   def update
-    respond_to do |format|
-      if @event_series.update(event_series_params)
-        flash.now[:notice] = "Series updated."
-        format.turbo_stream
-        format.html { redirect_to events_path, notice: "Series updated." }
-      else
-        flash.now[:alert] = @event_series.errors.full_messages.to_sentence
-        format.turbo_stream { render :update, status: :unprocessable_entity }
-        format.html { render :edit, status: :unprocessable_entity }
-      end
+    if @event_series.update(event_series_params)
+      redirect_to events_path, notice: "Series updated."
+    else
+      flash.now[:alert] = @event_series.errors.full_messages.to_sentence
+      render :edit, status: :unprocessable_entity
     end
   end
 
