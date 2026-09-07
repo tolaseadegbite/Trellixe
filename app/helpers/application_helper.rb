@@ -11,6 +11,16 @@ module ApplicationHelper
     end
   end
 
+  # Permitted, non-blank Ransack params for filter readouts and counts.
+  # A cleared search submits q[field]="" which matches everything but must
+  # not render as an active filter.
+  def present_filter_params(*keys)
+    q = params[:q]
+    return {}.with_indifferent_access unless q.is_a?(ActionController::Parameters)
+
+    q.permit(*keys).to_h.reject { |_, v| v.blank? }.with_indifferent_access
+  end
+
   def month_offset(date)
     date.beginning_of_month.wday - 1
   end

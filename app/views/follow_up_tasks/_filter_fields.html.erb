@@ -1,0 +1,14 @@
+<%# Follow-up filter fields for the shared search bar. Locals: f (filter form builder).
+    Due-date presets live as saved views above — this panel keeps the event picker. %>
+<% events = @filterable_events || Current.account.events.order(:name) %>
+<div class="grid grid-cols-2 gap-3">
+  <div>
+    <%= f.label :invitation_event_id_eq, "Event", class: "mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]" %>
+    <%= f.collection_select :invitation_event_id_eq, events, :id, :name, { include_blank: "All events" },
+        { class: "w-full rounded-lg border border-[#D9DDE0] bg-[#F6F9F7] h-10 px-3 text-sm outline-none transition focus:border-[#3AB67D] focus:bg-white focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-white/[0.03] dark:focus:bg-[#0C1210]", data: { controller: "combobox", action: "input->debounce#submit" } } %>
+  </div>
+  <div class="flex items-end">
+    <%= button_tag "Reset", type: "button", data: { action: "click->search-filter#resetAll" },
+        class: "w-full rounded-lg border border-[#D9DDE0] bg-white flex h-10 items-center justify-center px-3 text-sm font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" %>
+  </div>
+</div>

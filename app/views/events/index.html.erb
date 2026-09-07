@@ -12,9 +12,8 @@
   <%= icon("calendar-plus", css: "h-5 w-5") %>
 <% end %>
 
-<div class="space-y-4">
-  <%= turbo_frame_tag :events_table, class: "block space-y-4" do %>
-    <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D9DDE0] bg-white p-3 dark:border-white/10 dark:bg-[#131B17]">
+<div class="space-y-4" data-controller="search-filter" data-action="click@window->search-filter#closeOnClickOutside">
+  <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D9DDE0] bg-white p-3 dark:border-white/10 dark:bg-[#131B17]">
       <%# Main view tabs: List vs Calendar vs Series %>
       <nav class="inline-flex items-center gap-1 rounded-xl bg-[#F1F4F2] p-1 dark:bg-white/5" aria-label="Events list and calendar">
         <%= link_to "Events list",
@@ -43,12 +42,17 @@
       <% end %>
     </div>
 
-    <%= turbo_frame_tag "event_view" do %>
+    <% if params[:view] != "calendar" %>
+      <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
+        <%= render "events/search_form" %>
+      </div>
+    <% end %>
+
+    <%= turbo_frame_tag "event_view", class: "block space-y-4" do %>
       <% if params[:view] == "calendar" %>
         <%= render "events/calendar" %>
       <% else %>
         <%= render "events/events-list" %>
       <% end %>
     <% end %>
-  <% end %>
 </div>

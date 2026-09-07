@@ -1,7 +1,7 @@
 <% content_for :title, "Follow-ups" %>
 <% content_for :page_header, "Follow-ups · #{@pagy.count}" %>
 
-<div class="space-y-4">
+<div class="space-y-4" data-controller="search-filter" data-action="click@window->search-filter#closeOnClickOutside">
   <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
     <%= render "follow_up_tasks/search_form" %>
   </div>
@@ -9,16 +9,43 @@
   <%= turbo_frame_tag :tasks_table, class: "block space-y-4" do %>
     <div class="flex flex-wrap items-center justify-between gap-3">
       <nav class="flex gap-1 rounded-xl border border-[#D9DDE0] bg-white p-1 dark:border-white/10 dark:bg-[#131B17]" aria-label="Task filters">
-        <%= link_to "Pending", follow_up_tasks_path(scope: "pending"),
+        <%= link_to "Pending", follow_up_tasks_path(scope: "pending"), data: { turbo_frame: "_top" },
             class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@scope == 'past' ? 'text-[#6b7672] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]' : 'bg-algae-900 text-white'}",
             **(@scope != "past" ? { aria: { current: "page" } } : {}) %>
-        <%= link_to "Past", follow_up_tasks_path(scope: "past"),
+        <%= link_to "Past", follow_up_tasks_path(scope: "past"), data: { turbo_frame: "_top" },
             class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@scope == 'past' ? 'bg-algae-900 text-white' : 'text-[#6b7672] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]'}",
             **(@scope == "past" ? { aria: { current: "page" } } : {}) %>
       </nav>
-      <% if params[:q].present? %>
+      <% task_filters = present_filter_params(:contact_first_name_or_contact_last_name_or_contact_email_or_event_name_cont, :invitation_event_id_eq, :due_at_lt, :due_at_gteq, :due_at_lteq) %>
+      <% if task_filters.any? %>
         <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Found <strong class="tabular-nums text-[#1c2420] dark:text-[#E7ECE9]"><%= @pagy.count %></strong> <%= "task".pluralize(@pagy.count) %> matching your filters.</p>
       <% end %>
+    </div>
+
+    <%
+      base_params = params.fetch(:q, {}).except(:due_at_lt, :due_at_gteq, :due_at_lteq, :page).permit!
+      q_params = params.fetch(:q, {})
+      pill = ->(active, danger = false) do
+        if active
+          danger ? "bg-red-700 text-white" : "bg-algae-900 text-white"
+        elsif danger
+          "border border-[#D9DDE0] bg-white text-red-700 hover:border-red-300 dark:border-white/10 dark:bg-white/5 dark:text-red-400"
+        else
+          "border border-[#D9DDE0] bg-white hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5"
+        end
+      end
+    %>
+    <div class="flex flex-wrap items-center gap-1.5">
+      <%= link_to "All", follow_up_tasks_path(scope: @scope, q: base_params), data: { turbo_frame: "_top" },
+          class: "rounded-lg px-3 py-1.5 text-[13px] font-semibold transition #{pill.call(!q_params.key?("due_at_lt") && !q_params.key?("due_at_gteq"))}" %>
+      <%= link_to "Overdue", follow_up_tasks_path(scope: @scope, q: base_params.merge(due_at_lt: Time.current)), data: { turbo_frame: "_top" },
+          class: "rounded-lg px-3 py-1.5 text-[13px] font-semibold transition #{pill.call(q_params.key?("due_at_lt"), true)}" %>
+      <%= link_to "Due today", follow_up_tasks_path(scope: @scope, q: base_params.merge(due_at_gteq: Time.current.beginning_of_day, due_at_lteq: Time.current.end_of_day)), data: { turbo_frame: "_top" },
+          class: "rounded-lg px-3 py-1.5 text-[13px] font-semibold transition #{pill.call(q_params.key?("due_at_gteq"))}" %>
+    </div>
+
+    <div class="mt-4">
+      <%= render "follow_up_tasks/active_filters" %>
     </div>
 
     <% if @scope == "pending" %>

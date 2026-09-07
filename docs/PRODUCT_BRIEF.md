@@ -137,7 +137,9 @@ already in use — compose from them before inventing anything new:
 
 1. **Helpers for atoms** — `icon(name, css:)`, `modal_dialog`,
    `full_title`, `user_avatar_url`, `account_initials`,
-   `vapid_public_key`. Small, logic-heavy, unit-testable.
+   `vapid_public_key`, `present_filter_params(*keys)` (blank-safe
+   Ransack params for readouts and counts). Small, logic-heavy,
+   unit-testable.
 2. **Strict-contract partials for molecules** — fixed locals, documented
    in a comment at the top of each file. Current inventory:
    - `shared/_empty_state` (`title, body, action?, icon_name?`)
@@ -158,6 +160,15 @@ already in use — compose from them before inventing anything new:
      `events/_checkin_counter` (`summary`) and `events/_checkin_row`
      (`invitation`)
    - `contacts/_contact_row` (`contact`) — the single list item at all widths
+   - `shared/_search_bar` (`search:, url:, frame:, predicate:, placeholder:,
+     hidden:, fields:`) — the one search idiom; per-page `_filter_fields`
+     (`f`) hold only page-specific fields. Saved-view pills and tabs live
+     with the list inside the update frame (contacts All/New-week,
+     follow-ups All/Overdue/Due-today + Pending/Past, events List/Calendar
+     + Upcoming/Past); Reset/Clear-all/× act in place via the search-filter
+     controller (widget-aware clear, single submit). Typing and field
+     picks update in place and never rebuild the shell, so the input keeps
+     focus and the panel keeps its state.
    - `events/_guest_checklist` (`form`) — searchable invite checklist for
      event forms (tags keep the styled multi-select: small sets)
    - `invitations/_invitation_row` (`invitation`) — guest row with logs thread

@@ -3,7 +3,7 @@
 one:
   owner: workspace_one (Account)
   name: Sunday Service
-  starts_at: <%= 2.days.from_now %>
+  starts_at: <%= 1.hour.ago %>
   duration_in_minutes: 120
 
 two:

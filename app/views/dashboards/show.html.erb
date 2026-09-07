@@ -64,7 +64,7 @@
           <h2 class="font-display text-[15px] font-semibold">Up next</h2>
           <p class="text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Services, outreaches, cell meetings.</p>
         </div>
-        <%= link_to "Calendar", events_path, class: "text-[13px] font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
+        <%= link_to "Calendar", events_path(view: "calendar"), class: "text-[13px] font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
       </div>
       <div class="divide-y divide-[#E9EBED] dark:divide-white/10">
         <% if @upcoming_events.any? %>

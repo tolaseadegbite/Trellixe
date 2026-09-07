@@ -10,7 +10,8 @@ class EventsTest < ApplicationSystemTestCase
     click_on "Sign in"
     # Wait for the authenticated render (server HTML, no JS dependency)
     # before navigating — POST+redirect otherwise races the next visit.
-    assert_text "Today's follow-ups"
+    # Generous wait: cold headless browsers stall on first paint.
+    assert_text "Today's follow-ups", wait: 10
   end
 
   test "visiting the index" do
@@ -24,13 +25,11 @@ class EventsTest < ApplicationSystemTestCase
 
     fill_in "Name", with: "System Sunday Service"
     # Native datetime-local inputs reject keystroke fills in headless Chrome;
-    # set the value programmatically (wire format) and notify listeners.
-    starts_at = 3.days.from_now.strftime("%Y-%m-%dT%H:%M")
+    # Flatpickr manages this field: set the date through its API (wire
+    # format) so alt input, hidden value, and change listeners all sync.
+    starts_at = 3.days.from_now.strftime("%Y-%m-%d %H:%M")
     page.execute_script(
-      "const el = document.getElementById('event_starts_at');" \
-      "el.value = '#{starts_at}';" \
-      "el.dispatchEvent(new Event('input', { bubbles: true }));" \
-      "el.dispatchEvent(new Event('change', { bubbles: true }));"
+      "document.getElementById('event_starts_at')._flatpickr.setDate('#{starts_at}', true);"
     )
     fill_in "Duration in minutes", with: 120
     click_on "Create event"

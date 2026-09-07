@@ -1,43 +1,8 @@
-<div data-controller="search-filter" data-action="click@window->search-filter#closeOnClickOutside">
-  <div class="flex flex-wrap items-center gap-2">
-    <%= search_form_for(@search, url: contacts_path,
-        data: { turbo_frame: "contacts_table", turbo_action: "advance", controller: "debounce" },
-        html: { class: "flex min-w-0 flex-1 items-center gap-2" }) do |f| %>
-      <span class="relative min-w-0 flex-1">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a938d] dark:text-[#9AA6A0]"><%= icon("search", css: "h-4 w-4") %></span>
-        <%= f.search_field :combined_search_cont, placeholder: "Search name, email, or context…",
-            class: "w-full rounded-lg border border-[#D9DDE0] bg-[#F6F9F7] py-2.5 pl-9 pr-3 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:bg-white focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-white/[0.03] dark:focus:bg-[#0C1210]",
-            data: { action: "input->debounce#submit" } %>
-      </span>
-    <% end %>
-    <button type="button" class="flex items-center gap-1.5 rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-[13px] font-medium transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" data-action="search-filter#toggle">
-      <%= icon("search", css: "h-4 w-4") %> Filters
-    </button>
-  </div>
-
-  <div class="hidden pt-3" data-search-filter-target="filters">
-    <%= search_form_for(@search, url: contacts_path,
-        data: { turbo_frame: "contacts_table", turbo_action: "advance", controller: "debounce" }) do |f| %>
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <div>
-          <%= f.label :invitations_event_id_eq, "Event", class: "mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]" %>
-          <%= f.collection_select :invitations_event_id_eq, @filterable_events, :id, :name, { include_blank: "All events" },
-              { class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0C1210]", data: { controller: "combobox", action: "input->debounce#submit" } } %>
-        </div>
-        <div>
-          <%= f.label :invitations_status_eq, "Status", class: "mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]" %>
-          <%= f.select :invitations_status_eq, Invitation.statuses.map { |k, v| [ k.humanize, v ] }, { include_blank: "Any status" },
-              { class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0C1210]", data: { action: "input->debounce#submit" } } %>
-        </div>
-        <div>
-          <%= f.label :created_at_gteq, "Added after", class: "mb-1 block text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]" %>
-          <%= f.date_field :created_at_gteq, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0C1210]", data: { action: "input->debounce#submit" } %>
-        </div>
-        <div class="flex items-end">
-          <%= link_to "Reset", contacts_path, data: { turbo_frame: "contacts_table" },
-              class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-center text-sm font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-</div>
+<%= render "shared/search_bar",
+    search: @search,
+    url: contacts_path,
+    frame: "contacts_table",
+    predicate: :combined_search_cont,
+    placeholder: "Search name, email, or context…",
+    hidden: {},
+    fields: "contacts/filter_fields" %>

@@ -1,30 +1,100 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="search-filter"
+// Owns a page's search card (search input + collapsible filter panel) and
+// every control that clears filters without a page reload. Works when
+// placed on a wrapper containing both the search card and the list:
+// targets resolve within it, while closeOnClickOutside scopes dismissal
+// to the card itself (falls back to the whole element where no card
+// target exists, e.g. embedded search forms).
 export default class extends Controller {
-  // Define the target element for this controller
-  static targets = ["filters"]
+  static targets = [ "filters", "card" ]
 
   // Action to be called on button click
   toggle() {
-    // Toggles the 'hide' utility class on the filters target div
-    this.filtersTarget.classList.toggle("hide")
+    // Toggles visibility on the filters target div (Tailwind `hidden`;
+    // the legacy css-zero `hide` class no longer exists on these panels)
+    this.filtersTarget.classList.toggle("hidden")
   }
 
   /**
-   * New method to handle clicks outside the component.
-   * This is triggered by the `click@window` action.
+   * Handles clicks outside the component.
+   * Triggered by the `click@window` action.
    */
   closeOnClickOutside(event) {
-    // Check three conditions:
-    // 1. Was the click outside of this controller's element?
+    // Flatpickr renders its calendar at document.body level, outside the
+    // panel — navigating months/years must not collapse the filters.
+    if (event.target.closest(".flatpickr-calendar")) return
+
+    // Check two conditions:
+    // 1. Was the click outside of the search card?
     // 2. Is the filter panel currently visible?
-    const isOutside = !this.element.contains(event.target)
-    const isVisible = !this.filtersTarget.classList.contains("hide")
+    const scope = this.hasCardTarget ? this.cardTarget : this.element
+    const isOutside = !scope.contains(event.target)
+    const isVisible = !this.filtersTarget.classList.contains("hidden")
 
     if (isOutside && isVisible) {
       // If both are true, hide the filters.
-      this.filtersTarget.classList.add("hide")
+      this.filtersTarget.classList.add("hidden")
     }
+  }
+
+  // Clears the search input plus every filter field (widget-aware), then
+  // submits the search form once so the list refreshes in place. Lives
+  // inside the panel, so the window click-outside handler ignores the
+  // click and the panel stays exactly as it was.
+  resetAll(event) {
+    event.preventDefault()
+    this.#fieldRoots().forEach((root) => {
+      root.querySelectorAll("input, select, textarea").forEach((el) => this.#clearField(el))
+    })
+    this.#submitSearch()
+  }
+
+  // Clears the filter(s) named in `names` (space-separated input names),
+  // then submits once. Readout pills live outside the panel, so the
+  // window handler collapses it first — the desired end state is a
+  // cleared, closed filter UI with a restored list.
+  removeFilter(event) {
+    event.preventDefault()
+    const names = (event.params.names || "").split(" ").filter(Boolean)
+    names.forEach((name) => {
+      this.element.querySelectorAll(`[name="${CSS.escape(name)}"]`).forEach((el) => this.#clearField(el))
+    })
+    this.#submitSearch()
+  }
+
+  #fieldRoots() {
+    // The search form plus the filter panel. Bulk checkboxes elsewhere on
+    // the page are deliberately untouched.
+    const roots = [ this.filtersTarget ]
+    const searchForm = this.#searchForm()
+    if (searchForm) roots.push(searchForm)
+    return roots
+  }
+
+  #submitSearch() {
+    const form = this.#searchForm()
+    if (form) form.requestSubmit()
+  }
+
+  #searchForm() {
+    const card = this.hasCardTarget ? this.cardTarget : this.element
+    return card.querySelector("form")
+  }
+
+  #clearField(el) {
+    if (el.tomselect) {
+      el.tomselect.clear()
+      return
+    }
+    if (el._flatpickr) {
+      el._flatpickr.clear()
+      return
+    }
+    if (el.type === "checkbox" || el.type === "radio") {
+      el.checked = false
+      return
+    }
+    el.value = ""
   }
 }

@@ -1,9 +1,12 @@
 <%# One-tap attendance row. Locals: invitation. The whole row submits:
-    attended → back to invited (instant undo), anything else → attended. %>
+    attended → back to invited (instant undo), anything else → attended.
+    Before the event starts the row is inert, matching manage mode. %>
 <% checked = invitation.attended? %>
 <% contact = invitation.contact %>
 <% context_line = invitation.notes.presence || contact.how_we_met %>
+<% open = invitation.event.starts_at <= Time.current %>
 
+<% if open %>
 <%= form_with url: bulk_update_invitations_path(mode: "checkin"), method: :patch,
       html: { id: dom_id(invitation, :checkin) } do %>
   <%= hidden_field_tag "invitation_ids[]", invitation.id %>
@@ -23,4 +26,13 @@
       </span>
     </span>
   </button>
+<% end %>
+<% else %>
+<div id="<%= dom_id(invitation, :checkin) %>" class="flex min-h-16 w-full items-center gap-3.5 rounded-2xl border border-dashed border-[#D9DDE0] bg-white/60 p-4 dark:border-white/10 dark:bg-white/[0.02]">
+  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#c3c9c5]" title="Attendance opens when the event starts"><%= icon("calendar-range", css: "h-5 w-5") %></span>
+  <span class="min-w-0 flex-1">
+    <span class="block truncate text-[16px] font-bold"><%= contact.full_name %></span>
+    <span class="mt-1 block text-[13px] font-semibold text-[#8a938d] dark:text-[#9AA6A0]">Opens <%= invitation.event.starts_at.strftime("%a, %b %-d") %></span>
+  </span>
+</div>
 <% end %>

@@ -1,0 +1,36 @@
+<%# Active filter readout for the events list. Mirrors contacts/_active_filters. %>
+<% safe_params = present_filter_params(:name_cont, :starts_at_gteq, :starts_at_lteq, :invited_contacts_id_eq) %>
+<% return if safe_params.empty? %>
+<% scope_q = { view: "events-list", scope: @scope } %>
+<% pill = "flex items-center gap-1.5 rounded-full border border-[#D9DDE0] bg-white py-1 pl-3 pr-1.5 text-xs dark:border-white/10 dark:bg-[#131B17]" %>
+<% dismiss = "flex h-5 w-5 items-center justify-center rounded-full hover:bg-[#E9EBED] dark:hover:bg-white/10" %>
+
+<div class="flex flex-wrap items-center gap-1.5">
+  <span class="text-xs font-semibold text-[#8a938d] dark:text-[#9AA6A0]">Active:</span>
+  <% if safe_params[:name_cont].present? %>
+    <span class="<%= pill %>">
+      “<%= safe_params[:name_cont] %>”
+      <%= button_tag type: "button", title: "Remove filter", data: { action: "click->search-filter#removeFilter", search_filter_names_param: "q[name_cont]" }, class: dismiss do %><%= icon("x", css: "h-3 w-3") %><% end %>
+    </span>
+  <% end %>
+  <% if safe_params[:starts_at_gteq].present? %>
+    <span class="<%= pill %>">
+      From <%= safe_params[:starts_at_gteq] %>
+      <%= button_tag type: "button", title: "Remove filter", data: { action: "click->search-filter#removeFilter", search_filter_names_param: "q[starts_at_gteq]" }, class: dismiss do %><%= icon("x", css: "h-3 w-3") %><% end %>
+    </span>
+  <% end %>
+  <% if safe_params[:starts_at_lteq].present? %>
+    <span class="<%= pill %>">
+      To <%= safe_params[:starts_at_lteq] %>
+      <%= button_tag type: "button", title: "Remove filter", data: { action: "click->search-filter#removeFilter", search_filter_names_param: "q[starts_at_lteq]" }, class: dismiss do %><%= icon("x", css: "h-3 w-3") %><% end %>
+    </span>
+  <% end %>
+  <% if safe_params[:invited_contacts_id_eq].present? %>
+    <% contact_name = @filterable_contacts.find { |c| c.id.to_s == safe_params[:invited_contacts_id_eq].to_s }&.full_name || "Contact" %>
+    <span class="<%= pill %>">
+      <%= contact_name %>
+      <%= button_tag type: "button", title: "Remove filter", data: { action: "click->search-filter#removeFilter", search_filter_names_param: "q[invited_contacts_id_eq]" }, class: dismiss do %><%= icon("x", css: "h-3 w-3") %><% end %>
+    </span>
+  <% end %>
+  <%= button_tag "Clear all", type: "button", data: { action: "click->search-filter#resetAll" }, class: "ml-1 text-xs font-semibold text-red-700 hover:underline dark:text-red-400" %>
+</div>

@@ -1,0 +1,39 @@
+<%# Active filter readout for follow-ups. Mirrors contacts/_active_filters.
+    Due-date presets show their friendly names, not raw timestamps. %>
+<% safe_params = present_filter_params(:contact_first_name_or_contact_last_name_or_contact_email_or_event_name_cont,
+    :invitation_event_id_eq, :due_at_lt, :due_at_gteq, :due_at_lteq) %>
+<% return if safe_params.empty? %>
+<% events = @filterable_events || Current.account.events.order(:name) %>
+<% pill = "flex items-center gap-1.5 rounded-full border border-[#D9DDE0] bg-white py-1 pl-3 pr-1.5 text-xs dark:border-white/10 dark:bg-[#131B17]" %>
+<% dismiss = "flex h-5 w-5 items-center justify-center rounded-full hover:bg-[#E9EBED] dark:hover:bg-white/10" %>
+<% search_predicate = "q[contact_first_name_or_contact_last_name_or_contact_email_or_event_name_cont]" %>
+
+<div class="flex flex-wrap items-center gap-1.5">
+  <span class="text-xs font-semibold text-[#8a938d] dark:text-[#9AA6A0]">Active:</span>
+  <% if safe_params[:contact_first_name_or_contact_last_name_or_contact_email_or_event_name_cont].present? %>
+    <span class="<%= pill %>">
+      “<%= safe_params[:contact_first_name_or_contact_last_name_or_contact_email_or_event_name_cont] %>”
+      <%= button_tag type: "button", title: "Remove filter", data: { action: "click->search-filter#removeFilter", search_filter_names_param: search_predicate }, class: dismiss do %><%= icon("x", css: "h-3 w-3") %><% end %>
+    </span>
+  <% end %>
+  <% if safe_params[:invitation_event_id_eq].present? %>
+    <% event_name = events.find { |e| e.id.to_s == safe_params[:invitation_event_id_eq].to_s }&.name || "Event" %>
+    <span class="<%= pill %>">
+      <%= event_name %>
+      <%= button_tag type: "button", title: "Remove filter", data: { action: "click->search-filter#removeFilter", search_filter_names_param: "q[invitation_event_id_eq]" }, class: dismiss do %><%= icon("x", css: "h-3 w-3") %><% end %>
+    </span>
+  <% end %>
+  <% if safe_params[:due_at_lt].present? %>
+    <span class="<%= pill %>">
+      Overdue
+      <%= button_tag type: "button", title: "Remove filter", data: { action: "click->search-filter#removeFilter", search_filter_names_param: "q[due_at_lt]" }, class: dismiss do %><%= icon("x", css: "h-3 w-3") %><% end %>
+    </span>
+  <% end %>
+  <% if safe_params[:due_at_gteq].present? %>
+    <span class="<%= pill %>">
+      Due today
+      <%= button_tag type: "button", title: "Remove filter", data: { action: "click->search-filter#removeFilter", search_filter_names_param: "q[due_at_gteq] q[due_at_lteq]" }, class: dismiss do %><%= icon("x", css: "h-3 w-3") %><% end %>
+    </span>
+  <% end %>
+  <%= button_tag "Clear all", type: "button", data: { action: "click->search-filter#resetAll" }, class: "ml-1 text-xs font-semibold text-red-700 hover:underline dark:text-red-400" %>
+</div>

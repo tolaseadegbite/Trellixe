@@ -2,10 +2,20 @@
 <div class="space-y-4">
   <%= render "events/checkin_counter", summary: summary %>
 
+  <% if event.starts_at > Time.current %>
+    <p class="rounded-xl border border-dashed border-[#D9DDE0] px-4 py-3 text-center text-[13px] leading-relaxed text-[#6b7672] dark:border-white/15 dark:text-[#9AA6A0]">
+      Check-in opens when the event starts (<%= event.starts_at.strftime("%a, %b %-d") %>) — the guest list can be managed anytime.
+    </p>
+  <% end %>
+
   <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
     <%= form_with url: event_path(event, mode: "checkin"), method: :get,
         data: { turbo_frame: "checkin_list", turbo_action: "advance", controller: "debounce" },
         html: { class: "flex min-w-0 items-center gap-2" } do %>
+      <%# mode travels as a field: browsers drop action-URL query strings on
+          GET submit, and without it the response renders manage view with no
+          checkin_list frame (Turbo "Content missing"). %>
+      <%= hidden_field_tag :mode, "checkin" %>
       <span class="relative min-w-0 flex-1">
         <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a938d] dark:text-[#9AA6A0]"><%= icon("search", css: "h-4 w-4") %></span>
         <%= search_field_tag "q[contact_first_name_or_contact_last_name_or_contact_email_cont]",

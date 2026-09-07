@@ -10,7 +10,8 @@ class EventCheckinsTest < ApplicationSystemTestCase
     click_on "Sign in"
     # Wait for the authenticated render (server HTML, no JS dependency)
     # before navigating — POST+redirect otherwise races the next visit.
-    assert_text "Today's follow-ups"
+    # Generous wait: cold headless browsers stall on first paint.
+    assert_text "Today's follow-ups", wait: 10
   end
 
   test "tapping a row checks in and updates the counter" do
@@ -34,5 +35,14 @@ class EventCheckinsTest < ApplicationSystemTestCase
 
     assert_text "1 of 2 checked in"
     assert_text "Tap to check in"
+  end
+
+  test "search filters guests without leaving check-in mode" do
+    visit event_path(@event, mode: "checkin")
+
+    fill_in "Type a name…", with: "Adaeze"
+
+    assert_text "Adaeze Okafor"
+    assert_no_text "Daniel Adeyemi"
   end
 end

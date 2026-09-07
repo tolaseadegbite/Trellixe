@@ -3,6 +3,19 @@
     <p class="hidden text-sm text-[#8a938d] md:block dark:text-[#9AA6A0]">Total of <%= pagy.count %> records.</p>
     <div class="ml-auto flex items-center gap-4">
       <%= form_with url: pagy_url_for(pagy, 1), class: "hidden items-center gap-2 md:flex", method: :get, data: { controller: "form", action: "change->form#submit" } do |form| %>
+        <%# GET forms drop their action URL's query string on submit, so echo
+            the current filters/mode back as fields — otherwise changing rows
+            silently clears search, filters, and check-in mode. %>
+        <% request.query_parameters.except("page", "limit").each do |key, value| %>
+          <% if value.is_a?(Hash) %>
+            <% value.each do |nested_key, nested_value| %>
+              <%= hidden_field_tag "#{key}[#{nested_key}]", nested_value %>
+            <% end %>
+          <% else %>
+            <%= hidden_field_tag key, value %>
+          <% end %>
+        <% end %>
+        <%= form.label :limit, "Rows", class: "text-sm font-medium text-[#3d4742] dark:text-[#C6CFC9]" %>
         <%= form.label :limit, "Rows", class: "text-sm font-medium text-[#3d4742] dark:text-[#C6CFC9]" %>
         <%= form.select :limit, [ 10, 20, 30, 40, 50 ], { selected: pagy.limit }, { class: "rounded-lg border border-[#D9DDE0] bg-white px-2 py-1.5 text-sm dark:border-white/10 dark:bg-white/5" } %>
       <% end %>

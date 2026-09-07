@@ -130,7 +130,12 @@ dialog.tlx-dialog::backdrop { background: rgb(20 28 24 / 0.5); }
 .flatpickr-calendar .flatpickr-day.flatpickr-disabled, .flatpickr-calendar .flatpickr-day.flatpickr-disabled:hover, .flatpickr-calendar .flatpickr-day.prevMonthDay, .flatpickr-calendar .flatpickr-day.nextMonthDay, .flatpickr-calendar .flatpickr-day.notAllowed { color: #9aa6a0; }
 .flatpickr-calendar .flatpickr-day.selected, .flatpickr-calendar .flatpickr-day.startRange, .flatpickr-calendar .flatpickr-day.endRange, .flatpickr-calendar .flatpickr-day.selected:hover, .flatpickr-calendar .flatpickr-day.startRange:hover, .flatpickr-calendar .flatpickr-day.endRange:hover { background: var(--color-algae-900); color: #fff; border-color: transparent; }
 
-/* TomSelect (combobox controller) — Algae theme to match inputs */.ts-control { align-items: center; background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 0.6rem; min-height: 2.5rem; color: var(--color-ink); display: inline-flex; flex-wrap: wrap; gap: 0.25rem; font-size: 0.9rem; line-height: inherit; padding: 0.375rem 0.75rem; }
+/* TomSelect (combobox controller) — Algae theme to match inputs.
+   NOTE: TomSelect copies the original <select>'s classes onto .ts-wrapper,
+   so the wrapper itself must stay visually neutral — all styling lives on
+   .ts-control/.ts-dropdown below, or every select renders double-framed. */
+.ts-wrapper { border: 0; border-radius: 0; background: transparent; padding: 0; box-shadow: none; }
+.ts-control { align-items: center; background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 0.6rem; min-height: 2.5rem; color: var(--color-ink); display: inline-flex; flex-wrap: wrap; gap: 0.25rem; font-size: 0.9rem; line-height: inherit; padding: 0.375rem 0.75rem; }
 .ts-control > input { color: inherit; font-size: inherit; }
 .ts-wrapper.focus .ts-control { border-color: var(--color-algae-600); box-shadow: 0 0 0 3px rgb(162 228 148 / 0.35); outline: none; }
 .ts-dropdown { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 0.75rem; box-shadow: 0 16px 40px -12px rgb(19 113 76 / 0.25); color: var(--color-ink); font-size: 0.875rem; line-height: inherit; overflow: hidden; }
@@ -143,7 +148,17 @@ dialog.tlx-dialog::backdrop { background: rgb(20 28 24 / 0.5); }
 .ts-dropdown .option.active { background: var(--color-algae-50); color: inherit; }
 .ts-dropdown .highlight { background: transparent; }
 .ts-dropdown .spinner { margin: 0.375rem 0 0; }
-.ts-wrapper.single .ts-control { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7672' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-position: center right 0.5rem; background-repeat: no-repeat; background-size: 1rem auto; padding-right: 2rem; }
+.ts-dropdown .ts-dropdown-content { scrollbar-width: thin; scrollbar-color: var(--color-mist-dark) transparent; }
+.ts-dropdown .ts-dropdown-content::-webkit-scrollbar { width: 6px; }
+.ts-dropdown .ts-dropdown-content::-webkit-scrollbar-thumb { background: var(--color-mist-dark); border-radius: 999px; }
+.ts-wrapper.single { position: relative; }
+.ts-wrapper.single .ts-control { padding-right: 2rem; }
+.ts-wrapper.single::after {
+  content: ""; position: absolute; right: 0.5rem; top: 50%; width: 1rem; height: 1rem;
+  transform: translateY(-50%); pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7672' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-size: contain;
+}
 .ts-wrapper.multi .ts-control > .item { background: #eef1f2; border-radius: 0.55rem; color: inherit; line-height: 1.25; margin: 0; padding: 0.15rem 0.5rem; }
 .ts-wrapper.multi .ts-control > .item.active { background: var(--color-algae-100); }
 .ts-wrapper.plugin-remove_button.multi .item .remove { border-left: 1px solid var(--color-mist-dark); }
@@ -171,13 +186,12 @@ dialog.tlx-dialog::backdrop { background: rgb(20 28 24 / 0.5); }
 .btn--icon { padding: 0.5rem; }
 .btn:is(:disabled, [aria-disabled="true"]) { opacity: 0.5; pointer-events: none; }
 
-.input, input[type="text"], input[type="email"], input[type="password"], input[type="search"], input[type="tel"], input[type="number"], input[type="date"], input[type="datetime-local"], select, textarea {
+.input {
   width: 100%; border: 1px solid var(--color-mist-dark); border-radius: 0.6rem; background: #fff;
   padding: 0.6rem 0.85rem; font-size: 0.9rem; color: var(--color-ink); outline: none; transition: border-color 0.15s, box-shadow 0.15s;
 }
-.input:focus, input:focus, select:focus, textarea:focus { border-color: var(--color-algae-600); box-shadow: 0 0 0 3px rgb(162 228 148 / 0.35); }
+.input:focus { border-color: var(--color-algae-600); box-shadow: 0 0 0 3px rgb(162 228 148 / 0.35); }
 input[type="checkbox"].input, input[type="checkbox"] { width: 1rem; height: 1rem; accent-color: var(--color-algae-900); padding: 0; }
-label { font-size: 0.8125rem; font-weight: 600; }
 
 .card { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 1rem; }
 .bg-surface, .bg-main { background: #fff; }
@@ -255,12 +269,14 @@ dialog.sheet { margin: 0; margin-left: auto; height: 100%; max-height: 100%; wid
 [data-color-scheme="dark"] dialog.tlx-dialog, [data-color-scheme="dark"] dialog.dialog { background: #131b17; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
 [data-color-scheme="dark"] [popover].tlx-popover, [data-color-scheme="dark"] .popover { background: #182019; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
 [data-color-scheme="dark"] dialog.sheet .sheet__content { background: #131b17; }
-[data-color-scheme="dark"] .ts-control { background: #131b17; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
+[data-color-scheme="dark"] .ts-wrapper.single .ts-control, [data-color-scheme="dark"] .ts-wrapper.multi .ts-control { background: #131b17; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
 [data-color-scheme="dark"] .ts-dropdown { background: #182019; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
 [data-color-scheme="dark"] .ts-dropdown .option.active { background: rgb(58 182 125 / 0.16); }
+[data-color-scheme="dark"] .ts-dropdown .ts-dropdown-content { scrollbar-color: rgb(255 255 255 / 0.2) transparent; }
+[data-color-scheme="dark"] .ts-dropdown .ts-dropdown-content::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.2); }
 [data-color-scheme="dark"] .ts-dropdown .optgroup:not(:first-child) { border-top-color: rgb(255 255 255 / 0.1); }
 [data-color-scheme="dark"] .ts-wrapper.multi .ts-control > .item { background: rgb(255 255 255 / 0.08); }
-[data-color-scheme="dark"] .ts-wrapper.single .ts-control { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239aa6a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
+[data-color-scheme="dark"] .ts-wrapper.single::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239aa6a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
 [data-color-scheme="dark"] .flatpickr-calendar { background: #182019; border-color: rgb(255 255 255 / 0.12); }
 [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-months .flatpickr-month { color: #e7ece9; }
 [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-months svg { fill: #9aa6a0; }

@@ -1,9 +1,10 @@
 <div class="space-y-4">
-  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
-    <%= render "events/search_form" %>
+  <div class="mb-4">
+    <%= render "events/active_filters" %>
   </div>
 
-  <% if params[:q].present? %>
+  <% event_filters = present_filter_params(:name_cont, :starts_at_gteq, :starts_at_lteq, :invited_contacts_id_eq) %>
+  <% if event_filters.any? %>
     <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Found <strong class="text-[#1c2420] tabular-nums dark:text-[#E7ECE9]"><%= @pagy.count %></strong> <%= "event".pluralize(@pagy.count) %> matching your filters.</p>
   <% end %>
 

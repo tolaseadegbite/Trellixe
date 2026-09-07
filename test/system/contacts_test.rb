@@ -10,7 +10,8 @@ class ContactsTest < ApplicationSystemTestCase
     click_on "Sign in"
     # Wait for the authenticated render (server HTML, no JS dependency)
     # before navigating — POST+redirect otherwise races the next visit.
-    assert_text "Today's follow-ups"
+    # Generous wait: cold headless browsers stall on first paint.
+    assert_text "Today's follow-ups", wait: 10
   end
 
   test "visiting the index" do
