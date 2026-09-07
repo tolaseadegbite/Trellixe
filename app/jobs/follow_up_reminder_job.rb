@@ -1,4 +1,8 @@
 class FollowUpReminderJob < ApplicationJob
+  # Undone check-ins destroy their pending tasks; the already-scheduled
+  # reminder for a gone task dies quietly instead of retrying forever.
+  discard_on ActiveJob::DeserializationError
+
   def perform(follow_up_task)
     return if follow_up_task.completed_at? || follow_up_task.interaction_logs.exists?
 

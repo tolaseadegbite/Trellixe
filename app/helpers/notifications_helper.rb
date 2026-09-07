@@ -37,8 +37,8 @@ module NotificationsHelper
       "You have been invited to join #{params[:account_name]}."
 
     when "FollowUpTaskNotifier"
-      if params[:task]
-        "Follow up with #{params[:task].contact.full_name}"
+      if follow_up_task_param(notification)
+        "Follow up with #{follow_up_task_param(notification).contact.full_name}"
       else
         "Follow up reminder"
       end
@@ -58,8 +58,8 @@ module NotificationsHelper
       team_invitation_acceptance_path(token: params[:token])
 
     when "FollowUpTaskNotifier"
-      if params[:task]
-        new_follow_up_task_interaction_log_path(params[:task])
+      if (task = follow_up_task_param(notification))
+        new_follow_up_task_interaction_log_path(task)
       else
         follow_up_tasks_path
       end
@@ -93,12 +93,23 @@ module NotificationsHelper
   def notification_avatar_initials(notification)
     event_type = notification.event.type
     params = notification.event.params
-    if params[:task].present?
-      params[:task].contact.full_name.split.first(2).map(&:first).join.upcase
+    if (task = follow_up_task_param(notification)).present?
+      task.contact.full_name.split.first(2).map(&:first).join.upcase
     elsif params[:user_name].present? && event_type != "TeamNotifier::RoleChanged"
       params[:user_name].split.first(2).map(&:first).join.upcase
     else
       params[:account_name]&.split&.first(2)&.map(&:first)&.join&.upcase || notification.account&.name&.first(2)&.upcase || "??"
     end
+  end
+
+  private
+
+  # A reminder's task may be gone (undone check-in, removed guest). GlobalID
+  # lookup raises RecordNotFound for missing records, so resolve defensively —
+  # callers fall back to generic copy instead of 500ing the whole list.
+  def follow_up_task_param(notification)
+    notification.event.params[:task]
+  rescue ActiveRecord::RecordNotFound
+    nil
   end
 end
