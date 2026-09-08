@@ -11,6 +11,19 @@
     <%= form.text_area :note, rows: 5, placeholder: "Called, had a great chat — invited to Sunday, needs a ride.",
         class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
   </div>
+  <% if local_assigns[:preset_event] %>
+    <div class="mt-4 flex items-center gap-1.5 rounded-lg border border-[#A2E494] bg-algae-50 px-3 py-2.5 text-sm dark:bg-algae-600/15">
+      <%= icon("calendar-range", css: "h-4 w-4 shrink-0 text-algae-900 dark:text-algae-300") %>
+      <span>For <strong><%= preset_event.name %></strong></span>
+    </div>
+    <%= form.hidden_field :event_id, value: preset_event.id %>
+  <% elsif local_assigns[:contact_events] %>
+    <div class="mt-4">
+      <%= form.label :event_id, "Related event", class: "mb-1 block text-[13px] font-semibold" %>
+      <%= form.collection_select :event_id, contact_events, :id, :name, { include_blank: "No specific event" },
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+    </div>
+  <% end %>
   <%= form.submit interaction_log.persisted? ? "Save changes" : "Save log",
       class: "mt-5 w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
 <% end %>

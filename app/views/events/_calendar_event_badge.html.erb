@@ -1,9 +1,9 @@
 <% if event.nil? %>
 <% elsif event.persisted? %>
   <%= link_to event,
-              class: "block truncate rounded-md bg-algae-900 px-1.5 py-1 text-xs font-medium text-white transition hover:bg-[#0f5c3e]",
+              class: "block truncate rounded-md bg-algae-900 px-1.5 py-1 text-xs font-medium tabular-nums text-white transition hover:bg-[#0f5c3e]",
               data: { turbo_frame: "_top" } do %>
-    <%= event.name %>
+    <%= event.starts_at.strftime("%-l:%M %p").strip %> · <%= event.name %>
   <% end %>
 <% else %>
   <%= tag.div id: dom_id(event.event_series, :virtual) do %>

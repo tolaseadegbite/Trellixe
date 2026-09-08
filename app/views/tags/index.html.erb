@@ -1,20 +1,10 @@
-<% if turbo_frame_request? && turbo_frame_request_id == "modal" %>
-  <%= render "shared/modal" do %>
-    <h3 class="font-display text-lg font-semibold tracking-tight">Manage tags</h3>
-    <p class="mt-1 text-[13px] text-[#6b7672] dark:text-[#9AA6A0]">Group contacts — regulars, newcomers, follow-ups.</p>
-    <div class="mt-4">
-      <%= render "manager", tags: @tags, tag: @tag, list_id: "modal-tags-list" %>
-    </div>
-  <% end %>
-<% else %>
-  <% content_for :title, "Tags" %>
-  <% content_for :page_header, "Tags · #{@tags.size}" %>
+<% content_for :title, "Tags" %>
+<% content_for :page_header do %><%= render "shared/breadcrumb", trail: [ { label: "Tags · #{@tag_total}" } ] %><% end %>
 
-  <div class="max-w-2xl rounded-2xl border border-[#D9DDE0] bg-white p-6 dark:border-white/10 dark:bg-[#131B17]">
-    <h2 class="font-display text-lg font-semibold tracking-tight">All tags</h2>
-    <p class="mt-1 text-sm text-[#6b7672] dark:text-[#9AA6A0]">Group contacts — regulars, newcomers, follow-ups. Tags also power automatic event invitations.</p>
-    <div class="mt-4">
-      <%= render "manager", tags: @tags, tag: @tag, list_id: "tags-list" %>
-    </div>
+<div class="mx-auto max-w-2xl rounded-2xl border border-[#D9DDE0] bg-white p-6 dark:border-white/10 dark:bg-[#131B17]">
+  <h2 class="font-display text-lg font-semibold tracking-tight">All tags</h2>
+  <p class="mt-1 text-sm text-[#6b7672] dark:text-[#9AA6A0]">Group contacts — regulars, newcomers, follow-ups. Tags also power automatic event invitations. Select a tag to see its contacts.</p>
+  <div class="mt-4">
+    <%= render "manager", tags: @tags, tag: @tag, list_id: "tags-list" %>
   </div>
-<% end %>
+</div>

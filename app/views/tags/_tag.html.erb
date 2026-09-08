@@ -1,5 +1,9 @@
 <div id="<%= dom_id(tag) %>" class="inline-flex items-center gap-1 rounded-full border border-[#D9DDE0] bg-[#F6F9F7] py-1 pl-3 pr-1.5 text-[13px] font-medium transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/[0.03]">
-  <span><%= tag.name %></span>
+  <%= link_to contacts_path(q: { tags_id_eq: tag.id }), data: { turbo_frame: "_top" }, title: "Show contacts with this tag",
+      class: "flex items-center gap-1.5 rounded-full hover:text-algae-900 hover:underline dark:hover:text-algae-300" do %>
+    <span><%= tag.name %></span>
+    <span class="rounded-full bg-[#E9EBED] px-1.5 py-px text-[11px] font-semibold tabular-nums text-[#6b7672] dark:bg-white/10 dark:text-[#9AA6A0]"><%= tag.try(:contacts_count) || tag.contacts.size %></span>
+  <% end %>
   <%= button_to tag_path(tag), method: :delete, title: "Remove tag",
       class: "flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-[#8a938d] transition hover:bg-red-50 hover:text-red-700 dark:text-[#9AA6A0] dark:hover:bg-red-500/10 dark:hover:text-red-400",
       form: { data: { turbo_confirm: "Remove this tag?" } } do %>

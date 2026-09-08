@@ -3,7 +3,7 @@
     <button class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#F1F4F2] hover:text-[#1c2420]" data-action="modal#close" aria-label="Close">
       <%= icon("x", css: "h-4 w-4") %>
     </button>
-    <div class="p-6">
+    <div id="modal-body" class="p-6">
       <%= yield %>
     </div>
   </dialog>

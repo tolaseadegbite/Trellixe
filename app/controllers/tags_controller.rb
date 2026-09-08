@@ -2,7 +2,11 @@ class TagsController < DashboardsController
   before_action :set_tag, only: [ :destroy ]
 
   def index
-    @tags = Current.account.tags.order(:name)
+    @tags = Current.account.tags.left_joins(:contacts)
+                           .group("tags.id")
+                           .select("tags.*, COUNT(contacts.id) AS contacts_count")
+                           .order(:name)
+    @tag_total = Current.account.tags.count
     @tag = Tag.new
   end
 
@@ -14,7 +18,11 @@ class TagsController < DashboardsController
         format.turbo_stream
         format.html { redirect_to tags_path, notice: "Tag created." }
       else
-        @tags = Current.account.tags.order(:name)
+        @tags = Current.account.tags.left_joins(:contacts)
+                                 .group("tags.id")
+                                 .select("tags.*, COUNT(contacts.id) AS contacts_count")
+                                 .order(:name)
+        @tag_total = Current.account.tags.count
         flash.now[:alert] = @tag.errors.full_messages.to_sentence
         format.turbo_stream { render :create, status: :unprocessable_entity }
         format.html { render :index, status: :unprocessable_entity }

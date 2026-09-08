@@ -37,13 +37,13 @@
   </div>
 
   <div class="grid gap-5 lg:grid-cols-5">
-    <section class="rounded-2xl border border-[#D9DDE0] bg-white lg:col-span-3 dark:border-white/10 dark:bg-[#131B17]">
-      <div class="flex items-center justify-between border-b border-[#E9EBED] px-5 py-3.5 dark:border-white/10">
-        <div>
+    <section class="min-w-0 rounded-2xl border border-[#D9DDE0] bg-white lg:col-span-3 dark:border-white/10 dark:bg-[#131B17]">
+      <div class="flex items-center justify-between gap-3 border-b border-[#E9EBED] px-5 py-3.5 dark:border-white/10">
+        <div class="min-w-0">
           <h2 class="font-display text-[15px] font-semibold">Today's follow-ups</h2>
           <p class="text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Call, text, or visit while the connection is warm.</p>
         </div>
-        <%= link_to "View all", follow_up_tasks_path, class: "text-[13px] font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
+        <%= link_to "View all", follow_up_tasks_path, class: "shrink-0 text-[13px] font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
       </div>
       <div class="divide-y divide-[#E9EBED] dark:divide-white/10">
         <% if @pending_tasks.any? %>
@@ -58,13 +58,13 @@
       </div>
     </section>
 
-    <section class="rounded-2xl border border-[#D9DDE0] bg-white lg:col-span-2 dark:border-white/10 dark:bg-[#131B17]">
-      <div class="flex items-center justify-between border-b border-[#E9EBED] px-5 py-3.5 dark:border-white/10">
-        <div>
+    <section class="min-w-0 rounded-2xl border border-[#D9DDE0] bg-white lg:col-span-2 dark:border-white/10 dark:bg-[#131B17]">
+      <div class="flex items-center justify-between gap-3 border-b border-[#E9EBED] px-5 py-3.5 dark:border-white/10">
+        <div class="min-w-0">
           <h2 class="font-display text-[15px] font-semibold">Up next</h2>
           <p class="text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Services, outreaches, cell meetings.</p>
         </div>
-        <%= link_to "Calendar", events_path(view: "calendar"), class: "text-[13px] font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
+        <%= link_to "Calendar", events_path(view: "calendar"), class: "shrink-0 text-[13px] font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
       </div>
       <div class="divide-y divide-[#E9EBED] dark:divide-white/10">
         <% if @upcoming_events.any? %>

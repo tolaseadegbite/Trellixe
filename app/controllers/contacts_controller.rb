@@ -13,8 +13,13 @@ class ContactsController < DashboardsController
 
   def show
     @interaction_logs = @contact.interaction_logs
-                                .includes(:user, follow_up_task: { invitation: :event })
+                                .includes(:user, :event, follow_up_task: { invitation: :event })
                                 .order(created_at: :desc)
+    @open_follow_ups = FollowUpTask.joins(invitation: :event)
+                                   .includes(:user, invitation: :event)
+                                   .where(invitations: { contact_id: @contact.id })
+                                   .pending
+                                   .order(created_at: :desc)
   end
 
   def new

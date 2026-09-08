@@ -1,53 +1,82 @@
 <% content_for :title, @contact.full_name %>
-<% content_for :page_header do %><%= @contact.full_name %><% end %>
+<% content_for :page_header do %><%= render "shared/breadcrumb", trail: [ { label: "Contacts", path: contacts_path }, { label: @contact.full_name } ] %><% end %>
 
 <div class="space-y-5">
-  <div class="grid gap-4 lg:grid-cols-3">
-    <div class="rounded-2xl border border-[#D9DDE0] bg-white p-6 lg:col-span-2 dark:border-white/10 dark:bg-[#131B17]">
-      <div class="flex items-start justify-between gap-4">
-        <div class="flex items-start gap-4">
-          <span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-algae-900 font-display text-2xl font-bold text-white">
-            <%= (@contact.full_name&.first || @contact.first_name&.first || @contact.email.first).upcase %>
-          </span>
-          <div class="min-w-0">
-            <h1 class="break-words font-display text-2xl font-bold tracking-tight"><%= @contact.full_name %></h1>
-            <% if @contact.tags.any? %>
-              <div class="mt-2 flex flex-wrap gap-1.5">
-                <% @contact.tags.each do |tag| %>
-                  <span class="rounded-full border border-[#A2E494] bg-algae-50 px-2.5 py-0.5 text-xs font-semibold text-algae-900 dark:bg-algae-600/15 dark:text-algae-300"><%= tag.name %></span>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
+  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-6 dark:border-white/10 dark:bg-[#131B17]">
+    <div class="flex items-start justify-between gap-4">
+      <div class="flex min-w-0 items-start gap-4">
+        <span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-algae-900 font-display text-2xl font-bold text-white">
+          <%= (@contact.full_name&.first || @contact.first_name&.first || @contact.email.first).upcase %>
+        </span>
+        <div class="min-w-0">
+          <h1 class="break-words font-display text-2xl font-bold tracking-tight"><%= @contact.full_name %></h1>
+          <% if @contact.tags.any? %>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              <% @contact.tags.each do |tag| %>
+                <span class="rounded-full border border-[#A2E494] bg-algae-50 px-2.5 py-0.5 text-xs font-semibold text-algae-900 dark:bg-algae-600/15 dark:text-algae-300"><%= tag.name %></span>
+              <% end %>
+            </div>
+          <% end %>
         </div>
-        <%= link_to edit_contact_path(@contact), data: { turbo_frame: "modal" }, class: "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-algae-900 text-white transition hover:bg-[#0f5c3e]", title: "Edit" do %>
-          <%= icon("pen", css: "h-4 w-4") %>
-        <% end %>
       </div>
-      <div class="mt-5 border-t border-[#E9EBED] pt-4 dark:border-white/10">
+      <%= link_to edit_contact_path(@contact), data: { turbo_frame: "modal" }, class: "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-algae-900 text-white transition hover:bg-[#0f5c3e]", title: "Edit" do %>
+        <%= icon("pen", css: "h-4 w-4") %>
+      <% end %>
+    </div>
+    <div class="mt-5 grid gap-5 border-t border-[#E9EBED] pt-4 sm:grid-cols-2 dark:border-white/10">
+      <div class="min-w-0">
         <p class="text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]">How you met</p>
         <p class="mt-1.5 text-[14.5px] leading-relaxed"><%= @contact.how_we_met.presence || "No context yet — add where you met and what matters to them." %></p>
       </div>
-    </div>
-
-    <div class="rounded-2xl border border-[#D9DDE0] bg-white p-6 dark:border-white/10 dark:bg-[#131B17]">
-      <h2 class="font-display text-[15px] font-semibold">Details</h2>
-      <dl class="mt-4 space-y-3 text-sm">
-        <div class="flex items-center gap-2.5">
-          <%= icon("mail", css: "h-4 w-4 shrink-0 text-[#8a938d] dark:text-[#9AA6A0]") %>
-          <span class="break-all"><%= @contact.email.presence || "No email" %></span>
-        </div>
-        <div class="flex items-center gap-2.5">
-          <%= icon("phone", css: "h-4 w-4 shrink-0 text-[#8a938d] dark:text-[#9AA6A0]") %>
-          <span class="tabular-nums"><%= @contact.phone_number.presence || "No phone number" %></span>
-        </div>
-        <div class="flex items-center gap-2.5 border-t border-[#E9EBED] pt-3 dark:border-white/10">
-          <%= image_tag user_avatar_url(@contact.creator, size: 48), size: 24, class: "h-6 w-6 rounded-full object-cover", alt: @contact.creator.name %>
-          <span class="text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Added by <strong class="text-[#1c2420] dark:text-[#E7ECE9]"><%= @contact.creator.name %></strong></span>
-        </div>
-      </dl>
+      <div class="min-w-0">
+        <p class="text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:text-[#9AA6A0]">Details</p>
+        <dl class="mt-1.5 space-y-3 text-sm">
+          <div class="flex items-center gap-2.5">
+            <%= icon("mail", css: "h-4 w-4 shrink-0 text-[#8a938d] dark:text-[#9AA6A0]") %>
+            <span class="break-all"><%= @contact.email.presence || "No email" %></span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <%= icon("phone", css: "h-4 w-4 shrink-0 text-[#8a938d] dark:text-[#9AA6A0]") %>
+            <span class="tabular-nums"><%= @contact.phone_number.presence || "No phone number" %></span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <%= image_tag user_avatar_url(@contact.creator, size: 48), size: 24, class: "h-6 w-6 rounded-full object-cover", alt: @contact.creator.name %>
+            <span class="text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Added by <strong class="text-[#1c2420] dark:text-[#E7ECE9]"><%= @contact.creator.name %></strong></span>
+          </div>
+        </dl>
+      </div>
     </div>
   </div>
+
+  <% if @open_follow_ups.any? %>
+    <% viewer_owns_any = @open_follow_ups.any? { |t| t.user == current_user } %>
+    <div class="rounded-2xl border border-[#A2E494] bg-algae-50/60 p-4 dark:border-algae-600/40 dark:bg-algae-600/10">
+      <p class="text-[11px] font-semibold uppercase tracking-wide text-algae-900 dark:text-algae-300">Open follow-ups · <%= @open_follow_ups.size %></p>
+      <ul class="mt-2 space-y-1.5">
+        <% @open_follow_ups.each do |task| %>
+          <% overdue = task.due_at < Time.current %>
+          <% mine = task.user == current_user %>
+          <li class="flex min-w-0 items-center gap-3 text-sm">
+            <div class="min-w-0 flex-1">
+              <%= link_to task.invitation.event.name, event_path(task.invitation.event), data: { turbo_frame: "_top" }, class: "block truncate font-medium hover:text-algae-900 hover:underline dark:hover:text-algae-300" %>
+              <span class="mt-0.5 block text-[13px] tabular-nums <%= overdue ? 'font-medium text-red-700 dark:text-red-400' : 'text-[#6b7672] dark:text-[#9AA6A0]' %>">
+                <%= mine ? "You" : task.user.full_name %> · <%= overdue ? "#{time_ago_in_words(task.due_at)} overdue" : "Due #{task.due_at.today? ? 'today' : l(task.due_at, format: :short)}" %>
+              </span>
+            </div>
+            <% if mine %>
+              <%= link_to "Log", new_contact_interaction_log_path(@contact, event_id: task.invitation.event_id), data: { turbo_frame: "modal" },
+                  class: "flex min-h-12 shrink-0 items-center rounded-lg bg-algae-900 px-4 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+      <%# The contact-filtered queue only ever lists the viewer's own tasks —
+          showing it to anyone else lands them on a misleading empty state. %>
+      <% if viewer_owns_any %>
+        <%= link_to "View all in queue", follow_up_tasks_path(q: { contact_first_name_or_contact_last_name_or_contact_email_or_event_name_cont: @contact.email }), class: "mt-2 inline-block text-[13px] font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
+      <% end %>
+    </div>
+  <% end %>
 
   <div data-controller="tabs">
     <div class="flex gap-1 border-b border-[#D9DDE0] dark:border-white/10" role="tablist">
@@ -55,12 +84,25 @@
       <button type="button" class="rounded-t-lg px-4 py-2.5 text-sm font-semibold text-[#8a938d] dark:text-[#9AA6A0]" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_events">Events</button>
     </div>
     <div id="tab_logs" data-tabs-target="tab" role="tabpanel" class="overflow-hidden rounded-b-2xl border border-t-0 border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
-      <% if @interaction_logs.any? %>
+      <div id="interaction_logs_list">
         <%= render @interaction_logs %>
-      <% else %>
-        <div class="px-6 py-10 text-center">
+      </div>
+      <% if @interaction_logs.empty? %>
+        <div id="interaction_logs_empty" class="px-6 py-10 text-center">
           <p class="text-sm font-semibold">No interactions yet</p>
-          <p class="mx-auto mt-1 max-w-xs text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Log a call, text, or visit from a follow-up task and it lands here.</p>
+          <% if @open_follow_ups.empty? %>
+            <p class="mx-auto mt-1 max-w-xs text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Log a call, text, or visit and it lands here.</p>
+            <%= link_to new_contact_interaction_log_path(@contact), data: { turbo_frame: "modal" },
+                class: "mt-4 inline-flex min-h-12 items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e]" do %>
+              <%= icon("plus", css: "h-4 w-4") %> Log your first interaction
+            <% end %>
+          <% else %>
+            <% owners = @open_follow_ups.map(&:user).uniq %>
+            <% names = owners.map { |u| u == current_user ? "You" : u.full_name } %>
+            <p class="mx-auto mt-1 max-w-xs text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">
+              <%= names.to_sentence %> <%= owners.one? && owners.first != current_user ? "is" : "are" %> following up — new notes land here once logged.
+            </p>
+          <% end %>
         </div>
       <% end %>
     </div>
@@ -70,7 +112,19 @@
         <% if @invitations.any? %>
           <div class="mt-3 space-y-3">
             <% @invitations.each do |invitation| %>
-              <%= render "invitations/history_entry_with_logs", invitation: invitation %>
+              <% status_classes = case invitation.status
+                  when "attended" then "bg-[#A2E494] text-[#1c2420]"
+                  when "declined" then "bg-algae-900 text-white"
+                  else "bg-[#E9EBED] text-[#3d4742] dark:bg-white/10 dark:text-[#C6CFC9]"
+                  end %>
+              <%= render "events/event_list_item", event: invitation.event do %>
+                <p class="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[#E9EBED] pt-2.5 text-[13px] text-[#6b7672] dark:border-white/10 dark:text-[#9AA6A0]">
+                  <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize <%= status_classes %>"><%= invitation.status %></span>
+                  <% if invitation.notes.present? %>
+                    <span class="min-w-0 break-words"><span class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]">Invitation note:</span> <%= invitation.notes %></span>
+                  <% end %>
+                </p>
+              <% end %>
             <% end %>
           </div>
           <%= render "shared/pagination", pagy: @pagy %>

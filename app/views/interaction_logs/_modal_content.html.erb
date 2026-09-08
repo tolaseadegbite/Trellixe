@@ -1,0 +1,24 @@
+<%# Modal body for logging. Locals: interaction_log; optional follow_up_task,
+    queue_context (queue flow) or contact (standalone flow). %>
+<div data-action="turbo:submit-end->modal#submitEnd">
+  <% if local_assigns[:follow_up_task] %>
+    <h2 class="font-display text-lg font-semibold">Log follow-up with <%= link_to interaction_log.contact.full_name, contact_path(interaction_log.contact), class: "text-algae-900 hover:underline dark:text-algae-300", data: { turbo_frame: "_top" } %></h2>
+    <p class="mt-1 text-sm text-[#8a938d] dark:text-[#9AA6A0]">from <%= follow_up_task.invitation.event.name %></p>
+    <div class="mt-4">
+      <% if local_assigns[:queue_context] %>
+        <%= render "form", interaction_log: interaction_log, follow_up_task: follow_up_task,
+            url: follow_up_task_interaction_logs_path(follow_up_task, queue_context.merge(from: "queue")) %>
+      <% else %>
+        <%= render "form", interaction_log: interaction_log, follow_up_task: follow_up_task %>
+      <% end %>
+    </div>
+  <% else %>
+    <h2 class="font-display text-lg font-semibold">Log interaction with <%= link_to contact.full_name, contact_path(contact), class: "text-algae-900 hover:underline dark:text-algae-300", data: { turbo_frame: "_top" } %></h2>
+    <p class="mt-1 text-sm text-[#8a938d] dark:text-[#9AA6A0]">A call, text, visit — anything worth remembering.</p>
+      <div class="mt-4">
+        <%= render "form", interaction_log: interaction_log,
+            url: contact_interaction_logs_path(contact, ({ event_id: preset_event.id } if local_assigns[:preset_event])),
+            contact_events: contact_events, preset_event: local_assigns[:preset_event] %>
+      </div>
+  <% end %>
+</div>

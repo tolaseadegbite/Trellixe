@@ -1,0 +1,8 @@
+<%# Standalone log created from a contact page: prepend to the history list. %>
+<%= turbo_stream.prepend "interaction_logs_list" do %>
+  <%= render "interaction_logs/interaction_log", interaction_log: @interaction_log %>
+<% end %>
+
+<%= turbo_stream.remove "interaction_logs_empty" %>
+
+<%= turbo_stream.prepend "flash_messages", partial: "shared/flash", locals: { notice: "Interaction logged." } %>

@@ -6,6 +6,7 @@
     past the low thousands this wants server-side typeahead instead. %>
 <% guests = Current.account.contacts.order(:first_name) %>
 <% selected_ids = local_assigns[:selected]&.map(&:to_i) || [] %>
+<% selected, rest = guests.partition { |c| selected_ids.include?(c.id) } %>
 <div data-controller="guest-list">
   <div class="mb-1 flex items-center justify-between gap-2">
     <%= form.label :contact_ids, "Invite contacts (optional)", class: "block text-[13px] font-semibold" %>
@@ -19,7 +20,7 @@
           data-guest-list-target="filter" data-action="input->guest-list#filter">
     </div>
     <div class="tlx-scroll mt-2 max-h-64 space-y-1 overflow-y-auto rounded-xl border border-[#D9DDE0] bg-[#F6F9F7] p-1.5 dark:border-white/10 dark:bg-white/[0.03]" role="group" aria-label="Guests to invite">
-      <% guests.each do |contact| %>
+      <% (selected + rest).each do |contact| %>
         <label data-guest-list-target="row" data-search="<%= contact.full_name.downcase %>"
             class="flex min-h-12 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 transition hover:bg-white dark:hover:bg-white/5">
           <%= check_box_tag "event[contact_ids][]", contact.id, selected_ids.include?(contact.id),

@@ -4,6 +4,8 @@ import { Controller } from "@hotwired/stimulus"
 // `[data-color-scheme="dark"]`. The stored "system" value is resolved
 // against the OS preference (and follows live changes).
 export default class extends Controller {
+  static targets = [ "moonIcon", "sunIcon" ]
+
   #media;
   #onSystemChange;
 
@@ -35,6 +37,20 @@ export default class extends Controller {
     this.#apply("dark", true)
   }
 
+  // Binary header toggle: flips the resolved scheme and pins it as an
+  // explicit preference (a system-follower who taps leaves system mode).
+  // The icon always previews the destination, synced in #apply.
+  toggle() {
+    const resolved = this.element.dataset.colorScheme
+    if (resolved === "dark") {
+      localStorage.setItem("color_scheme", "light")
+      this.#apply("light", false)
+    } else {
+      localStorage.setItem("color_scheme", "dark")
+      this.#apply("dark", false)
+    }
+  }
+
   get #stored() {
     return localStorage.getItem("color_scheme") || "system"
   }
@@ -47,5 +63,8 @@ export default class extends Controller {
     this.element.dataset.colorScheme = resolved
     this.element.style.colorScheme = resolved
     this.element.dataset.colorSchemePreference = followSystem ? "system" : value
+    // Header toggle icons (mobile only; absent on desktop — skip silently).
+    if (this.hasMoonIconTarget) this.moonIconTarget.classList.toggle("hidden", resolved === "dark")
+    if (this.hasSunIconTarget) this.sunIconTarget.classList.toggle("hidden", resolved !== "dark")
   }
 }

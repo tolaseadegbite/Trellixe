@@ -15,13 +15,17 @@ bin/brakeman --no-pager && bin/importmap audit && bin/dev
 ## Project Architecture
 **Rails 8.0.2** · **Ruby 3.4.5** · PostgreSQL (primary) + SQLite3 (queue/cache/cable)
 - **Hotwire** (Turbo + Stimulus) with importmap (no bundler, no npm)
-- **css-zero** framework: utility classes (`btn`, `input`, `flex`, `gap-half`, `mbe-4`)
-- Custom utilities in `app/assets/stylesheets/utilities/utilities.css`: `wrap-anywhere`, `min-i-0`, `i-full`, `overflow-ellipsis`, `overflow-y-auto`, responsive `show\@md`/`hide\@md`, etc.
+- **Tailwind CSS v4** (`tailwindcss-rails`, CSS-first config in `app/assets/tailwind/application.css`, Algae palette). css-zero is gone — do not reintroduce it
+- **Dark mode contract**: `color-scheme` Stimulus controller sets `data-color-scheme="light|dark"` on `<body>`; the Tailwind `dark` variant keys off it. Every view ships both modes
+- Self-hosted fonts via `shared/_font_faces` (font URLs must stay Propshaft-digested — never relative `url()` in the Tailwind input)
+- Third-party widget CSS (TomSelect, flatpickr) is pinned-imported from CDN at the top of the Tailwind input with Algae overrides
+- Native platform first: `<dialog>`, `popover="auto"` (never `popover="true"`), Turbo Frames/Streams
 - **Pagy** for pagination, **Ransack** for search/filtering
 - **Noticed** for in-app notifications, **Solid Queue** for background jobs
 - **Authentication Zero**: bcrypt, sessions, OmniAuth, sudo/masquerade
 - Multi-tenant via `Current` (ActiveSupport::CurrentAttributes)
 - Public IDs via `PublicIdentifiable` concern (`user_abc123`)
+- **Product spec**: `docs/PRODUCT_BRIEF.md` is the constitution — read it before any UI work. Branches: `master` (stable) ← `redesign/tailwind-ui` (system of record) ← `rethink/field-ux` (structural UX, merged back slice by slice)
 ## Code Style
 ### Imports & Requires
 App code needs zero requires — Rails autoloads. Test files start with:
@@ -98,9 +102,9 @@ Key rules:
 ### Views & CSS
 - `.html.erb` for pages, `.turbo_stream.erb` for Turbo Stream responses
 - Use `dom_id(record)` for HTML IDs
-- **css-zero utility classes**: `btn`, `btn--icon`, `btn--subtle`, `btn--negative`, `btn--primary`, `input`, `flex`, `flex-col`, `items-center`, `items-start`, `justify-between`, `gap` (0.5rem), `gap-half` (0.25rem)
-- **Custom utilities** (`app/assets/stylesheets/utilities/utilities.css`): `wrap-anywhere`, `wrap-break-word`, `overflow-ellipsis`, `overflow-clip`, `min-i-0`, `i-full`, `max-i-full`, `b-full`, `overflow-hidden`, `overflow-y-auto`, `overflow-x-auto`, `sticky`, `show\@md`, `hide\@md`, all margin/padding via logical properties (`mbe-*`, `mis-*`, `pis-*`, etc.)
-- **Hover card background**: `hover:bg-shade transition` — standard pattern
+- **Tailwind utilities everywhere** (no css-zero). Shared visual language lives in partials — check `docs/PRODUCT_BRIEF.md` §9 inventory first (`shared/_search_bar`, `_breadcrumb`, `_empty_state`, `shared/_pagination`, `shared/_modal`, `contacts/_contact_row`, `events/_event_list_item`, `events/_show_header`, `events/_guest_checklist`, `follow_up_tasks/_queue`, `tags/_manager`)
+- Slices **replace** old markup — never keep two competing patterns side by side
+- **Backend contracts are load-bearing**: Turbo Frame ids, `dom_id`s, Ransack/Pagy params, routes, `attended → FollowUpTask → FollowUpReminderJob`. Change view freely, change contract only with a test
 
 ### Flex text overflow fix (known gotcha)
 When text inside a flex item refuses to wrap (e.g., inside a popover), use CSS Grid with `minmax(0, 1fr)` on the container and inline `style="overflow-wrap: break-word; word-break: break-word; white-space: normal;"` on the `<p>` tag together. Set `min-inline-size: 0` on the text container. For scroll containers, add `overflow-x: hidden` alongside `overflow-y: auto` to prevent scrollbar-width-induced horizontal scrollbar.
@@ -133,12 +137,19 @@ Views: `image_tag user_avatar_url(user, size: 32), size: 32, class: "rounded-ful
 - Helper `sign_in_as(user)` available in all integration tests (posts to sign_in with `Secret1*3*5*`)
 - System tests: `ApplicationSystemTestCase` (Selenium headless Chrome, 1400×1400)
 - Standard pattern: `require "test_helper"`, extend `ActionDispatch::IntegrationTest`, use `setup` block for fixtures
+- Env needs the Chromium shim at `~/.local/bin/google-chrome` on PATH; flatpickr interactions need Capybara `using_wait_time`/assert-first waits
 
 ### Error Handling
 - Scoped `find` to prevent cross-tenant data leaks: `Current.account.contacts.find(params[:id])`
 - Non-bang `update`/`create`: check return value, branch on success/failure
 - Bang `destroy!`: raises on failure
 - User-facing errors: `@contact.errors.full_messages.to_sentence`
+
+### CSS Gotchas (learned the hard way)
+- **Unlayered beats layered**: Tailwind v4 puts utilities in `@layer utilities`. Any unlayered rule (`turbo-frame`, `form`, `input`, `[popover]`, `dialog::backdrop`) overrides them — so never write bare element selectors or global widget resets; scope everything and keep visual tweaks as utilities or layered components
+- **Never nest `<form>`** (search bars inside filter forms break silently); filter forms carry state (e.g. search text) via hidden fields, never via the action URL — Turbo GET navigation drops action-URL query params
+- `popover="auto"` + `data-action="toggle->controller#method"` for popover signal-outs (click-outside close); `toggle` fires on both open and close
+- Keep hand-written JS free of private (`#`) fields unless certain — a mid-file parse error silently kills every controller on the page; verify with runtime checks, not just `node --check`
 ### Permissions
 Roles (`member`/`admin`) live on `Membership` as a string enum. Always use semantic helpers from the `Permissionable` concern (included in `ApplicationController`):
 

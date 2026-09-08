@@ -1,0 +1,15 @@
+<%# Breadcrumb trail. Locals: trail (array of {label:, path:} hashes; the
+    last item omits path and renders as the current page). Single visual
+    language for all back navigation — icon link to the parent plus the
+    current name. Never javascript:history.back() (strands direct arrivals
+    off-site and breaks without JS). %>
+<span class="flex min-w-0 items-center gap-2 text-sm">
+  <% trail[0...-1].each do |crumb| %>
+    <%= link_to crumb[:path], data: { turbo_frame: "_top" }, aria: { label: "Back to #{crumb[:label]}" },
+        class: "flex shrink-0 items-center text-[#8a938d] transition hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]" do %>
+      <%= icon("chevron-left", css: "h-5 w-5") %>
+    <% end %>
+    <span class="shrink-0 text-[#8a938d] dark:text-[#9AA6A0]">/</span>
+  <% end %>
+  <span class="truncate font-medium"><%= trail.last[:label] %></span>
+</span>

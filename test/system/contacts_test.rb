@@ -50,4 +50,109 @@ class ContactsTest < ApplicationSystemTestCase
 
     assert_text "successfully destroyed"
   end
+
+  test "strip names teammate owners and limits Log to own rows" do
+    other = User.new(email: "teammate@example.com", password: "Secret1*3*5*")
+    other.save!(validate: false)
+    event = accounts(:workspace_one).events.create!(name: "Extra Outreach",
+      starts_at: 1.day.from_now, duration_in_minutes: 60)
+    invitation = Invitation.create!(contact: @contact, event: event)
+    invitation.follow_up_tasks.create!(user: other, due_at: 1.day.from_now)
+
+    visit contact_url(@contact)
+
+    within(find("li", text: other.full_name)) do
+      assert_no_selector "a", text: "Log"
+    end
+    within(find("li", text: "You")) do
+      assert_selector "a", text: "Log"
+    end
+    assert_text "View all in queue"
+  end
+
+  test "strip rows show due state with event-locked logging" do
+    visit contact_url(@contact)
+
+    assert_text "OPEN FOLLOW-UPS"
+    assert_text "Due"
+    click_on "Log", match: :first
+
+    within("dialog[open]") do
+      assert_text "For #{follow_up_tasks(:three).invitation.event.name}"
+      assert_no_select "Related event"
+      fill_in "What happened?", with: "Called from the strip."
+      click_on "Save log"
+    end
+
+    assert_text "Interaction logged"
+    assert_text "Called from the strip."
+  end
+
+  test "log-less contact renders empty state with generic logging" do    fresh = Contact.create!(first_name: "NoLog", last_name: "Person",
+      owner: accounts(:workspace_one), creator: @user)
+
+    visit contact_url(fresh)
+    click_on "Log your first interaction"
+
+    within("dialog[open]") do
+      assert_select "Related event"
+      fill_in "What happened?", with: "First ever call."
+      click_on "Save log"
+    end
+
+    assert_text "Interaction logged"
+    assert_text "First ever call."
+  end
+
+  test "empty history with only teammate tasks shows owner info, no CTA" do
+    other = User.new(email: "teammate2@example.com", password: "Secret1*3*5*")
+    other.save!(validate: false)
+    fresh = Contact.create!(first_name: "NoLog", last_name: "Mate",
+      owner: accounts(:workspace_one), creator: @user)
+    event = accounts(:workspace_one).events.create!(name: "Extra Outreach",
+      starts_at: 1.day.from_now, duration_in_minutes: 60)
+    invitation = Invitation.create!(contact: fresh, event: event)
+    invitation.follow_up_tasks.create!(user: other, due_at: 1.day.from_now)
+
+    visit contact_url(fresh)
+
+    assert_no_text "Log your first interaction"
+    assert_text "#{other.full_name} is following up"
+    assert_no_text "View all in queue"
+  end
+
+  test "events tab uses canonical event cards with status" do
+    visit contact_url(@contact)
+    within('[role="tablist"]') { click_on "Events" }
+
+    assert_text invitations(:one).event.name
+    assert_text "Invited"
+  end
+
+  test "tag click-through filters contacts" do
+    tag = accounts(:workspace_one).tags.create!(name: "System Regulars")
+    ContactTag.create!(contact: @contact, tag: tag)
+
+    visit tags_url
+    assert_text "System Regulars"
+    click_on "System Regulars"
+
+    assert_text @contact.full_name
+  end
+
+  test "mobile header toggle flips color scheme twice" do
+    visit dashboard_path
+    page.driver.browser.manage.window.resize_to(390, 844)
+
+    before = find("body")["data-color-scheme"]
+    flipped = before == "dark" ? "light" : "dark"
+
+    click_on "Toggle light / dark mode"
+    assert_selector "body[data-color-scheme=\"#{flipped}\"]"
+
+    click_on "Toggle light / dark mode"
+    assert_selector "body[data-color-scheme=\"#{before}\"]"
+  ensure
+    page.driver.browser.manage.window.resize_to(1400, 1400)
+  end
 end

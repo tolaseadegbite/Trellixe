@@ -1,13 +1,7 @@
 <% content_for :title, @event.name %>
 
 <% content_for :page_header do %>
-  <span class="flex min-w-0 items-center gap-2 text-sm">
-    <%= link_to "javascript:history.back()", class: "flex shrink-0 items-center text-[#8a938d] transition hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]" do %>
-      <%= icon("chevron-left", css: "h-5 w-5") %>
-    <% end %>
-    <span class="text-[#8a938d] dark:text-[#9AA6A0]">/</span>
-    <span class="truncate font-medium"><%= @event.name %></span>
-  </span>
+  <%= render "shared/breadcrumb", trail: [ { label: "Events", path: events_path }, { label: @event.name } ] %>
 <% end %>
 
 <div class="space-y-5">

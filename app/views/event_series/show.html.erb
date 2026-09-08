@@ -1,40 +1,11 @@
 <% content_for :title, @event_series.name %>
 
 <% content_for :page_header do %>
-  <span class="flex min-w-0 items-center gap-2 text-sm">
-    <%= link_to event_series_index_path, data: { turbo_frame: "_top" }, class: "flex shrink-0 items-center text-[#8a938d] transition hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]" do %>
-      <%= icon("chevron-left", css: "h-5 w-5") %>
-    <% end %>
-    <span class="text-[#8a938d] dark:text-[#9AA6A0]">/</span>
-    <span class="truncate font-medium"><%= @event_series.name %></span>
-  </span>
+  <%= render "shared/breadcrumb", trail: [ { label: "Series", path: event_series_index_path }, { label: @event_series.name } ] %>
 <% end %>
 
 <div class="space-y-5">
   <%= render "event_series/show_details", event_series: @event_series %>
-
-  <div class="flex items-center gap-2">
-    <%= link_to edit_event_series_path(@event_series), title: "Edit",
-        class: "flex h-9 w-9 items-center justify-center rounded-lg bg-algae-900 text-white transition hover:bg-[#0f5c3e]" do %>
-      <%= icon("pen", css: "h-4 w-4") %>
-    <% end %>
-
-    <% unless @event_series.cancelled_series? || (@event_series.ends_on.present? && @event_series.ends_on < Date.current) %>
-      <%= button_to generate_occurrence_event_series_path(@event_series,
-                      date: @event_series.occurrences(from: Time.current, to: 60.days.from_now).first&.to_date || Date.today,
-                      from: "show"),
-          method: :post, title: "Generate next occurrence",
-          class: "flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" do %>
-        <%= icon("calendar-plus", css: "h-4 w-4") %>
-      <% end %>
-    <% end %>
-
-    <%= button_to toggle_cancellation_event_series_path(@event_series),
-        method: :patch, title: @event_series.cancelled_series? ? "Reactivate" : "Cancel series",
-        class: "flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" do %>
-      <%= icon(@event_series.cancelled_series? ? "check" : "x", css: "h-4 w-4") %>
-    <% end %>
-  </div>
 
   <div id="series-events">
     <h2 class="mb-2 font-display text-[15px] font-semibold">Generated events</h2>

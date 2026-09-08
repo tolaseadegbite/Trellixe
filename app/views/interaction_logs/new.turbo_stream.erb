@@ -1,6 +1,6 @@
-<% content_for :title, @follow_up_task ? "Log follow-up" : "Log interaction" %>
-
-<%= render "shared/modal" do %>
+<%# Re-render the log form inside the open modal on validation failure
+    (both the queue flow and the standalone contact flow land here). %>
+<%= turbo_stream.update "modal-body" do %>
   <%= render "modal_content", interaction_log: @interaction_log, follow_up_task: @follow_up_task,
       queue_context: @queue_context, contact: @contact, contact_events: @contact_events,
       preset_event: @preset_event %>

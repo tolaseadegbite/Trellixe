@@ -100,6 +100,7 @@ Rails.application.routes.draw do
       delete :bulk_destroy
       post :bulk_assign_event
     end
+    resources :interaction_logs, only: %i[ new create ]
   end
 
   resources :events do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_26_025038) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_26_025040) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -126,11 +126,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_26_025038) do
   create_table "interaction_logs", force: :cascade do |t|
     t.bigint "contact_id", null: false
     t.bigint "user_id", null: false
-    t.bigint "follow_up_task_id", null: false
+    t.bigint "follow_up_task_id"
     t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "event_id"
     t.index ["contact_id"], name: "index_interaction_logs_on_contact_id"
+    t.index ["event_id"], name: "index_interaction_logs_on_event_id"
     t.index ["follow_up_task_id"], name: "index_interaction_logs_on_follow_up_task_id"
     t.index ["user_id"], name: "index_interaction_logs_on_user_id"
   end
@@ -285,6 +287,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_26_025038) do
   add_foreign_key "follow_up_tasks", "invitations"
   add_foreign_key "follow_up_tasks", "users"
   add_foreign_key "interaction_logs", "contacts"
+  add_foreign_key "interaction_logs", "events"
   add_foreign_key "interaction_logs", "follow_up_tasks"
   add_foreign_key "interaction_logs", "users"
   add_foreign_key "invitations", "contacts"

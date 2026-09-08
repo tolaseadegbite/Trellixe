@@ -38,6 +38,27 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should show contact with no interaction logs" do
+    fresh = accounts(:workspace_one).contacts.create!(first_name: "Fresh", creator: @user)
+
+    get contact_url(fresh)
+    assert_response :success
+  end
+
+  test "show includes teammate-owned open tasks" do
+    other = User.new(email: "teammate@example.com", password: "Secret1*3*5*")
+    other.save!(validate: false)
+    event = accounts(:workspace_one).events.create!(name: "Extra Outreach",
+      starts_at: 1.day.from_now, duration_in_minutes: 60)
+    invitation = Invitation.create!(contact: @contact, event: event)
+    invitation.follow_up_tasks.create!(user: other, due_at: 1.day.from_now)
+
+    get contact_url(@contact)
+
+    assert_response :success
+    assert_select "li", text: /#{other.full_name}/
+  end
+
   test "should get edit" do
     get edit_contact_url(@contact)
     assert_response :success

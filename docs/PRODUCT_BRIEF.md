@@ -148,6 +148,8 @@ already in use — compose from them before inventing anything new:
      content`)
    - `shared/_pagination` (`pagy`)
    - `shared/_auth_shell` (`title, subtitle?` + block)
+   - `shared/_breadcrumb` (`trail:` array of `{label:, path:}`; last item
+     pathless) — the single back-navigation language, never history.back()
    - `shared/_font_faces` (no locals)
    - `shared/_settings_back_button` (no locals)
    - `tags/_manager` (`tags, tag, list_id`)
@@ -169,9 +171,18 @@ already in use — compose from them before inventing anything new:
      controller (widget-aware clear, single submit). Typing and field
      picks update in place and never rebuild the shell, so the input keeps
      focus and the panel keeps its state.
-   - `events/_guest_checklist` (`form`) — searchable invite checklist for
-     event forms (tags keep the styled multi-select: small sets)
-   - `invitations/_invitation_row` (`invitation`) — guest row with logs thread
+    - `events/_guest_checklist` (`form`) — searchable invite checklist for
+      event forms (tags keep the styled multi-select: small sets)
+    - `events/_event_list_item` (`event`, optional block for attached meta)
+      — date-forward event card with live badge, check-in progress, and
+      actions popover; the single event presentation on lists, series show,
+      calendar day view, and contact history
+    - `events/_show_header` (`event`, `checkin?`) — event detail hero with
+      date/live badge, stats strip, and in-card actions (edit + Check in)
+    - `invitations/_invitation_row` (`invitation`) — guest row with logs thread
+    - `interaction_logs/_modal_content` (`interaction_log`; `follow_up_task?,`
+      `queue_context?` or `contact?, contact_events, preset_event?`) — shared
+      log-modal body for the queue flow and the standalone contact flow
    - `members/_member_row` (`membership`), `team_invitations/_team_invite_row`
      (`team_invitation`)
 3. **Layout-partials for shells** — `render layout:` (auth shell pattern)

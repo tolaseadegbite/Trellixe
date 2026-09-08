@@ -11,6 +11,10 @@ export default class extends Controller {
 
   // Action to be called on button click
   toggle() {
+    // The controller outlives its panel on pages that render no search
+    // card (e.g. the events calendar view) — a toggle with nothing to
+    // toggle is a no-op, never an exception.
+    if (!this.hasFiltersTarget) return
     // Toggles visibility on the filters target div (Tailwind `hidden`;
     // the legacy css-zero `hide` class no longer exists on these panels)
     this.filtersTarget.classList.toggle("hidden")
@@ -21,6 +25,10 @@ export default class extends Controller {
    * Triggered by the `click@window` action.
    */
   closeOnClickOutside(event) {
+    // Pages like the events calendar carry this controller without a
+    // panel — without this guard every click on them throws
+    // "Missing target element".
+    if (!this.hasFiltersTarget) return
     // Flatpickr renders its calendar at document.body level, outside the
     // panel — navigating months/years must not collapse the filters.
     if (event.target.closest(".flatpickr-calendar")) return
@@ -66,7 +74,7 @@ export default class extends Controller {
   #fieldRoots() {
     // The search form plus the filter panel. Bulk checkboxes elsewhere on
     // the page are deliberately untouched.
-    const roots = [ this.filtersTarget ]
+    const roots = this.hasFiltersTarget ? [ this.filtersTarget ] : []
     const searchForm = this.#searchForm()
     if (searchForm) roots.push(searchForm)
     return roots

@@ -14,6 +14,13 @@
     </div>
   </div>
 
+  <%= button_tag type: "button", title: "Toggle light / dark mode", aria: { label: "Toggle light / dark mode" },
+      data: { action: "click->color-scheme#toggle" },
+      class: "relative flex h-9 w-9 items-center justify-center rounded-lg text-[#3d4742] transition hover:bg-[#F1F4F2] md:hidden dark:text-[#C6CFC9] dark:hover:bg-white/5" do %>
+    <span data-color-scheme-target="moonIcon"><%= icon("moon", css: "h-5 w-5") %></span>
+    <span data-color-scheme-target="sunIcon" class="hidden"><%= icon("sun", css: "h-5 w-5") %></span>
+  <% end %>
+
   <%= link_to notifications_path, class: "relative flex h-9 w-9 items-center justify-center rounded-lg text-[#3d4742] transition hover:bg-[#F1F4F2] md:hidden dark:text-[#C6CFC9] dark:hover:bg-white/5", aria: { label: "Notifications" } do %>
     <%= icon("bell", css: "h-5 w-5") %>
     <%= render "notifications/badge", unread: context_notifications.unread.any?, id_suffix: "header" %>
