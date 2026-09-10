@@ -7,13 +7,14 @@ class DeliveryMethods::TurboStreamDelivery < Noticed::DeliveryMethod
       "notifications_#{recipient.id}_global"
     end
 
-    # 2. Update Sidebar List
+    # 2. Update Sidebar List (the only live list — the index page renders
+    #    from the DB on visit, and prepending to it would fight its pagy
+    #    footer while spamming missing-target errors everywhere else)
     broadcast_to_stream(stream_name, "sidebar-notifications-list", "notifications/notification")
 
-    # 3. Update Header/Mobile List
-    broadcast_to_stream(stream_name, "notifications-list", "notifications/notification")
-
-    # 4. Update Badges
+    # 3. Update Badges (desktop sidebar popover + header bell — the only
+    #    badge roots in the shell; targeting absent ids spams the console
+    #    with missing-target errors)
     broadcast_badge(stream_name, "sidebar")
     broadcast_badge(stream_name, "header")
   end

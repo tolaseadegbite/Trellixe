@@ -31,6 +31,26 @@ class TeamInvitationAcceptancesController < ApplicationController
     end
   end
 
+  # Decline: holder of the link destroys the invitation (same trust basis
+  # as accept). No status column — destroy is the decline. All admins are
+  # notified so nobody waits on an answer that will never come.
+  def destroy
+    account = @invitation.account
+    email = @invitation.email
+    @invitation.destroy!
+
+    admins = account.memberships.admin.includes(:user).map(&:user)
+    admins.each do |admin|
+      TeamNotifier::InvitationDeclined.with(
+        account_id: account.id,
+        account_name: account.name,
+        email: email
+      ).deliver_later(admin)
+    end
+
+    redirect_to root_path, notice: "Invitation declined."
+  end
+
   private
 
   def find_invitation

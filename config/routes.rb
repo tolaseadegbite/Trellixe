@@ -3,6 +3,11 @@ Rails.application.routes.draw do
   mount MissionControl::Jobs::Engine, at: "/jobs"
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
+  # ActionCable endpoint for Turbo Streams (notifications, live counters).
+  # Without this mount, stream subscriptions 404 and all realtime updates
+  # silently stop while DB-backed badges still appear on refresh.
+  mount ActionCable.server => "/cable"
+
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -73,7 +78,7 @@ Rails.application.routes.draw do
   end
 
   # 5. Public Acceptance Link (from Email)
-  resource :team_invitation_acceptance, only: [ :show, :update ]
+  resource :team_invitation_acceptance, only: [ :show, :update, :destroy ]
 
   # 6. In-App Notifications
   resources :notifications, only: [ :index, :show ] do

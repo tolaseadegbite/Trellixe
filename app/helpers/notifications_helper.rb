@@ -36,6 +36,9 @@ module NotificationsHelper
     when "TeamNotifier::InvitationReceived"
       "You have been invited to join #{params[:account_name]}."
 
+    when "TeamNotifier::InvitationDeclined"
+      "#{params[:email]} declined the invitation to #{params[:account_name]}."
+
     when "FollowUpTaskNotifier"
       if follow_up_task_param(notification)
         "Follow up with #{follow_up_task_param(notification).contact.full_name}"

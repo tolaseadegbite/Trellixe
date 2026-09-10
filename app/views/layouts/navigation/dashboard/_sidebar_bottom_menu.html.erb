@@ -69,10 +69,6 @@
   </div>
 
   <div class="md:hidden">
-    <%= link_to notifications_path, class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5" do %>
-      <span class="relative"><%= icon("bell", css: "h-[18px] w-[18px]") %><%= render "notifications/badge", unread: context_notifications.unread.any?, id_suffix: "sidebar-m" %></span>
-      Notifications
-    <% end %>
     <%= link_to settings_path, class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5" do %>
       <%= image_tag user_avatar_url(current_user, size: 64), size: 28, alt: current_user.name, class: "h-7 w-7 rounded-full object-cover" %>
       <span class="truncate"><%= current_user.name %></span>

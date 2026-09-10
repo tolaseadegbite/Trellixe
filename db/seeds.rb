@@ -1,4 +1,5 @@
 require "faker"
+require "set"
 
 PASSWORD = "Trellixe2026Seed!"
 HOW_WE_MET = [
@@ -29,6 +30,15 @@ LOG_NOTES = [
 
 DECLINE_REASONS = [ "Out of town", "Had a prior commitment", "Wasn't feeling well" ].freeze
 
+TAG_NAMES = [
+  "Sunday Regulars", "Newcomers", "Transport Needed",
+  "Cell Members", "Youth", "Prayer Requests"
+].freeze
+
+SERIES_NAMES = [
+  "Sunday Service", "Midweek Cell Meeting", "Monthly Outreach"
+].freeze
+
 def seed_workspace_data(account:, creator:, member_ids:)
   contacts = (1..50).map do
     first = Faker::Name.first_name
@@ -46,6 +56,23 @@ def seed_workspace_data(account:, creator:, member_ids:)
   Contact.insert_all!(contacts)
   contact_ids = Contact.where(owner: account).pluck(:id)
 
+  tags = TAG_NAMES.map do |name|
+    {
+      owner_type: "Account", owner_id: account.id, name: name,
+      created_at: 60.days.ago, updated_at: 60.days.ago
+    }
+  end
+  Tag.insert_all!(tags)
+  tag_ids = Tag.where(owner: account).pluck(:id)
+
+  pairs = Set.new
+  contact_ids.each do |cid|
+    tag_ids.sample(rand(0..3)).each { |tid| pairs << [ cid, tid ] }
+  end
+  ContactTag.insert_all!(pairs.map { |cid, tid|
+    { contact_id: cid, tag_id: tid, created_at: Time.current, updated_at: Time.current }
+  }) if pairs.any?
+
   events = (1..15).map do
     starts_at = Faker::Time.between(from: 30.days.ago, to: 45.days.from_now)
     {
@@ -57,9 +84,27 @@ def seed_workspace_data(account:, creator:, member_ids:)
   end
   Event.insert_all!(events)
 
+  # Recurring series with tag-driven auto-invites. create! (not insert_all)
+  # so recurrence callbacks compile; occurrences auto-invite tagged contacts.
+  rand(1..2).times do
+    series = EventSeries.create!(
+      owner: account,
+      name: SERIES_NAMES.sample,
+      starts_at: Faker::Time.between(from: 21.days.ago, to: 7.days.from_now).change(hour: 9),
+      duration_in_minutes: [ 60, 90, 120 ].sample,
+      recurrence_frequency: "weekly",
+      day_of_week: [ rand(0..6).to_s ],
+      tag_ids: tag_ids.sample(rand(1..2))
+    )
+    [ 14.days.ago, 7.days.ago, 7.days.from_now ].sample(2).each do |day|
+      series.generate_occurrence!(series.starts_at.change(year: day.year, month: day.month, day: day.day))
+    end
+  end
+
   invitations = []
   Event.where(owner: account).find_each do |event|
-    contact_ids.sample(rand(3..8)).each do |cid|
+    already = event.invitations.pluck(:contact_id).to_set
+    contact_ids.reject { |cid| already.include?(cid) }.sample(rand(3..8)).each do |cid|
       status = event.starts_at > Time.current ? :invited : %i[invited attended declined].sample
       invitations << {
         contact_id: cid, event_id: event.id,
@@ -95,6 +140,22 @@ def seed_workspace_data(account:, creator:, member_ids:)
     }
   end
   InteractionLog.insert_all!(logs) if logs.any?
+
+  # Standalone logs (no follow-up task): some tied to a past event (history
+  # chip), some truly general. Covers the contact-page logging paths.
+  standalone = []
+  Contact.where(owner: account).where.not(
+    id: InteractionLog.where(contact_id: contact_ids).select(:contact_id)
+  ).sample(8).each do |contact|
+    past_event = contact.events.past.order(starts_at: :desc).first
+    standalone << {
+      contact_id: contact.id, user_id: creator.id, follow_up_task_id: nil,
+      event_id: (past_event&.id if rand < 0.7),
+      note: LOG_NOTES.sample,
+      created_at: rand(1..20).days.ago, updated_at: Time.current
+    }
+  end
+  InteractionLog.insert_all!(standalone) if standalone.any?
 end
 
 puts "=== Cleaning old data ==="
@@ -104,7 +165,9 @@ InteractionLog.destroy_all
 FollowUpTask.destroy_all
 Invitation.destroy_all
 Event.destroy_all
+EventSeries.destroy_all
 Contact.destroy_all
+Tag.destroy_all
 TeamInvitation.destroy_all
 Membership.destroy_all
 Account.destroy_all
@@ -252,8 +315,9 @@ end
 puts ""
 puts "=== Seed complete ==="
 puts "  #{User.count} users / #{Account.count} workspaces"
-puts "  #{Contact.count} contacts / #{Event.count} events"
-puts "  #{Invitation.count} invitations / #{FollowUpTask.count} follow-ups / #{InteractionLog.count} logs"
+puts "  #{Contact.count} contacts / #{Event.count} events (#{EventSeries.count} series)"
+puts "  #{Tag.count} tags / #{ContactTag.count} assignments"
+puts "  #{Invitation.count} invitations / #{FollowUpTask.count} follow-ups / #{InteractionLog.count} logs (#{InteractionLog.where(follow_up_task_id: nil).count} standalone)"
 puts "  #{Noticed::Event.count} notification events / #{Noticed::Notification.count} notifications"
 puts ""
 puts "  Sign in with: tolase@trellixe.com / #{PASSWORD}"

@@ -10,6 +10,16 @@
     </div>
     <%= button_to "Join team", team_invitation_acceptance_path(token: @invitation.token), method: :put,
         class: "mt-4 w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+    <% decline_trigger = button_tag "Decline invitation", type: "button",
+        class: "mt-2 w-full cursor-pointer rounded-lg border border-[#D9DDE0] bg-white px-4 py-2.5 text-[14.5px] font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5",
+        data: { action: "dialog#showModal" } %>
+    <%= modal_dialog decline_trigger, size: "450px", title: "Decline this invitation?" do %>
+      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]"><strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= @invitation.email %></strong> won't be able to join <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= @invitation.account.name %></strong> without a new invite.</p>
+      <div class="mt-5 flex justify-end gap-2">
+        <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+        <%= button_to "Decline invitation", team_invitation_acceptance_path(token: @invitation.token), method: :delete, class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white" %>
+      </div>
+    <% end %>
   <% else %>
     <%= form_with model: @user, url: team_invitation_acceptance_path(token: @invitation.token), method: :put, class: "space-y-4" do |f| %>
       <% if @user.errors.any? %>
@@ -30,6 +40,16 @@
             class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
       </div>
       <%= f.submit "Create account & join", class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+    <% end %>
+    <% decline_trigger = button_tag "Decline invitation", type: "button",
+        class: "mt-2 w-full cursor-pointer rounded-lg border border-[#D9DDE0] bg-white px-4 py-2.5 text-[14.5px] font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5",
+        data: { action: "dialog#showModal" } %>
+    <%= modal_dialog decline_trigger, size: "450px", title: "Decline this invitation?" do %>
+      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]"><strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= @invitation.email %></strong> won't be able to join <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= @invitation.account.name %></strong> without a new invite.</p>
+      <div class="mt-5 flex justify-end gap-2">
+        <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+        <%= button_to "Decline invitation", team_invitation_acceptance_path(token: @invitation.token), method: :delete, class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white" %>
+      </div>
     <% end %>
     <p class="mt-6 text-center text-[13.5px] text-[#5b6660] dark:text-[#9AA6A0]">Already have an account? <%= link_to "Log in", sign_in_path(return_to: request.fullpath), class: "font-semibold text-algae-900 hover:underline dark:text-algae-300" %></p>
   <% end %>

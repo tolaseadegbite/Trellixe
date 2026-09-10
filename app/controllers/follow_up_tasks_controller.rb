@@ -54,7 +54,9 @@ class FollowUpTasksController < DashboardsController
     # 2. Logic Branch
     case action_type
     when "Mark Complete", "Done"
+      completed_ids = @tasks.pluck(:id)
       @tasks.update_all(completed_at: Time.current, updated_at: Time.current)
+      mark_completed_notifications_read(completed_ids)
       flash.now[:notice] = "Marked #{count} #{"task".pluralize(count)} as complete."
     when "Snooze 24h"
       # Shift due_at forward by 1 day
@@ -79,6 +81,18 @@ class FollowUpTasksController < DashboardsController
   end
 
   private
+
+  # Mirrors InteractionLogsController#mark_related_notifications_read for a
+  # set of tasks: completing work clears its badges. Snooze deliberately
+  # skips this — pending work keeps its badge lit.
+  def mark_completed_notifications_read(task_ids)
+    gids = FollowUpTask.where(id: task_ids).map { |t| t.to_gid.to_s }
+    event_ids = Noticed::Event.where(type: "FollowUpTaskNotifier")
+                              .where("params #>> '{task, _aj_globalid}' IN (?)", gids)
+                              .pluck(:id)
+    current_user.notifications.where(event_id: event_ids)
+                .update_all(read_at: Time.current, seen_at: Time.current)
+  end
 
   def render_flash
     render turbo_stream: turbo_stream.update("flash_messages", partial: "shared/flash")

@@ -22,4 +22,18 @@ class MembersTest < ApplicationSystemTestCase
     click_on "Pending invites"
     assert_text "Pending invites"
   end
+
+  test "settings submenu has no notifications link" do
+    visit members_url
+
+    assert_no_selector "details a[href='#{notifications_path}']"
+  end
+
+  test "notification badge roots carry stream target ids" do
+    visit members_url
+
+    assert_selector "#sidebar-notification-badge", visible: :all
+    assert_selector "#header-notification-badge", visible: :all
+    assert_no_selector "#sidebar-m-notification-badge", visible: :all
+  end
 end
