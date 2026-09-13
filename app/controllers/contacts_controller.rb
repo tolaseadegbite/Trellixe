@@ -123,6 +123,10 @@ class ContactsController < DashboardsController
       end
 
       Invitation.insert_all(invitations_attributes)
+      # Bulk inserts skip model callbacks — schedule pre-event digests here.
+      @event.invitations.where(contact_id: new_contact_ids).find_each do |invitation|
+        PreEventDigest.schedule_for(invitation)
+      end
       flash.now[:notice] = "Successfully added #{new_contact_ids.size} contacts to #{@event.name}."
     else
       flash.now[:alert] = "Selected contacts were already assigned to #{@event.name}."

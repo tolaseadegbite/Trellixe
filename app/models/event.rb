@@ -7,6 +7,7 @@ class Event < ApplicationRecord
   validates :duration_in_minutes, presence: true, numericality: { greater_than: 0 }
 
   has_many :invitations, dependent: :destroy
+  has_many :pre_event_digests, dependent: :destroy
   has_many :invited_contacts, through: :invitations, source: :contact
   has_many :follow_up_tasks, through: :invitations
   has_many :interaction_logs, through: :follow_up_tasks

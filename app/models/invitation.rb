@@ -17,6 +17,11 @@ class Invitation < ApplicationRecord
   # completed work and its logs are immutable history and stay.
   after_update :remove_pending_follow_ups, if: :saved_change_to_status?
 
+  # Every guest added (any creation path using .create!) gets its volunteer
+  # a pre-event digest slot. insert_all sites call the scheduler explicitly
+  # since bulk inserts skip callbacks.
+  after_create_commit { PreEventDigest.schedule_for(self) }
+
   def self.ransackable_attributes(auth_object = nil)
     # Allow searching by status and event_id
     %w[status event_id]
