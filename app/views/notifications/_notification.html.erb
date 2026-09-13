@@ -1,7 +1,11 @@
+<%# Opening a notification marks it read (NotificationsController#show),
+    so prefetch is disabled: Turbo prefetches hovered links with real GETs,
+    and a hover must never flip read state. %>
 <%= link_to notification_path(notification),
     id: dom_id(notification),
     class: "block border-b border-[#E9EBED] px-4 py-3 transition last:border-0 hover:bg-[#F6F9F7] dark:border-white/10 dark:hover:bg-white/[0.04] #{'bg-algae-50/60 dark:bg-algae-600/10' if notification.unread?}",
-    data: notification.event.type == "FollowUpTaskNotifier" ? { turbo_frame: "modal" } : {} do %>
+    data: { turbo_prefetch: false }.merge(
+      notification.event.type == "FollowUpTaskNotifier" ? { turbo_frame: "modal" } : {}) do %>
   <div class="flex items-center gap-3">
     <% if (actor_url = notification_actor_avatar_url(notification)) %>
       <%= image_tag actor_url, size: 32, alt: "", class: "h-8 w-8 shrink-0 rounded-full object-cover" %>

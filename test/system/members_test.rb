@@ -36,4 +36,17 @@ class MembersTest < ApplicationSystemTestCase
     assert_selector "#header-notification-badge", visible: :all
     assert_no_selector "#sidebar-m-notification-badge", visible: :all
   end
+
+  test "notification row links disable prefetch" do
+    event = Noticed::Event.create!(type: "TeamNotifier::MemberJoined",
+      params: { account_id: accounts(:workspace_one).id,
+                account_name: "Cell One", user_name: "Hover Probe" })
+    note = Noticed::Notification.create!(event: event, recipient: @user,
+      account: accounts(:workspace_one))
+
+    visit members_url
+
+    assert_selector "#sidebar-notifications-list a[data-turbo-prefetch='false'][href='#{notification_path(note)}']",
+      visible: :all
+  end
 end
