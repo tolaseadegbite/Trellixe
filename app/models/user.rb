@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :accounts, through: :memberships
   has_many :follow_up_tasks, dependent: :destroy
+  has_many :pre_event_digests, dependent: :destroy
 
   # Authentication tokens
   generates_token_for :email_verification, expires_in: 2.days do

@@ -22,6 +22,8 @@ class InvitationsController < DashboardsController
       Invitation.insert_all(invitations_attributes)
 
       @new_invitations = @event.invitations.where(contact_id: contact_ids).includes(:contact)
+      # Bulk inserts skip model callbacks — schedule pre-event digests here.
+      @new_invitations.each { |invitation| PreEventDigest.schedule_for(invitation) }
 
       invited_ids = @event.invitations.pluck(:contact_id)
       @available_contacts = Current.account.contacts.where.not(id: invited_ids).order(:first_name)
@@ -155,9 +157,9 @@ class InvitationsController < DashboardsController
 
     event_end_time = invitation.event.starts_at + invitation.event.duration_in_minutes.minutes
 
-    # due_date = event_end_time.next_day.beginning_of_day.advance(hours: 9)
-    due_date = event_end_time.advance(minutes: 3)
-    # due_date = event_end_time.tomorrow.change(hour: 9)
+    account = Current.account
+    assignee_zone = current_user.time_zone.presence || "UTC"
+    due_date = account.post_reminder_due_at(event_end_time, assignee_zone)
 
     FollowUpTask.find_or_create_by!(invitation: invitation) do |task|
       task.user = current_user

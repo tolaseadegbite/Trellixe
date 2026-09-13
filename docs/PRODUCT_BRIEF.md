@@ -61,15 +61,16 @@ touch, and every next action is visible to everyone who needs it.
 ## 6. V1 scope
 
 **In:** contact capture with context, Sunday check-in (bulk + single),
-auto-queued follow-ups, interaction timeline, tags + tag-driven
-auto-invites, series scheduling, team invites with roles, attendance and
-invite→follow-up conversion stats.
+pre-event volunteer digests, auto-queued follow-ups, interaction timeline,
+tags + tag-driven auto-invites, series scheduling, team invites with roles,
+attendance and invite→follow-up conversion stats, workspace-wide reminder
+policy (admin-owned schedule; per-volunteer due-time overrides deferred).
 
 **Explicitly NOT v1 — do not build these, however helpful they seem:**
 
 - QR self-check-in for crusades
-- Free-form manual to-dos
-- Per-workspace reminder cadences
+- Free-form manual to-dos (reassigning loop-generated follow-ups is in;
+  inventing arbitrary tasks is not)
 - Zonal / regional oversight portals
 
 ## 7. UX principles

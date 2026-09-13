@@ -42,4 +42,18 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
 
     assert @invitation.reload.attended?
   end
+
+  test "attended task due follows workspace policy clock" do
+    travel_to Time.utc(2026, 9, 14, 10, 0) do # Monday, UTC (lazaro has no zone set)
+      event = accounts(:workspace_one).events.create!(
+        name: "Policy Sunday", starts_at: Time.utc(2026, 9, 13, 10, 0), duration_in_minutes: 60)
+      invitation = event.invitations.create!(contact: contacts(:two))
+
+      patch bulk_update_invitations_url,
+        params: { invitation_ids: [ invitation.id ], status: "attended" }
+
+      task = invitation.follow_up_tasks.sole
+      assert_equal Time.utc(2026, 9, 14, 9, 0), task.due_at
+    end
+  end
 end

@@ -67,6 +67,7 @@ class AccountsController < DashboardsController
   private
 
   def account_params
-    params.require(:account).permit(:name)
+    params.require(:account).permit(:name, :reminder_clock, :pre_event_enabled,
+      :pre_event_day_offset, :pre_event_buffer_minutes, :post_event_day_offset)
   end
 end

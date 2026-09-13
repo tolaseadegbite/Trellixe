@@ -2,6 +2,7 @@ require "test_helper"
 
 class NotificationsHelperTest < ActiveSupport::TestCase
   include NotificationsHelper
+  include Rails.application.routes.url_helpers
 
   setup do
     @user = users(:lazaro_nixon)
@@ -46,10 +47,22 @@ class NotificationsHelperTest < ActiveSupport::TestCase
     assert_equal "decliner@example.com declined the invitation to Cell One.",
       notification_message(note_for("TeamNotifier::InvitationDeclined",
         { account_name: "Cell One", email: "decliner@example.com" }))
+    assert_equal "2 guests to nudge before Sunday Service.",
+      notification_message(note_for("PreEventDigestNotifier",
+        { event_id: 1, event_name: "Sunday Service", invitee_count: 2,
+          account_id: accounts(:workspace_one).id }))
   end
 
-  test "follow-up reminder prefers the live task, falls back when gone" do
-    task = follow_up_tasks(:three)
+  test "pre-event digest lands on its event" do
+    event = events(:one)
+
+    assert_equal event_path(event.id), notification_destination(
+      note_for("PreEventDigestNotifier",
+        { event_id: event.id, event_name: event.name, invitee_count: 1,
+          account_id: accounts(:workspace_one).id }))
+  end
+
+  test "follow-up reminder prefers the live task, falls back when gone" do    task = follow_up_tasks(:three)
     assert_equal "Follow up with #{task.contact.full_name}",
       notification_message(note_for("FollowUpTaskNotifier", { task: task }))
 

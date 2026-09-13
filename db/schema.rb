@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_26_025040) do
+ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -21,6 +21,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_26_025040) do
     t.string "public_id"
     t.datetime "created_at", default: -> { "now()" }, null: false
     t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.string "reminder_clock", default: "09:00", null: false
+    t.boolean "pre_event_enabled", default: true, null: false
+    t.integer "pre_event_day_offset", default: 1, null: false
+    t.integer "pre_event_buffer_minutes", default: 120, null: false
+    t.integer "post_event_day_offset", default: 1, null: false
     t.index ["public_id"], name: "index_accounts_on_public_id", unique: true
   end
 
@@ -191,6 +196,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_26_025040) do
     t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
   end
 
+  create_table "pre_event_digests", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "fire_at", null: false
+    t.datetime "sent_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "user_id"], name: "index_pre_event_digests_unsent", unique: true, where: "(sent_at IS NULL)"
+    t.index ["event_id"], name: "index_pre_event_digests_on_event_id"
+    t.index ["user_id"], name: "index_pre_event_digests_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "user_agent"
@@ -295,6 +312,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_26_025040) do
   add_foreign_key "memberships", "accounts"
   add_foreign_key "memberships", "users"
   add_foreign_key "noticed_notifications", "accounts"
+  add_foreign_key "pre_event_digests", "events"
+  add_foreign_key "pre_event_digests", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "sign_in_tokens", "users"
   add_foreign_key "tagged_event_series", "event_series"

@@ -38,6 +38,54 @@
     </div>
   </div>
 
+  <%# --- REMINDERS CARD --- %>
+  <div id="reminder-settings" class="mb-10 overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+    <div class="border-b border-[#E9EBED] p-6 dark:border-white/10">
+      <h3 class="mb-1 text-lg font-bold">Reminders</h3>
+      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">One shared rhythm for the whole cell: nudges go out at this clock time, in each volunteer's own time zone. Applies to newly scheduled work only.</p>
+    </div>
+
+    <div class="p-6">
+      <%= form_with(model: @account, url: account_path(@account), method: :patch) do |form| %>
+        <% if @account.errors.any? %>
+          <div class="mb-4 text-sm text-red-700 dark:text-red-400">
+            <%= @account.errors.full_messages.to_sentence %>
+          </div>
+        <% end %>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="flex flex-col gap-1">
+            <%= form.label :reminder_clock, "Reminder time", class: "mb-1 block text-[13px] font-semibold" %>
+            <%= form.text_field :reminder_clock, required: true, placeholder: "09:00",
+                class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]",
+                data: { controller: "datepicker", datepicker_type_value: "time" } %>
+          </div>
+          <div class="flex flex-col gap-1">
+            <%= form.label :post_event_day_offset, "Follow up, days after event", class: "mb-1 block text-[13px] font-semibold" %>
+            <%= form.number_field :post_event_day_offset, min: 0, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <%= form.check_box :pre_event_enabled, class: "h-4 w-4 cursor-pointer accent-[#13714C]" %>
+            <%= form.label :pre_event_enabled, "Nudge volunteers before events", class: "text-sm font-semibold" %>
+          </div>
+          <div class="flex flex-col gap-1">
+            <%= form.label :pre_event_day_offset, "Pre-event nudge, days after invite", class: "mb-1 block text-[13px] font-semibold" %>
+            <%= form.number_field :pre_event_day_offset, min: 0, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+          </div>
+          <div class="flex flex-col gap-1 sm:col-span-2">
+            <%= form.label :pre_event_buffer_minutes, "Don't nudge inside this window before start (minutes)", class: "mb-1 block text-[13px] font-semibold" %>
+            <%= form.number_field :pre_event_buffer_minutes, min: 0, step: 15, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+            <p class="text-xs leading-relaxed text-[#8a938d] dark:text-[#9AA6A0]">Invites that land inside this window skip the morning slot — the volunteer is nudged right away instead, while the event is still upcoming.</p>
+          </div>
+        </div>
+
+        <div class="mt-6 flex items-center justify-end">
+          <%= form.submit "Save Changes", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
   <%# --- DANGER ZONE --- %>
   <div class="overflow-hidden rounded-2xl border border-red-200 bg-white dark:border-red-500/30 dark:bg-[#1d1214]">
     <div class="border-b border-red-200 p-6 dark:border-red-500/30">

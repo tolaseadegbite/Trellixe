@@ -39,6 +39,10 @@ module NotificationsHelper
     when "TeamNotifier::InvitationDeclined"
       "#{params[:email]} declined the invitation to #{params[:account_name]}."
 
+    when "PreEventDigestNotifier"
+      count = params[:invitee_count].to_i
+      "#{count} #{"guest".pluralize(count)} to nudge before #{params[:event_name]}."
+
     when "FollowUpTaskNotifier"
       if follow_up_task_param(notification)
         "Follow up with #{follow_up_task_param(notification).contact.full_name}"
@@ -59,6 +63,13 @@ module NotificationsHelper
 
     when "TeamNotifier::InvitationReceived"
       team_invitation_acceptance_path(token: params[:token])
+
+    when "PreEventDigestNotifier"
+      if Event.exists?(params[:event_id])
+        event_path(params[:event_id])
+      else
+        events_path
+      end
 
     when "FollowUpTaskNotifier"
       if (task = follow_up_task_param(notification))
