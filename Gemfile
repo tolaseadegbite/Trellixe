@@ -1,7 +1,10 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.2", ">= 8.0.2.1"
+gem "rails", "~> 8.1.0"
+# json 3.x made JSON.parse keyword-only; ActiveSupport 8.1 calls it with a
+# positional options hash. Stay on 2.x until upstream adapts.
+gem "json", "~> 2.0"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record

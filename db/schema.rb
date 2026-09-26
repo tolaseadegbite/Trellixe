@@ -10,44 +10,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_13_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
 
   create_table "accounts", force: :cascade do |t|
-    t.string "name", default: "Personal Workspace", null: false
-    t.integer "seat_limit", default: 5, null: false
-    t.string "public_id"
     t.datetime "created_at", default: -> { "now()" }, null: false
-    t.datetime "updated_at", default: -> { "now()" }, null: false
-    t.string "reminder_clock", default: "09:00", null: false
-    t.boolean "pre_event_enabled", default: true, null: false
-    t.integer "pre_event_day_offset", default: 1, null: false
-    t.integer "pre_event_buffer_minutes", default: 120, null: false
+    t.string "name", default: "Personal Workspace", null: false
     t.integer "post_event_day_offset", default: 1, null: false
+    t.integer "pre_event_buffer_minutes", default: 120, null: false
+    t.integer "pre_event_day_offset", default: 1, null: false
+    t.boolean "pre_event_enabled", default: true, null: false
+    t.string "public_id"
+    t.string "reminder_clock", default: "09:00", null: false
+    t.integer "seat_limit", default: 5, null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
     t.index ["public_id"], name: "index_accounts_on_public_id", unique: true
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -59,8 +59,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
 
   create_table "contact_tags", force: :cascade do |t|
     t.bigint "contact_id", null: false
-    t.bigint "tag_id", null: false
     t.datetime "created_at", null: false
+    t.bigint "tag_id", null: false
     t.datetime "updated_at", null: false
     t.index ["contact_id", "tag_id"], name: "index_contact_tags_on_contact_id_and_tag_id", unique: true
     t.index ["contact_id"], name: "index_contact_tags_on_contact_id"
@@ -68,16 +68,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.string "owner_type", null: false
-    t.bigint "owner_id", null: false
-    t.string "first_name", null: false
-    t.string "last_name"
-    t.string "email"
-    t.string "phone_number"
-    t.text "how_we_met"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "creator_id", null: false
+    t.string "email"
+    t.string "first_name", null: false
+    t.text "how_we_met"
+    t.string "last_name"
+    t.bigint "owner_id", null: false
+    t.string "owner_type", null: false
+    t.string "phone_number"
+    t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_contacts_on_creator_id"
     t.index ["email"], name: "index_contacts_on_email", opclass: :gin_trgm_ops, using: :gin
     t.index ["first_name"], name: "index_contacts_on_first_name", opclass: :gin_trgm_ops, using: :gin
@@ -87,41 +87,41 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
   end
 
   create_table "event_series", force: :cascade do |t|
-    t.string "owner_type", null: false
-    t.bigint "owner_id", null: false
-    t.string "name", null: false
-    t.integer "duration_in_minutes", null: false
-    t.datetime "starts_at", null: false
-    t.jsonb "recurrence_rule", default: {}, null: false
-    t.date "ends_on"
     t.boolean "cancelled_series", default: false
     t.datetime "created_at", null: false
+    t.integer "duration_in_minutes", null: false
+    t.date "ends_on"
+    t.string "name", null: false
+    t.bigint "owner_id", null: false
+    t.string "owner_type", null: false
+    t.jsonb "recurrence_rule", default: {}, null: false
+    t.datetime "starts_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_type", "owner_id"], name: "index_event_series_on_owner"
   end
 
   create_table "events", force: :cascade do |t|
-    t.string "owner_type", null: false
-    t.bigint "owner_id", null: false
-    t.string "name", null: false
-    t.datetime "starts_at", null: false
-    t.integer "duration_in_minutes", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "duration_in_minutes", null: false
     t.bigint "event_series_id"
+    t.string "name", null: false
+    t.bigint "owner_id", null: false
+    t.string "owner_type", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["event_series_id"], name: "index_events_on_event_series_id"
     t.index ["owner_type", "owner_id", "starts_at"], name: "index_events_on_owner_and_starts_at"
     t.index ["owner_type", "owner_id"], name: "index_events_on_owner"
   end
 
   create_table "follow_up_tasks", force: :cascade do |t|
-    t.bigint "invitation_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "due_at", null: false
     t.datetime "completed_at"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "due_at", null: false
+    t.bigint "invitation_id", null: false
     t.datetime "notified_at"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["invitation_id"], name: "index_follow_up_tasks_on_invitation_id", unique: true
     t.index ["notified_at"], name: "index_follow_up_tasks_on_notified_at", where: "(notified_at IS NULL)"
     t.index ["user_id", "completed_at"], name: "index_follow_up_tasks_on_user_id_and_completed_at"
@@ -130,12 +130,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
 
   create_table "interaction_logs", force: :cascade do |t|
     t.bigint "contact_id", null: false
-    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "event_id"
     t.bigint "follow_up_task_id"
     t.text "note", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "event_id"
+    t.bigint "user_id", null: false
     t.index ["contact_id"], name: "index_interaction_logs_on_contact_id"
     t.index ["event_id"], name: "index_interaction_logs_on_event_id"
     t.index ["follow_up_task_id"], name: "index_interaction_logs_on_follow_up_task_id"
@@ -144,10 +144,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
 
   create_table "invitations", force: :cascade do |t|
     t.bigint "contact_id", null: false
-    t.bigint "event_id", null: false
-    t.integer "status", default: 0, null: false
-    t.text "notes"
     t.datetime "created_at", null: false
+    t.bigint "event_id", null: false
+    t.text "notes"
+    t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["contact_id", "event_id"], name: "index_invitations_on_contact_id_and_event_id", unique: true
     t.index ["contact_id"], name: "index_invitations_on_contact_id"
@@ -155,12 +155,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
   end
 
   create_table "memberships", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.bigint "account_id", null: false
-    t.string "role", default: "member", null: false
-    t.string "public_id"
     t.datetime "created_at", null: false
+    t.string "public_id"
+    t.string "role", default: "member", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["account_id", "role"], name: "index_memberships_on_account_id_and_role"
     t.index ["account_id"], name: "index_memberships_on_account_id"
     t.index ["public_id"], name: "index_memberships_on_public_id", unique: true
@@ -169,27 +169,27 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
   end
 
   create_table "noticed_events", force: :cascade do |t|
-    t.string "type"
-    t.string "record_type"
-    t.bigint "record_id"
-    t.jsonb "params"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "notifications_count"
+    t.jsonb "params"
+    t.bigint "record_id"
+    t.string "record_type"
+    t.string "type"
+    t.datetime "updated_at", null: false
     t.index ["record_type", "record_id"], name: "index_noticed_events_on_record"
   end
 
   create_table "noticed_notifications", force: :cascade do |t|
-    t.string "type"
-    t.bigint "event_id", null: false
-    t.string "recipient_type", null: false
-    t.bigint "recipient_id", null: false
-    t.datetime "read_at", precision: nil
-    t.datetime "seen_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "account_id"
+    t.datetime "created_at", null: false
+    t.bigint "event_id", null: false
     t.string "public_id"
+    t.datetime "read_at", precision: nil
+    t.bigint "recipient_id", null: false
+    t.string "recipient_type", null: false
+    t.datetime "seen_at", precision: nil
+    t.string "type"
+    t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_noticed_notifications_on_account_id"
     t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
     t.index ["public_id"], name: "index_noticed_notifications_on_public_id", unique: true
@@ -197,38 +197,38 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
   end
 
   create_table "pre_event_digests", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.bigint "event_id", null: false
-    t.bigint "user_id", null: false
     t.datetime "fire_at", null: false
     t.datetime "sent_at"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["event_id", "user_id"], name: "index_pre_event_digests_unsent", unique: true, where: "(sent_at IS NULL)"
     t.index ["event_id"], name: "index_pre_event_digests_on_event_id"
     t.index ["user_id"], name: "index_pre_event_digests_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "user_agent"
+    t.datetime "created_at", null: false
     t.string "ip_address"
     t.datetime "sudo_at", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "sign_in_tokens", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.datetime "created_at", default: -> { "now()" }, null: false
     t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_sign_in_tokens_on_user_id"
   end
 
   create_table "tagged_event_series", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.bigint "event_series_id", null: false
     t.bigint "tag_id", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_series_id", "tag_id"], name: "index_tagged_event_series_on_event_series_id_and_tag_id", unique: true
     t.index ["event_series_id"], name: "index_tagged_event_series_on_event_series_id"
@@ -236,23 +236,23 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
   end
 
   create_table "tags", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "owner_type", null: false
-    t.bigint "owner_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "owner_id", null: false
+    t.string "owner_type", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_type", "owner_id", "name"], name: "index_tags_on_owner_type_and_owner_id_and_name", unique: true
     t.index ["owner_type", "owner_id"], name: "index_tags_on_owner"
   end
 
   create_table "team_invitations", force: :cascade do |t|
-    t.string "email", null: false
     t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.datetime "expires_at", null: false
+    t.string "public_id"
     t.string "role", default: "member", null: false
     t.string "token", null: false
-    t.string "public_id"
-    t.datetime "expires_at", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "email"], name: "index_team_invitations_on_account_id_and_email", unique: true
     t.index ["account_id"], name: "index_team_invitations_on_account_id"
@@ -261,37 +261,37 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_13_000001) do
   end
 
   create_table "user_activities", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "action", null: false
-    t.string "user_agent"
-    t.string "ip_address"
     t.datetime "created_at", null: false
+    t.string "ip_address"
     t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_user_activities_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", null: false
-    t.string "password_digest", null: false
-    t.boolean "verified", default: false, null: false
-    t.string "provider"
-    t.string "uid"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "email", null: false
     t.string "name"
+    t.string "password_digest", null: false
+    t.string "provider"
     t.string "public_id"
     t.string "time_zone", default: "UTC", null: false
+    t.string "uid"
+    t.datetime "updated_at", null: false
+    t.boolean "verified", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["public_id"], name: "index_users_on_public_id", unique: true
   end
 
   create_table "web_push_subscriptions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "endpoint", null: false
-    t.string "p256dh", null: false
     t.string "auth", null: false
     t.datetime "created_at", null: false
+    t.string "endpoint", null: false
+    t.string "p256dh", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_web_push_subscriptions_on_user_id"
   end
 

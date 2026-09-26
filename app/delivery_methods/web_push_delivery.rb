@@ -1,4 +1,4 @@
-class WebPushDelivery < Noticed::DeliveryMethods::Base
+class WebPushDelivery < Noticed::DeliveryMethod
   # This method is called by Noticed
   def deliver
     # `recipient` is the User object
