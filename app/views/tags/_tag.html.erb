@@ -4,9 +4,16 @@
     <span><%= tag.name %></span>
     <span class="rounded-full bg-[#E9EBED] px-1.5 py-px text-[11px] font-semibold tabular-nums text-[#6b7672] dark:bg-white/10 dark:text-[#9AA6A0]"><%= tag.try(:contacts_count) || tag.contacts.size %></span>
   <% end %>
-  <%= button_to tag_path(tag), method: :delete, title: "Remove tag",
+  <% delete_trigger = button_tag type: "button", title: "Remove tag",
       class: "flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-[#8a938d] transition hover:bg-red-50 hover:text-red-700 dark:text-[#9AA6A0] dark:hover:bg-red-500/10 dark:hover:text-red-400",
-      form: { data: { turbo_confirm: "Remove this tag?" } } do %>
+      data: { action: "dialog#showModal" } do %>
     <%= icon("x", css: "h-3.5 w-3.5") %>
+  <% end %>
+  <%= modal_dialog delete_trigger, size: "450px", title: "Remove '#{tag.name}'?" do %>
+    <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">This permanently removes this tag. This can't be undone.</p>
+    <div class="mt-5 flex justify-end gap-2">
+      <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold transition hover:border-[#A2E494] dark:border-white/10" data-action="click->dialog#close">Cancel</button>
+      <%= button_to "Delete", tag_path(tag), method: :delete, class: "rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-800" %>
+    </div>
   <% end %>
 </div>
