@@ -64,6 +64,12 @@ class FollowUpTasksController < DashboardsController
       # or just set a fixed time. Simple fixed time is safer for bulk actions.
       new_time = 24.hours.from_now
       @tasks.update_all(due_at: new_time, updated_at: Time.current)
+      # Point a fresh reminder at the new due time. The runs scheduled for
+      # the old time carry a stale due_at token and discard themselves
+      # instead of polling every minute until the new time arrives.
+      @tasks.find_each do |task|
+        FollowUpReminderJob.set(wait_until: new_time).perform_later(task, new_time)
+      end
       flash.now[:notice] = "Snoozed #{count} #{"task".pluralize(count)} for 24 hours."
     end
 

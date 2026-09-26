@@ -30,7 +30,7 @@ class FollowUpTask < ApplicationRecord
   private
 
   def schedule_first_reminder
-    FollowUpReminderJob.set(wait_until: due_at).perform_later(self)
+    FollowUpReminderJob.set(wait_until: due_at).perform_later(self, due_at)
   end
 
   def remove_related_notifications

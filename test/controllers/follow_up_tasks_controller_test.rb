@@ -34,4 +34,16 @@ class FollowUpTasksControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_predicate note.reload, :unread?
   end
+
+  test "bulk snooze enqueues a fresh reminder at the new due time" do
+    freeze_time do
+      assert_enqueued_with(job: FollowUpReminderJob, at: 24.hours.from_now) do
+        patch bulk_update_follow_up_tasks_url,
+          params: { task_ids: [ @task.id ], commit: "Snooze 24h" }, as: :turbo_stream
+      end
+    end
+
+    assert_response :success
+    assert_equal 24.hours.from_now.to_i, @task.reload.due_at.to_i
+  end
 end
