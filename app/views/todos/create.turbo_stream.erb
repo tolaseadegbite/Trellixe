@@ -1,0 +1,8 @@
+<% if @todo.persisted? %>
+  <%= turbo_stream.remove "todos-empty" %>
+  <%= turbo_stream.prepend "todos-list", partial: "todos/todo_row", locals: { todo: @todo } %>
+<% else %>
+  <%= turbo_stream.update "new_todo_form", partial: "todos/form", locals: { todo: @todo } %>
+<% end %>
+
+<%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>

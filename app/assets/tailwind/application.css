@@ -130,6 +130,12 @@ dialog.tlx-dialog::backdrop { background: rgb(20 28 24 / 0.5); }
 .flatpickr-calendar .flatpickr-day.flatpickr-disabled, .flatpickr-calendar .flatpickr-day.flatpickr-disabled:hover, .flatpickr-calendar .flatpickr-day.prevMonthDay, .flatpickr-calendar .flatpickr-day.nextMonthDay, .flatpickr-calendar .flatpickr-day.notAllowed { color: #9aa6a0; }
 .flatpickr-calendar .flatpickr-day.selected, .flatpickr-calendar .flatpickr-day.startRange, .flatpickr-calendar .flatpickr-day.endRange, .flatpickr-calendar .flatpickr-day.selected:hover, .flatpickr-calendar .flatpickr-day.startRange:hover, .flatpickr-calendar .flatpickr-day.endRange:hover { background: var(--color-algae-900); color: #fff; border-color: transparent; }
 
+/* Flatpickr (datepicker controller) — the visible alt input copies the
+   original input's classes, but .flatpickr-wrapper shrink-wraps, so date
+   fields render narrower than their sibling inputs. Force full width. */
+.flatpickr-wrapper { display: block; width: 100%; }
+.flatpickr-wrapper > input { width: 100%; }
+
 /* TomSelect (combobox controller) — Algae theme to match inputs.
    NOTE: TomSelect copies the original <select>'s classes onto .ts-wrapper,
    so the wrapper itself must stay visually neutral — all styling lives on

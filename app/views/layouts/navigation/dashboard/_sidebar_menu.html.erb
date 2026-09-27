@@ -93,6 +93,15 @@
         <%= icon("tags", css: "h-[18px] w-[18px] text-[#8a938d] dark:text-[#9AA6A0]") %>
         Tags
       <% end %>
+      <%= link_to todos_path,
+          class: "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition #{active.(todos_path) ? 'bg-algae-50 text-algae-900 dark:bg-algae-600/15 dark:text-algae-300' : 'text-[#3d4742] hover:bg-[#F1F4F2] dark:text-[#C6CFC9] dark:hover:bg-white/5'}" do %>
+        <%= icon("circle-check", css: "h-[18px] w-[18px] #{active.(todos_path) ? 'text-algae-900 dark:text-algae-300' : 'text-[#8a938d] dark:text-[#9AA6A0]'}") %>
+        <span class="flex-1">Todos</span>
+        <% todo_count = Current.account.todos.visible_to(current_user).for_member(current_user).open.count %>
+        <% if todo_count > 0 %>
+          <span class="flex h-5 min-w-5 items-center justify-center rounded-full bg-algae-900 px-1.5 text-[11px] font-bold tabular-nums text-white"><%= todo_count %></span>
+        <% end %>
+      <% end %>
     </div>
 
     <p class="px-2.5 pb-1.5 pt-5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a938d] dark:text-[#9AA6A0]">Workspace</p>

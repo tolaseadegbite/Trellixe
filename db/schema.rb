@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_13_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_27_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -260,6 +260,43 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_13_000001) do
     t.index ["token"], name: "index_team_invitations_on_token", unique: true
   end
 
+  create_table "todo_contacts", force: :cascade do |t|
+    t.bigint "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "todo_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_id"], name: "index_todo_contacts_on_contact_id"
+    t.index ["todo_id", "contact_id"], name: "index_todo_contacts_on_todo_id_and_contact_id", unique: true
+    t.index ["todo_id"], name: "index_todo_contacts_on_todo_id"
+  end
+
+  create_table "todo_participations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "todo_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["todo_id", "user_id"], name: "index_todo_participations_on_todo_id_and_user_id", unique: true
+    t.index ["todo_id"], name: "index_todo_participations_on_todo_id"
+    t.index ["user_id"], name: "index_todo_participations_on_user_id"
+  end
+
+  create_table "todos", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.bigint "creator_id", null: false
+    t.datetime "due_at"
+    t.integer "progress_count", default: 0, null: false
+    t.integer "target_count"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.string "visibility", default: "shared", null: false
+    t.index ["account_id"], name: "index_todos_on_account_id"
+    t.index ["creator_id"], name: "index_todos_on_creator_id"
+    t.index ["user_id"], name: "index_todos_on_user_id"
+  end
+
   create_table "user_activities", force: :cascade do |t|
     t.string "action", null: false
     t.datetime "created_at", null: false
@@ -319,6 +356,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_13_000001) do
   add_foreign_key "tagged_event_series", "event_series"
   add_foreign_key "tagged_event_series", "tags"
   add_foreign_key "team_invitations", "accounts"
+  add_foreign_key "todo_contacts", "contacts"
+  add_foreign_key "todo_contacts", "todos"
+  add_foreign_key "todo_participations", "todos"
+  add_foreign_key "todo_participations", "users"
+  add_foreign_key "todos", "accounts"
+  add_foreign_key "todos", "users"
+  add_foreign_key "todos", "users", column: "creator_id"
   add_foreign_key "user_activities", "users"
   add_foreign_key "web_push_subscriptions", "users"
 end

@@ -1,0 +1,8 @@
+<%= render "shared/search_bar",
+    search: @search,
+    url: todos_path,
+    frame: "todos_table",
+    predicate: :title_cont,
+    placeholder: "Search todos…",
+    hidden: { status: @status, filter: @filter },
+    fields: "todos/filter_fields" %>

@@ -1,0 +1,9 @@
+<%# Shared by update, toggle_complete, step_progress and toggle_contact:
+    the row always re-renders the record's current state in place. %>
+<% if @todo.errors.any? %>
+  <%= turbo_stream.update "edit_todo_form", partial: "todos/form", locals: { todo: @todo } %>
+<% else %>
+  <%= turbo_stream.replace dom_id(@todo), partial: "todos/todo_row", locals: { todo: @todo } %>
+<% end %>
+
+<%= turbo_stream.update "flash_messages", partial: "shared/flash", locals: { notice: flash.now[:notice], alert: flash.now[:alert] } %>

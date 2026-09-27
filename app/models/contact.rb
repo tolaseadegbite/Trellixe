@@ -9,6 +9,8 @@ class Contact < ApplicationRecord
   has_many :events, through: :invitations
   has_many :contact_tags, dependent: :destroy
   has_many :tags, through: :contact_tags
+  has_many :todo_contacts, dependent: :destroy
+  has_many :todos, through: :todo_contacts
 
   # 1. Ransack Alias: Maps 'combined_search' to multiple columns
   # URL becomes: ?q[combined_search_cont]=David

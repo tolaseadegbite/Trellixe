@@ -57,6 +57,14 @@ touch, and every next action is visible to everyone who needs it.
   timeline.
 - **Tag**: the connective tissue — grouping contacts *and* driving automatic
   invitations.
+- **Todo**: scoped manual work. Admin-managed shared todos (titled,
+  due-dated, assignable to one member or to everyone, linkable to many
+  contacts as reference) plus member-private personal todos (visible to
+  the creator alone, admins included). Closing is admin-or-assignee;
+  team-wide todos close by admin only. Any member who can see a shared
+  todo logs their own participation ("I participated" roster) and steps
+  goal progress; goal todos carry a target count with a manual counter.
+  No reminders — the list itself is the nudge.
 
 ## 6. V1 scope
 
@@ -64,13 +72,16 @@ touch, and every next action is visible to everyone who needs it.
 pre-event volunteer digests, auto-queued follow-ups, interaction timeline,
 tags + tag-driven auto-invites, series scheduling, team invites with roles,
 attendance and invite→follow-up conversion stats, workspace-wide reminder
-policy (admin-owned schedule; per-volunteer due-time overrides deferred).
+policy (admin-owned schedule; per-volunteer due-time overrides deferred),
+todos — admin-assigned shared work and member-private personal lists, with
+contact links, per-contact check-offs, and goal counters (reminders
+deferred).
 
 **Explicitly NOT v1 — do not build these, however helpful they seem:**
 
 - QR self-check-in for crusades
-- Free-form manual to-dos (reassigning loop-generated follow-ups is in;
-  inventing arbitrary tasks is not)
+- Todo reminders and notifications (reassigning loop-generated follow-ups
+  is in; inventing task types beyond scoped todos is not)
 - Zonal / regional oversight portals
 
 ## 7. UX principles
@@ -184,8 +195,17 @@ already in use — compose from them before inventing anything new:
     - `interaction_logs/_modal_content` (`interaction_log`; `follow_up_task?,`
       `queue_context?` or `contact?, contact_events, preset_event?`) — shared
       log-modal body for the queue flow and the standalone contact flow
-   - `members/_member_row` (`membership`), `team_invitations/_team_invite_row`
-     (`team_invitation`)
+    - `members/_member_row` (`membership`), `team_invitations/_team_invite_row`
+      (`team_invitation`)
+    - `todos/_todo_row` (`todo`) — the single todo presentation: gated
+      complete toggle, assignee/Everyone pill, due/overdue pill, goal bar
+      + stepper, contact reference chips, participation roster +
+      "I participated" button, edit + delete actions
+    - `todos/_form` (`todo`) — new/edit modal form; assignee and visibility
+      pickers render for admins only
+    - `todos/_contact_checklist` (`form`, `selected`) — checkbox contact
+      linker posting `todo[contact_ids][]`, reusing the `guest-list`
+      controller (no new JS)
 3. **Layout-partials for shells** — `render layout:` (auth shell pattern)
    for page/modal shells.
 

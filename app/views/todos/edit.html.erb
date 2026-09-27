@@ -1,0 +1,10 @@
+<% content_for :title, "Edit Todo" %>
+
+<%= render "shared/modal" do %>
+  <div data-action="turbo:submit-end->modal#submitEnd">
+    <h2 class="mb-4 font-display text-xl font-bold tracking-tight">Edit todo</h2>
+    <div id="edit_todo_form">
+      <%= render "form", todo: @todo %>
+    </div>
+  </div>
+<% end %>

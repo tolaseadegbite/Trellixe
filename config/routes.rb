@@ -90,6 +90,15 @@ Rails.application.routes.draw do
   # --- Tags ---
   resources :tags, only: [ :index, :create, :destroy ]
 
+  # --- Todos ---
+  resources :todos, only: [ :index, :new, :create, :edit, :update, :destroy ] do
+    member do
+      patch :toggle_complete
+      patch :step_progress
+      patch :participate
+    end
+  end
+
   # --- Event Series ---
   resources :event_series, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
     member do

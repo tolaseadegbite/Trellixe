@@ -7,6 +7,8 @@ class Account < ApplicationRecord
   has_many :users, through: :memberships
   has_many :team_invitations, dependent: :destroy
 
+  has_many :todos, dependent: :destroy
+
   # Trellixe Domain Data (Polymorphic Ownership)
   has_many :contacts, as: :owner, dependent: :destroy
   has_many :events, as: :owner, dependent: :destroy

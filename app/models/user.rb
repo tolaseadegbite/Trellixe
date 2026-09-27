@@ -8,6 +8,9 @@ class User < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :accounts, through: :memberships
   has_many :follow_up_tasks, dependent: :destroy
+  has_many :todos, dependent: :destroy
+  has_many :created_todos, class_name: "Todo", foreign_key: :creator_id, dependent: :nullify
+  has_many :todo_participations, dependent: :destroy
   has_many :pre_event_digests, dependent: :destroy
 
   # Authentication tokens
