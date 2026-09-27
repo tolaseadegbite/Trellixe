@@ -165,8 +165,10 @@ already in use — compose from them before inventing anything new:
    - `shared/_font_faces` (no locals)
    - `shared/_settings_back_button` (no locals)
    - `tags/_manager` (`tags, tag, list_id`)
-   - `dashboards/_follow_up_row`, `dashboards/_upcoming_event_row`
-     (`task` / `event`)
+     - `dashboards/_follow_up_row`, `dashboards/_upcoming_event_row`
+      (`task` / `event`), `dashboards/_todo_row` (`todo` — open, dated;
+      due line ticks via the `countdown` controller, goal count + bar
+      for goal todos)
    - `follow_up_tasks/_queue` (`queue, pagy, context`) with
      `follow_up_tasks/_queue_current` (`task, context, queue`) and
      `follow_up_tasks/_queue_up_next_row` (`task, context`)

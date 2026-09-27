@@ -38,9 +38,9 @@
         <% end %>
       </span>
       <% if todo.overdue? %>
-        <span class="rounded-full bg-red-700 px-2 py-0.5 text-[11px] font-bold text-white">Overdue · <%= time_ago_in_words(todo.due_at) %></span>
+        <span class="rounded-full bg-red-700 px-2 py-0.5 text-[11px] font-bold text-white" data-controller="countdown" data-countdown-due-at-value="<%= todo.due_at.iso8601 %>"><span data-countdown-target="label" class="tabular-nums">Overdue · <%= time_ago_in_words(todo.due_at) %></span></span>
       <% elsif todo.due_at.present? %>
-        <span class="rounded-full border border-[#A2E494] bg-algae-50 px-2 py-0.5 text-[11px] font-semibold text-algae-900 dark:bg-algae-600/15 dark:text-algae-300">Due <%= todo.due_at.today? ? "today" : l(todo.due_at, format: :short) %></span>
+        <span class="rounded-full border border-[#A2E494] bg-algae-50 px-2 py-0.5 text-[11px] font-semibold text-algae-900 dark:bg-algae-600/15 dark:text-algae-300" data-controller="countdown" data-countdown-due-at-value="<%= todo.due_at.iso8601 %>" data-countdown-fallback-value="Due <%= todo.due_at.today? ? 'today' : l(todo.due_at, format: :short) %>"><span data-countdown-target="label" class="tabular-nums">Due <%= todo.due_at.today? ? "today" : l(todo.due_at, format: :short) %></span></span>
       <% end %>
       <% if todo.personal? %>
         <span class="rounded-full border border-[#D9DDE0] px-2 py-0.5 text-[11px] font-semibold dark:border-white/10">Only you</span>
@@ -50,21 +50,18 @@
       <% end %>
     </div>
 
-    <% if todo.goal? && todo.shared? %>
+    <% if todo.goal? %>
       <div class="mt-2 flex items-center gap-2">
         <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-[#E9EBED] dark:bg-white/10" role="progressbar"
             aria-valuenow="<%= todo.progress_count %>" aria-valuemin="0" aria-valuemax="<%= todo.target_count %>" aria-label="Goal progress">
           <div class="h-full rounded-full bg-algae-600 transition-all" style="width: <%= (todo.progress_count * 100.0 / todo.target_count).round %>%"></div>
         </div>
-        <%= button_to step_progress_todo_path(todo, delta: -1), method: :patch, title: "Step back",
-            class: "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[#D9DDE0] text-[#6b7672] transition hover:border-[#A2E494] dark:border-white/10 dark:text-[#9AA6A0]" do %><%= icon("minus", css: "h-4 w-4") %><% end %>
-        <%= button_to step_progress_todo_path(todo, delta: 1), method: :patch, title: "Log progress",
-            class: "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[#D9DDE0] text-[#6b7672] transition hover:border-[#A2E494] dark:border-white/10 dark:text-[#9AA6A0]" do %><%= icon("plus", css: "h-4 w-4") %><% end %>
-      </div>
-    <% elsif todo.goal? %>
-      <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-[#E9EBED] dark:bg-white/10" role="progressbar"
-          aria-valuenow="<%= todo.progress_count %>" aria-valuemin="0" aria-valuemax="<%= todo.target_count %>" aria-label="Goal progress">
-        <div class="h-full rounded-full bg-algae-600 transition-all" style="width: <%= (todo.progress_count * 100.0 / todo.target_count).round %>%"></div>
+        <% if todo.shared? || todo.user == current_user %>
+          <%= button_to step_progress_todo_path(todo, delta: -1), method: :patch, title: "Step back",
+              class: "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[#D9DDE0] text-[#6b7672] transition hover:border-[#A2E494] dark:border-white/10 dark:text-[#9AA6A0]" do %><%= icon("minus", css: "h-4 w-4") %><% end %>
+          <%= button_to step_progress_todo_path(todo, delta: 1), method: :patch, title: "Log progress",
+              class: "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[#D9DDE0] text-[#6b7672] transition hover:border-[#A2E494] dark:border-white/10 dark:text-[#9AA6A0]" do %><%= icon("plus", css: "h-4 w-4") %><% end %>
+        <% end %>
       </div>
     <% end %>
 

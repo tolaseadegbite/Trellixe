@@ -1,0 +1,25 @@
+<%# Dashboard todo row. Locals: todo (open, dated). Mirrors the
+    follow-up row idiom: status bar, title, due line with a live
+    countdown, goal count + bar for goal todos, and a link into the
+    todos list. %>
+<% overdue = todo.overdue? %>
+<div class="flex items-center gap-3 px-5 py-3.5" id="<%= dom_id(todo) %>">
+  <span class="h-9 w-1 shrink-0 rounded-full <%= overdue ? 'bg-red-500' : 'bg-algae-300' %>"></span>
+  <div class="min-w-0 flex-1">
+    <p class="truncate text-[14px] font-semibold"><%= todo.title %></p>
+    <p class="truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">
+      <%= todo.user.present? ? (todo.user_id == current_user.id ? "You" : todo.user.full_name) : "Everyone" %> ·
+      <span class="<%= overdue ? 'font-medium text-red-700 dark:text-red-400' : '' %>" data-controller="countdown" data-countdown-due-at-value="<%= todo.due_at.iso8601 %>" data-countdown-fallback-value="Due <%= l(todo.due_at, format: :short) %>"><span data-countdown-target="label" class="tabular-nums"><%= overdue ? "Overdue · #{time_ago_in_words(todo.due_at)}" : "Due #{l(todo.due_at, format: :short)}" %></span></span>
+      <% if todo.goal? %>
+        <span class="font-semibold tabular-nums text-algae-900 dark:text-algae-300"> · <%= todo.progress_count %>/<%= todo.target_count %></span>
+      <% end %>
+    </p>
+    <% if todo.goal? %>
+      <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[#E9EBED] dark:bg-white/10" role="progressbar"
+          aria-valuenow="<%= todo.progress_count %>" aria-valuemin="0" aria-valuemax="<%= todo.target_count %>" aria-label="Goal progress">
+        <div class="h-full rounded-full bg-algae-600 transition-all" style="width: <%= (todo.progress_count * 100.0 / todo.target_count).round %>%"></div>
+      </div>
+    <% end %>
+  </div>
+  <%= link_to "Open", todos_path(status: "open"), class: "shrink-0 rounded-lg border border-[#D9DDE0] px-3 py-1.5 text-[13px] font-semibold transition hover:border-[#A2E494] hover:text-algae-900 dark:border-white/10 dark:hover:text-algae-300" %>
+</div>

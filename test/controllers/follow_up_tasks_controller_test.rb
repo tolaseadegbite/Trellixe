@@ -41,9 +41,12 @@ class FollowUpTasksControllerTest < ActionDispatch::IntegrationTest
         patch bulk_update_follow_up_tasks_url,
           params: { task_ids: [ @task.id ], commit: "Snooze 24h" }, as: :turbo_stream
       end
-    end
 
-    assert_response :success
-    assert_equal 24.hours.from_now.to_i, @task.reload.due_at.to_i
+      # Inside frozen time: comparing against a fresh 24.hours.from_now
+      # outside this block flakes across a wall-clock second boundary.
+      assert_response :success
+      assert_equal 24.hours.from_now.to_i, @task.reload.due_at.to_i
+    end
   end
+
 end

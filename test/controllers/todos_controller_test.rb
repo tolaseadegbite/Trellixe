@@ -181,6 +181,17 @@ class TodosControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to todos_path
   end
 
+  test "owner steps progress on own personal goal" do
+    sign_in_as(@member)
+    todo = @account.todos.create!(title: "Read John", user: @member, creator: @member,
+      visibility: :personal, target_count: 3)
+
+    patch step_progress_todo_url(todo), params: { delta: 1 }, as: :turbo_stream
+
+    assert_response :success
+    assert_equal 1, todo.reload.progress_count
+  end
+
   test "member steps progress on team-wide goal" do
     todo = @account.todos.create!(title: "Read John", user: nil, creator: @admin, target_count: 3)
     sign_in_as(@member)

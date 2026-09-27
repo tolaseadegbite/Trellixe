@@ -90,6 +90,11 @@ class TodosController < DashboardsController
   # themselves with one tap; tapping again removes the entry. Personal
   # todos have exactly one viewer, so there is nothing to join.
   def participate
+    unless @todo.shared?
+      redirect_back_or_to todos_path, alert: "Permission denied."
+      return
+    end
+
     if @todo.participated?(current_user)
       @todo.todo_participations.find_by(user: current_user).destroy!
       flash.now[:notice] = "Removed from participants."
@@ -149,10 +154,10 @@ class TodosController < DashboardsController
   end
 
   # Executing (progress steps, participation): any member who can see a
-  # shared todo. Personal owners use the edit form instead — execution
-  # widgets render on shared todos only.
+  # shared todo, plus owners on their own personal ones (their steppers
+  # render in place; the edit form only sets the target).
   def authorize_participation!
-    return if @todo.shared?
+    return if @todo.shared? || (@todo.personal? && @todo.user == current_user)
 
     redirect_back_or_to todos_path, alert: "Permission denied."
   end

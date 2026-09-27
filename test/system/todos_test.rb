@@ -83,6 +83,17 @@ class TodosTest < ApplicationSystemTestCase
     assert_selector "a[aria-label='New todo']", visible: :all
   end
 
+  test "dashboard shows a due todo with a ticking label" do
+    accounts(:workspace_one).todos.create!(title: "Dashboard due", user: @user, creator: @user,
+      due_at: 2.hours.from_now)
+
+    visit dashboard_url
+
+    assert_text "Due todos"
+    assert_text "Dashboard due"
+    assert_text(/Due in \d+h/, wait: 10)
+  end
+
   test "member personal todo is invisible to admin" do
     member = User.new(email: "private@example.com", password: "Secret1*3*5*")
     member.save!(validate: false)

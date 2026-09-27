@@ -8,6 +8,14 @@ class DashboardsController < ApplicationController
                                  .order(due_at: :asc).limit(8)
                                  .includes(invitation: [ :event, :contact ])
     @overdue_count = current_user.follow_up_tasks.for_account(account).pending.where("due_at < ?", Time.current).count
+    @due_todos = account.todos.visible_to(current_user).for_member(current_user)
+                        .open.where.not(due_at: nil)
+                        .order(due_at: :asc).limit(5)
+                        .includes(:user, todo_contacts: :contact, todo_participations: :user)
+    @todos_overdue_count = account.todos.visible_to(current_user).for_member(current_user)
+                                  .open.where("due_at < ?", Time.current).count
+    @due_todos_count = account.todos.visible_to(current_user).for_member(current_user)
+                              .open.where.not(due_at: nil).count
     @contacts_count = account.contacts.count
     @week_contacts = account.contacts.where("contacts.created_at >= ?", 7.days.ago).count
     invites = Invitation.joins(:event).where(events: { owner_type: "Account", owner_id: account.id })
