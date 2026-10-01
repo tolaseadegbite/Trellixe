@@ -1,21 +1,18 @@
 <%= turbo_stream.update "flash_messages", partial: "shared/flash" %>
 
 <%= turbo_stream.update "header_avatar" do %>
-  <div class="avatar" style="--avatar-size: 2rem;">
-    <%= image_tag user_avatar_url(current_user, size: 32), alt: current_user.name %>
-  </div>
-<% end %>
-
-<%= turbo_stream.update "sidebar_avatar_compact" do %>
-  <div class="flex shrink-0 overflow-hidden rounded-full bg-highlight" style="padding: .1rem;">
-    <%= image_tag user_avatar_url(current_user, size: 32), size: 32, alt: current_user.name, class: "rounded-full" %>
-  </div>
+  <%= render "shared/user_avatar", user: current_user, size: 32,
+      css: "h-8 w-8 rounded-full object-cover ring-1 ring-[#D9DDE0] dark:ring-white/20" %>
 <% end %>
 
 <%= turbo_stream.update "sidebar_avatar_full" do %>
-  <div class="flex shrink-0 overflow-hidden rounded-full bg-highlight" style="padding: .1rem;">
-    <%= image_tag user_avatar_url(current_user, size: 32), size: 32, alt: current_user.name, class: "rounded-full" %>
-  </div>
+  <%= render "shared/user_avatar", user: current_user, size: 32,
+      css: "h-8 w-8 rounded-full object-cover" %>
+<% end %>
+
+<%= turbo_stream.update "sidebar_avatar_compact" do %>
+  <%= render "shared/user_avatar", user: current_user, size: 28,
+      css: "h-7 w-7 rounded-full object-cover" %>
 <% end %>
 
 <%= turbo_stream.update "edit_avatar_form" do %>

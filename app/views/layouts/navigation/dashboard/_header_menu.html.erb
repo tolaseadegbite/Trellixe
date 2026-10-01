@@ -27,6 +27,9 @@
   <% end %>
 
   <%= link_to settings_path, class: "hidden h-9 w-9 items-center justify-center overflow-hidden rounded-full md:flex" do %>
-    <%= image_tag user_avatar_url(current_user, size: 64), size: 32, alt: current_user.name, class: "h-8 w-8 rounded-full object-cover ring-1 ring-[#D9DDE0] dark:ring-white/20" %>
+    <span id="header_avatar" class="contents">
+      <%= render "shared/user_avatar", user: current_user, size: 32,
+          css: "h-8 w-8 rounded-full object-cover ring-1 ring-[#D9DDE0] dark:ring-white/20" %>
+    </span>
   <% end %>
 </div>

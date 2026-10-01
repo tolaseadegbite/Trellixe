@@ -158,7 +158,10 @@ already in use — compose from them before inventing anything new:
    - `shared/_flash` (notice/alert, auto-dismisses)
    - `shared/_dialog` / `shared/_modal` (`trigger, title, label?, size?,
      content`)
-   - `shared/_pagination` (`pagy`)
+    - `shared/_pagination` (`pagy`)
+    - `shared/_user_avatar` (`user:`, `size:`, `css:`) — the single avatar
+      `<img>`; shell targets `header_avatar`, `sidebar_avatar_full`,
+      `sidebar_avatar_compact` re-render it on upload
    - `shared/_auth_shell` (`title, subtitle?` + block)
    - `shared/_breadcrumb` (`trail:` array of `{label:, path:}`; last item
      pathless) — the single back-navigation language, never history.back()

@@ -1,0 +1,4 @@
+<%# User avatar image. Locals: user, size: (rendered px), css: (img classes).
+    The variant is requested at 2x for retina; the src changes with every
+    new upload, so Turbo Stream re-renders always fetch fresh. %>
+<%= image_tag user_avatar_url(user, size: size * 2), size: size, alt: user.name, class: css %>
