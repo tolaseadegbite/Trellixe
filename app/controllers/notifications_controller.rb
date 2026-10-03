@@ -1,7 +1,13 @@
 class NotificationsController < DashboardsController
   before_action :authenticate
 
+  # Opening the list is triage: every visit (mobile bell, desktop
+  # popover "View all") marks the in-scope unread notifications read,
+  # silently. Rows render read on first paint; badges refresh with the
+  # layout render that follows this action.
   def index
+    mark_scope_as_read
+
     @notifications = current_user.notifications
                                  .where(account_id: [ Current.account.id, nil ])
                                  .newest_first.limit(50)
@@ -16,6 +22,16 @@ class NotificationsController < DashboardsController
   end
 
   def mark_all_as_read
+    mark_scope_as_read
+
+    redirect_back(fallback_location: notifications_path, notice: "All notifications marked as read.")
+  end
+
+  private
+
+  # Single definition of "everything this user hasn't seen in this
+  # workspace": account notifications plus global (account-less) ones.
+  def mark_scope_as_read
     scope = current_user.notifications.unread
 
     if Current.account
@@ -23,7 +39,5 @@ class NotificationsController < DashboardsController
     end
 
     scope.update_all(read_at: Time.current, seen_at: Time.current)
-
-    redirect_back(fallback_location: notifications_path, notice: "All notifications marked as read.")
   end
 end
