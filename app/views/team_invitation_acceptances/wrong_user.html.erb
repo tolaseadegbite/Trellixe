@@ -2,8 +2,8 @@
 <%= render layout: "shared/auth_shell", locals: { title: "Wrong account", subtitle: "This invite was sent to #{@invitation.email}, but you're signed in as #{current_user.email}." } do %>
   <div class="space-y-2.5">
     <%= button_to "Log out and switch", session_path(Current.session), method: :delete,
-        class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+        class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-pine" %>
     <%= link_to "Back to dashboard", root_path,
-        class: "flex w-full items-center justify-center rounded-lg border border-[#D9DDE0] bg-white px-4 py-2.5 text-[14px] font-medium transition hover:border-[#A2E494] dark:bg-[#131B17] dark:border-white/10" %>
+        class: "flex w-full items-center justify-center rounded-lg border border-[#D9DDE0] bg-white px-4 py-2.5 text-[14px] font-medium transition hover:border-algae-300 dark:bg-card dark:border-white/10" %>
   </div>
 <% end %>

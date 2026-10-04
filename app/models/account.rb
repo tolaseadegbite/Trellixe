@@ -23,7 +23,25 @@ class Account < ApplicationRecord
   has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
   has_many :notifications, through: :noticed_events, class_name: "Noticed::Notification"
 
+  # Workspace appearance (admin-owned, §8). Stock Algae is the default and
+  # always available; curated Omarchy dark palettes are opt-in per
+  # workspace and re-skin dark mode only. Keys map to
+  # body[data-theme] blocks in the Tailwind input.
+  THEMES = {
+    "stock" => { label: "Stock Algae", background: "#0c1210", accent: "#3ab67d", foreground: "#e7ece9" },
+    "osaka-jade" => { label: "Osaka Jade", background: "#111c18", accent: "#509475", foreground: "#c1c497" },
+    "solitude" => { label: "Solitude", background: "#101315", accent: "#798186", foreground: "#cacccc" },
+    "giants" => { label: "Giants", background: "#27241f", accent: "#97786d", foreground: "#e1d5c2" },
+    "retro-82" => { label: "Retro 82", background: "#05182e", accent: "#faa968", foreground: "#f6dcac" },
+    "miasma" => { label: "Miasma", background: "#222222", accent: "#78824b", foreground: "#c2c2b0" },
+    "tokyo-night" => { label: "Tokyo Night", background: "#1a1b26", accent: "#7aa2f7", foreground: "#a9b1d6" },
+    "matte-black" => { label: "Matte Black", background: "#121212", accent: "#e68e0d", foreground: "#bebebe" },
+    "gruvbox" => { label: "Gruvbox", background: "#282828", accent: "#7daea3", foreground: "#d4be98" },
+    "everforest" => { label: "Everforest", background: "#2d353b", accent: "#7fbbb3", foreground: "#d3c6aa" }
+  }.freeze
+
   validates :name, presence: true
+  validates :theme, inclusion: { in: THEMES.keys }
 
   # Workspace-wide reminder policy (admin-owned; §6). One shared rhythm per
   # cell: volunteers never set personal due times.

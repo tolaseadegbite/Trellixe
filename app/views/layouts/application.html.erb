@@ -23,7 +23,7 @@
 
   <% auth_pages = controller_name.in?(%w[sessions passwords registrations passwordlesses password_resets]) %>
 
-  <body class="min-h-screen bg-[#F1F4F2] font-sans text-[#1c2420] antialiased dark:bg-[#0C1210] dark:text-[#E7ECE9]" data-controller="color-scheme">
+  <body class="min-h-screen bg-[#F1F4F2] font-sans text-[#1c2420] antialiased dark:bg-night dark:text-ink" data-controller="color-scheme">
 
     <div id="flash_messages">
       <%= render "shared/flash" %>

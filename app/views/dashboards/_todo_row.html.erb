@@ -7,7 +7,7 @@
   <span class="h-9 w-1 shrink-0 rounded-full <%= overdue ? 'bg-red-500' : 'bg-algae-300' %>"></span>
   <div class="min-w-0 flex-1">
     <p class="truncate text-[14px] font-semibold"><%= todo.title %></p>
-    <p class="truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">
+    <p class="truncate text-[13px] text-[#8a938d] dark:text-fog">
       <%= todo.user.present? ? (todo.user_id == current_user.id ? "You" : todo.user.full_name) : "Everyone" %> ·
       <span class="<%= overdue ? 'font-medium text-red-700 dark:text-red-400' : '' %>" data-controller="countdown" data-countdown-due-at-value="<%= todo.due_at.iso8601 %>" data-countdown-fallback-value="Due <%= l(todo.due_at, format: :short) %>"><span data-countdown-target="label" class="tabular-nums"><%= overdue ? "Overdue · #{time_ago_in_words(todo.due_at)}" : "Due #{l(todo.due_at, format: :short)}" %></span></span>
       <% if todo.goal? %>
@@ -21,5 +21,5 @@
       </div>
     <% end %>
   </div>
-  <%= link_to "Open", todos_path(status: "open"), class: "shrink-0 rounded-lg border border-[#D9DDE0] px-3 py-1.5 text-[13px] font-semibold transition hover:border-[#A2E494] hover:text-algae-900 dark:border-white/10 dark:hover:text-algae-300" %>
+  <%= link_to "Open", todos_path(status: "open"), class: "shrink-0 rounded-lg border border-[#D9DDE0] px-3 py-1.5 text-[13px] font-semibold transition hover:border-algae-300 hover:text-algae-900 dark:border-white/10 dark:hover:text-algae-300" %>
 </div>

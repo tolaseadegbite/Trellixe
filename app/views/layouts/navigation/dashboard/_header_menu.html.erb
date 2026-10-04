@@ -1,5 +1,5 @@
 <div class="flex min-w-0 flex-1 items-center gap-2">
-  <h1 class="truncate font-display text-[17px] font-bold tracking-tight text-[#1c2420] md:text-lg dark:text-[#E7ECE9]"><%= yield(:page_header) || "Dashboard" %></h1>
+  <h1 class="truncate font-display text-[17px] font-bold tracking-tight text-[#1c2420] md:text-lg dark:text-ink"><%= yield(:page_header) || "Dashboard" %></h1>
 </div>
 
 <div class="flex shrink-0 items-center gap-1.5">
@@ -7,7 +7,7 @@
     <%= yield :header_action_buttons %>
     <div data-controller="push-subscription">
       <button data-push-subscription-target="subscribeButton" data-action="push-subscription#subscribe"
-        class="flex items-center gap-1.5 rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-[13px] font-medium text-[#3d4742] transition hover:border-[#A2E494] hover:text-algae-900 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-[#C6CFC9] dark:hover:text-algae-300">
+        class="flex items-center gap-1.5 rounded-lg border border-[#D9DDE0] bg-white px-3 py-2 text-[13px] font-medium text-[#3d4742] transition hover:border-algae-300 hover:text-algae-900 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-clay dark:hover:text-algae-300">
         <%= icon("bell", css: "h-4 w-4") %>
         <span data-push-subscription-target="label">Enable alerts</span>
       </button>
@@ -16,12 +16,12 @@
 
   <%= button_tag type: "button", title: "Toggle light / dark mode", aria: { label: "Toggle light / dark mode" },
       data: { action: "click->color-scheme#toggle" },
-      class: "relative flex h-9 w-9 items-center justify-center rounded-lg text-[#3d4742] transition hover:bg-[#F1F4F2] md:hidden dark:text-[#C6CFC9] dark:hover:bg-white/5" do %>
+      class: "relative flex h-9 w-9 items-center justify-center rounded-lg text-[#3d4742] transition hover:bg-[#F1F4F2] md:hidden dark:text-clay dark:hover:bg-white/5" do %>
     <span data-color-scheme-target="moonIcon"><%= icon("moon", css: "h-5 w-5") %></span>
     <span data-color-scheme-target="sunIcon" class="hidden"><%= icon("sun", css: "h-5 w-5") %></span>
   <% end %>
 
-  <%= link_to notifications_path, class: "relative flex h-9 w-9 items-center justify-center rounded-lg text-[#3d4742] transition hover:bg-[#F1F4F2] md:hidden dark:text-[#C6CFC9] dark:hover:bg-white/5", aria: { label: "Notifications" } do %>
+  <%= link_to notifications_path, class: "relative flex h-9 w-9 items-center justify-center rounded-lg text-[#3d4742] transition hover:bg-[#F1F4F2] md:hidden dark:text-clay dark:hover:bg-white/5", aria: { label: "Notifications" } do %>
     <%= icon("bell", css: "h-5 w-5") %>
     <%= render "notifications/badge", unread: context_notifications.unread.any?, id_suffix: "header" %>
   <% end %>

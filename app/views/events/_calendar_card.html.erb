@@ -1,6 +1,6 @@
 <% stats = event.invitation_summary %>
 
-<div class="flex h-full flex-col justify-between overflow-hidden rounded-xl border border-[#D9DDE0] bg-white text-center shadow-sm dark:border-white/10 dark:bg-[#131B17]">
+<div class="flex h-full flex-col justify-between overflow-hidden rounded-xl border border-[#D9DDE0] bg-white text-center shadow-sm dark:border-white/10 dark:bg-card">
   <div class="p-2 text-center">
     <h4 class="break-words text-xs font-semibold">
       <%= link_to event.name, event, class: "hover:text-algae-900 hover:underline dark:hover:text-algae-300", data: { turbo_frame: "_top" } %>
@@ -12,8 +12,8 @@
       <%= icon("user-check", css: "h-3.5 w-3.5 text-algae-900 dark:text-algae-300") %>
       <span class="text-xs tabular-nums">
         <span class="font-semibold"><%= stats[:attended] %></span>
-        <span class="text-[#8a938d] dark:text-[#9AA6A0]">/</span>
-        <span class="text-[#8a938d] dark:text-[#9AA6A0]"><%= stats[:total] %></span>
+        <span class="text-[#8a938d] dark:text-fog">/</span>
+        <span class="text-[#8a938d] dark:text-fog"><%= stats[:total] %></span>
       </span>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <div id="<%= dom_id(event, :show_header) %>">
-  <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+  <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-card">
     <div class="flex items-start gap-4 p-6">
       <% live = event.starts_at <= Time.current && event.ends_at >= Time.current %>
       <% if live %>
@@ -15,18 +15,18 @@
       <% end %>
       <div class="min-w-0 flex-1">
         <h1 class="break-words font-display text-2xl font-bold tracking-tight"><%= event.name %></h1>
-        <p class="mt-1.5 text-sm tabular-nums text-[#6b7672] dark:text-[#9AA6A0]">
+        <p class="mt-1.5 text-sm tabular-nums text-[#6b7672] dark:text-fog">
           <%= format_full_event_datetime_range(event) rescue l(event.starts_at, format: :long) %>
         </p>
         <% if event.event_series %>
-          <p class="mt-1 text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">
+          <p class="mt-1 text-[13px] text-[#8a938d] dark:text-fog">
             Part of <%= link_to event.event_series.name, event_series_path(event.event_series), data: { turbo_frame: "_top" }, class: "font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
           </p>
         <% end %>
       </div>
       <% unless local_assigns[:checkin] %>
       <%= link_to edit_event_path(event), title: "Edit",
-          class: "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-algae-900 text-white transition hover:bg-[#0f5c3e]" do %>
+          class: "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-algae-900 text-white transition hover:bg-pine" do %>
         <%= icon("pen", css: "h-4 w-4") %>
       <% end %>
       <% end %>
@@ -37,10 +37,10 @@
       <div class="min-w-0 flex-1">
         <div class="flex items-baseline justify-between gap-3">
           <p class="text-sm font-semibold tabular-nums">
-            <%= stats[:attended] %> <span class="font-medium text-[#8a938d] dark:text-[#9AA6A0]">of <%= stats[:total] %> checked in</span>
+            <%= stats[:attended] %> <span class="font-medium text-[#8a938d] dark:text-fog">of <%= stats[:total] %> checked in</span>
           </p>
           <% if stats[:declined] > 0 %>
-            <p class="text-[13px] tabular-nums text-[#8a938d] dark:text-[#9AA6A0]"><%= stats[:declined] %> declined</p>
+            <p class="text-[13px] tabular-nums text-[#8a938d] dark:text-fog"><%= stats[:declined] %> declined</p>
           <% end %>
         </div>
         <div class="mt-2 h-2 overflow-hidden rounded-full bg-[#E9EBED] dark:bg-white/10" role="progressbar"
@@ -49,7 +49,7 @@
         </div>
       </div>
       <% unless local_assigns[:checkin] %>
-        <%= link_to "Check in", event_path(event, mode: "checkin"), class: "shrink-0 rounded-lg bg-algae-900 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+        <%= link_to "Check in", event_path(event, mode: "checkin"), class: "shrink-0 rounded-lg bg-algae-900 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-pine" %>
       <% end %>
     </div>
   </div>

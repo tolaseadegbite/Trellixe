@@ -20,6 +20,23 @@
   --color-mist-dark: #d9dde0;
   --color-ink: #1c2420;
 
+  /* Surface tokens: light values are the stock light UI; dark values are
+     applied in the dark override block below. Views must use these (behind
+     dark:) instead of hardcoded dark hexes, so workspace themes can remap
+     them per palette. Transparency-based dark utilities (white/5, white/10)
+     adapt to any background and need no tokens. */
+  --color-card: #ffffff;
+  --color-night: #f1f4f2;
+  --color-drawer: #ffffff;
+  --color-pop: #ffffff;
+  --color-fog: #6b7672;
+  --color-clay: #3d4742;
+
+  /* Pine is the deep-green hover surface. Relative-color glows, rings,
+     and washes below derive from the algae scale, so they follow themes
+     automatically with zero per-theme lines. */
+  --color-pine: #0f5c3e;
+
   --font-display: "Google Sans", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
 }
@@ -61,7 +78,7 @@ input:disabled, button:disabled, select:disabled, textarea:disabled { cursor: no
 dialog.tlx-dialog {
   border: 1px solid var(--color-mist-dark);
   border-radius: 14px;
-  box-shadow: 0 24px 64px -16px rgb(19 113 76 / 0.28);
+  box-shadow: 0 24px 64px -16px rgb(from var(--color-algae-900) r g b / 0.28);
   padding: 0;
   width: min(32rem, calc(100vw - 2rem));
   margin: auto;
@@ -89,7 +106,7 @@ dialog.tlx-dialog::backdrop { background: rgb(20 28 24 / 0.5); }
 [popover].tlx-popover {
   border: 1px solid var(--color-mist-dark);
   border-radius: 12px;
-  box-shadow: 0 16px 40px -12px rgb(19 113 76 / 0.25);
+  box-shadow: 0 16px 40px -12px rgb(from var(--color-algae-900) r g b / 0.25);
   margin: 0;
   inset: auto;
   position: absolute;
@@ -103,7 +120,7 @@ dialog.tlx-dialog::backdrop { background: rgb(20 28 24 / 0.5); }
 @starting-style { [popover].tlx-popover:popover-open { opacity: 0; } }
 
 /* flatpickr (datepicker controller) — Algae theme to match inputs */
-.flatpickr-calendar { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 0.75rem; box-shadow: 0 16px 40px -12px rgb(19 113 76 / 0.25); font-size: 0.875rem; width: 250px; }
+.flatpickr-calendar { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 0.75rem; box-shadow: 0 16px 40px -12px rgb(from var(--color-algae-900) r g b / 0.25); font-size: 0.875rem; width: 250px; }
 .flatpickr-calendar::before, .flatpickr-calendar::after { display: none; }
 .flatpickr-calendar .flatpickr-innerContainer { justify-content: center; padding-bottom: 0.75rem; }
 .flatpickr-calendar .flatpickr-days, .flatpickr-calendar .dayContainer { width: 220px; min-width: 220px; max-width: 220px; }
@@ -143,8 +160,8 @@ dialog.tlx-dialog::backdrop { background: rgb(20 28 24 / 0.5); }
 .ts-wrapper { border: 0; border-radius: 0; background: transparent; padding: 0; box-shadow: none; }
 .ts-control { align-items: center; background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 0.6rem; min-height: 2.5rem; color: var(--color-ink); display: inline-flex; flex-wrap: wrap; gap: 0.25rem; font-size: 0.9rem; line-height: inherit; padding: 0.375rem 0.75rem; }
 .ts-control > input { color: inherit; font-size: inherit; }
-.ts-wrapper.focus .ts-control { border-color: var(--color-algae-600); box-shadow: 0 0 0 3px rgb(162 228 148 / 0.35); outline: none; }
-.ts-dropdown { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 0.75rem; box-shadow: 0 16px 40px -12px rgb(19 113 76 / 0.25); color: var(--color-ink); font-size: 0.875rem; line-height: inherit; overflow: hidden; }
+.ts-wrapper.focus .ts-control { border-color: var(--color-algae-600); box-shadow: 0 0 0 3px rgb(from var(--color-algae-300) r g b / 0.35); outline: none; }
+.ts-dropdown { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 0.75rem; box-shadow: 0 16px 40px -12px rgb(from var(--color-algae-900) r g b / 0.25); color: var(--color-ink); font-size: 0.875rem; line-height: inherit; overflow: hidden; }
 .ts-dropdown .ts-dropdown-content:not(:has(.optgroup)) { padding: 0.25rem; }
 .ts-dropdown .optgroup { padding: 0.25rem; }
 .ts-dropdown .optgroup:not(:first-child) { border-top: 1px solid var(--color-mist); }
@@ -196,7 +213,7 @@ dialog.tlx-dialog::backdrop { background: rgb(20 28 24 / 0.5); }
   width: 100%; border: 1px solid var(--color-mist-dark); border-radius: 0.6rem; background: #fff;
   padding: 0.6rem 0.85rem; font-size: 0.9rem; color: var(--color-ink); outline: none; transition: border-color 0.15s, box-shadow 0.15s;
 }
-.input:focus { border-color: var(--color-algae-600); box-shadow: 0 0 0 3px rgb(162 228 148 / 0.35); }
+.input:focus { border-color: var(--color-algae-600); box-shadow: 0 0 0 3px rgb(from var(--color-algae-300) r g b / 0.35); }
 input[type="checkbox"].input, input[type="checkbox"] { width: 1rem; height: 1rem; accent-color: var(--color-algae-900); padding: 0; }
 
 .card { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 1rem; }
@@ -238,61 +255,244 @@ input[type="checkbox"].input, input[type="checkbox"] { width: 1rem; height: 1rem
 .hide { display: none; }
 
 /* Legacy dialog/sheet/popover element names still emitted by older partials */
-dialog.dialog { border: 1px solid var(--color-mist-dark); border-radius: 14px; padding: 0; width: min(32rem, calc(100vw - 2rem)); margin: auto; box-shadow: 0 24px 64px -16px rgb(19 113 76 / 0.28); }
+dialog.dialog { border: 1px solid var(--color-mist-dark); border-radius: 14px; padding: 0; width: min(32rem, calc(100vw - 2rem)); margin: auto; box-shadow: 0 24px 64px -16px rgb(from var(--color-algae-900) r g b / 0.28); }
 dialog.dialog::backdrop { background: rgb(20 28 24 / 0.5); }
 .dialog__content { padding: 1.5rem; }
 .dialog__close { position: absolute; top: 0.75rem; right: 0.75rem; }
 dialog.sheet { margin: 0; margin-left: auto; height: 100%; max-height: 100%; width: min(24rem, 90vw); border: none; padding: 0; }
 .sheet__content { padding: 0.5rem; height: 100%; overflow-y: auto; }
-.popover { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 12px; box-shadow: 0 16px 40px -12px rgb(19 113 76 / 0.25); }
+.popover { background: #fff; border: 1px solid var(--color-mist-dark); border-radius: 12px; box-shadow: 0 16px 40px -12px rgb(from var(--color-algae-900) r g b / 0.25); }
 
 /* ---- Dark theme: central overrides for compat-layer components ---- */
 [data-color-scheme="dark"] {
   color-scheme: dark;
   --color-ink: #e7ece9;
+  --color-card: #131b17;
+  --color-night: #0c1210;
+  --color-drawer: #101613;
+  --color-pop: #182019;
+  --color-fog: #9aa6a0;
+  --color-clay: #c6cfc9;
 }
-[data-color-scheme="dark"] .btn { background: #1a231f; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
+[data-color-scheme="dark"] .btn { background: #1a231f; border-color: rgb(255 255 255 / 0.12); color: var(--color-ink); }
 [data-color-scheme="dark"] .btn:hover { background: #232e28; }
 [data-color-scheme="dark"] .btn--primary { background: var(--color-algae-600); border-color: transparent; color: #08130d; }
 [data-color-scheme="dark"] .btn--primary:hover { background: var(--color-algae-500); }
 [data-color-scheme="dark"] .btn--subtle:hover, [data-color-scheme="dark"] .btn--plain:hover { background: rgb(255 255 255 / 0.06); }
-[data-color-scheme="dark"] .input, [data-color-scheme="dark"] input[type="text"], [data-color-scheme="dark"] input[type="email"], [data-color-scheme="dark"] input[type="password"], [data-color-scheme="dark"] input[type="search"], [data-color-scheme="dark"] input[type="tel"], [data-color-scheme="dark"] input[type="number"], [data-color-scheme="dark"] input[type="date"], [data-color-scheme="dark"] input[type="datetime-local"], [data-color-scheme="dark"] select, [data-color-scheme="dark"] textarea { background: #131b17; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
-[data-color-scheme="dark"] .card, [data-color-scheme="dark"] .bg-surface, [data-color-scheme="dark"] .bg-main { background: #131b17; }
+[data-color-scheme="dark"] .input, [data-color-scheme="dark"] input[type="text"], [data-color-scheme="dark"] input[type="email"], [data-color-scheme="dark"] input[type="password"], [data-color-scheme="dark"] input[type="search"], [data-color-scheme="dark"] input[type="tel"], [data-color-scheme="dark"] input[type="number"], [data-color-scheme="dark"] input[type="date"], [data-color-scheme="dark"] input[type="datetime-local"], [data-color-scheme="dark"] select, [data-color-scheme="dark"] textarea { background: var(--color-card); border-color: rgb(255 255 255 / 0.12); color: var(--color-ink); }
+[data-color-scheme="dark"] .card, [data-color-scheme="dark"] .bg-surface, [data-color-scheme="dark"] .bg-main { background: var(--color-card); }
 [data-color-scheme="dark"] .bg-shade, [data-color-scheme="dark"] .bg-highlight { background: rgb(255 255 255 / 0.05); }
-[data-color-scheme="dark"] .bg-primary-light { background: rgb(58 182 125 / 0.14); }
-[data-color-scheme="dark"] .text-subtle { color: #9aa6a0; }
-[data-color-scheme="dark"] .text-primary { color: #e7ece9; }
+[data-color-scheme="dark"] .bg-primary-light { background: rgb(from var(--color-algae-600) r g b / 0.14); }
+[data-color-scheme="dark"] .text-subtle { color: var(--color-fog); }
+[data-color-scheme="dark"] .text-primary { color: var(--color-ink); }
 [data-color-scheme="dark"] .border-main { border-color: rgb(255 255 255 / 0.1); }
-[data-color-scheme="dark"] .badge { background: rgb(58 182 125 / 0.14); border-color: rgb(58 182 125 / 0.4); color: #b9e8c9; }
+[data-color-scheme="dark"] .badge { background: rgb(from var(--color-algae-600) r g b / 0.14); border-color: rgb(from var(--color-algae-600) r g b / 0.4); color: #b9e8c9; }
 [data-color-scheme="dark"] .menu__item:hover { background: rgb(255 255 255 / 0.06); }
 [data-color-scheme="dark"] .menu__separator { border-top-color: rgb(255 255 255 / 0.1); }
-[data-color-scheme="dark"] .table th { background: rgb(255 255 255 / 0.04); color: #9aa6a0; }
+[data-color-scheme="dark"] .table th { background: rgb(255 255 255 / 0.04); color: var(--color-fog); }
 [data-color-scheme="dark"] .table td { border-top-color: rgb(255 255 255 / 0.08); }
 [data-color-scheme="dark"] .table tr:hover td { background: rgb(255 255 255 / 0.03); }
-[data-color-scheme="dark"] .alert { background: #131b17; border-color: rgb(255 255 255 / 0.12); }
+[data-color-scheme="dark"] .alert { background: var(--color-card); border-color: rgb(255 255 255 / 0.12); }
 [data-color-scheme="dark"] .alert--negative { background: rgb(185 28 28 / 0.18); border-color: rgb(185 28 28 / 0.5); color: #fca5a5; }
-[data-color-scheme="dark"] .avatar { background: rgb(58 182 125 / 0.16); }
-[data-color-scheme="dark"] dialog.tlx-dialog, [data-color-scheme="dark"] dialog.dialog { background: #131b17; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
-[data-color-scheme="dark"] [popover].tlx-popover, [data-color-scheme="dark"] .popover { background: #182019; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
-[data-color-scheme="dark"] dialog.sheet .sheet__content { background: #131b17; }
-[data-color-scheme="dark"] .ts-wrapper.single .ts-control, [data-color-scheme="dark"] .ts-wrapper.multi .ts-control { background: #131b17; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
-[data-color-scheme="dark"] .ts-dropdown { background: #182019; border-color: rgb(255 255 255 / 0.12); color: #e7ece9; }
-[data-color-scheme="dark"] .ts-dropdown .option.active { background: rgb(58 182 125 / 0.16); }
+[data-color-scheme="dark"] .avatar { background: rgb(from var(--color-algae-600) r g b / 0.16); }
+[data-color-scheme="dark"] dialog.tlx-dialog, [data-color-scheme="dark"] dialog.dialog { background: var(--color-card); border-color: rgb(255 255 255 / 0.12); color: var(--color-ink); }
+[data-color-scheme="dark"] [popover].tlx-popover, [data-color-scheme="dark"] .popover { background: var(--color-pop); border-color: rgb(255 255 255 / 0.12); color: var(--color-ink); }
+[data-color-scheme="dark"] dialog.sheet .sheet__content { background: var(--color-card); }
+[data-color-scheme="dark"] .ts-wrapper.single .ts-control, [data-color-scheme="dark"] .ts-wrapper.multi .ts-control { background: var(--color-card); border-color: rgb(255 255 255 / 0.12); color: var(--color-ink); }
+[data-color-scheme="dark"] .ts-dropdown { background: var(--color-pop); border-color: rgb(255 255 255 / 0.12); color: var(--color-ink); }
+[data-color-scheme="dark"] .ts-dropdown .option.active { background: rgb(from var(--color-algae-600) r g b / 0.16); }
 [data-color-scheme="dark"] .ts-dropdown .ts-dropdown-content { scrollbar-color: rgb(255 255 255 / 0.2) transparent; }
 [data-color-scheme="dark"] .ts-dropdown .ts-dropdown-content::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.2); }
 [data-color-scheme="dark"] .ts-dropdown .optgroup:not(:first-child) { border-top-color: rgb(255 255 255 / 0.1); }
 [data-color-scheme="dark"] .ts-wrapper.multi .ts-control > .item { background: rgb(255 255 255 / 0.08); }
 [data-color-scheme="dark"] .ts-wrapper.single::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239aa6a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
-[data-color-scheme="dark"] .flatpickr-calendar { background: #182019; border-color: rgb(255 255 255 / 0.12); }
-[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-months .flatpickr-month { color: #e7ece9; }
-[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-months svg { fill: #9aa6a0; }
-[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-prev-month:hover svg, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-next-month:hover svg { fill: #e7ece9; }
+[data-color-scheme="dark"] .flatpickr-calendar { background: var(--color-pop); border-color: rgb(255 255 255 / 0.12); }
+[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-months .flatpickr-month { color: var(--color-ink); }
+[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-months svg { fill: var(--color-fog); }
+[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-prev-month:hover svg, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-next-month:hover svg { fill: var(--color-ink); }
 [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-monthDropdown-months:hover { background: rgb(255 255 255 / 0.06); }
-[data-color-scheme="dark"] .flatpickr-calendar .numInputWrapper input, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-time .numInput, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-time .flatpickr-time-separator, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-time .flatpickr-am-pm { color: #e7ece9; }
+[data-color-scheme="dark"] .flatpickr-calendar .numInputWrapper input, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-time .numInput, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-time .flatpickr-time-separator, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-time .flatpickr-am-pm { color: var(--color-ink); }
 [data-color-scheme="dark"] .flatpickr-calendar .numInputWrapper span { border-color: rgb(255 255 255 / 0.12); }
-[data-color-scheme="dark"] .flatpickr-calendar .numInputWrapper span.arrowUp::after { border-bottom-color: #e7ece9; }
-[data-color-scheme="dark"] .flatpickr-calendar .numInputWrapper span.arrowDown::after { border-top-color: #e7ece9; }
-[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-weekday { color: #9aa6a0; }
-[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day { color: #e7ece9; }
-[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day.today, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day.inRange, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day:hover, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day:focus { background: rgb(255 255 255 / 0.07); color: #e7ece9; }
+[data-color-scheme="dark"] .flatpickr-calendar .numInputWrapper span.arrowUp::after { border-bottom-color: var(--color-ink); }
+[data-color-scheme="dark"] .flatpickr-calendar .numInputWrapper span.arrowDown::after { border-top-color: var(--color-ink); }
+[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-weekday { color: var(--color-fog); }
+[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day { color: var(--color-ink); }
+[data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day.today, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day.inRange, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day:hover, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day:focus { background: rgb(255 255 255 / 0.07); color: var(--color-ink); }
 [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day.selected, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day.startRange, [data-color-scheme="dark"] .flatpickr-calendar .flatpickr-day.endRange { background: var(--color-algae-600); color: #08130d; }
+
+/* ---- Workspace themes: curated Omarchy dark palettes (opt-in per workspace) ----
+   Scoped to body[data-color-scheme="dark"][data-theme], which outranks the
+   stock dark overrides above — stock (no data-theme) is untouched by
+   construction. Only surface/ink/accent tokens remap; transparency-based
+   utilities (white/5, white/10) and status reds adapt or hold everywhere.
+   Accent values ported literally from the IPAM Omarchy set. */
+body[data-color-scheme="dark"][data-theme="osaka-jade"] {
+  --color-pine: color-mix(in srgb, #509475, black 30%);
+  --color-night: #090f0d;
+  --color-drawer: #090f0d;
+  --color-card: #0c1512;
+  --color-pop: #111c18;
+  --color-ink: #f7e8b2;
+  --color-fog: #81b8a8;
+  --color-clay: #c1c497;
+  --color-algae-900: color-mix(in srgb, #509475, black 18%);
+  --color-algae-800: color-mix(in srgb, #509475, black 18%);
+  --color-algae-700: #509475;
+  --color-algae-600: #509475;
+  --color-algae-500: color-mix(in srgb, #509475, white 25%);
+  --color-algae-300: color-mix(in srgb, #509475, white 45%);
+  --color-algae-200: color-mix(in srgb, #509475, white 45%);
+  --color-algae-100: color-mix(in srgb, #509475, white 45%);
+}
+
+body[data-color-scheme="dark"][data-theme="solitude"] {
+  --color-pine: color-mix(in srgb, #798186, black 30%);
+  --color-night: #080a0b;
+  --color-drawer: #080a0b;
+  --color-card: #0c0e10;
+  --color-pop: #101315;
+  --color-ink: #d9dbdc;
+  --color-fog: #798186;
+  --color-clay: #a5aeb4;
+  --color-algae-900: color-mix(in srgb, #798186, black 18%);
+  --color-algae-800: color-mix(in srgb, #798186, black 18%);
+  --color-algae-700: #798186;
+  --color-algae-600: #798186;
+  --color-algae-500: #a8adb0;
+  --color-algae-300: #d9dbdc;
+  --color-algae-200: #d9dbdc;
+  --color-algae-100: #d9dbdc;
+}
+
+body[data-color-scheme="dark"][data-theme="giants"] {
+  --color-pine: color-mix(in srgb, #97786d, black 30%);
+  --color-night: #141210;
+  --color-drawer: #141210;
+  --color-card: #1d1b17;
+  --color-pop: #27241f;
+  --color-ink: #e9e0d1;
+  --color-fog: #a9a092;
+  --color-clay: #e1d5c2;
+  --color-algae-900: color-mix(in srgb, #97786d, black 18%);
+  --color-algae-800: color-mix(in srgb, #97786d, black 18%);
+  --color-algae-700: #97786d;
+  --color-algae-600: #97786d;
+  --color-algae-500: #b28b7e;
+  --color-algae-300: color-mix(in srgb, #b28b7e, white 30%);
+  --color-algae-200: color-mix(in srgb, #b28b7e, white 30%);
+  --color-algae-100: color-mix(in srgb, #b28b7e, white 30%);
+}
+
+body[data-color-scheme="dark"][data-theme="retro-82"] {
+  --color-pine: color-mix(in srgb, #faa968, black 30%);
+  --color-night: #020c17;
+  --color-drawer: #020c17;
+  --color-card: #031222;
+  --color-pop: #05182e;
+  --color-ink: #f6dcac;
+  --color-fog: #3f8f8a;
+  --color-clay: #a7c9c6;
+  --color-algae-900: color-mix(in srgb, #faa968, black 18%);
+  --color-algae-800: color-mix(in srgb, #faa968, black 18%);
+  --color-algae-700: #faa968;
+  --color-algae-600: #faa968;
+  --color-algae-500: #faa968;
+  --color-algae-300: color-mix(in srgb, #faa968, white 30%);
+  --color-algae-200: color-mix(in srgb, #faa968, white 30%);
+  --color-algae-100: color-mix(in srgb, #faa968, white 30%);
+}
+
+body[data-color-scheme="dark"][data-theme="miasma"] {
+  --color-pine: color-mix(in srgb, #78824b, black 30%);
+  --color-night: #121212;
+  --color-drawer: #121212;
+  --color-card: #191919;
+  --color-pop: #222222;
+  --color-ink: #c2c2b0;
+  --color-fog: #8a8a7e;
+  --color-clay: #c2c2b0;
+  --color-algae-900: color-mix(in srgb, #78824b, black 18%);
+  --color-algae-800: color-mix(in srgb, #78824b, black 18%);
+  --color-algae-700: #78824b;
+  --color-algae-600: #78824b;
+  --color-algae-500: #c9a554;
+  --color-algae-300: color-mix(in srgb, #c9a554, white 25%);
+  --color-algae-200: color-mix(in srgb, #c9a554, white 25%);
+  --color-algae-100: color-mix(in srgb, #c9a554, white 25%);
+}
+
+body[data-color-scheme="dark"][data-theme="matte-black"] {
+  --color-pine: color-mix(in srgb, #e68e0d, black 30%);
+  --color-night: #090909;
+  --color-drawer: #090909;
+  --color-card: #0d0d0d;
+  --color-pop: #121212;
+  --color-ink: #eaeaea;
+  --color-fog: #8a8a8d;
+  --color-clay: #bebebe;
+  --color-algae-900: color-mix(in srgb, #e68e0d, black 18%);
+  --color-algae-800: color-mix(in srgb, #e68e0d, black 18%);
+  --color-algae-700: #e68e0d;
+  --color-algae-600: #e68e0d;
+  --color-algae-500: #f59e0b;
+  --color-algae-300: color-mix(in srgb, #f59e0b, white 25%);
+  --color-algae-200: color-mix(in srgb, #f59e0b, white 25%);
+  --color-algae-100: color-mix(in srgb, #f59e0b, white 25%);
+}
+
+body[data-color-scheme="dark"][data-theme="tokyo-night"] {
+  --color-pine: color-mix(in srgb, #7aa2f7, black 30%);
+  --color-night: #0e0e14;
+  --color-drawer: #0e0e14;
+  --color-card: #13141c;
+  --color-pop: #1a1b26;
+  --color-ink: #c0caf5;
+  --color-fog: #707aa4;
+  --color-clay: #a9b1d6;
+  --color-algae-900: color-mix(in srgb, #7aa2f7, black 18%);
+  --color-algae-800: color-mix(in srgb, #7aa2f7, black 18%);
+  --color-algae-700: #7aa2f7;
+  --color-algae-600: #7aa2f7;
+  --color-algae-500: #7da6ff;
+  --color-algae-300: color-mix(in srgb, #7da6ff, white 25%);
+  --color-algae-200: color-mix(in srgb, #7da6ff, white 25%);
+  --color-algae-100: color-mix(in srgb, #7da6ff, white 25%);
+}
+
+body[data-color-scheme="dark"][data-theme="gruvbox"] {
+  --color-pine: color-mix(in srgb, #7daea3, black 30%);
+  --color-night: #161616;
+  --color-drawer: #161616;
+  --color-card: #1e1e1e;
+  --color-pop: #282828;
+  --color-ink: #d4be98;
+  --color-fog: #8e7f6e;
+  --color-clay: #bdae93;
+  --color-algae-900: color-mix(in srgb, #7daea3, black 18%);
+  --color-algae-800: color-mix(in srgb, #7daea3, black 18%);
+  --color-algae-700: #7daea3;
+  --color-algae-600: #7daea3;
+  --color-algae-500: color-mix(in srgb, #7daea3, white 22%);
+  --color-algae-300: color-mix(in srgb, #7daea3, white 42%);
+  --color-algae-200: color-mix(in srgb, #7daea3, white 42%);
+  --color-algae-100: color-mix(in srgb, #7daea3, white 42%);
+}
+
+body[data-color-scheme="dark"][data-theme="everforest"] {
+  --color-pine: color-mix(in srgb, #7fbbb3, black 30%);
+  --color-night: #181d20;
+  --color-drawer: #181d20;
+  --color-card: #21272c;
+  --color-pop: #2d353b;
+  --color-ink: #d3c6aa;
+  --color-fog: #84847c;
+  --color-clay: #9da9a0;
+  --color-algae-900: color-mix(in srgb, #7fbbb3, black 18%);
+  --color-algae-800: color-mix(in srgb, #7fbbb3, black 18%);
+  --color-algae-700: #7fbbb3;
+  --color-algae-600: #7fbbb3;
+  --color-algae-500: color-mix(in srgb, #7fbbb3, white 22%);
+  --color-algae-300: color-mix(in srgb, #7fbbb3, white 42%);
+  --color-algae-200: color-mix(in srgb, #7fbbb3, white 42%);
+  --color-algae-100: color-mix(in srgb, #7fbbb3, white 42%);
+}

@@ -12,6 +12,8 @@ bin/rails test -n "/should create/"                          # pattern match
 bin/rubocop      && bin/rubocop -a       && bin/rubocop -A   # check / safe / all
 bin/brakeman --no-pager && bin/importmap audit && bin/dev
 ```
+Restart the dev server after migrations, branch switches, or initializers —
+a long-lived Puma keeps stale code/schema and fails silently.
 ## Project Architecture
 **Rails 8.0.2** · **Ruby 3.4.5** · PostgreSQL (primary) + SQLite3 (queue/cache/cable)
 - **Hotwire** (Turbo + Stimulus) with importmap (no bundler, no npm)

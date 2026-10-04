@@ -5,7 +5,7 @@
 
   <% event_filters = present_filter_params(:name_cont, :starts_at_gteq, :starts_at_lteq, :invited_contacts_id_eq) %>
   <% if event_filters.any? %>
-    <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Found <strong class="text-[#1c2420] tabular-nums dark:text-[#E7ECE9]"><%= @pagy.count %></strong> <%= "event".pluralize(@pagy.count) %> matching your filters.</p>
+    <p class="text-sm text-[#6b7672] dark:text-fog">Found <strong class="text-[#1c2420] tabular-nums dark:text-ink"><%= @pagy.count %></strong> <%= "event".pluralize(@pagy.count) %> matching your filters.</p>
   <% end %>
 
   <div id="events-list">

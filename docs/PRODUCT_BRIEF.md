@@ -126,11 +126,22 @@ deferred).
 - **Algae palette**: deep `#13714C` · mid `#3AB67D` · light `#A2E494` ·
   mist `#E9EBED`. Dark surfaces: page `#0C1210`, card `#131B17`,
   ink `#E7ECE9`, subtle `#9AA6A0`. No gradients, no blue/purple SaaS
-  tropes, no emoji in UI.
+  tropes, no emoji in UI. This is the stock identity and the default for
+  every workspace — stock light and stock dark never change.
+- **Opt-in Omarchy dark palettes**: a workspace admin may replace the
+  stock dark surfaces + accents with one of nine curated palettes
+  (osaka-jade, solitude, giants, retro-82, miasma, tokyo-night,
+  matte-black, gruvbox, everforest) via settings or the sidebar Theme
+  menu. Palettes are dark-mode only, apply workspace-wide on next render
+  (settings previews before saving), and revert instantly to stock. No
+  palette ships without its stock-parity proof (stock renders
+  byte-identical with and without the feature).
 - **Dark mode contract**: the `color-scheme` Stimulus controller sets
   `data-color-scheme="light|dark"` on `<body>` (resolving `system` itself);
   the Tailwind `dark` variant keys off that attribute. Every new view ships
   both modes — follow the per-area token map, don't invent new dark colors.
+  Scheme preference is remembered per workspace (plus a global slot for
+  signed-out pages); switching spaces restores each space's own scheme.
 - **Type**: Google Sans (display) + Open Sans (body), self-hosted via
   `shared/_font_faces` (font URLs must stay Propshaft-digested — never put
   relative `url()` font paths in the Tailwind build input).
