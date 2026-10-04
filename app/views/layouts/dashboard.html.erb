@@ -24,6 +24,8 @@
     <%= turbo_stream_from "notifications_#{current_user.id}_global" %>
     <% if Current.account %>
       <%= turbo_stream_from "notifications_#{current_user.id}_account_#{Current.account.id}" %>
+      <%# Workspace appearance: theme changes morph every viewing session. %>
+      <%= turbo_stream_from "appearance_account_#{Current.account.id}" %>
     <% end %>
   </head>
 

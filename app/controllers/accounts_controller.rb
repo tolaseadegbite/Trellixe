@@ -30,6 +30,12 @@ class AccountsController < DashboardsController
   def update
     @account = Current.account
     if @account.update(account_params)
+      # Theme changes morph every session viewing this workspace (phone,
+      # laptop, other tabs) so no device sits on a stale palette. Gated
+      # to theme changes: name/reminder edits disturb nobody.
+      if @account.saved_change_to_theme?
+        Turbo::StreamsChannel.broadcast_refresh_to("appearance_account_#{@account.id}")
+      end
       # Explicit return path: Referer is unreliable under Turbo fetches
       # (palette picks teleported to settings). Settings forms post no
       # return_to and fall back to themselves.

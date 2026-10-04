@@ -1,6 +1,7 @@
 require "test_helper"
 
 class AccountsControllerTest < ActionDispatch::IntegrationTest
+  include ActionCable::TestHelper
   # test "the truth" do
   #   assert true
   # end
@@ -48,6 +49,28 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
     assert_equal "stock", @account.reload.theme
+  end
+
+  test "theme change broadcasts a refresh to workspace sessions" do
+    sign_in_as(@admin)
+
+    perform_enqueued_jobs do
+      patch account_url(@account), params: { account: { theme: "gruvbox" } }
+    end
+
+    messages = broadcasts("appearance_account_#{@account.id}")
+    assert messages.any? { |m| m.include?("refresh") },
+      "expected a refresh broadcast so other sessions re-render themed"
+  end
+
+  test "non-theme updates broadcast nothing" do
+    sign_in_as(@admin)
+
+    perform_enqueued_jobs do
+      patch account_url(@account), params: { account: { name: "Renamed" } }
+    end
+
+    assert_empty broadcasts("appearance_account_#{@account.id}")
   end
 
   test "initial HTML carries the theme attribute only when set" do

@@ -5,10 +5,25 @@ import { writeScheme } from "controllers/scheme_storage"
 // radio applies the palette to <body> immediately, before saving — the
 // saved value (server-rendered data-theme) is the truth on next load.
 // Only mutates the data-theme attribute (inert to Stimulus observers — no
-// DOM moves, so no connect/disconnect churn); disconnect restores the
-// saved value so Turbo-cache restores never show a stale preview.
+// DOM moves, so no connect/disconnect churn).
+//
+// Stale previews never reach Turbo's snapshot cache: on
+// turbo:before-cache-save the saved value is restored into the outgoing
+// document. That event fires pre-swap on the OLD tree, so unlike a
+// disconnect() restore it can never clobber an incoming page — a teardown
+// restore wrote the outgoing page's saved value onto the new body and
+// forced every sidebar palette pick on this page to need two clicks.
 export default class extends Controller {
   static values = { current: { type: String, default: "stock" } }
+
+  connect() {
+    this.onCacheSave = () => this.#apply(this.currentValue)
+    document.addEventListener("turbo:before-cache-save", this.onCacheSave)
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:before-cache-save", this.onCacheSave)
+  }
 
   preview(event) {
     this.#apply(event.target.value)
@@ -16,21 +31,14 @@ export default class extends Controller {
 
   // Saving a non-stock palette is meaningless in light mode (themes are
   // dark-only), so flip the personal scheme to dark on submit — mirrors
-  // color-scheme#setDark without coupling the controllers. Sets a flag so
-  // disconnect (below) doesn't wipe the incoming server truth while the
-  // old tree tears down around the redirect response.
+  // color-scheme#setDark without coupling the controllers.
   ensureDark() {
     const picked = this.element.querySelector('input[type="radio"]:checked')
     if (picked && picked.value !== "stock") {
       writeScheme(document.body.dataset.accountId || null, "dark")
       document.body.dataset.colorScheme = "dark"
       document.body.style.colorScheme = "dark"
-      this.committed = true
     }
-  }
-
-  disconnect() {
-    if (!this.committed) this.#apply(this.currentValue)
   }
 
   #apply(theme) {

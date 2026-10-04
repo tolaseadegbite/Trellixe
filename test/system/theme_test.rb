@@ -66,6 +66,20 @@ class ThemeTest < ApplicationSystemTestCase
     assert_selector "body[data-theme='everforest'][data-color-scheme='dark']", visible: :all
   end
 
+  test "sidebar popover pick applies first click from the settings page" do
+    sign_in_with(@user.email)
+    visit edit_account_path(@account)
+    click_on "Theme"
+    click_on "Everforest"
+
+    assert_selector "body[data-theme='everforest']", visible: :all
+    assert_equal "everforest", @account.reload.theme
+    assert_equal edit_account_path(@account), current_path
+    execute_script("document.body.dataset.colorScheme = 'dark'")
+    assert_equal "rgb(24, 29, 32)",
+      evaluate_script("getComputedStyle(document.body).backgroundColor")
+  end
+
   test "member sees no workspace palettes in the popover" do
     member = User.create!(email: "plain@example.com", password: "Secret1*3*5*", verified: true)
     member.memberships.create!(account: @account, role: :member)
