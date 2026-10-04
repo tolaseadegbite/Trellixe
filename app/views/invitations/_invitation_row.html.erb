@@ -3,9 +3,9 @@
     feeds bulk check-in, the popover holds View contact + Remove. The logs
     thread below has the single stable id log streams target. %>
 <% status_classes = case invitation.status
-   when "attended" then "bg-[#A2E494] text-[#1c2420]"
+   when "attended" then "bg-algae-300 text-[#1c2420]"
    when "declined" then "bg-algae-900 text-white"
-   else "bg-[#E9EBED] text-[#3d4742] dark:bg-white/10 dark:text-[#C6CFC9]"
+   else "bg-[#E9EBED] text-[#3d4742] dark:bg-white/10 dark:text-clay"
    end %>
 <% task = invitation.follow_up_tasks.find { |t| t.user_id == current_user.id } %>
 
@@ -14,25 +14,25 @@
     <% if invitation.event.starts_at > Time.current %>
       <span class="flex h-5 w-5 shrink-0 items-center justify-center text-[#c3c9c5]" title="Attendance opens when the event starts"><%= icon("calendar-range", css: "h-4 w-4") %></span>
     <% else %>
-      <%= check_box_tag "invitation_ids[]", invitation.id, false, class: "h-5 w-5 shrink-0 cursor-pointer accent-[#13714C]", data: { action: "check-all#check", check_all_target: "dependant" } %>
+      <%= check_box_tag "invitation_ids[]", invitation.id, false, class: "h-5 w-5 shrink-0 cursor-pointer accent-algae-900", data: { action: "check-all#check", check_all_target: "dependant" } %>
     <% end %>
     <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-algae-900 text-xs font-bold text-white">
       <%= invitation.contact.full_name.split.first(2).map(&:first).join.upcase %>
     </span>
     <span class="min-w-0 flex-1">
       <%= link_to invitation.contact.full_name, contact_path(invitation.contact), class: "block truncate text-[14.5px] font-semibold hover:text-algae-900 hover:underline dark:hover:text-algae-300", data: { turbo_frame: "_top" } %>
-      <span class="mt-0.5 block truncate text-[13px] text-[#8a938d] dark:text-[#9AA6A0]"><%= invitation.notes&.truncate(80).presence || invitation.contact.email %></span>
+      <span class="mt-0.5 block truncate text-[13px] text-[#8a938d] dark:text-fog"><%= invitation.notes&.truncate(80).presence || invitation.contact.email %></span>
     </span>
     <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize <%= status_classes %>"><%= invitation.status %></span>
     <span class="flex shrink-0 items-center gap-1">
-      <%= link_to edit_invitation_path(invitation), data: { turbo_frame: "modal" }, title: "Edit", class: "flex h-9 w-9 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]" do %><%= icon("pen", css: "h-[18px] w-[18px]") %><% end %>
+      <%= link_to edit_invitation_path(invitation), data: { turbo_frame: "modal" }, title: "Edit", class: "flex h-9 w-9 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-fog dark:hover:bg-white/10 dark:hover:text-ink" do %><%= icon("pen", css: "h-[18px] w-[18px]") %><% end %>
       <span data-controller="popover" data-popover-placement-value="bottom-end" data-action="click@window->popover#clickOutside" class="relative">
-        <button type="button" class="flex h-9 w-9 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] dark:text-[#9AA6A0] dark:hover:bg-white/10" popovertarget="popover-invitation-<%= invitation.id %>" data-popover-target="trigger" aria-haspopup="true"><%= icon("ellipsis", css: "h-[18px] w-[18px]") %></button>
+        <button type="button" class="flex h-9 w-9 items-center justify-center rounded-lg text-[#8a938d] transition hover:bg-[#E9EBED] dark:text-fog dark:hover:bg-white/10" popovertarget="popover-invitation-<%= invitation.id %>" data-popover-target="trigger" aria-haspopup="true"><%= icon("ellipsis", css: "h-[18px] w-[18px]") %></button>
         <%= tag.div popover: "auto", id: "popover-invitation-#{invitation.id}", class: "tlx-popover w-36 p-1.5", data: { popover_target: "content" } do %>
           <%= link_to "View contact", contact_path(invitation.contact), data: { turbo_frame: "_top" }, class: "flex rounded-lg px-2.5 py-2 text-[13px] hover:bg-[#F1F4F2] dark:hover:bg-white/5" %>
           <% delete_trigger = button_tag "Remove", type: "button", class: "flex w-full rounded-lg px-2.5 py-2 text-left text-[13px] text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10", data: { action: "dialog#showModal" } %>
           <%= modal_dialog delete_trigger, size: "450px", title: "Remove '#{invitation.contact.full_name}'?" do %>
-            <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">They'll be removed from this event's guest list. This can't be undone.</p>
+            <p class="text-sm text-[#6b7672] dark:text-fog">They'll be removed from this event's guest list. This can't be undone.</p>
             <div class="mt-5 flex justify-end gap-2">
               <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold dark:border-white/10" data-action="click->dialog#close">Cancel</button>
               <%= link_to "Remove", invitation, data: { turbo_method: :delete }, class: "rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white" %>

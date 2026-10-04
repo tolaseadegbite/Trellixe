@@ -2,35 +2,35 @@
 <% content_for :page_header, "Todos · #{@pagy.count}" %>
 <% content_for :header_action_buttons do %>
   <%= link_to new_todo_path, data: { turbo_frame: "modal" },
-      class: "flex items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e]" do %>
+      class: "flex items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-pine" do %>
     <%= icon("plus", css: "h-4 w-4") %> New todo
   <% end %>
 <% end %>
 
 <%= link_to new_todo_path, data: { turbo_frame: "modal" }, aria: { label: "New todo" },
-    class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-[#0f5c3e] md:hidden" do %>
+    class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-pine md:hidden" do %>
   <%= icon("plus", css: "h-5 w-5") %>
 <% end %>
 
 <div class="space-y-4" data-controller="search-filter" data-action="click@window->search-filter#closeOnClickOutside">
-  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
+  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-card">
     <%= render "todos/search_form" %>
   </div>
 
   <%= turbo_frame_tag :todos_table, class: "block space-y-4" do %>
     <%
       pill = ->(is_active) do
-        is_active ? "bg-algae-900 text-white" : "border border-[#D9DDE0] bg-white hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5"
+        is_active ? "bg-algae-900 text-white" : "border border-[#D9DDE0] bg-white hover:border-algae-300 dark:border-white/10 dark:bg-white/5"
       end
       pill_to = ->(filter) { todos_path(status: @status, filter: filter) }
     %>
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <nav class="flex gap-1 rounded-xl border border-[#D9DDE0] bg-white p-1 dark:border-white/10 dark:bg-[#131B17]" aria-label="Todo status">
+      <nav class="flex gap-1 rounded-xl border border-[#D9DDE0] bg-white p-1 dark:border-white/10 dark:bg-card" aria-label="Todo status">
         <%= link_to "Open", todos_path(status: "open", filter: @filter), data: { turbo_frame: "_top" },
-            class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@status == 'done' ? 'text-[#6b7672] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]' : 'bg-algae-900 text-white'}",
+            class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@status == 'done' ? 'text-[#6b7672] hover:text-[#1c2420] dark:text-fog dark:hover:text-ink' : 'bg-algae-900 text-white'}",
             **(@status != "done" ? { aria: { current: "page" } } : {}) %>
         <%= link_to "Completed", todos_path(status: "done", filter: @filter), data: { turbo_frame: "_top" },
-            class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@status == 'done' ? 'bg-algae-900 text-white' : 'text-[#6b7672] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:text-[#E7ECE9]'}" ,
+            class: "rounded-lg px-4 py-1.5 text-[13px] font-semibold transition #{@status == 'done' ? 'bg-algae-900 text-white' : 'text-[#6b7672] hover:text-[#1c2420] dark:text-fog dark:hover:text-ink'}" ,
             **(@status == "done" ? { aria: { current: "page" } } : {}) %>
       </nav>
       <div class="flex flex-wrap items-center gap-1.5">
@@ -44,10 +44,10 @@
     </div>
 
     <% if present_filter_params(:title_cont).any? %>
-      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Found <strong class="tabular-nums text-[#1c2420] dark:text-[#E7ECE9]"><%= @pagy.count %></strong> <%= "todo".pluralize(@pagy.count) %> matching your search.</p>
+      <p class="text-sm text-[#6b7672] dark:text-fog">Found <strong class="tabular-nums text-[#1c2420] dark:text-ink"><%= @pagy.count %></strong> <%= "todo".pluralize(@pagy.count) %> matching your search.</p>
     <% end %>
 
-    <div id="todos-list" class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+    <div id="todos-list" class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-card">
       <% if @todos.any? %>
         <div class="divide-y divide-[#E9EBED] dark:divide-white/10">
           <%= render partial: "todos/todo_row", collection: @todos, as: :todo %>

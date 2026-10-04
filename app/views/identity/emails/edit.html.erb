@@ -12,9 +12,9 @@
         <h1 class="mb-4 text-2xl font-bold">Change your email</h1>
       <% else %>
         <h1 class="mb-4 text-2xl font-bold">Verify your email</h1>
-        <p class="mb-2 text-[#6b7672] dark:text-[#9AA6A0]">We sent a verification email to the address below. Check that email and follow those instructions to confirm it's your email address.</p>
+        <p class="mb-2 text-[#6b7672] dark:text-fog">We sent a verification email to the address below. Check that email and follow those instructions to confirm it's your email address.</p>
         <div class="mb-4">
-          <%= button_to "Re-send verification email", identity_email_verification_path, class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]", data: { turbo_frame: "_top" } %>
+          <%= button_to "Re-send verification email", identity_email_verification_path, class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-pine", data: { turbo_frame: "_top" } %>
         </div>
       <% end %>
 

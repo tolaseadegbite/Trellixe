@@ -3,9 +3,9 @@
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
     <h2 class="font-display text-lg font-semibold">Delete this log?</h2>
-    <p class="mt-2 text-sm leading-relaxed text-[#6b7672] dark:text-[#9AA6A0]">This permanently removes this note. This can't be undone.</p>
+    <p class="mt-2 text-sm leading-relaxed text-[#6b7672] dark:text-fog">This permanently removes this note. This can't be undone.</p>
     <div class="mt-5 flex justify-end gap-2">
-      <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold transition hover:border-[#A2E494] dark:border-white/10" data-action="click->modal#close">Cancel</button>
+      <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold transition hover:border-algae-300 dark:border-white/10" data-action="click->modal#close">Cancel</button>
       <%= button_to "Delete", interaction_log_path(@interaction_log), method: :delete, class: "rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-800", form: { data: { turbo_frame: "_top" } } %>
     </div>
   </div>

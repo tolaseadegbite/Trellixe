@@ -8,13 +8,13 @@
     <h2 class="font-display text-xl font-bold tabular-nums"><%= @date.strftime("%B %Y") %></h2>
     <div class="flex items-center gap-1.5">
       <%= link_to events_path(date: @date - 1.month, view: "calendar"), title: "Previous month",
-          class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" do %>
+          class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-algae-300 dark:border-white/10 dark:bg-white/5" do %>
         <%= icon("chevron-left", css: "h-4 w-4") %>
       <% end %>
       <%= link_to "Today", events_path(view: "calendar"),
-          class: "rounded-lg border border-[#D9DDE0] bg-white px-3 py-1.5 text-[13px] font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" %>
+          class: "rounded-lg border border-[#D9DDE0] bg-white px-3 py-1.5 text-[13px] font-semibold transition hover:border-algae-300 dark:border-white/10 dark:bg-white/5" %>
       <%= link_to events_path(date: @date + 1.month, view: "calendar"), title: "Next month",
-          class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-[#A2E494] dark:border-white/10 dark:bg-white/5" do %>
+          class: "flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9DDE0] bg-white transition hover:border-algae-300 dark:border-white/10 dark:bg-white/5" do %>
         <%= icon("chevron-right", css: "h-4 w-4") %>
       <% end %>
     </div>
@@ -22,7 +22,7 @@
 
   <div class="grid grid-cols-7 gap-px overflow-hidden rounded-2xl border border-[#D9DDE0] bg-[#E9EBED] dark:border-white/10 dark:bg-white/10">
     <% Date::ABBR_DAYNAMES.rotate.each do |weekday| %>
-      <div class="bg-[#F6F9F7] p-2 text-center text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:bg-[#131B17] dark:text-[#9AA6A0]">
+      <div class="bg-[#F6F9F7] p-2 text-center text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] dark:bg-card dark:text-fog">
         <%= weekday %>
       </div>
     <% end %>
@@ -31,7 +31,7 @@
       <% is_today = today?(day) %>
       <% is_current_month = day.month == @date.month %>
 
-      <div class="flex min-h-[5rem] cursor-pointer flex-col p-1 transition-colors md:min-h-[8rem] md:cursor-default <%= [ ('bg-algae-50/70 dark:bg-algae-600/10' if is_today), (is_current_month ? 'bg-white dark:bg-[#131B17]' : 'bg-[#F6F9F7] dark:bg-white/[0.03]') ].compact.join(' ') %>"
+      <div class="flex min-h-[5rem] cursor-pointer flex-col p-1 transition-colors md:min-h-[8rem] md:cursor-default <%= [ ('bg-algae-50/70 dark:bg-algae-600/10' if is_today), (is_current_month ? 'bg-white dark:bg-card' : 'bg-[#F6F9F7] dark:bg-white/[0.03]') ].compact.join(' ') %>"
            data-mobile-calendar-target="day"
            data-date="<%= day.to_s %>"
            data-is-today="<%= is_today %>"
@@ -60,7 +60,7 @@
             <div class="h-1.5 w-1.5 rounded-full bg-algae-600"></div>
           <% end %>
           <% if events_that_day.size > 4 %>
-            <span class="text-[10px] font-semibold tabular-nums text-[#8a938d] dark:text-[#9AA6A0]">+<%= events_that_day.size - 4 %></span>
+            <span class="text-[10px] font-semibold tabular-nums text-[#8a938d] dark:text-fog">+<%= events_that_day.size - 4 %></span>
           <% end %>
         </div>
       </div>
@@ -72,7 +72,7 @@
 
     <% (@date.beginning_of_month.beginning_of_week..@date.end_of_month.end_of_week).each do |day| %>
       <div data-mobile-calendar-target="list" data-date="<%= day.to_s %>" style="display: none;" class="mt-3">
-        <h4 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] tabular-nums dark:text-[#9AA6A0]"><%= day.strftime("%A, %b %d") %></h4>
+        <h4 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[#8a938d] tabular-nums dark:text-fog"><%= day.strftime("%A, %b %d") %></h4>
         <% if @events_by_date[day].present? %>
           <div class="grid grid-cols-1 gap-3">
             <% @events_by_date[day].each do |event| %>
@@ -84,15 +84,15 @@
             <% end %>
           </div>
         <% else %>
-          <div class="rounded-2xl border border-dashed border-[#D9DDE0] bg-white p-4 text-center dark:border-white/10 dark:bg-[#131B17]">
-            <p class="text-sm text-[#8a938d] dark:text-[#9AA6A0]">No events for this day.</p>
+          <div class="rounded-2xl border border-dashed border-[#D9DDE0] bg-white p-4 text-center dark:border-white/10 dark:bg-card">
+            <p class="text-sm text-[#8a938d] dark:text-fog">No events for this day.</p>
           </div>
         <% end %>
       </div>
     <% end %>
 
-    <div class="mt-3 rounded-2xl border border-dashed border-[#D9DDE0] bg-white p-4 text-center dark:border-white/10 dark:bg-[#131B17]" data-mobile-calendar-target="placeholder">
-      <p class="text-sm text-[#8a938d] dark:text-[#9AA6A0]">Tap a day above to see details.</p>
+    <div class="mt-3 rounded-2xl border border-dashed border-[#D9DDE0] bg-white p-4 text-center dark:border-white/10 dark:bg-card" data-mobile-calendar-target="placeholder">
+      <p class="text-sm text-[#8a938d] dark:text-fog">Tap a day above to see details.</p>
     </div>
   </div>
 <% end %>

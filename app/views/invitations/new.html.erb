@@ -3,7 +3,7 @@
 <%= render "shared/modal" do %>
   <div data-action="turbo:submit-end->modal#submitEnd">
     <h2 class="font-display text-lg font-semibold">Invite contacts<% if @event %> to <%= @event.name %><% end %></h2>
-    <p class="mt-1 text-sm text-[#8a938d] dark:text-[#9AA6A0]">Pick people from your contacts — they land on the guest list as invited.</p>
+    <p class="mt-1 text-sm text-[#8a938d] dark:text-fog">Pick people from your contacts — they land on the guest list as invited.</p>
     <div class="mt-4">
       <% if @event %>
         <%= render "form", event: @event, invitation: (@invitation || @event.invitations.build) %>

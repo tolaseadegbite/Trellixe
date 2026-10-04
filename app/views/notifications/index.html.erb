@@ -6,7 +6,7 @@
     <h2 class="font-display text-[15px] font-semibold">All notifications</h2>
   </div>
 
-  <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+  <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-card">
     <div id="notifications-list">
       <% if @notifications.any? %>
         <%= render partial: "notifications/notification", collection: @notifications, as: :notification %>

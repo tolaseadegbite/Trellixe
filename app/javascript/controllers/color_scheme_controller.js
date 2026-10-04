@@ -1,8 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
+import { readScheme, writeScheme } from "controllers/scheme_storage"
 
 // Drives the `dark` Tailwind variant, which matches
 // `[data-color-scheme="dark"]`. The stored "system" value is resolved
-// against the OS preference (and follows live changes).
+// against the OS preference (and follows live changes). Preference is
+// remembered per workspace (see scheme_storage); pages without an
+// account fall back to the global slot.
 export default class extends Controller {
   static targets = [ "moonIcon", "sunIcon" ]
 
@@ -12,10 +15,10 @@ export default class extends Controller {
   connect() {
     this.#media = window.matchMedia("(prefers-color-scheme: dark)")
     this.#onSystemChange = () => {
-      if (this.#stored === "system") this.#apply("dark", true)
+      if (this.#scoped() === "system") this.#apply("dark", true)
     }
     this.#media.addEventListener?.("change", this.#onSystemChange)
-    this.#apply(this.#stored, this.#stored === "system")
+    this.#apply(this.#scoped(), this.#scoped() === "system")
   }
 
   disconnect() {
@@ -23,17 +26,17 @@ export default class extends Controller {
   }
 
   setLight() {
-    localStorage.setItem("color_scheme", "light")
+    writeScheme(this.#accountId, "light")
     this.#apply("light", false)
   }
 
   setDark() {
-    localStorage.setItem("color_scheme", "dark")
+    writeScheme(this.#accountId, "dark")
     this.#apply("dark", false)
   }
 
   setSystem() {
-    localStorage.setItem("color_scheme", "system")
+    writeScheme(this.#accountId, "system")
     this.#apply("dark", true)
   }
 
@@ -43,16 +46,20 @@ export default class extends Controller {
   toggle() {
     const resolved = this.element.dataset.colorScheme
     if (resolved === "dark") {
-      localStorage.setItem("color_scheme", "light")
+      writeScheme(this.#accountId, "light")
       this.#apply("light", false)
     } else {
-      localStorage.setItem("color_scheme", "dark")
+      writeScheme(this.#accountId, "dark")
       this.#apply("dark", false)
     }
   }
 
-  get #stored() {
-    return localStorage.getItem("color_scheme") || "system"
+  get #accountId() {
+    return document.body.dataset.accountId || null
+  }
+
+  #scoped() {
+    return readScheme(this.#accountId)
   }
 
   // Sets the dataset the `dark` variant keys off, always to the resolved

@@ -4,7 +4,7 @@
     <%= icon(local_assigns[:icon_name] || "card-sim", css: "h-5 w-5") %>
   </div>
   <h3 class="mt-4 font-display text-[15px] font-semibold"><%= local_assigns[:title] || "Nothing here yet" %></h3>
-  <p class="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-[#8a938d] dark:text-[#9AA6A0]"><%= local_assigns[:body] || "No records found." %></p>
+  <p class="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-[#8a938d] dark:text-fog"><%= local_assigns[:body] || "No records found." %></p>
   <% if local_assigns[:action] %>
     <div class="mt-5 flex justify-center"><%= action %></div>
   <% end %>

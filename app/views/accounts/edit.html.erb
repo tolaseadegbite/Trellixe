@@ -8,14 +8,14 @@
 
   <div class="mb-8">
     <h1 class="mb-2 text-2xl font-bold">General Settings</h1>
-    <p class="text-[#6b7672] dark:text-[#9AA6A0]">Manage your workspace identity.</p>
+    <p class="text-[#6b7672] dark:text-fog">Manage your workspace identity.</p>
   </div>
 
   <%# --- RENAME CARD --- %>
-  <div class="mb-10 overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+  <div class="mb-10 overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-card">
     <div class="border-b border-[#E9EBED] p-6 dark:border-white/10">
       <h3 class="mb-1 text-lg font-bold">Workspace Name</h3>
-      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">This name is visible to all team members.</p>
+      <p class="text-sm text-[#6b7672] dark:text-fog">This name is visible to all team members.</p>
     </div>
 
     <div class="p-6">
@@ -28,21 +28,21 @@
 
         <div class="mb-6 flex flex-col gap-1">
           <%= form.label :name, "Display Name", class: "mb-1 block text-[13px] font-semibold" %>
-          <%= form.text_field :name, required: true, placeholder: "e.g. Acme Corp", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+          <%= form.text_field :name, required: true, placeholder: "e.g. Acme Corp", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
         </div>
 
         <div class="flex items-center justify-end">
-          <%= form.submit "Save Changes", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+          <%= form.submit "Save Changes", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-pine" %>
         </div>
       <% end %>
     </div>
   </div>
 
   <%# --- REMINDERS CARD --- %>
-  <div id="reminder-settings" class="mb-10 overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+  <div id="reminder-settings" class="mb-10 overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-card">
     <div class="border-b border-[#E9EBED] p-6 dark:border-white/10">
       <h3 class="mb-1 text-lg font-bold">Reminders</h3>
-      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">One shared rhythm for the whole cell: nudges go out at this clock time, in each volunteer's own time zone. Applies to newly scheduled work only.</p>
+      <p class="text-sm text-[#6b7672] dark:text-fog">One shared rhythm for the whole cell: nudges go out at this clock time, in each volunteer's own time zone. Applies to newly scheduled work only.</p>
     </div>
 
     <div class="p-6">
@@ -57,30 +57,62 @@
           <div class="flex flex-col gap-1">
             <%= form.label :reminder_clock, "Reminder time", class: "mb-1 block text-[13px] font-semibold" %>
             <%= form.text_field :reminder_clock, required: true, placeholder: "09:00",
-                class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]",
+                class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night",
                 data: { controller: "datepicker", datepicker_type_value: "time" } %>
           </div>
           <div class="flex flex-col gap-1">
             <%= form.label :post_event_day_offset, "Follow up, days after event", class: "mb-1 block text-[13px] font-semibold" %>
-            <%= form.number_field :post_event_day_offset, min: 0, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+            <%= form.number_field :post_event_day_offset, min: 0, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
           </div>
           <div class="flex items-center gap-2.5">
-            <%= form.check_box :pre_event_enabled, class: "h-4 w-4 cursor-pointer accent-[#13714C]" %>
+            <%= form.check_box :pre_event_enabled, class: "h-4 w-4 cursor-pointer accent-algae-900" %>
             <%= form.label :pre_event_enabled, "Nudge volunteers before events", class: "text-sm font-semibold" %>
           </div>
           <div class="flex flex-col gap-1">
             <%= form.label :pre_event_day_offset, "Pre-event nudge, days after invite", class: "mb-1 block text-[13px] font-semibold" %>
-            <%= form.number_field :pre_event_day_offset, min: 0, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+            <%= form.number_field :pre_event_day_offset, min: 0, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
           </div>
           <div class="flex flex-col gap-1 sm:col-span-2">
             <%= form.label :pre_event_buffer_minutes, "Don't nudge inside this window before start (minutes)", class: "mb-1 block text-[13px] font-semibold" %>
-            <%= form.number_field :pre_event_buffer_minutes, min: 0, step: 15, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
-            <p class="text-xs leading-relaxed text-[#8a938d] dark:text-[#9AA6A0]">Invites that land inside this window skip the morning slot — the volunteer is nudged right away instead, while the event is still upcoming.</p>
+            <%= form.number_field :pre_event_buffer_minutes, min: 0, step: 15, class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm tabular-nums outline-none transition focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
+            <p class="text-xs leading-relaxed text-[#8a938d] dark:text-fog">Invites that land inside this window skip the morning slot — the volunteer is nudged right away instead, while the event is still upcoming.</p>
           </div>
         </div>
 
         <div class="mt-6 flex items-center justify-end">
-          <%= form.submit "Save Changes", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+          <%= form.submit "Save Changes", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-pine" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# --- APPEARANCE --- %>
+  <div id="appearance-settings" class="mb-10 overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-card">
+    <div class="border-b border-[#E9EBED] p-6 dark:border-white/10">
+      <h3 class="mb-1 text-lg font-bold">Appearance</h3>
+      <p class="text-sm text-[#6b7672] dark:text-fog">One dark palette for the whole workspace. Stock Algae is the default; curated palettes re-skin dark mode only — switch your appearance to Dark to see them, then save.</p>
+    </div>
+    <div class="p-6">
+      <%= form_with(model: @account, url: account_path(@account), data: { controller: "theme-preview", theme_preview_current_value: @account.theme, action: "submit->theme-preview#ensureDark" }) do |form| %>
+        <div class="space-y-1.5" role="radiogroup" aria-label="Workspace theme">
+          <% Account::THEMES.each do |key, meta| %>
+            <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-[#D9DDE0] px-3.5 py-3 transition hover:border-algae-300 has-checked:border-algae-600 has-checked:bg-algae-50 dark:border-white/10 dark:has-checked:bg-algae-600/10 <%= 'border-algae-600 bg-algae-50 dark:bg-algae-600/10' if @account.theme == key %>">
+              <%= form.radio_button :theme, key, checked: @account.theme == key, class: "h-4 w-4 shrink-0 accent-algae-900", data: { action: "change->theme-preview#preview" } %>
+              <span class="flex shrink-0 items-center" aria-hidden="true">
+                <span class="h-5 w-5 rounded-full border border-black/10" style="background-color: <%= meta[:background] %>"></span>
+                <span class="-ml-2 h-5 w-5 rounded-full border border-black/10" style="background-color: <%= meta[:accent] %>"></span>
+                <span class="-ml-2 h-5 w-5 rounded-full border border-black/10" style="background-color: <%= meta[:foreground] %>"></span>
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-sm font-semibold"><%= meta[:label] %></span>
+                <span class="block truncate text-xs text-[#8a938d] dark:text-fog"><%= key == "stock" ? "Default Algae light and dark" : "Dark mode only · light stays Algae" %></span>
+              </span>
+            </label>
+          <% end %>
+        </div>
+
+        <div class="mt-6 flex items-center justify-end">
+          <%= form.submit "Save Changes", class: "cursor-pointer rounded-lg bg-algae-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-pine" %>
         </div>
       <% end %>
     </div>
@@ -90,13 +122,13 @@
   <div class="overflow-hidden rounded-2xl border border-red-200 bg-white dark:border-red-500/30 dark:bg-[#1d1214]">
     <div class="border-b border-red-200 p-6 dark:border-red-500/30">
       <h3 class="mb-1 text-lg font-bold text-red-600 dark:text-red-400">Danger Zone</h3>
-      <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">Irreversible actions for this workspace.</p>
+      <p class="text-sm text-[#6b7672] dark:text-fog">Irreversible actions for this workspace.</p>
     </div>
 
     <div class="flex flex-wrap items-center justify-between gap-4 p-6">
       <div class="flex flex-col">
         <span class="text-sm font-bold">Delete Workspace</span>
-        <span class="text-xs text-[#6b7672] dark:text-[#9AA6A0]">Permanently remove this workspace and all associated data.</span>
+        <span class="text-xs text-[#6b7672] dark:text-fog">Permanently remove this workspace and all associated data.</span>
       </div>
 
       <% delete_trigger = button_tag "Delete Workspace", type: "button", class: "flex cursor-pointer rounded-lg bg-red-700 px-4 py-2 font-bold text-white transition hover:bg-red-800", data: { action: "dialog#showModal" } %>
@@ -105,7 +137,7 @@
 
         <%= form_with url: account_path(@account), method: :delete, class: "flex flex-col gap-4" do |f| %>
 
-          <p class="text-sm text-[#6b7672] dark:text-[#9AA6A0]">
+          <p class="text-sm text-[#6b7672] dark:text-fog">
             Are you sure you want to delete <strong><%= @account.name %></strong>?
             <br><br>
             All contacts, events, and team memberships will be permanently destroyed.
@@ -115,11 +147,11 @@
           <%# PASSWORD CHALLENGE %>
           <div class="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-500/30 dark:bg-red-500/10">
             <%= f.label :password_challenge, "Enter your password to confirm", class: "mb-2 block text-xs font-bold text-red-700 dark:text-red-300" %>
-            <%= f.password_field :password_challenge, required: true, class: "w-full rounded-lg border border-red-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100 dark:border-red-500/30 dark:bg-[#0C1210]", placeholder: "Your password" %>
+            <%= f.password_field :password_challenge, required: true, class: "w-full rounded-lg border border-red-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100 dark:border-red-500/30 dark:bg-night", placeholder: "Your password" %>
           </div>
 
           <div class="mt-2 flex items-center justify-end gap-2">
-            <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold transition hover:border-[#A2E494] dark:border-white/10 dark:hover:border-algae-600/50" data-action="click->dialog#close">Cancel</button>
+            <button type="button" class="rounded-lg border border-[#D9DDE0] px-4 py-2 text-sm font-semibold transition hover:border-algae-300 dark:border-white/10 dark:hover:border-algae-600/50" data-action="click->dialog#close">Cancel</button>
 
             <%= f.submit "I understand, delete it", class: "cursor-pointer rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-800" %>
           </div>

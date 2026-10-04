@@ -9,32 +9,32 @@
   <div class="grid grid-cols-2 gap-3">
     <div>
       <%= form.label :first_name, class: "mb-1 block text-[13px] font-semibold" %>
-      <%= form.text_field :first_name, autofocus: true, placeholder: "Blessing", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+      <%= form.text_field :first_name, autofocus: true, placeholder: "Blessing", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
     </div>
     <div>
       <%= form.label :last_name, class: "mb-1 block text-[13px] font-semibold" %>
-      <%= form.text_field :last_name, placeholder: "Kalu", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+      <%= form.text_field :last_name, placeholder: "Kalu", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
     </div>
   </div>
   <div class="mt-3 grid gap-3 sm:grid-cols-2">
     <div>
       <%= form.label :email, class: "mb-1 block text-[13px] font-semibold" %>
-      <%= form.text_field :email, placeholder: "blessing@example.com", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+      <%= form.text_field :email, placeholder: "blessing@example.com", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
     </div>
     <div>
       <%= form.label :phone_number, class: "mb-1 block text-[13px] font-semibold" %>
-      <%= form.text_field :phone_number, placeholder: "+234 …", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+      <%= form.text_field :phone_number, placeholder: "+234 …", class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
     </div>
   </div>
   <div class="mt-3">
     <%= form.label :how_we_met, "Context — how did you meet?", class: "mb-1 block text-[13px] font-semibold" %>
     <%= form.text_area :how_we_met, rows: 3, placeholder: "Met at Saturday outreach by the junction. Pray for mum's surgery Thursday. Bring a friend Sunday.",
-        class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:border-white/10 dark:bg-[#0C1210]" %>
+        class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-[#a7b0aa] focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:border-white/10 dark:bg-night" %>
   </div>
   <div class="mt-3">
     <%= form.label :tag_ids, "Tags", class: "mb-1 block text-[13px] font-semibold" %>
     <%= form.collection_select :tag_ids, Current.account.tags.order(:name), :id, :name, { include_hidden: false },
         { multiple: true, class: "w-full", data: { controller: "combobox" } } %>
   </div>
-  <%= form.submit contact.persisted? ? "Save changes" : "Add contact", class: "mt-5 w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+  <%= form.submit contact.persisted? ? "Save changes" : "Add contact", class: "mt-5 w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-pine" %>
 <% end %>

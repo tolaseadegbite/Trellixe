@@ -6,7 +6,7 @@
   </span>
   <span class="min-w-0 flex-1 basis-40">
     <span class="block truncate text-[14.5px] font-semibold"><%= team_invitation.email %></span>
-    <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">
+    <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] text-[#8a938d] dark:text-fog">
       <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-px text-[11px] font-semibold capitalize text-amber-800"><%= team_invitation.role %> · Pending</span>
       <span class="tabular-nums"><%= time_ago_in_words(team_invitation.updated_at) %> ago</span>
     </span>
@@ -14,7 +14,7 @@
   <% if can_manage_members? %>
     <span class="flex shrink-0 items-center gap-1.5">
       <%= button_to resend_team_invitation_path(team_invitation), method: :post,
-          class: "cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#6b7672] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-[#9AA6A0] dark:hover:bg-white/10 dark:hover:text-[#E7ECE9]",
+          class: "cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#6b7672] transition hover:bg-[#E9EBED] hover:text-[#1c2420] dark:text-fog dark:hover:bg-white/10 dark:hover:text-ink",
           form: { data: { turbo_submits_with: "Sending..." } } do %>
         Resend
       <% end %>

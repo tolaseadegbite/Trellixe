@@ -48,5 +48,4 @@ class FollowUpTasksControllerTest < ActionDispatch::IntegrationTest
       assert_equal 24.hours.from_now.to_i, @task.reload.due_at.to_i
     end
   end
-
 end

@@ -17,27 +17,27 @@
     <div>
       <%= form.label :name, class: "mb-1.5 block text-[13px] font-semibold" %>
       <%= form.text_field :name, value: @user.name, placeholder: "Adaeze Okafor", required: true, autofocus: true,
-          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:bg-night dark:border-white/10" %>
     </div>
     <div>
       <%= form.label :email, class: "mb-1.5 block text-[13px] font-semibold" %>
       <%= form.email_field :email, value: @user.email, placeholder: "you@example.com", required: true, autocomplete: "email",
-          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:bg-night dark:border-white/10" %>
     </div>
     <div>
       <%= form.label :password, class: "mb-1.5 block text-[13px] font-semibold" %>
       <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "12 characters minimum",
-          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:bg-night dark:border-white/10" %>
     </div>
     <div>
       <%= form.label :password_confirmation, class: "mb-1.5 block text-[13px] font-semibold" %>
       <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repeat password",
-          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-[#3AB67D] focus:ring-2 focus:ring-[#A2E494]/50 dark:bg-[#0C1210] dark:border-white/10" %>
+          class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:bg-night dark:border-white/10" %>
     </div>
-    <%= form.submit "Create workspace", class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-[#0f5c3e]" %>
+    <%= form.submit "Create workspace", class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-pine" %>
   <% end %>
 
-  <p class="mt-6 text-center text-[13.5px] text-[#5b6660] dark:text-[#9AA6A0]">
+  <p class="mt-6 text-center text-[13.5px] text-[#5b6660] dark:text-fog">
     Already have an account? <%= link_to "Sign in", sign_in_path, class: "font-semibold text-algae-900 hover:underline dark:text-algae-300" %>
   </p>
 <% end %>

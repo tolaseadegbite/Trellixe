@@ -3,12 +3,12 @@
 <% content_for :header_action_buttons do %>
   <% if can_invite_members? %>
     <% if Current.account.seat_limit_reached? %>
-      <%= link_to "#", class: "hidden items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e] sm:flex" do %>
+      <%= link_to "#", class: "hidden items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-pine sm:flex" do %>
         <%= icon("sparkles", css: "h-4 w-4") %> Upgrade plan
       <% end %>
     <% else %>
       <%= link_to new_team_invitation_path, data: { turbo_frame: "modal" },
-          class: "hidden items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0f5c3e] sm:flex" do %>
+          class: "hidden items-center gap-1.5 rounded-lg bg-algae-900 px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-pine sm:flex" do %>
         <%= icon("plus", css: "h-4 w-4") %> Invite member
       <% end %>
     <% end %>
@@ -17,26 +17,26 @@
 
 <% if can_invite_members? && !Current.account.seat_limit_reached? %>
   <%= link_to new_team_invitation_path, data: { turbo_frame: "modal" }, aria: { label: "Invite member" },
-      class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-[#0f5c3e] md:hidden" do %>
+      class: "fixed bottom-6 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-algae-900 p-4 text-white shadow-xl transition hover:bg-pine md:hidden" do %>
     <%= icon("plus", css: "h-5 w-5") %>
   <% end %>
 <% end %>
 
 <div class="space-y-4">
-  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-[#131B17]">
+  <div class="rounded-2xl border border-[#D9DDE0] bg-white p-4 dark:border-white/10 dark:bg-card">
     <div class="flex flex-wrap items-center justify-between gap-2">
       <div>
         <h2 class="font-display text-[15px] font-semibold">Team members</h2>
-        <p class="text-[13px] text-[#8a938d] dark:text-[#9AA6A0]">Manage access to <strong class="font-semibold text-[#1c2420] dark:text-[#E7ECE9]"><%= Current.account.name %></strong>.</p>
+        <p class="text-[13px] text-[#8a938d] dark:text-fog">Manage access to <strong class="font-semibold text-[#1c2420] dark:text-ink"><%= Current.account.name %></strong>.</p>
       </div>
-      <span class="inline-flex items-center rounded-full border border-[#D9DDE0] bg-[#F6F9F7] px-2.5 py-1 text-xs font-semibold tabular-nums text-[#1c2420] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#E7ECE9]">
+      <span class="inline-flex items-center rounded-full border border-[#D9DDE0] bg-[#F6F9F7] px-2.5 py-1 text-xs font-semibold tabular-nums text-[#1c2420] dark:border-white/10 dark:bg-white/[0.03] dark:text-ink">
         <%= Current.account.seats_used %> / <%= Current.account.seat_limit %> seats used
       </span>
     </div>
   </div>
 
   <% if can_invite_members? && Current.account.seat_limit_reached? %>
-    <%= link_to "#", class: "flex items-center justify-between gap-3 rounded-2xl bg-algae-900 p-4 text-left text-white shadow-sm transition hover:bg-[#0f5c3e] md:hidden" do %>
+    <%= link_to "#", class: "flex items-center justify-between gap-3 rounded-2xl bg-algae-900 p-4 text-left text-white shadow-sm transition hover:bg-pine md:hidden" do %>
       <span class="flex items-center gap-3">
         <%= icon("sparkles", css: "h-6 w-6") %>
         <span>
@@ -51,18 +51,18 @@
   <div data-controller="tabs">
     <div class="flex gap-1 border-b border-[#E9EBED] dark:border-white/10" role="tablist">
       <button type="button" id="trigger_active" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_active" aria-selected="true"
-          class="rounded-t-lg px-3 py-2.5 text-[13px] font-semibold text-[#6b7672] transition aria-selected:bg-white aria-selected:text-algae-900 dark:text-[#9AA6A0] dark:aria-selected:bg-[#131B17] dark:aria-selected:text-algae-300">
+          class="rounded-t-lg px-3 py-2.5 text-[13px] font-semibold text-[#6b7672] transition aria-selected:bg-white aria-selected:text-algae-900 dark:text-fog dark:aria-selected:bg-card dark:aria-selected:text-algae-300">
         Active members (<%= @active_memberships.count %>)
       </button>
       <button type="button" id="trigger_pending" data-tabs-target="button" data-action="tabs#select" role="tab" aria-controls="tab_pending" aria-selected="false"
-          class="rounded-t-lg px-3 py-2.5 text-[13px] font-semibold text-[#6b7672] transition aria-selected:bg-white aria-selected:text-algae-900 dark:text-[#9AA6A0] dark:aria-selected:bg-[#131B17] dark:aria-selected:text-algae-300">
+          class="rounded-t-lg px-3 py-2.5 text-[13px] font-semibold text-[#6b7672] transition aria-selected:bg-white aria-selected:text-algae-900 dark:text-fog dark:aria-selected:bg-card dark:aria-selected:text-algae-300">
         Pending invites (<%= @pending_invitations.count %>)
       </button>
     </div>
 
     <%# --- TAB 1: ACTIVE MEMBERS --- %>
     <div id="tab_active" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_active" class="pt-4">
-      <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+      <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-card">
         <div id="members-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
           <% if @active_memberships.empty? %>
             <div class="px-4 py-8"><%= render "shared/empty_state", title: "No active members", body: "Invite your team to share contacts, events, and follow-ups.", icon_name: "user" %></div>
@@ -75,7 +75,7 @@
 
     <%# --- TAB 2: PENDING INVITES --- %>
     <div hidden id="tab_pending" data-tabs-target="tab" role="tabpanel" aria-labelledby="trigger_pending" class="pt-4">
-      <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-[#131B17]">
+      <div class="overflow-hidden rounded-2xl border border-[#D9DDE0] bg-white dark:border-white/10 dark:bg-card">
         <div id="invitations-list" class="divide-y divide-[#E9EBED] dark:divide-white/10">
           <% if @pending_invitations.any? %>
             <%= render partial: "team_invitations/team_invite_row", collection: @pending_invitations, as: :team_invitation %>

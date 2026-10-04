@@ -30,8 +30,14 @@ class AccountsController < DashboardsController
   def update
     @account = Current.account
     if @account.update(account_params)
-      redirect_to edit_account_path(@account), notice: "Workspace updated."
+      # Explicit return path: Referer is unreliable under Turbo fetches
+      # (palette picks teleported to settings). Settings forms post no
+      # return_to and fall back to themselves.
+      redirect_to safe_return_to || edit_account_path(@account), notice: "Workspace updated."
     else
+      # Loud failure: a silent re-render looks exactly like a save that
+      # "reverted", with no way to tell the difference.
+      flash.now[:alert] = @account.errors.full_messages.to_sentence
       render :edit, status: :unprocessable_entity
     end
   end
@@ -66,8 +72,14 @@ class AccountsController < DashboardsController
 
   private
 
+  # Local paths only — never follow a return_to off this host.
+  def safe_return_to
+    path = params[:return_to].to_s
+    path if path.start_with?("/") && !path.start_with?("//")
+  end
+
   def account_params
-    params.require(:account).permit(:name, :reminder_clock, :pre_event_enabled,
+    params.require(:account).permit(:name, :theme, :reminder_clock, :pre_event_enabled,
       :pre_event_day_offset, :pre_event_buffer_minutes, :post_event_day_offset)
   end
 end
