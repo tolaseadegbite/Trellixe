@@ -26,6 +26,12 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get terms" do
+    get terms_url
+    assert_response :success
+    assert_match "Terms of Service", response.body
+  end
+
   test "should get contact" do
     get contact_us_url
     assert_response :success

@@ -152,6 +152,7 @@ Rails.application.routes.draw do
   get "/documentation", to: "pages#documentation", as: :documentation
   get "/help", to: "pages#help", as: :help
   get "/privacy", to: "pages#privacy", as: :privacy
+  get "/terms", to: "pages#terms", as: :terms
   get "/contact-us", to: "pages#contact", as: :contact_us
 
   root "pages#home"

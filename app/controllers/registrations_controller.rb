@@ -8,6 +8,13 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
 
+    unless params[:terms_accepted] == "1"
+      @user.errors.add(:base, "Please accept the Terms of Service to continue.")
+      render :new, status: :unprocessable_entity
+      return
+    end
+    @user.terms_accepted_at = Time.current
+
     if @user.save
       session_record = @user.sessions.create!
       cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }

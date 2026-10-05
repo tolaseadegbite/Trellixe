@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_27_000003) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_27_000004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -315,6 +315,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_000003) do
     t.string "password_digest", null: false
     t.string "provider"
     t.string "public_id"
+    t.datetime "terms_accepted_at"
     t.string "time_zone", default: "UTC", null: false
     t.string "uid"
     t.datetime "updated_at", null: false

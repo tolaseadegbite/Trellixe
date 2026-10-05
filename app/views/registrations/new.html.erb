@@ -34,6 +34,11 @@
       <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repeat password",
           class: "w-full rounded-lg border border-[#D9DDE0] bg-white px-3.5 py-2.5 text-[14.5px] outline-none transition placeholder:text-[#a7b0aa] focus:border-algae-600 focus:ring-2 focus:ring-algae-300/50 dark:bg-night dark:border-white/10" %>
     </div>
+    <label class="flex cursor-pointer items-start gap-2.5 text-[13px] leading-relaxed text-[#3d4742] dark:text-clay">
+      <%= check_box_tag :terms_accepted, "1", false, required: true,
+          class: "mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-algae-900" %>
+      <span>I agree to the <%= link_to "Terms of Service", terms_path, target: "_blank", rel: "noopener", class: "font-semibold text-algae-900 underline hover:text-algae-700 dark:text-algae-300" %> and acknowledge the <%= link_to "Privacy Policy", privacy_path, target: "_blank", rel: "noopener", class: "font-semibold text-algae-900 underline hover:text-algae-700 dark:text-algae-300" %>.</span>
+    </label>
     <%= form.submit "Create workspace", class: "w-full cursor-pointer rounded-lg bg-algae-900 px-4 py-2.5 text-[14.5px] font-semibold text-white transition hover:bg-pine" %>
   <% end %>
 

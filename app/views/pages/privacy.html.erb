@@ -1,11 +1,65 @@
-<% content_for :title, "Privacy" %>
+<% content_for :title, "Privacy Policy" %>
 <div class="mx-auto w-full max-w-3xl px-4 py-14 md:px-8">
-  <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-algae-900 dark:text-algae-300">Privacy</p>
+  <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-algae-900 dark:text-algae-300">Privacy Policy</p>
   <h1 class="mt-2 font-display text-3xl font-bold tracking-tight">Your people's data stays yours.</h1>
-  <div class="mt-6 space-y-4 text-[15px] leading-relaxed text-[#3d4742] dark:text-clay">
-    <p>Trellixe stores contact details, prayer requests, and visit notes so your team can follow up with care. That data belongs to your workspace — we never sell it, and we never use it for advertising.</p>
-    <p>Workspace admins control who sees what. When someone leaves the team, remove them and their access ends immediately. Delete a contact and their history goes with them.</p>
-    <p>Questions about your data? Write to us from the contact page and a human replies.</p>
+  <p class="mt-2 text-sm text-[#8a938d] dark:text-fog">Effective October 5, 2026. Plain language first; counsel reviews before paid plans launch.</p>
+
+  <div class="mt-8 space-y-8 text-[15px] leading-relaxed text-[#3d4742] dark:text-clay">
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">What we store, and why</h2>
+      <p class="mt-2">Trellixe stores what your outreach needs and nothing else: workspace and account details, team member names and emails, contacts (names, phone numbers, emails, and the context you write — prayer requests, situations, who brought them), events and invitations, follow-up tasks and todos, interaction logs, and tags. Every one of these exists so your team can follow up with care. We collect no analytics, run no trackers, and profile no one.</p>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">What we never do</h2>
+      <p class="mt-2">We never sell your data. We never use it for advertising. We never train machine-learning models on it. Your contacts, prayer points, and notes are not our product — your subscription is, when paid plans arrive.</p>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">Who can see what</h2>
+      <p class="mt-2">Data belongs to the workspace, never to the individual who entered it. Workspace admins manage members, roles, and assignments; members see shared workspace data plus only their own personal todos and logs. Removing someone from the team ends their access immediately. Our own platform administrators can access workspace data solely to operate the service and support you, and every such access is logged.</p>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">Third parties</h2>
+      <p class="mt-2">We share data only with the infrastructure that runs Trellixe: our hosting provider (servers and databases) and our email delivery provider (invites, sign-in and password emails). Each processes data only on our instructions. We will publish the current vendor list here before paid plans launch; until then, ask us from the contact page and a human replies with it.</p>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">Retention and deletion</h2>
+      <p class="mt-2">Delete a contact and their history — invitations, logs, tags, todos — goes with them. Delete a workspace and everything in it goes too. Backups age out within 30 days of deletion. What you can delete yourself, delete yourself; for anything else, write to us and we complete it within 30 days.</p>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">Your rights</h2>
+      <p class="mt-2">Wherever you live, you may ask for a copy of your data, corrections, export, or deletion — for yourself or, if you lead a workspace, for people whose details your team entered (including minors in your care, whose data carries the same rights on request, without interrogation). Start in the app where the control exists, or write to us from the contact page.</p>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">Cookies and local storage</h2>
+      <p class="mt-2">First-party only, no trackers, no advertising cookies:</p>
+      <ul class="mt-2 list-disc space-y-1 pl-5">
+        <li><span class="font-semibold">Sign-in session</span> — keeps you logged in on your devices.</li>
+        <li><span class="font-semibold">Current workspace</span> — remembers which workspace you last opened.</li>
+        <li><span class="font-semibold">Appearance</span> — your light/dark choice, per workspace, on your device only.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">Security</h2>
+      <p class="mt-2">Passwords are hashed with bcrypt; sessions are signed and revocable; workspace data is scoped so one workspace can never see another's; destructive actions require password confirmation. No system is impregnable — if we discover a breach affecting your data, we tell you directly and promptly.</p>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">Children</h2>
+      <p class="mt-2">Outreach involves minors. Churches enter children's details under their own authority and responsibility; those records carry the same access, export, and deletion rights as any other, exercisable by a parent, guardian, or church leader on the child's behalf.</p>
+    </section>
+
+    <section>
+      <h2 class="font-display text-lg font-semibold text-[#1c2420] dark:text-ink">Changes and contact</h2>
+      <p class="mt-2">If this policy changes materially, we announce it in-app before it takes effect. Questions about your data? Write to us from the contact page and a human replies.</p>
+    </section>
   </div>
-  <%= link_to "Back home", root_path, class: "mt-8 inline-flex rounded-lg border border-[#D9DDE0] bg-white px-4 py-2.5 text-sm font-semibold hover:border-algae-300 dark:bg-card dark:border-white/10" %>
+
+  <%= link_to "Back home", root_path, class: "mt-10 inline-flex rounded-lg border border-[#D9DDE0] bg-white px-4 py-2.5 text-sm font-semibold hover:border-algae-300 dark:bg-card dark:border-white/10" %>
 </div>
