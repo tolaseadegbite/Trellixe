@@ -63,6 +63,10 @@ class User < ApplicationRecord
     "https://www.gravatar.com/avatar/#{hash}?s=#{size}&d=mp"
   end
 
+  def admin?
+    admin == true
+  end
+
   private
 
   def valid_time_zone

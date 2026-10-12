@@ -169,6 +169,11 @@ GEM
     loofah (2.25.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    madmin (3.3.0)
+      importmap-rails
+      rails (>= 7.0.0)
+      stimulus-rails
+      turbo-rails
     mail (2.9.1)
       logger
       mini_mime (>= 0.1.1)
@@ -452,6 +457,7 @@ DEPENDENCIES
   json (~> 2.0)
   kamal
   letter_opener_web (~> 3.0)
+  madmin
   mission_control-jobs
   noticed (~> 2.9)
   omniauth

@@ -85,3 +85,4 @@ gem "web-push"
 
 gem "noticed", "~> 2.9"
 gem "ice_cube"
+gem "madmin"
