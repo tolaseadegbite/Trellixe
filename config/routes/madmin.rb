@@ -17,40 +17,7 @@ namespace :madmin do
   resources :contact_tags
   resources :event_series
   resources :contacts
-  namespace :solid_cable do
-    resources :messages
-  end
   resources :accounts
-  namespace :solid_queue do
-    resources :blocked_executions
-  end
-  namespace :solid_queue do
-    resources :claimed_executions
-  end
-  namespace :solid_queue do
-    resources :failed_executions
-  end
-  namespace :solid_queue do
-    resources :jobs
-  end
-  namespace :solid_queue do
-    resources :pauses
-  end
-  namespace :solid_queue do
-    resources :processes
-  end
-  namespace :solid_queue do
-    resources :ready_executions
-  end
-  namespace :solid_queue do
-    resources :recurring_executions
-  end
-  namespace :solid_queue do
-    resources :recurring_tasks
-  end
-  namespace :solid_queue do
-    resources :scheduled_executions
-  end
   namespace :team_notifier do
     namespace :invitation_declined do
       resources :notifications
@@ -95,12 +62,6 @@ namespace :madmin do
     namespace :role_changed do
       resources :notifications
     end
-  end
-  namespace :solid_queue do
-    resources :semaphores
-  end
-  namespace :solid_cache do
-    resources :entries
   end
   resources :application_notifiers
   namespace :application_notifier do
